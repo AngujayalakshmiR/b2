@@ -157,10 +157,11 @@
         transition: color 0.3s ease-in-out;
     }
 
+
     /* Hover effect (only for non-active items) */
-     a.k:hover {
-        background-color: #f0f0f0 !important; /* Light grey */
-        color: #000 !important; /* Dark text */
+    .l:not(.active)  a.k:hover {
+        background-color: rgb(45, 64, 113) !important; /* Light grey */
+        color: white !important; /* Dark text */
         border-radius: 8px;
         width: 90%; /* Keep it smaller than the sidebar */
         margin: 0 auto; /* Center align */
@@ -168,13 +169,13 @@
 
     /* Keep icons black on hover for non-active items */
     .l:not(.active) a.k:hover i {
-        color: black !important;
+        color: white !important;
     }
 
     /* Active item style */
     .l.active {
-        background-color: #f0f0f0 !important; /* Light grey */
-        color: #000 !important; /* Dark text */
+        background-color: rgb(45, 64, 113) !important; /* Light grey */
+        color: white !important; /* Dark text */
         border-radius: 8px;
         width: 90%; /* Keep it smaller than the sidebar */
         margin: 0 auto; /* Center align */
@@ -196,13 +197,15 @@
 
     /* Ensure icons turn white inside active links */
     .l.active a.k i {
-        color: white !important;
+        color:white !important;
     }
-    footer{
-        background:linear-gradient(to right, #4568dc, #b06ab3);
-        color:white;
-        padding:15px;
-    }
+    footer {
+    background: white;
+    color: rgb(15,29,64);
+    padding: 15px;
+    box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.1); /* Negative Y value for top shadow */
+}
+
     .master.active{
         width: 90%;
         background: linear-gradient(to right, #4568dc, #b06ab3);
@@ -218,13 +221,13 @@
 
     }
     .collapse{
-        background:	#F8F8F8;
+        background:#F8F8F8;
         border-radius: 10px;
         color:white;
     }
     .collapse-item.active{
         width: 90%;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
+        background: rgb(45, 64, 113);
         color:white;
         border-radius: 8px;
         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
@@ -238,6 +241,11 @@
     #dataTable tbody tr {
       cursor: pointer;
     }
+    .sidebar-dark .nav-item .nav-link[data-toggle="collapse"]:hover::after {
+    color: white;
+}
+ /* Styling for the modal */
+
 </style>
 
 </head>
@@ -268,7 +276,7 @@
 </li>
 
 <!-- Divider -->
-<hr class="sidebar-divider" style="margin-bottom: 0px; color:#4568dc">
+<div class="sidebar-divider" style="margin-bottom: 5px;"></div>
 
 <!-- Nav Item - Master -->
 <li class="nav-item master l">
@@ -279,16 +287,16 @@
     </a>
     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item " href="customer.php" style="color: white;"><b>Customer</b></a>
-            <a class="collapse-item" href="employee.php" style="color: white;"><b>Employee</b></a>
-            <a class="collapse-item" href="designation.php" style="color: white;"><b>Designation</b></a>
-            <a class="collapse-item" href="projecttype.php" style="color: white;"><b>Project Type</b></a>
+            <a class="collapse-item " href="customer.php" style="color: rgb(15,29,64);"><b>Customer</b></a>
+            <a class="collapse-item" href="employee.php" style="color: rgb(15,29,64);"><b>Employee</b></a>
+            <a class="collapse-item" href="designation.php" style="color: rgb(15,29,64);"><b>Designation</b></a>
+            <a class="collapse-item" href="projecttype.php" style="color: rgb(15,29,64);"><b>Project Type</b></a>
         </div>
     </div>
 </li> 
 
 <!-- Divider -->
-<hr class="sidebar-divider" style="margin-bottom: 0px;">
+<div class="sidebar-divider" style="margin-bottom: 5px;"></div>
 
 <!-- Nav Item - Project Creation -->
 <li class="nav-item l active">
@@ -298,7 +306,7 @@
     </a>
 </li>
 
-<hr class="sidebar-divider" style="margin-bottom: 0px;">
+<div class="sidebar-divider" style="margin-bottom: 5px;"></div>
 
 <!-- Nav Item - Daily Updates -->
 <li class="nav-item l">
@@ -308,7 +316,7 @@
     </a>
 </li>
 
-<hr class="sidebar-divider" style="margin-bottom: 0px;">
+<div class="sidebar-divider" style="margin-bottom: 5px;"></div>
 
 <!-- Nav Item - Work Reports -->
 <li class="nav-item l">
@@ -319,7 +327,7 @@
 </li>
 
 <!-- Divider -->
-<hr class="sidebar-divider d-none d-md-block">
+<div class="sidebar-divider" style="margin-bottom: 5px;"></div>
 
 <!-- Sidebar Toggler -->
 <div class="text-center d-none d-md-inline">
@@ -336,12 +344,17 @@
             <div id="content">
 
                 <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style=" background:linear-gradient(to right, #b06ab3, #4568dc);">
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style=" background:white;color:white">
 
 <!-- Sidebar Toggle (Topbar) -->
 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
     <i class="fa fa-bars"></i>
 </button>
+
+<button class="btn btn-primary" style="float:left; border-radius:25px;" id="openModalBtn">
+                                    <i class="fas fa-plus"></i> Add Project 
+                                     </button>
+
 
 
 
@@ -373,13 +386,13 @@
     </li>
 
     <div class="topbar-divider d-none d-sm-block"></div>
-
+    
     <!-- Nav Item - User Information -->
     <li class="nav-item dropdown no-arrow">
         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <img class="img-profile rounded-circle"
-                src="img/profile.png" style="width: 3rem;height: 3rem;">
+                src="img/p.png" style="width: 3rem;height: 3rem;">
         </a>
         <!-- Dropdown - User Information -->
         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -417,9 +430,7 @@
                             <!-- DataTales Example -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Project Creation  <button class="btn btn-primary" style="float:right;" onclick="window.location.href='add_project.php'">
-                                    <i class="fas fa-plus"></i> Add Project 
-                                     </button>
+                                    <h6 class="m-0 font-weight-bold text-primary">Project Creation  
                             </h6>
                                    
                                 </div>
@@ -488,7 +499,7 @@
                         </div>
                         <!-- /.container-fluid -->
         
-                    </div>
+                    </div></div>
         
 <!-- Add Customer Modal -->
 <!-- <div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerModalLabel" aria-hidden="true">

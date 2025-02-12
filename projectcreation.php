@@ -125,20 +125,20 @@
 <style>
     .sidebar-brand-icon, .sidebar-brand-text {
         font-size: large;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
+        background: white;
         -webkit-background-clip: text; /* Clip background to text */
         -webkit-text-fill-color: transparent; /* Make text color transparent to show gradient */
         font-weight: bold; /* Optional: Makes text more prominent */
     }
     /* Sidebar background */
     .sidebar {
-        background-color: white !important;
+        background-color: rgb(15,29,64) !important;
         width: 250px; /* Adjust according to sidebar width */
     }
 
     /* Sidebar link styles */
     .l a.k{
-        color: #333 !important; /* Dark text */
+        color: white !important; /* Dark text */
         border-radius: 8px; /* Rounded corners */
         transition: all 0.3s ease-in-out;
         padding: 12px 15px;
@@ -152,13 +152,13 @@
 
     /* Ensure icons are black */
     .l a.k i {
-        color: black !important;
+        color: white !important;
         font-size: 18px; /* Slightly larger icons */
         transition: color 0.3s ease-in-out;
     }
 
     /* Hover effect (only for non-active items) */
-    .l:not(.active) a.k:hover {
+     a.k:hover {
         background-color: #f0f0f0 !important; /* Light grey */
         color: #000 !important; /* Dark text */
         border-radius: 8px;
@@ -173,12 +173,12 @@
 
     /* Active item style */
     .l.active {
-        width: 90%;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
+        background-color: #f0f0f0 !important; /* Light grey */
+        color: #000 !important; /* Dark text */
         border-radius: 8px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-        transform: scale(1.02); /* Slight lift effect */
+        width: 90%; /* Keep it smaller than the sidebar */
         margin: 0 auto; /* Center align */
+        padding:1px;
     }
     .collapse-item.active{
         width: 90%;
@@ -273,16 +273,16 @@
 <!-- Nav Item - Master -->
 <li class="nav-item master l">
     <a class="nav-link k collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-        aria-expanded="true" aria-controls="collapseTwo" style="color: black;">
-        <i class="fas fa-fw fa-clipboard-list" style="font-size:20px;color:black;"></i>
+        aria-expanded="true" aria-controls="collapseTwo" style="color: white;">
+        <i class="fas fa-fw fa-clipboard-list" style="font-size:20px;color:white;"></i>
         <span><b>Master</b></span>
     </a>
     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item " href="customer.php" style="color: black;"><b>Customer</b></a>
-            <a class="collapse-item" href="employee.php" style="color: black;"><b>Employee</b></a>
-            <a class="collapse-item" href="designation.php" style="color: black;"><b>Designation</b></a>
-            <a class="collapse-item" href="projecttype.php" style="color: black;"><b>Project Type</b></a>
+            <a class="collapse-item " href="customer.php" style="color: white;"><b>Customer</b></a>
+            <a class="collapse-item" href="employee.php" style="color: white;"><b>Employee</b></a>
+            <a class="collapse-item" href="designation.php" style="color: white;"><b>Designation</b></a>
+            <a class="collapse-item" href="projecttype.php" style="color: white;"><b>Project Type</b></a>
         </div>
     </div>
 </li> 
@@ -292,7 +292,7 @@
 
 <!-- Nav Item - Project Creation -->
 <li class="nav-item l active">
-    <a class="nav-link k" href="projectcreation.php" style="color: black;">
+    <a class="nav-link k" href="projectcreation.php" style="color: white;">
         <i class="fas fa-fw fa-folder" style="font-size:20px"></i>
         <span><b>Project Creation</b></span>
     </a>
@@ -302,7 +302,7 @@
 
 <!-- Nav Item - Daily Updates -->
 <li class="nav-item l">
-    <a class="nav-link k" href="dailyupdates.php" style="color: black;">
+    <a class="nav-link k" href="dailyupdates.php" style="color: white;">
         <i class="fas fa-fw fa-table" style="font-size:20px"></i>
         <span><b>Daily Updates</b></span>
     </a>
@@ -312,7 +312,7 @@
 
 <!-- Nav Item - Work Reports -->
 <li class="nav-item l">
-    <a class="nav-link k" href="reports.php" style="color: black;">
+    <a class="nav-link k" href="reports.php" style="color: white;">
         <i class="fas fa-fw fa-chart-area" style="font-size:20px"></i>
         <span><b>Work Reports</b></span>
     </a>

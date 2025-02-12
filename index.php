@@ -527,106 +527,7 @@
 
 
 <style>
-    .sidebar-brand-icon, .sidebar-brand-text {
-        font-size: large;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
-        -webkit-background-clip: text; /* Clip background to text */
-        -webkit-text-fill-color: transparent; /* Make text color transparent to show gradient */
-        font-weight: bold; /* Optional: Makes text more prominent */
-    }
-    /* Sidebar background */
-    .sidebar {
-        background-color: white !important;
-        width: 250px; /* Adjust according to sidebar width */
-    }
-
-    /* Sidebar link styles */
-    .l a.k{
-        color: #333 !important; /* Dark text */
-        border-radius: 8px; /* Rounded corners */
-        transition: all 0.3s ease-in-out;
-        padding: 12px 15px;
-        font-size: 16px; /* Increased font size */
-        display: flex;
-        align-items: center;
-        gap: 10px; /* Space between icon and text */
-        width: 85%; /* Ensure links don’t take full width */
-        margin: 0 auto; /* Center align */
-    }
-
-    /* Ensure icons are black */
-    .l a.k i {
-        color: black !important;
-        font-size: 18px; /* Slightly larger icons */
-        transition: color 0.3s ease-in-out;
-    }
-
-    /* Hover effect (only for non-active items) */
-    .l:not(.active) a.k:hover {
-        background-color: #f0f0f0 !important; /* Light grey */
-        color: #000 !important; /* Dark text */
-        border-radius: 8px;
-        width: 90%; /* Keep it smaller than the sidebar */
-        margin: 0 auto; /* Center align */
-    }
-
-    /* Keep icons black on hover for non-active items */
-    .l:not(.active) a.k:hover i {
-        color: black !important;
-    }
-
-    /* Active item style */
-    .l.active {
-        width: 90%;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
-        border-radius: 8px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-        transform: scale(1.02); /* Slight lift effect */
-        margin: 0 auto; /* Center align */
-    }
    
-    /* Active item text & icon color */
-    .l.active a.k{
-        color: white !important;
-    }
-
-    /* Ensure icons turn white inside active links */
-    .l.active a.k i {
-        color: white !important;
-    }
-    footer{
-        background:linear-gradient(to right, #4568dc, #b06ab3);
-        color:white;
-        padding:15px;
-    }
-    .master.active{
-        width: 90%;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
-        color:white;
-        border-radius: 8px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-        transform: scale(1.02); /* Slight lift effect */
-        margin: 0 auto; /* Center align */
-    }
-    .master.active.collapse{
-        background:white;
-        border-radius: 8px;
-
-    }
-    .collapse{
-        background:	#F8F8F8;
-        border-radius: 10px;
-        color:white;
-    }
-    .collapse-item.active{
-        width: 90%;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
-        color:white;
-        border-radius: 8px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-        transform: scale(1.02); /* Slight lift effect */
-        margin: 0 auto; /* Center align */
-    }
 
     .custom-card {
         background: linear-gradient(45deg, rgba(255, 99, 71, 0.8), rgba(255, 165, 0, 0.8));
@@ -655,6 +556,130 @@
     .completed-card {
         background: linear-gradient(45deg, #56ab2f, #a8e063);
     }
+
+    .sidebar-brand-icon, .sidebar-brand-text {
+        font-size: large;
+        background: white;
+        -webkit-background-clip: text; /* Clip background to text */
+        -webkit-text-fill-color: transparent; /* Make text color transparent to show gradient */
+        font-weight: bold; /* Optional: Makes text more prominent */
+    }
+    /* Sidebar background */
+    .sidebar {
+        background-color: rgb(15,29,64) !important;
+        width: 250px; /* Adjust according to sidebar width */
+    }
+
+    /* Sidebar link styles */
+    .l a.k{
+        color: white !important; /* Dark text */
+        border-radius: 8px; /* Rounded corners */
+        transition: all 0.3s ease-in-out;
+        padding: 12px 15px;
+        font-size: 16px; /* Increased font size */
+        display: flex;
+        align-items: center;
+        gap: 10px; /* Space between icon and text */
+        width: 85%; /* Ensure links don’t take full width */
+        margin: 0 auto; /* Center align */
+    }
+
+    /* Ensure icons are black */
+    .l a.k i {
+        color: white !important;
+        font-size: 18px; /* Slightly larger icons */
+        transition: color 0.3s ease-in-out;
+    }
+
+
+    /* Hover effect (only for non-active items) */
+    .l:not(.active)  a.k:hover {
+        background-color: rgb(45, 64, 113) !important; /* Light grey */
+        color: white !important; /* Dark text */
+        border-radius: 8px;
+        width: 90%; /* Keep it smaller than the sidebar */
+        margin: 0 auto; /* Center align */
+    }
+
+    /* Keep icons black on hover for non-active items */
+    .l:not(.active) a.k:hover i {
+        color: white !important;
+    }
+
+    /* Active item style */
+    .l.active {
+        background-color: rgb(45, 64, 113) !important; /* Light grey */
+        color: white !important; /* Dark text */
+        border-radius: 8px;
+        width: 90%; /* Keep it smaller than the sidebar */
+        margin: 0 auto; /* Center align */
+        padding:1px;
+    }
+    .collapse-item.active{
+        width: 90%;
+        background:white;
+        color:white;
+        border-radius: 8px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        transform: scale(1.02); /* Slight lift effect */
+        margin: 0 auto; /* Center align */
+    }
+    /* Active item text & icon color */
+    .l.active a.k{
+        color: white !important;
+    }
+
+    /* Ensure icons turn white inside active links */
+    .l.active a.k i {
+        color:white !important;
+    }
+    footer {
+    background: white;
+    color: rgb(15,29,64);
+    padding: 15px;
+    box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.1); /* Negative Y value for top shadow */
+}
+
+    .master.active{
+        width: 90%;
+        background: white;
+        color:white;
+        border-radius: 8px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        transform: scale(1.02); /* Slight lift effect */
+        margin: 0 auto; /* Center align */
+    }
+    .master.active.collapse{
+        background:white;
+        border-radius: 8px;
+
+    }
+    .collapse{
+        background:#F8F8F8;
+        border-radius: 10px;
+        color:white;
+    }
+    .collapse-item.active{
+        width: 90%;
+        background: rgb(45, 64, 113);
+        color:white;
+        border-radius: 8px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        transform: scale(1.02); /* Slight lift effect */
+        margin: 0 auto; /* Center align */
+    }
+    .action-buttons button {
+      margin: 0 5px;
+    }
+    /* Optional: Change cursor for clickable rows */
+    #dataTable tbody tr {
+      cursor: pointer;
+    }
+    .sidebar-dark .nav-item .nav-link[data-toggle="collapse"]:hover::after {
+    color: white;
+}
+ /* Styling for the modal */
+
 </style>
 
         <!-- End of Sidebar -->
@@ -666,7 +691,7 @@
             <div id="content">
 
                 <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style=" background:linear-gradient(to right, #b06ab3, #4568dc);">
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style=" background:white;">
 
                     <!-- Sidebar Toggle (Topbar) -->
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
@@ -709,7 +734,7 @@
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <img class="img-profile rounded-circle"
-                                    src="img/profile.png" style="width: 3rem;height: 3rem;">
+                                    src="img/p.png" style="width: 3rem;height: 3rem;">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"

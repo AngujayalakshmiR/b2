@@ -380,6 +380,62 @@
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style=" background:white;">
+                <div class="mr-auto d-flex align-items-center pl-3 py-2">
+  <h4 class="text-dark font-weight-bold mr-4" 
+      style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
+      Master > Designation
+  </h4>
+  <button class="btn d-flex align-items-center px-3" 
+      style="background-color: rgb(15,29,64); color: white; border-radius: 25px;"
+      data-toggle="modal" data-target="#designationModal">
+                <i class="fa-solid fa-id-badge fa-1x"></i>&nbsp; <!-- Designation Icon -->
+ Create Designation
+  </button>
+</div>
+
+
+<!-- Customer Modal (No header, reduced width) -->
+<!-- Include Font Awesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<div class="modal fade" id="designationModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 40%;">
+    <div class="modal-content" style="border-radius: 15px;">
+      <div class="modal-body p-0">
+        <div class="row no-gutters">
+          <!-- Left Column: Form (Approximately 70% width) -->
+          <div class="col-md-10">
+            <div class="ml-3 mt-3 mb-3 mr-3">
+              <form action="designation.php" method="GET">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="customerName"><b>Designation Details:</b></label>
+                      <input type="text" class="form-control" id="customerName" placeholder="Enter designation">
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="d-flex justify-content-start">
+                  <button type="submit" class="btn" style="background-color: rgb(15,29,64); color: white; border-radius: 25px;">Submit</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Right Column: Designation Icon -->
+          <div class="col-md-2 d-flex align-items-center justify-content-center" 
+               style="background-color: rgb(15,29,64); color: white; 
+                      border-top-right-radius: 14px; border-bottom-right-radius: 14px;">
+            <i class="fa-solid fa-id-badge fa-4x"></i> <!-- Designation Icon -->
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
                     <!-- Sidebar Toggle (Topbar) -->
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
@@ -443,68 +499,47 @@
 
                 <!-- Begin Page Content -->
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+              <!-- Include Bootstrap -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
-                    <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Master > Designation Type</h1>
-                    
-
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Designation Details<form id="taskForm" class="d-flex align-items-center">
-        
-        <input type="text" class="form-control" id="taskInput" placeholder="Enter Designation Type">
-        <button type="submit" class="btn btn-primary" id="taskButton">Add Designation</button>
-        
-</form></h6>
-                           
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered text-center" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr class="thead">
-                                            <th>S.no</th>
-                                            <th>Designation Type</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Designer</td>
-                                            
-                                            <td class="action-buttons">
-                                                <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                                                <button class="btn-action btn-delete"><i class="fas fa-trash-alt"></i></button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Web Developer</td>
-                                           
-                                            <td class="action-buttons">
-                                                <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                                                <button class="btn-action btn-delete"><i class="fas fa-trash-alt"></i></button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>Mobile App Developer</td>
-                                            
-                                            <td class="action-buttons">
-                                                <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                                                <button class="btn-action btn-delete"><i class="fas fa-trash-alt"></i></button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Column 1 -->
+        <div class="col-md-3">
+            <div class="card shadow-sm p-3" style="min-height: 50px; background-color:rgb(250, 195, 203); border-radius: 15px;">
+                <div class="card-body text-center">
+                    <h6 class="card-text">Software Engineer</h6>
                 </div>
+            </div>
+        </div>
+        
+        <!-- Column 2 -->
+        <div class="col-md-3">
+            <div class="card shadow-sm p-3" style="min-height: 50px; background-color:rgb(190, 235, 240); border-radius: 15px;">
+                <div class="card-body text-center">
+                <h6 class="card-text">Software Engineer</h6>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Column 3 -->
+        <div class="col-md-3">
+            <div class="card shadow-sm p-3" style="min-height: 50px; background-color:rgb(240, 237, 169); border-radius: 15px;">
+                <div class="card-body text-center">
+                <h6 class="card-text">Software Engineer</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm p-3" style="min-height: 50px; background-color:rgb(180, 247, 160); border-radius: 15px;">
+                <div class="card-body text-center">
+                <h6 class="card-text">Software Engineer</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
                 <!-- /.container-fluid -->
 
             </div>

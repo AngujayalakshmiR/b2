@@ -422,7 +422,7 @@
           </div>
           <!-- Right Column: RGB Color Code (Approximately 30% width) -->
           <!-- Right Column: Vertical "CUSTOMER" text -->
-<div class="col-md-2 d-flex align-items-center justify-content-center" style="background-color: rgb(15,29,64); color: white; border-top-right-radius: 15px; border-bottom-right-radius: 15px;">
+<div class="col-md-2 d-flex align-items-center justify-content-center" style="background-color: rgb(15,29,64); color: white; border-top-right-radius: 14px; border-bottom-right-radius: 14px;">
   <div class="text-center" style="font-size: 36px;font-family:'Apple Chancery',fantacy;font-style:oblique; font-weight: 1000;">
     C<br>
     U<br>

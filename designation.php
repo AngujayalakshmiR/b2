@@ -500,46 +500,46 @@
                 <!-- Begin Page Content -->
                 <!-- Begin Page Content -->
               <!-- Include Bootstrap -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
-<div class="container-fluid mt-4">
+              <div class="container-fluid mt-4">
     <div class="row">
         <!-- Column 1 -->
         <div class="col-md-3">
-            <div class="card shadow-sm p-3" style="min-height: 50px; background-color:rgb(250, 195, 203); border-radius: 15px;">
+            <div class="card  p-3" style="min-height: 50px;color:black; background-color: rgb(248, 165, 178); border-radius: 10px;">
                 <div class="card-body text-center">
                     <h6 class="card-text">Software Engineer</h6>
                 </div>
             </div>
         </div>
-        
+
         <!-- Column 2 -->
         <div class="col-md-3">
-            <div class="card shadow-sm p-3" style="min-height: 50px; background-color:rgb(190, 235, 240); border-radius: 15px;">
+            <div class="card  p-3" style="min-height: 50px;color:black; background-color: rgb(137, 217, 226); border-radius: 10px;">
                 <div class="card-body text-center">
-                <h6 class="card-text">Software Engineer</h6>
+                    <h6 class="card-text">Software Engineer</h6>
                 </div>
             </div>
         </div>
-        
+
         <!-- Column 3 -->
         <div class="col-md-3">
-            <div class="card shadow-sm p-3" style="min-height: 50px; background-color:rgb(240, 237, 169); border-radius: 15px;">
+            <div class="card  p-3" style="min-height: 50px;color:black; background-color: rgb(224, 219, 113); border-radius: 10px;">
                 <div class="card-body text-center">
-                <h6 class="card-text">Software Engineer</h6>
+                    <h6 class="card-text">Software Engineer</h6>
                 </div>
             </div>
         </div>
+
+        <!-- Column 4 -->
         <div class="col-md-3">
-            <div class="card shadow-sm p-3" style="min-height: 50px; background-color:rgb(180, 247, 160); border-radius: 15px;">
+            <div class="card  p-3" style="min-height: 50px;color:black; background-color: rgb(134, 226, 105); border-radius: 10px;">
                 <div class="card-body text-center">
-                <h6 class="card-text">Software Engineer</h6>
+                    <h6 class="card-text">Software Engineer</h6>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
                 <!-- /.container-fluid -->
 
             </div>

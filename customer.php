@@ -364,56 +364,105 @@
             <div id="content">
 
                 <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style=" background:white;">
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style="background:white;">
+<!-- Create Customer Button -->
+
+<div class="mr-auto d-flex align-items-center pl-3 py-2">
+  <h4 class="text-dark font-weight-bold mr-4" 
+      style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
+      Master > Customer Details
+  </h4>
+  <button class="btn d-flex align-items-center px-3" 
+      style="background-color: rgb(15,29,64); color: white; border-radius: 25px;"
+      data-toggle="modal" data-target="#customerModal">
+    <i class="fas fa-user mr-2"></i> Create Customer
+  </button>
+</div>
+
+<!-- Customer Modal (No header, reduced width) -->
+<div class="modal fade" id="customerModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 40%;">
+    <div class="modal-content" style="border-radius: 15px;">
+      <!-- Modal header removed -->
+      <div class="modal-body p-0">
+        <div class="row no-gutters">
+          <!-- Left Column: Form (Approximately 70% width) -->
+          <div class="col-md-10">
+            <div class="ml-3 mt-3 mb-3 mr-3">
+              <form action="customer.php" method="GET">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="customerName"><b>Name:</b></label>
+                      <input type="text" class="form-control" id="customerName" placeholder="Enter name">
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="companyName"><b>Company Name:</b></label>
+                      <input type="text" class="form-control" id="companyName" placeholder="Enter company name">
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="phoneNumber"><b>Phone Number:</b></label>
+                      <input type="text" class="form-control" id="phoneNumber" placeholder="Enter phone number">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="customerAddress"><b>Address:</b></label>
+                  <textarea class="form-control" id="customerAddress" rows="3" placeholder="Enter address"></textarea>
+                </div>
+                <div class="d-flex justify-content-start">
+                  <button type="submit" class="btn " style="background-color: rgb(15,29,64); color: white; border-radius: 25px;">Submit</button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <!-- Right Column: RGB Color Code (Approximately 30% width) -->
+          <!-- Right Column: Vertical "CUSTOMER" text -->
+<div class="col-md-2 d-flex align-items-center justify-content-center" style="background-color: rgb(15,29,64); color: white; border-top-right-radius: 15px; border-bottom-right-radius: 15px;">
+  <div class="text-center" style="font-size: 36px;font-family:'Apple Chancery',fantacy;font-style:oblique; font-weight: 1000;">
+    C<br>
+    U<br>
+    S<br>
+    T<br>
+    O<br>
+    M<br>
+    E<br>
+    R
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Bootstrap & jQuery (Include these if they are not already present in your project) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 
 <!-- Sidebar Toggle (Topbar) -->
 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
     <i class="fa fa-bars"></i>
 </button>
 
-
-
 <!-- Topbar Navbar -->
 <ul class="navbar-nav ml-auto">
 
-    <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-    <li class="nav-item dropdown no-arrow d-sm-none">
-        <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-search fa-fw"></i>
-        </a>
-        <!-- Dropdown - Messages -->
-        <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-            aria-labelledby="searchDropdown">
-            <form class="form-inline mr-auto w-100 navbar-search">
-                <div class="input-group">
-                    <input type="text" class="form-control bg-light border-0 small"
-                        placeholder="Search for..." aria-label="Search"
-                        aria-describedby="basic-addon2">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" type="button">
-                            <i class="fas fa-search fa-sm"></i>
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </li>
-
-    <div class="topbar-divider d-none d-sm-block"></div>
-
     <!-- Nav Item - User Information -->
     <li class="nav-item dropdown no-arrow">
-        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img class="img-profile rounded-circle"
-                src="img/p.png" style="width: 3rem;height: 3rem;">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <img class="img-profile rounded-circle" src="img/p.png" style="width: 3rem; height: 3rem;">
         </a>
         <!-- Dropdown - User Information -->
-        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-            aria-labelledby="userDropdown">
-            
-            
+        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                 Logout
@@ -424,13 +473,12 @@
 </ul>
 
 </nav>
-                <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
         
         <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">Master > Customer Details</h1>
+       
         
 
         <!-- DataTales Example -->

@@ -590,8 +590,6 @@
 <script>
   $(document).ready(function(){
   var submissionCount = localStorage.getItem('submissionCount') ? parseInt(localStorage.getItem('submissionCount')) : 0;
-
-  // Handle new customer addition
   $('#customerForm').on('submit', function(e){
     e.preventDefault();
 
@@ -626,7 +624,12 @@
     }));
 
     $('#customerForm')[0].reset();
-  });
+    
+    // Close the modal and remove the backdrop
+    $('#customerModal').modal('hide');
+    $('body').removeClass('modal-open');
+    $('.modal-backdrop').remove();
+});
 
   // Open Edit Modal
   $('#customerContainer').on('click', '.card', function(){

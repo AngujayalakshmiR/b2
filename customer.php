@@ -266,7 +266,67 @@
     .sidebar-dark .nav-item .nav-link[data-toggle="collapse"]:hover::after {
     color: white;
 }
+
 </style>
+<!-- Modal Styles -->
+<style>
+/* Off-canvas modal attached to the right with a trapezoid shape */
+.side-modal {
+      position: fixed;
+      top: 15vh;              /* 15% from the top */
+      right: 0;               /* Attached to the right edge */
+      width: 400px;           /* Adjust width as needed */
+      height: 70vh;           /* 70% of viewport height */
+      background-color: #fff;
+      clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%);
+      box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+      transform: translateX(100%); /* Start hidden off-screen to the right */
+      transition: transform 0.3s ease;
+      z-index: 1050;
+      overflow-y: auto;
+  }
+  /* When open, the modal slides in flush with the right edge */
+  .side-modal.open {
+      transform: translateX(0);
+  }
+  /* Center the content within the modal */
+  .side-modal .modal-content {
+      padding: 20px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Centers items horizontally */
+      justify-content: center; /* Centers items vertically */
+      height: 100%;
+  }
+  /* Style the form inside the modal */
+  .side-modal .modal-content form {
+      width: 100%;
+      max-width: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  }
+  /* Style input fields and the submit button */
+  .side-modal .modal-content input,
+  .side-modal .modal-content button {
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 16px;
+      box-sizing: border-box;
+  }
+  /* Close icon styling */
+  .side-modal .close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+  }
+</style>
+
 
 </head>
 
@@ -365,224 +425,230 @@
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style="background:white;">
-<!-- Create Customer Button -->
+  <!-- Create Customer Button -->
+  <div class="mr-auto d-flex align-items-center pl-3 py-2">
+    <h4 class="text-dark font-weight-bold mr-4" 
+        style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
+        Master &gt; Customer Details
+    </h4>
+    <button class="btn d-flex align-items-center px-3" 
+        style="background-color: rgb(15,29,64); color: white; border-radius: 25px;"
+        data-toggle="modal" data-target="#customerModal">
+      <i class="fas fa-user mr-2"></i> Create Customer
+    </button>
+  </div>
+  
+  <!-- (Other topbar items can go here) -->
+  
+</nav>
 
-<div class="mr-auto d-flex align-items-center pl-3 py-2">
-  <h4 class="text-dark font-weight-bold mr-4" 
-      style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
-      Master > Customer Details
-  </h4>
-  <button class="btn d-flex align-items-center px-3" 
-      style="background-color: rgb(15,29,64); color: white; border-radius: 25px;"
-      data-toggle="modal" data-target="#customerModal">
-    <i class="fas fa-user mr-2"></i> Create Customer
-  </button>
-</div>
-
-<!-- Customer Modal (No header, reduced width) -->
+<!-- Customer Modal -->
 <div class="modal fade" id="customerModal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 40%;">
     <div class="modal-content" style="border-radius: 15px;">
-      <!-- Modal header removed -->
       <div class="modal-body p-0">
         <div class="row no-gutters">
-          <!-- Left Column: Form (Approximately 70% width) -->
+          <!-- Left Column: Form -->
           <div class="col-md-10">
             <div class="ml-3 mt-3 mb-3 mr-3">
-              <form action="customer.php" method="GET">
+              <!-- Notice we removed the action and method attributes for client-side handling -->
+              <form id="customerForm">
                 <div class="row">
                   <div class="col-md-12">
                     <div class="form-group">
                       <label for="customerName"><b>Name:</b></label>
-                      <input type="text" class="form-control" id="customerName" placeholder="Enter name">
+                      <input type="text" class="form-control" id="customerName" placeholder="Enter name" required>
                     </div>
                   </div>
                   <div class="col-md-12">
                     <div class="form-group">
                       <label for="companyName"><b>Company Name:</b></label>
-                      <input type="text" class="form-control" id="companyName" placeholder="Enter company name">
+                      <input type="text" class="form-control" id="companyName" placeholder="Enter company name" required>
                     </div>
                   </div>
                   <div class="col-md-12">
                     <div class="form-group">
                       <label for="phoneNumber"><b>Phone Number:</b></label>
-                      <input type="text" class="form-control" id="phoneNumber" placeholder="Enter phone number">
+                      <input type="text" class="form-control" id="phoneNumber" placeholder="Enter phone number" required>
                     </div>
                   </div>
                 </div>
                 <div class="form-group">
                   <label for="customerAddress"><b>Address:</b></label>
-                  <textarea class="form-control" id="customerAddress" rows="3" placeholder="Enter address"></textarea>
+                  <textarea class="form-control" id="customerAddress" rows="3" placeholder="Enter address" required></textarea>
                 </div>
                 <div class="d-flex justify-content-start">
-                  <button type="submit" class="btn " style="background-color: rgb(15,29,64); color: white; border-radius: 25px;">Submit</button>
+                  <button type="submit" class="btn" style="background-color: rgb(15,29,64); color: white; border-radius: 25px;">
+                    Submit
+                  </button>
                 </div>
               </form>
             </div>
           </div>
-          <!-- Right Column: RGB Color Code (Approximately 30% width) -->
           <!-- Right Column: Vertical "CUSTOMER" text -->
-<div class="col-md-2 d-flex align-items-center justify-content-center" style="background-color: rgb(15,29,64); color: white; border-top-right-radius: 14px; border-bottom-right-radius: 14px;">
-  <div class="text-center" style="font-size: 36px;font-family:'Apple Chancery',fantacy;font-style:oblique; font-weight: 1000;">
-    C<br>
-    U<br>
-    S<br>
-    T<br>
-    O<br>
-    M<br>
-    E<br>
-    R
-  </div>
-</div>
-
+          <div class="col-md-2 d-flex align-items-center justify-content-center" style="background-color: rgb(15,29,64); color: white; border-top-right-radius: 14px; border-bottom-right-radius: 14px;">
+            <div class="text-center" style="font-size: 36px;font-family:'Apple Chancery',fantacy;font-style:oblique; font-weight: 1000;">
+              C<br>
+              U<br>
+              S<br>
+              T<br>
+              O<br>
+              M<br>
+              E<br>
+              R
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
+<div class="container-fluid">
+  <div id="customerContainer" class="row">
+    <!-- Cards will be appended here -->
+  </div>
+</div>
 
+<!-- Modal HTML -->
+<div id="sideModal" class="side-modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <form id="modalForm">
+      <input type="text" placeholder="Customer Name" required>
+      <input type="text" placeholder="Company Name" required>
+      <input type="text" placeholder="Phone Number" required>
+      <input type="text" placeholder="Customer Address" required>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+</div>
 
-<!-- Bootstrap & jQuery (Include these if they are not already present in your project) -->
+<!-- jQuery, Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-
-<!-- Sidebar Toggle (Topbar) -->
-<button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-    <i class="fa fa-bars"></i>
-</button>
-
-<!-- Topbar Navbar -->
-<ul class="navbar-nav ml-auto">
-
-    <!-- Nav Item - User Information -->
-    <li class="nav-item dropdown no-arrow">
-        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img class="img-profile rounded-circle" src="img/p.png" style="width: 3rem; height: 3rem;">
-        </a>
-        <!-- Dropdown - User Information -->
-        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                Logout
-            </a>
-        </div>
-    </li>
-
-</ul>
-
-</nav>
-
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-        
-        <!-- Page Heading -->
-       
-        
-
-        <!-- DataTales Example -->
-        <div class="card shadow mb-4">
-        <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Customer Details</h6>
-<form id="customerForm" class="row g-3 mt-3">
-<!-- Column 1: Name & Company Name -->
-<div class="col-md-4 p-2">
-<input type="text" class="form-control mb-2" id="customername" placeholder="Enter Customer Name">
-<input type="text" class="form-control" id="companyname" placeholder="Enter Company Name">
-</div>
-
-<!-- Column 2: Address -->
-<div class="col-md-4 p-2">
-<textarea class="form-control h-100" id="customeraddress" placeholder="Enter Company Address" rows="3"></textarea>
-</div>
-
-<!-- Column 3: Phone Number & Submit Button -->
-<div class="col-md-4 p-2">
-<input type="text" class="form-control mb-2" id="customerno" placeholder="Enter Phone Number">
-<button type="submit" class="btn btn-primary w-100" id="customerbtn">Add Customer</button>
-</div>
-</form>
-
-
-
-       
-    </div>
+<!-- jQuery and your script -->
+<script>
+  $(document).ready(function(){
+    // Counter to keep track of the number of submissions
+    var submissionCount = 0;
+    
+    $('#customerForm').on('submit', function(e){
+      e.preventDefault();  // Prevent the default form submission
+      
+      // Grab values from the form inputs
+      var customerName    = $('#customerName').val();
+      var companyName     = $('#companyName').val();
+      var phoneNumber     = $('#phoneNumber').val();
+      var customerAddress = $('#customerAddress').val();
+      
+      // Increase the counter for each submission
+      submissionCount++;
+      
+      // Determine card color based on submission count:
+      // - submissionCount % 3 === 1: pink
+      // - submissionCount % 3 === 2: blue
+      // - submissionCount % 3 === 0: orange
+      var cardColor;
+      if(submissionCount % 3 === 1) {
+        cardColor = 'rgb(248,165,178)'; // pink
+      } else if(submissionCount % 3 === 2) {
+        cardColor = 'rgb(137,217,226)'; // blue
+      } else {
+        cardColor = 'orange'; // orange
+      }
+      
+      // Create the HTML for a single card with a data-id attribute.
+      // Also, set the cursor pointer to indicate it's clickable.
+      var cardHTML = `
+        <div class="col-md-4 mt-3">
+          <div class="card p-3" data-id="${submissionCount}" style="min-height: 100px; background-color: ${cardColor}; border-radius: 10px; cursor: pointer;">
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered text-center" id="dataTable" width="100%" cellspacing="0">
-                        <thead>
-                            <tr class="thead">
-                                <th>S.no</th>
-                                <th>Name</th>
-                                <th>Company Name</th>
-                                <th>Contact</th>
-                                <th>Address</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>JayaVarshini</td>
-                                <td>ABC Company</td>
-                                <td>1234567890</td>
-                                <td>No.123, Nehru Nagar, Karur-639006, Tamil Nadu, India</td>
-                                <td class="action-buttons">
-                                    <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                                    <button class="btn-action btn-delete"><i class="fas fa-trash-alt"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Suriya</td>
-                                <td>XYZ Company</td>
-                                <td>9876543210</td>
-                                <td>No.143, Vijaya Street, Chennai-5, Tamil Nadu, India</td>
-                                <td class="action-buttons">
-                                    <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                                    <button class="btn-action btn-delete"><i class="fas fa-trash-alt"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Mohan</td>
-                                <td>MNO Company</td>
-                                <td>4567891234</td>
-                                <td>No.11/A, Sengunthar Nagar, Karur-639006, Tamil Nadu, India</td>
-                                <td class="action-buttons">
-                                    <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                                    <button class="btn-action btn-delete"><i class="fas fa-trash-alt"></i></button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+              <h6 class="card-text"><strong>Name:</strong> ${customerName}</h6>
+              <h6 class="card-text"><strong>Company:</strong> ${companyName}</h6>
             </div>
+          </div>
         </div>
+      `;
+      
+      // Append the new card to the container (ensure #customerContainer is a Bootstrap row or flex container)
+      $('#customerContainer').append(cardHTML);
+      
+      // Create an object with the hidden data (phone and address) along with name and company
+      var hiddenData = {
+        phone: phoneNumber,
+        address: customerAddress,
+        name: customerName,
+        company: companyName
+      };
+      localStorage.setItem('customer_hidden_' + submissionCount, JSON.stringify(hiddenData));
+      
+      // Reset the form
+      $(this)[0].reset();
+    });
+    
+    // Delegate click event on card to open modal
+    $('#customerContainer').on('click', '.card', function(){
+      var cardId = $(this).data('id');
+      
+      // Retrieve hidden data from localStorage using the card's data-id
+      var data = localStorage.getItem('customer_hidden_' + cardId);
+      if(data) {
+        var details = JSON.parse(data);
+        // Populate modal content with the card details
+        var modalContent = `
+          <h6><strong>Name:</strong> ${details.name}</h6>
+          <h6><strong>Company:</strong> ${details.company}</h6>
+          <h6><strong>Phone:</strong> ${details.phone}</h6>
+          <h6><strong>Address:</strong> ${details.address}</h6>
+        `;
+        $('#modalBody').html(modalContent);
+      } else {
+        $('#modalBody').html('<p>No details found.</p>');
+      }
+      
+      // Open modal by adding the 'open' class
+      $('#sideModal').addClass('open');
+    });
+    
+    // Close modal when clicking on the close button
+    $('#sideModal').on('click', '.close', function(){
+      $('#sideModal').removeClass('open');
+    });
+    
+    // Optionally, close modal when clicking outside the modal content
+    $('#sideModal').on('click', function(e) {
+      if ($(e.target).is('#sideModal')) {
+        $('#sideModal').removeClass('open');
+      }
+    });
+  });
+</script>
 
-    </div>
-                <!-- /.container-fluid -->
 
-            </div>
+
+
+
+
+
 
 
 
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <footer class="sticky-footer bg-white">
+           
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+        <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
                        <h6> <b>Copyright &copy; Knock the Globe Technologies 2025</b></h6>
                     </div>
                 </div>
             </footer>
-            <!-- End of Footer -->
-
-        </div>
-        <!-- End of Content Wrapper -->
-
     </div>
     <!-- End of Page Wrapper -->
 

@@ -380,42 +380,40 @@
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style=" background:white;">
-                <div class="mr-auto d-flex align-items-center pl-3 py-2">
-  <h4 class="text-dark font-weight-bold mr-4" 
-      style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
-      Master > Designation
-  </h4>
-  <button class="btn d-flex align-items-center px-3" 
-      style="background-color: rgb(15,29,64); color: white; border-radius: 25px;"
-      data-toggle="modal" data-target="#designationModal">
-                <i class="fa-solid fa-id-badge fa-1x"></i>&nbsp; <!-- Designation Icon -->
- Create Designation
-  </button>
+                                
+                   <!-- Header Section -->
+<div class="mr-auto d-flex align-items-center pl-3 py-2">
+    <h4 class="text-dark font-weight-bold mr-4" style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
+        Master > Designation
+    </h4>
+    <button class="btn d-flex align-items-center px-3" style="background-color: rgb(15,29,64); color: white; border-radius: 25px;"
+        data-toggle="modal" data-target="#designationModal">
+        <i class="fa-solid fa-id-badge fa-1x"></i>&nbsp;
+        Create Designation
+    </button>
+    <i id="trashIcon" class="fa-solid fa-trash fa-2x ml-3" 
+       style="color: red; cursor: pointer; padding: 10px; border-radius: 50%; background: white; box-shadow: 0px 0px 5px rgba(0,0,0,0.2);">
+    </i>
 </div>
-
 
 <!-- Customer Modal (No header, reduced width) -->
 <!-- Include Font Awesome for Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
+<!-- Modal -->
 <div class="modal fade" id="designationModal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 40%;">
     <div class="modal-content" style="border-radius: 15px;">
       <div class="modal-body p-0">
         <div class="row no-gutters">
-          <!-- Left Column: Form (Approximately 70% width) -->
+          <!-- Left Column: Form -->
           <div class="col-md-10">
             <div class="ml-3 mt-3 mb-3 mr-3">
-              <form action="designation.php" method="GET">
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <label for="customerName"><b>Designation Details:</b></label>
-                      <input type="text" class="form-control" id="customerName" placeholder="Enter designation">
-                    </div>
-                  </div>
+              <form id="designationForm">
+                <div class="form-group">
+                  <label for="designationInput"><b>Designation Details:</b></label>
+                  <input type="text" class="form-control" id="designationInput" placeholder="Enter designation" required>
                 </div>
-                
                 <div class="d-flex justify-content-start">
                   <button type="submit" class="btn" style="background-color: rgb(15,29,64); color: white; border-radius: 25px;">Submit</button>
                 </div>
@@ -429,7 +427,6 @@
                       border-top-right-radius: 14px; border-bottom-right-radius: 14px;">
             <i class="fa-solid fa-id-badge fa-4x"></i> <!-- Designation Icon -->
           </div>
-
         </div>
       </div>
     </div>
@@ -501,45 +498,78 @@
                 <!-- Begin Page Content -->
               <!-- Include Bootstrap -->
 
-              <div class="container-fluid mt-4">
-    <div class="row">
-        <!-- Column 1 -->
-        <div class="col-md-3">
-            <div class="card  p-3" style="min-height: 50px;color:black; background-color: rgb(248, 165, 178); border-radius: 10px;">
-                <div class="card-body text-center">
-                    <h6 class="card-text">Software Engineer</h6>
-                </div>
-            </div>
-        </div>
-
-        <!-- Column 2 -->
-        <div class="col-md-3">
-            <div class="card  p-3" style="min-height: 50px;color:black; background-color: rgb(137, 217, 226); border-radius: 10px;">
-                <div class="card-body text-center">
-                    <h6 class="card-text">Software Engineer</h6>
-                </div>
-            </div>
-        </div>
-
-        <!-- Column 3 -->
-        <div class="col-md-3">
-            <div class="card  p-3" style="min-height: 50px;color:black; background-color: rgb(224, 219, 113); border-radius: 10px;">
-                <div class="card-body text-center">
-                    <h6 class="card-text">Software Engineer</h6>
-                </div>
-            </div>
-        </div>
-
-        <!-- Column 4 -->
-        <div class="col-md-3">
-            <div class="card  p-3" style="min-height: 50px;color:black; background-color: rgb(134, 226, 105); border-radius: 10px;">
-                <div class="card-body text-center">
-                    <h6 class="card-text">Software Engineer</h6>
-                </div>
-            </div>
-        </div>
-    </div>
+           <!-- Designation Cards Container -->
+<div class="container mt-4">
+    <div class="row" id="designationContainer" style="row-gap: 20px;"></div>
 </div>
+
+<!-- Add Designation Modal -->
+<div class="modal fade" id="designationModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 40%;">
+    <div class="modal-content" style="border-radius: 15px;">
+      <div class="modal-body p-0">
+        <div class="row no-gutters">
+          <!-- Left Column: Form -->
+          <div class="col-md-10">
+            <div class="ml-3 mt-3 mb-3 mr-3">
+              <form id="designationForm">
+                <div class="form-group">
+                  <label for="designationInput"><b>Designation Details:</b></label>
+                  <input type="text" class="form-control" id="designationInput" placeholder="Enter designation" required>
+                </div>
+                <div class="d-flex justify-content-start">
+                  <button type="submit" class="btn" style="background-color: rgb(15,29,64); color: white; border-radius: 25px;">Submit</button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <!-- Right Column: Designation Icon -->
+          <div class="col-md-2 d-flex align-items-center justify-content-center" 
+               style="background-color: rgb(15,29,64); color: white; 
+                      border-top-right-radius: 14px; border-bottom-right-radius: 14px;">
+            <i class="fa-solid fa-id-badge fa-4x"></i> <!-- Designation Icon -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Designation Modal -->
+<div class="modal fade" id="editDesignationModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 40%;">
+    <div class="modal-content" style="border-radius: 15px;">
+      <div class="modal-body p-0">
+        <div class="row no-gutters">
+          <!-- Left Column: Form -->
+          <div class="col-md-10">
+            <div class="ml-3 mt-3 mb-3 mr-3">
+              <form id="editDesignationForm">
+                <input type="hidden" id="editIndex">
+                <div class="form-group">
+                  <label for="editDesignationInput"><b>Designation Details:</b></label>
+                  <input type="text" class="form-control" id="editDesignationInput" placeholder="Edit designation" required>
+                </div>
+                <div class="d-flex justify-content-start">
+                  <button type="submit" class="btn" style="background-color: rgb(15,29,64); color: white; border-radius: 25px;">Update</button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <!-- Right Column: Designation Icon -->
+          <div class="col-md-2 d-flex align-items-center justify-content-center" 
+               style="background-color: rgb(15,29,64); color: white; 
+                      border-top-right-radius: 14px; border-bottom-right-radius: 14px;">
+                <i class="fa-solid fa-pen-to-square fa-3x" style="color: white;"></i>
+                    </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
                 <!-- /.container-fluid -->
 
             </div>
@@ -614,6 +644,108 @@ $(document).ready(function() {
     <!-- Bootstrap JavaScript -->
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
+    <script>
+    let colors = ["#F8A5B2", "#89D9E2", "#E0DB71", "#86E269", "#66D9B2"];
+    let colorIndex = 0;
+
+    function getNextColor() {
+        let color = colors[colorIndex];
+        colorIndex = (colorIndex + 1) % colors.length;
+        return color;
+    }
+
+    // Handle adding new designation
+    document.getElementById("designationForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        let designationInput = document.getElementById("designationInput");
+        let designation = designationInput.value.trim();
+        if (designation === "") return;
+        addDesignation(designation);
+        $("#designationModal").modal("hide");
+        document.getElementById("designationForm").reset();
+    });
+
+    function addDesignation(designation) {
+        let newCard = document.createElement("div");
+        newCard.className = "col-md-3 draggable-container"; // Wrapper div
+        let cardId = "card-" + new Date().getTime();
+        newCard.innerHTML = `
+            <div id="${cardId}" class="card p-3 draggable-card" draggable="true" 
+                style="min-height: 50px; color:black; background-color: ${getNextColor()}; 
+                       border-radius: 10px; position: relative; transition: transform 0.2s;">
+                <div class="card-body text-center">
+                    <h6 class="card-text">${designation}</h6>
+                </div>
+            </div>
+        `;
+
+        let cardElement = newCard.querySelector(".card");
+
+        // Drag Events
+        cardElement.addEventListener("dragstart", function(event) {
+            event.dataTransfer.setData("text/plain", cardId);
+            setTimeout(() => {
+                cardElement.style.opacity = "0.5";
+            }, 0);
+        });
+
+        cardElement.addEventListener("dragend", function() {
+            cardElement.style.opacity = "1";
+        });
+
+        // Click to edit
+        cardElement.addEventListener("click", function() {
+            openEditModal(cardId, designation);
+        });
+
+        document.getElementById("designationContainer").appendChild(newCard);
+    }
+
+    function openEditModal(cardId, designation) {
+        document.getElementById("editDesignationInput").value = designation;
+        document.getElementById("editIndex").value = cardId;
+        $("#editDesignationModal").modal("show");
+    }
+
+    // Handle updating the designation
+    document.getElementById("editDesignationForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent page reload
+
+        let editInput = document.getElementById("editDesignationInput").value.trim();
+        let cardId = document.getElementById("editIndex").value;
+
+        if (editInput === "" || !cardId) return;
+
+        let cardElement = document.getElementById(cardId);
+        if (cardElement) {
+            cardElement.querySelector(".card-text").textContent = editInput;
+        }
+
+        $("#editDesignationModal").modal("hide");
+    });
+
+    // Delete Functionality
+    function deleteCard(cardId) {
+        let cardElement = document.getElementById(cardId);
+        if (cardElement) {
+            cardElement.parentElement.remove(); // Remove the entire wrapper div
+        }
+    }
+
+    // Trash Icon Drop Handling
+    let trashIcon = document.getElementById("trashIcon");
+
+    trashIcon.addEventListener("dragover", function(event) {
+        event.preventDefault();
+    });
+
+    trashIcon.addEventListener("drop", function(event) {
+        event.preventDefault();
+        let cardId = event.dataTransfer.getData("text/plain");
+        deleteCard(cardId);
+    });
+</script>
+
 </body>
 
 </html>

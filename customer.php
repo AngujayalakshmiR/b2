@@ -274,11 +274,11 @@
   position: fixed;
   top: 0;
   right: -100%; /* Initially hidden */
-  width: 350px;
+  width: 400px;
   height: 100vh;
   background: rgba(15, 29, 64); /* Transparent bluish effect */
   backdrop-filter: blur(10px); /* Glassmorphism effect */
-  clip-path: polygon(30% 0%, 100% 0%, 100% 100%, 0% 100%);
+  clip-path: polygon(25% 0%, 100% 0%, 100% 100%, 0% 100%);
   transition: right 0.4s ease-in-out;
   z-index: 1000;
   padding: 10px; /* Reduce padding */
@@ -325,7 +325,7 @@
   display: flex;
   flex-direction: column;
   width: 100%; /* Full width */
-  align-items: center; /* Center elements */
+  align-items: right; /* Center elements */
 }
 
 /* Input Fields */
@@ -364,12 +364,21 @@
   font-size: 16px;
   transition: background 0.3s ease, transform 0.2s ease;
 }
+.modal-content1 {
+  padding-left: 30px;
+}
+.side-modal {
+  clip-path: none;
+}
+
 
 #modalForm1 button:hover {
   background: rgb(220, 145, 158);
   transform: scale(1.05);
 }
-
+.card-body{
+  color:black;
+}
 </style>
 <!-- Modal Styles -->
 
@@ -560,7 +569,6 @@
 <!-- Side Modal -->
 <div id="sideModal" class="side-modal">
   <div class="modal-content1">
-    <span class="close">&times;</span>
     <form id="modalForm1">
       <input type="hidden" id="editId">
       <input type="text" id="modal-customerName" placeholder="Customer Name" required>
@@ -599,11 +607,11 @@
     var cardColor = cardColors[(submissionCount - 1) % 3];
 
     var cardHTML = `
-      <div class="col-md-4 mt-3">
+      <div class="col-md-3 mt-3">
         <div class="card p-3" data-id="${submissionCount}" style="background-color: ${cardColor}; border-radius: 10px; cursor: pointer;">
           <div class="card-body">
-            <h6 class="card-text"><strong>Name:</strong> <span class="customer-name">${customerName}</span></h6>
-            <h6 class="card-text"><strong>Company:</strong> <span class="company-name">${companyName}</span></h6>
+            <h6 class="card-text"><span class="customer-name">${customerName}</span></h6>
+            <h6 class="card-text"><strong> <span class="company-name">${companyName}</span></strong></h6>
           </div>
         </div>
       </div>

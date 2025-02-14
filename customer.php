@@ -268,64 +268,111 @@
 }
 
 </style>
-<!-- Modal Styles -->
 <style>
-/* Off-canvas modal attached to the right with a trapezoid shape */
+  /* Base styles for the side modal */
 .side-modal {
-      position: fixed;
-      top: 15vh;              /* 15% from the top */
-      right: 0;               /* Attached to the right edge */
-      width: 400px;           /* Adjust width as needed */
-      height: 70vh;           /* 70% of viewport height */
-      background-color: #fff;
-      clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%);
-      box-shadow: -2px 0 5px rgba(0,0,0,0.3);
-      transform: translateX(100%); /* Start hidden off-screen to the right */
-      transition: transform 0.3s ease;
-      z-index: 1050;
-      overflow-y: auto;
-  }
-  /* When open, the modal slides in flush with the right edge */
-  .side-modal.open {
-      transform: translateX(0);
-  }
-  /* Center the content within the modal */
-  .side-modal .modal-content {
-      padding: 20px;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center; /* Centers items horizontally */
-      justify-content: center; /* Centers items vertically */
-      height: 100%;
-  }
-  /* Style the form inside the modal */
-  .side-modal .modal-content form {
-      width: 100%;
-      max-width: 300px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-  }
-  /* Style input fields and the submit button */
-  .side-modal .modal-content input,
-  .side-modal .modal-content button {
-      width: 100%;
-      margin: 10px 0;
-      padding: 10px;
-      font-size: 16px;
-      box-sizing: border-box;
-  }
-  /* Close icon styling */
-  .side-modal .close {
-      position: absolute;
-      top: 10px;
-      right: 15px;
-      font-size: 28px;
-      font-weight: bold;
-      cursor: pointer;
-  }
+  position: fixed;
+  top: 0;
+  right: -100%; /* Initially hidden */
+  width: 350px;
+  height: 100vh;
+  background: rgba(15, 29, 64); /* Transparent bluish effect */
+  backdrop-filter: blur(10px); /* Glassmorphism effect */
+  clip-path: polygon(30% 0%, 100% 0%, 100% 100%, 0% 100%);
+  transition: right 0.4s ease-in-out;
+  z-index: 1000;
+  padding: 10px; /* Reduce padding */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: -5px 0px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Open state */
+.side-modal.open {
+  right: 0;
+}
+
+/* Modal content */
+.modal-content1 {
+  position: relative;
+  width: 90%; /* Ensure it fits within modal */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: none;
+  padding: 5px;
+}
+
+/* Close button */
+.side-modal .close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  cursor: pointer;
+  color: white;
+  transition: transform 0.3s ease;
+}
+
+.side-modal .close:hover {
+  transform: rotate(90deg);
+}
+
+/* Form styling */
+#modalForm1 {
+  display: flex;
+  flex-direction: column;
+  width: 100%; /* Full width */
+  align-items: center; /* Center elements */
+}
+
+/* Input Fields */
+#modalForm1 input {
+  width: 100%; /* Full width */
+  max-width: 90%; /* Ensure it doesn't overflow */
+  margin-bottom: 12px;
+  padding: 10px;
+  border: 2px solid rgb(255, 255, 255);
+  border-radius: 8px;
+  background: rgb(255, 255, 255);
+  color: rgba(15, 29, 64);
+  font-size: 16px;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+#modalForm1 input:focus {
+  border-color: rgb(248, 165, 178);
+  box-shadow: 0px 0px 10px rgba(248, 165, 178, 0.5);
+  outline: none;
+}
+
+#modalForm1 input::placeholder {
+  color: rgba(15, 29, 64, 0.6); /* Darker placeholder for visibility */
+}
+
+/* Submit Button */
+#modalForm1 button {
+  background: rgb(248, 165, 178);
+  color: white;
+  padding: 12px;
+  width: 90%;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+#modalForm1 button:hover {
+  background: rgb(220, 145, 158);
+  transform: scale(1.05);
+}
+
 </style>
+<!-- Modal Styles -->
+
 
 
 </head>
@@ -510,19 +557,23 @@
   </div>
 </div>
 
-<!-- Modal HTML -->
+<!-- Side Modal -->
 <div id="sideModal" class="side-modal">
-  <div class="modal-content">
+  <div class="modal-content1">
     <span class="close">&times;</span>
-    <form id="modalForm">
-      <input type="text" placeholder="Customer Name" required>
-      <input type="text" placeholder="Company Name" required>
-      <input type="text" placeholder="Phone Number" required>
-      <input type="text" placeholder="Customer Address" required>
-      <button type="submit">Submit</button>
+    <form id="modalForm1">
+      <input type="hidden" id="editId">
+      <input type="text" id="modal-customerName" placeholder="Customer Name" required>
+      <input type="text" id="modal-companyName" placeholder="Company Name" required>
+      <input type="text" id="modal-phoneNumber" placeholder="Phone Number" required>
+      <input type="text" id="modal-customerAddress" placeholder="Customer Address" required>
+      <button type="submit" id="submitBtn">Submit</button>
     </form>
   </div>
 </div>
+
+
+
 
 <!-- jQuery, Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -530,110 +581,106 @@
 <!-- jQuery and your script -->
 <script>
   $(document).ready(function(){
-    // Counter to keep track of the number of submissions
-    var submissionCount = 0;
-    
-    $('#customerForm').on('submit', function(e){
-      e.preventDefault();  // Prevent the default form submission
-      
-      // Grab values from the form inputs
-      var customerName    = $('#customerName').val();
-      var companyName     = $('#companyName').val();
-      var phoneNumber     = $('#phoneNumber').val();
-      var customerAddress = $('#customerAddress').val();
-      
-      // Increase the counter for each submission
-      submissionCount++;
-      
-      // Determine card color based on submission count:
-      // - submissionCount % 3 === 1: pink
-      // - submissionCount % 3 === 2: blue
-      // - submissionCount % 3 === 0: orange
-      var cardColor;
-      if(submissionCount % 3 === 1) {
-        cardColor = 'rgb(248,165,178)'; // pink
-      } else if(submissionCount % 3 === 2) {
-        cardColor = 'rgb(137,217,226)'; // blue
-      } else {
-        cardColor = 'orange'; // orange
-      }
-      
-      // Create the HTML for a single card with a data-id attribute.
-      // Also, set the cursor pointer to indicate it's clickable.
-      var cardHTML = `
-        <div class="col-md-4 mt-3">
-          <div class="card p-3" data-id="${submissionCount}" style="min-height: 100px; background-color: ${cardColor}; border-radius: 10px; cursor: pointer;">
-            <div class="card-body">
-              <h6 class="card-text"><strong>Name:</strong> ${customerName}</h6>
-              <h6 class="card-text"><strong>Company:</strong> ${companyName}</h6>
-            </div>
+  var submissionCount = localStorage.getItem('submissionCount') ? parseInt(localStorage.getItem('submissionCount')) : 0;
+
+  // Handle new customer addition
+  $('#customerForm').on('submit', function(e){
+    e.preventDefault();
+
+    var customerName = $('#customerName').val();
+    var companyName = $('#companyName').val();
+    var phoneNumber = $('#phoneNumber').val();
+    var customerAddress = $('#customerAddress').val();
+
+    submissionCount++;
+    localStorage.setItem('submissionCount', submissionCount);
+
+    var cardColors = ['rgb(248,165,178)', 'rgb(137,217,226)', 'orange'];
+    var cardColor = cardColors[(submissionCount - 1) % 3];
+
+    var cardHTML = `
+      <div class="col-md-4 mt-3">
+        <div class="card p-3" data-id="${submissionCount}" style="background-color: ${cardColor}; border-radius: 10px; cursor: pointer;">
+          <div class="card-body">
+            <h6 class="card-text"><strong>Name:</strong> <span class="customer-name">${customerName}</span></h6>
+            <h6 class="card-text"><strong>Company:</strong> <span class="company-name">${companyName}</span></h6>
           </div>
         </div>
-      `;
-      
-      // Append the new card to the container (ensure #customerContainer is a Bootstrap row or flex container)
-      $('#customerContainer').append(cardHTML);
-      
-      // Create an object with the hidden data (phone and address) along with name and company
-      var hiddenData = {
-        phone: phoneNumber,
-        address: customerAddress,
-        name: customerName,
-        company: companyName
-      };
-      localStorage.setItem('customer_hidden_' + submissionCount, JSON.stringify(hiddenData));
-      
-      // Reset the form
-      $(this)[0].reset();
-    });
-    
-    // Delegate click event on card to open modal
-    $('#customerContainer').on('click', '.card', function(){
-      var cardId = $(this).data('id');
-      
-      // Retrieve hidden data from localStorage using the card's data-id
-      var data = localStorage.getItem('customer_hidden_' + cardId);
-      if(data) {
-        var details = JSON.parse(data);
-        // Populate modal content with the card details
-        var modalContent = `
-          <h6><strong>Name:</strong> ${details.name}</h6>
-          <h6><strong>Company:</strong> ${details.company}</h6>
-          <h6><strong>Phone:</strong> ${details.phone}</h6>
-          <h6><strong>Address:</strong> ${details.address}</h6>
-        `;
-        $('#modalBody').html(modalContent);
-      } else {
-        $('#modalBody').html('<p>No details found.</p>');
-      }
-      
-      // Open modal by adding the 'open' class
-      $('#sideModal').addClass('open');
-    });
-    
-    // Close modal when clicking on the close button
-    $('#sideModal').on('click', '.close', function(){
-      $('#sideModal').removeClass('open');
-    });
-    
-    // Optionally, close modal when clicking outside the modal content
-    $('#sideModal').on('click', function(e) {
-      if ($(e.target).is('#sideModal')) {
-        $('#sideModal').removeClass('open');
-      }
-    });
+      </div>
+    `;
+
+    $('#customerContainer').append(cardHTML);
+    localStorage.setItem('customer_hidden_' + submissionCount, JSON.stringify({ 
+      name: customerName, 
+      company: companyName, 
+      phone: phoneNumber, 
+      address: customerAddress 
+    }));
+
+    $('#customerForm')[0].reset();
   });
+
+  // Open Edit Modal
+  $('#customerContainer').on('click', '.card', function(){
+    var cardId = $(this).data('id');
+    var data = localStorage.getItem('customer_hidden_' + cardId);
+
+    if(data) {
+      var details = JSON.parse(data);
+      $('#editId').val(cardId);
+      $('#modal-customerName').val(details.name);
+      $('#modal-companyName').val(details.company);
+      $('#modal-phoneNumber').val(details.phone);
+      $('#modal-customerAddress').val(details.address);
+      $('#submitBtn').text('Update');
+      $('#sideModal').addClass('open');
+    }
+  });
+
+  // Handle edit form submission
+  $('#modalForm1').on('submit', function(e){
+    e.preventDefault();
+
+    var editId = $('#editId').val();
+    var customerName = $('#modal-customerName').val();
+    var companyName = $('#modal-companyName').val();
+    var phoneNumber = $('#modal-phoneNumber').val();
+    var customerAddress = $('#modal-customerAddress').val();
+
+    if(editId) {
+      var card = $(`.card[data-id="${editId}"]`);
+      card.find('.customer-name').text(customerName);
+      card.find('.company-name').text(companyName);
+
+      localStorage.setItem('customer_hidden_' + editId, JSON.stringify({
+        name: customerName, 
+        company: companyName, 
+        phone: phoneNumber, 
+        address: customerAddress 
+      }));
+
+      $('#modalForm1')[0].reset();
+      $('#submitBtn').text('Submit');
+      $('#sideModal').removeClass('open');
+    }
+  });
+
+  // Close Side Modal
+  $('#sideModal').on('click', '.close', function(){
+    $('#sideModal').removeClass('open');
+    $('#modalForm1')[0].reset();
+    $('#submitBtn').text('Submit');
+    $('#editId').val('');
+  });
+
+  $('#sideModal').on('click', function(e) {
+    if ($(e.target).is('#sideModal')) {
+      $('#sideModal').removeClass('open');
+    }
+  });
+});
+
 </script>
-
-
-
-
-
-
-
-
-
-
             <!-- End of Main Content -->
 
             <!-- Footer -->

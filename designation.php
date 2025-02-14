@@ -392,7 +392,7 @@
         Create Designation
     </button>
     <i id="trashIcon" class="fa-solid fa-trash fa-2x ml-3" 
-       style="color: red; cursor: pointer; padding: 10px; border-radius: 50%; background: white; box-shadow: 0px 0px 5px rgba(0,0,0,0.2);">
+       style="color: rgb(15,29,64); cursor: pointer; padding: 10px; border-radius: 50%; background: white; box-shadow: 0px 0px 5px rgba(0,0,0,0.2);float:left;font-size:15px;">
     </i>
 </div>
 
@@ -499,7 +499,7 @@
               <!-- Include Bootstrap -->
 
            <!-- Designation Cards Container -->
-<div class="container mt-4">
+<div class="container-fluid mt-4">
     <div class="row" id="designationContainer" style="row-gap: 20px;"></div>
 </div>
 
@@ -645,106 +645,155 @@ $(document).ready(function() {
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
     <script>
-    let colors = ["#F8A5B2", "#89D9E2", "#E0DB71", "#86E269", "#66D9B2"];
-    let colorIndex = 0;
+  let colors = ["#F8A5B2", "#89D9E2", "#E0DB71", "#86E269", "#66D9B2"];
+  let colorIndex = 0;
 
-    function getNextColor() {
-        let color = colors[colorIndex];
-        colorIndex = (colorIndex + 1) % colors.length;
-        return color;
-    }
+  function getNextColor() {
+    let color = colors[colorIndex];
+    colorIndex = (colorIndex + 1) % colors.length;
+    return color;
+  }
 
-    // Handle adding new designation
-    document.getElementById("designationForm").addEventListener("submit", function(event) {
-        event.preventDefault();
-        let designationInput = document.getElementById("designationInput");
-        let designation = designationInput.value.trim();
-        if (designation === "") return;
-        addDesignation(designation);
-        $("#designationModal").modal("hide");
-        document.getElementById("designationForm").reset();
+  // Handle adding new designation
+  document.getElementById("designationForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    let designationInput = document.getElementById("designationInput");
+    let designation = designationInput.value.trim();
+    if (designation === "") return;
+    addDesignation(designation);
+    $("#designationModal").modal("hide");
+    document.getElementById("designationForm").reset();
+  });
+
+  function addDesignation(designation) {
+    // Create a wrapper div for grid layout
+    let newCardWrapper = document.createElement("div");
+    newCardWrapper.className = "col-md-3 draggable-container";
+    let cardId = "card-" + new Date().getTime();
+    newCardWrapper.innerHTML = `
+      <div id="${cardId}" class="card p-3 draggable-card" draggable="true" 
+           style="min-height: 50px; color:black; background-color: ${getNextColor()}; 
+                  border-radius: 10px; position: relative; transition: transform 0.2s;">
+          <div class="card-body text-center">
+              <h6 class="card-text">${designation}</h6>
+          </div>
+      </div>
+    `;
+
+    let cardElement = newCardWrapper.querySelector(".card");
+
+    // Drag Events on the card
+    cardElement.addEventListener("dragstart", function(event) {
+      event.dataTransfer.setData("text/plain", cardId);
+      setTimeout(() => {
+        cardElement.style.opacity = "0.5";
+      }, 0);
     });
 
-    function addDesignation(designation) {
-        let newCard = document.createElement("div");
-        newCard.className = "col-md-3 draggable-container"; // Wrapper div
-        let cardId = "card-" + new Date().getTime();
-        newCard.innerHTML = `
-            <div id="${cardId}" class="card p-3 draggable-card" draggable="true" 
-                style="min-height: 50px; color:black; background-color: ${getNextColor()}; 
-                       border-radius: 10px; position: relative; transition: transform 0.2s;">
-                <div class="card-body text-center">
-                    <h6 class="card-text">${designation}</h6>
-                </div>
-            </div>
-        `;
-
-        let cardElement = newCard.querySelector(".card");
-
-        // Drag Events
-        cardElement.addEventListener("dragstart", function(event) {
-            event.dataTransfer.setData("text/plain", cardId);
-            setTimeout(() => {
-                cardElement.style.opacity = "0.5";
-            }, 0);
-        });
-
-        cardElement.addEventListener("dragend", function() {
-            cardElement.style.opacity = "1";
-        });
-
-        // Click to edit
-        cardElement.addEventListener("click", function() {
-            openEditModal(cardId, designation);
-        });
-
-        document.getElementById("designationContainer").appendChild(newCard);
-    }
-
-    function openEditModal(cardId, designation) {
-        document.getElementById("editDesignationInput").value = designation;
-        document.getElementById("editIndex").value = cardId;
-        $("#editDesignationModal").modal("show");
-    }
-
-    // Handle updating the designation
-    document.getElementById("editDesignationForm").addEventListener("submit", function(event) {
-        event.preventDefault(); // Prevent page reload
-
-        let editInput = document.getElementById("editDesignationInput").value.trim();
-        let cardId = document.getElementById("editIndex").value;
-
-        if (editInput === "" || !cardId) return;
-
-        let cardElement = document.getElementById(cardId);
-        if (cardElement) {
-            cardElement.querySelector(".card-text").textContent = editInput;
-        }
-
-        $("#editDesignationModal").modal("hide");
+    cardElement.addEventListener("dragend", function() {
+      cardElement.style.opacity = "1";
     });
 
-    // Delete Functionality
-    function deleteCard(cardId) {
-        let cardElement = document.getElementById(cardId);
-        if (cardElement) {
-            cardElement.parentElement.remove(); // Remove the entire wrapper div
-        }
+    // Allow dropping on the card for reordering
+    cardElement.addEventListener("dragover", function(event) {
+      event.preventDefault();
+    });
+
+    cardElement.addEventListener("drop", function(event) {
+      event.preventDefault();
+      let draggedCardId = event.dataTransfer.getData("text/plain");
+      if (draggedCardId === this.id) return; 
+      let draggedCardWrapper = document.getElementById(draggedCardId).parentElement;
+      let container = document.getElementById("designationContainer");
+      let rect = this.getBoundingClientRect();
+      let offset = event.clientY - rect.top;
+      if (offset < rect.height / 2) {
+        container.insertBefore(draggedCardWrapper, this.parentElement);
+      } else {
+        container.insertBefore(draggedCardWrapper, this.parentElement.nextSibling);
+      }
+    });
+
+    // Set different click behavior based on device width
+    if (window.innerWidth <= 768) {
+      // On mobile, tapping the text strikes it through and deletes the card.
+      let cardText = cardElement.querySelector(".card-text");
+      cardText.addEventListener("click", function(e) {
+        // Prevent triggering any parent click events
+        e.stopPropagation();
+        // Add strike-through styling
+        this.style.textDecoration = "line-through";
+        // Delete the card after a brief delay (e.g., 300ms)
+        setTimeout(() => {
+          deleteCard(cardId);
+        }, 300);
+      });
+    } else {
+      // On desktop, tapping the card opens the edit modal.
+      cardElement.addEventListener("click", function() {
+        openEditModal(cardId, designation);
+      });
     }
 
-    // Trash Icon Drop Handling
-    let trashIcon = document.getElementById("trashIcon");
+    document.getElementById("designationContainer").appendChild(newCardWrapper);
+  }
 
-    trashIcon.addEventListener("dragover", function(event) {
-        event.preventDefault();
-    });
+  function openEditModal(cardId, designation) {
+    document.getElementById("editDesignationInput").value = designation;
+    document.getElementById("editIndex").value = cardId;
+    $("#editDesignationModal").modal("show");
+  }
 
-    trashIcon.addEventListener("drop", function(event) {
-        event.preventDefault();
-        let cardId = event.dataTransfer.getData("text/plain");
-        deleteCard(cardId);
-    });
+  // Handle updating the designation
+  document.getElementById("editDesignationForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    let editInput = document.getElementById("editDesignationInput").value.trim();
+    let cardId = document.getElementById("editIndex").value;
+    if (editInput === "" || !cardId) return;
+    let cardElement = document.getElementById(cardId);
+    if (cardElement) {
+      cardElement.querySelector(".card-text").textContent = editInput;
+    }
+    $("#editDesignationModal").modal("hide");
+  });
+
+  // Delete Functionality
+  function deleteCard(cardId) {
+    let cardElement = document.getElementById(cardId);
+    if (cardElement) {
+      cardElement.parentElement.remove(); // Remove the entire wrapper div
+    }
+  }
+
+  // Trash Icon Drop Handling
+  let trashIcon = document.getElementById("trashIcon");
+
+  trashIcon.addEventListener("dragover", function(event) {
+    event.preventDefault();
+  });
+
+  trashIcon.addEventListener("drop", function(event) {
+    event.preventDefault();
+    let cardId = event.dataTransfer.getData("text/plain");
+    deleteCard(cardId);
+  });
+
+  // Allow dropping on the container (for empty spaces)
+  let container = document.getElementById("designationContainer");
+  container.addEventListener("dragover", function(event) {
+    event.preventDefault();
+  });
+
+  container.addEventListener("drop", function(event) {
+    if (event.target === container) {
+      event.preventDefault();
+      let cardId = event.dataTransfer.getData("text/plain");
+      let draggedCardWrapper = document.getElementById(cardId).parentElement;
+      container.appendChild(draggedCardWrapper);
+    }
+  });
 </script>
+
 
 </body>
 

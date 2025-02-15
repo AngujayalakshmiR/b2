@@ -24,11 +24,7 @@
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <style>
         
-        /* Gradient background for thead */
-        thead  {
-            background: linear-gradient(to right, #4568dc, #b06ab3);
-            color: white;
-        }
+       
 
         /* Center align action buttons */
         .action-buttons {
@@ -266,6 +262,58 @@
     .sidebar-dark .nav-item .nav-link[data-toggle="collapse"]:hover::after {
     color: white;
 }
+/* Style for the table header (thead) */
+#dataTable thead {
+    color: rgb(140, 147, 159);
+    font-weight: 1; 
+    font-style: normal;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Style for table data (td) */
+#dataTable tbody td {
+    font-style: normal;
+    overflow: hidden;
+    line-height: 1rem;
+    text-overflow: ellipsis;
+    color: rgb(23, 25, 28);
+    font-size: 14px;
+    font-weight: 400;
+    padding: 10px; /* Adds spacing inside cells */
+}
+
+/* Style for icons in the status column */
+#dataTable tbody td i {
+    color: rgb(0, 148, 255);
+}
+/* Counter styling similar to .bpKSTa .header-counter */
+.header-counter {
+    margin-left: 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(0, 148, 255);
+    padding: 2px 5px;
+    font-size: 13px;
+    min-width: 20px;
+    min-height: 20px;
+    font-weight: 500;
+    color: white;
+    border-radius: 100px;
+}
+
+/* Styling for the card header */
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Adjust spacing */
+    padding: 12px 16px;
+    background-color: #f8f9fc;
+}
+.page-item.active .page-link {
+    background: rgb(0, 148, 255);
+}
 </style>
 
 </head>
@@ -365,7 +413,10 @@
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style=" background:white;">
-
+                <button class="btn" style="float:right;border-radius:25px;background: rgb(0, 148, 255);color:white;" onclick="window.location.href='add_employee.php'">
+                <i class="fas fa-user"></i>
+                &nbsp Add Employee
+                                </button>
 <!-- Sidebar Toggle (Topbar) -->
 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
     <i class="fa fa-bars"></i>
@@ -428,27 +479,38 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
-                    <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Master > Employee Details</h1>
                     
 
-                    <!-- DataTales Example -->
+                    
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Employee Details 
-                                <button class="btn btn-primary" style="float:right;" onclick="window.location.href='add_employee.php'">
-                                    <i class="fas fa-plus"></i>&nbsp Add Employee
-                                </button>
-                            </h6>
-                           
+                        <p class="m-0" style="font-size: 16px;color:rgb(23, 25, 28);font-style: normal;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: rgb(23, 25, 28);
+    font-size: 16px;
+    font-weight: 500;"><b>Employee Details</b> 
+        <span class="header-counter">2</span>  <!-- Counter next to heading -->
+</p>
                         </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered text-center" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr class="thead">
-                                            <th>S.no</th>
+                        <div class="card-body" style="padding: 20px;">
+                            <div class="table-responsive ">
+                            <table class="table text-center" id="dataTable" width="100%">
+                            <colgroup>
+        <col style="width: 5%;">  <!-- S.no -->
+        <col style="width: 8%;">  <!-- Name -->
+        <col style="width: 12%;">  <!-- Company -->
+        <col style="width: 12%;">  <!-- Title -->
+        <col style="width: 12%;">  <!-- Total Days (Adjusted) -->
+        <col style="width:5%;">  <!-- Description -->
+        <col style="width: 5%;">  <!-- Total Hrs (Adjusted) -->
+        <col style="width: 5%;">  <!-- Actual Hrs (Adjusted) -->
+        <col style="width: 10%;">  <!-- Status -->
+    </colgroup>
+                            <thead>
+              <tr style="font-family:calibri;">
+              <th>S.no</th>
                                             <th>Name</th>
                                             <th>Designation</th>
                                             <th>Ph No</th>
@@ -457,76 +519,74 @@
                                             <th>Aadhar</th>
                                             <th>Pan</th>
                                             <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+              <td>1</td>
                                             <td>JayaVarshini</td>
                                             <td>App Developer</td>
                                             <td>1234567890</td>
                                             <td>No.123, Nehru Nagar, Karur-639006, Tamil Nadu, India</td>
-                                            <td>
-                                                <i class="fas fa-camera-retro photo-icon" title="Photo"></i>
+                <td>
+                                                <i class="fas fa-camera-retro photo-icon" title="Photo" style="color: rgb(222, 141, 197);"></i>
                                             </td>
                                             <td>
-                                                <i class="fas fa-id-card aadhar-icon" title="Aadhar Card"></i>
+                                                <i class="fas fa-id-card aadhar-icon" title="Aadhar Card" style="color: rgb(140, 221, 130);"></i>
                                             </td>
                                             <td>
-                                                <i class="fas fa-id-badge pan-icon" title="Pan Card"></i>
+                                                <i class="fas fa-id-badge pan-icon" title="Pan Card" style="color: rgb(246, 185, 114);"></i>
                                             </td>
                                             <td class="action-buttons">
                                                 <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                                                <button class="btn-action btn-delete"><i class="fas fa-trash-alt"></i></button>
+                                                <button class="btn-action btn-delete" ><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
                                             </td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
+              </tr>
+              <tr>
+              <td>2</td>
                                             <td>Suriya</td>
                                             <td>Full Stack Developer</td>
                                             <td>9876543210</td>
                                             <td>No.143, Vijaya Street, Chennai-5, Tamil Nadu, India</td>
-                                            <td>
-                                                <i class="fas fa-camera-retro photo-icon" title="Photo"></i>
+                <td>
+                                                <i class="fas fa-camera-retro photo-icon" title="Photo" style="color: rgb(222, 141, 197);"></i>
                                             </td>
                                             <td>
-                                                <i class="fas fa-id-card aadhar-icon" title="Aadhar Card"></i>
+                                                <i class="fas fa-id-card aadhar-icon" title="Aadhar Card" style="color: rgb(140, 221, 130);"></i>
                                             </td>
                                             <td>
-                                                <i class="fas fa-id-badge pan-icon" title="Pan Card"></i>
+                                                <i class="fas fa-id-badge pan-icon" title="Pan Card" style="color: rgb(246, 185, 114);"></i>
                                             </td>
                                             <td class="action-buttons">
                                                 <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                                                <button class="btn-action btn-delete"><i class="fas fa-trash-alt"></i></button>
+                                                <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
                                             </td>
-                                        </tr>
-                                        <tr>
+              </tr>
+              <tr>
                                             <td>3</td>
                                             <td>Mohan</td>
                                             <td>UI / UX Designer</td>
                                             <td>4567891234</td>
                                             <td>No.11/A, Sengunthar Nagar, Karur-639006, Tamil Nadu, India</td>
                                             <td>
-                                                <i class="fas fa-camera-retro photo-icon" title="Photo"></i>
+                                                <i class="fas fa-camera-retro photo-icon" title="Photo" style="color: rgb(222, 141, 197);"></i>
                                             </td>
                                             <td>
-                                                <i class="fas fa-id-card aadhar-icon" title="Aadhar Card"></i>
+                                                <i class="fas fa-id-card aadhar-icon" title="Aadhar Card" style="color: rgb(140, 221, 130);"></i>
                                             </td>
                                             <td>
-                                                <i class="fas fa-id-badge pan-icon" title="Pan Card"></i>
+                                                <i class="fas fa-id-badge pan-icon" title="Pan Card" style="color: rgb(246, 185, 114);"></i>
                                             </td>
                                             <td class="action-buttons">
                                                 <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                                                <button class="btn-action btn-delete"><i class="fas fa-trash-alt"></i></button>
+                                                <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
                                             </td>
                                         </tr>
-                                    </tbody>
-                                </table>
+            </tbody>
+</table>
                             </div>
                         </div>
-                        
                     </div>
-
                 </div>
                 <!-- /.container-fluid -->
 

@@ -24,12 +24,6 @@
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <style>
         
-        /* Gradient background for thead */
-        thead  {
-            background: linear-gradient(to right, #4568dc, #b06ab3);
-            color: white;
-        }
-
         /* Center align action buttons */
         .action-buttons {
             display: flex;
@@ -379,6 +373,59 @@
 .card-body{
   color:black;
 }
+
+/* Style for the table header (thead) */
+#dataTable thead {
+    color: rgb(140, 147, 159);
+    font-weight: 1; 
+    font-style: normal;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Style for table data (td) */
+#dataTable tbody td {
+    font-style: normal;
+    overflow: hidden;
+    line-height: 1rem;
+    text-overflow: ellipsis;
+    color: rgb(23, 25, 28);
+    font-size: 14px;
+    font-weight: 400;
+    padding: 10px; /* Adds spacing inside cells */
+}
+
+/* Style for icons in the status column */
+#dataTable tbody td i {
+    color: rgb(0, 148, 255);
+}
+/* Counter styling similar to .bpKSTa .header-counter */
+.header-counter {
+    margin-left: 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(0, 148, 255);
+    padding: 2px 5px;
+    font-size: 13px;
+    min-width: 20px;
+    min-height: 20px;
+    font-weight: 500;
+    color: white;
+    border-radius: 100px;
+}
+
+/* Styling for the card header */
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Adjust spacing */
+    padding: 12px 16px;
+    background-color: #f8f9fc;
+}
+.page-item.active .page-link {
+    background: rgb(0, 148, 255);
+}
 </style>
 <!-- Modal Styles -->
 
@@ -487,98 +534,108 @@
         style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
         Master &gt; Customer Details
     </h4>
-    <button class="btn d-flex align-items-center px-3" 
-        style="background-color: rgb(15,29,64); color: white; border-radius: 25px;"
-        data-toggle="modal" data-target="#customerModal">
-      <i class="fas fa-user mr-2"></i> Create Customer
-    </button>
   </div>
   
   <!-- (Other topbar items can go here) -->
   
 </nav>
 
-<!-- Customer Modal -->
-<div class="modal fade" id="customerModal" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 40%;">
-    <div class="modal-content" style="border-radius: 15px;">
-      <div class="modal-body p-0">
-        <div class="row no-gutters">
-          <!-- Left Column: Form -->
-          <div class="col-md-10">
-            <div class="ml-3 mt-3 mb-3 mr-3">
-              <!-- Notice we removed the action and method attributes for client-side handling -->
-              <form id="customerForm">
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <label for="customerName"><b>Name:</b></label>
-                      <input type="text" class="form-control" id="customerName" placeholder="Enter name" required>
-                    </div>
-                  </div>
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <label for="companyName"><b>Company Name:</b></label>
-                      <input type="text" class="form-control" id="companyName" placeholder="Enter company name" required>
-                    </div>
-                  </div>
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <label for="phoneNumber"><b>Phone Number:</b></label>
-                      <input type="text" class="form-control" id="phoneNumber" placeholder="Enter phone number" required>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="customerAddress"><b>Address:</b></label>
-                  <textarea class="form-control" id="customerAddress" rows="3" placeholder="Enter address" required></textarea>
-                </div>
-                <div class="d-flex justify-content-start">
-                  <button type="submit" class="btn" style="background-color: rgb(15,29,64); color: white; border-radius: 25px;">
-                    Submit
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-          <!-- Right Column: Vertical "CUSTOMER" text -->
-          <div class="col-md-2 d-flex align-items-center justify-content-center" style="background-color: rgb(15,29,64); color: white; border-top-right-radius: 14px; border-bottom-right-radius: 14px;">
-            <div class="text-center" style="font-size: 36px;font-family:'Apple Chancery',fantacy;font-style:oblique; font-weight: 1000;">
-              C<br>
-              U<br>
-              S<br>
-              T<br>
-              O<br>
-              M<br>
-              E<br>
-              R
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 <div class="container-fluid">
-  <div id="customerContainer" class="row">
-    <!-- Cards will be appended here -->
-  </div>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <form id="customerForm" class="row g-3 mt-3">
+                <!-- Column 1: Name & Company Name -->
+                <div class="col-md-4 p-2">
+                    <input type="text" class="form-control mb-2" id="customername" placeholder="Enter Customer Name">
+                    <input type="text" class="form-control" id="companyname" placeholder="Enter Company Name">
+                </div>
+
+                <!-- Column 2: Address -->
+                <div class="col-md-4 p-2">
+                    <textarea class="form-control h-100" id="customeraddress" placeholder="Enter Company Address" rows="3"></textarea>
+                </div>
+
+                <!-- Column 3: Phone Number & Submit Button -->
+                <div class="col-md-4 p-2">
+                    <input type="text" class="form-control mb-2" id="customerno" placeholder="Enter Phone Number">
+                    <button type="submit" class="btn btn-primary w-100" id="customerbtn">Add Customer</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
-<!-- Side Modal -->
-<div id="sideModal" class="side-modal">
-  <div class="modal-content1">
-    <form id="modalForm1">
-      <input type="hidden" id="editId">
-      <input type="text" id="modal-customerName" placeholder="Customer Name" required>
-      <input type="text" id="modal-companyName" placeholder="Company Name" required>
-      <input type="text" id="modal-phoneNumber" placeholder="Phone Number" required>
-      <input type="text" id="modal-customerAddress" placeholder="Customer Address" required>
-      <button type="submit" id="submitBtn">Submit</button>
-    </form>
-  </div>
-</div>
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+        <div class="card-header py-3">
+        <p class="m-0" style="font-size: 16px;color:rgb(23, 25, 28);font-style: normal;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: rgb(23, 25, 28);
+    font-size: 16px;
+    font-weight: 500;"><b>Employee Details</b> 
+        <span class="header-counter">3</span>  <!-- Counter next to heading -->
+</p>
+       
+    </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered text-center" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr class="thead">
+                                <th>S.no</th>
+                                <th>Name</th>
+                                <th>Company Name</th>
+                                <th>Contact</th>
+                                <th>Address</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>JayaVarshini</td>
+                                <td>ABC Company</td>
+                                <td>1234567890</td>
+                                <td>No.123, Nehru Nagar, Karur-639006, Tamil Nadu, India</td>
+                                <td class="action-buttons">
+                                    <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Suriya</td>
+                                <td>XYZ Company</td>
+                                <td>9876543210</td>
+                                <td>No.143, Vijaya Street, Chennai-5, Tamil Nadu, India</td>
+                                <td class="action-buttons">
+                                    <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Mohan</td>
+                                <td>MNO Company</td>
+                                <td>4567891234</td>
+                                <td>No.11/A, Sengunthar Nagar, Karur-639006, Tamil Nadu, India</td>
+                                <td class="action-buttons">
+                                    <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
 
 
 
@@ -586,112 +643,7 @@
 <!-- jQuery, Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<!-- jQuery and your script -->
-<script>
-  $(document).ready(function(){
-  var submissionCount = localStorage.getItem('submissionCount') ? parseInt(localStorage.getItem('submissionCount')) : 0;
-  $('#customerForm').on('submit', function(e){
-    e.preventDefault();
 
-    var customerName = $('#customerName').val();
-    var companyName = $('#companyName').val();
-    var phoneNumber = $('#phoneNumber').val();
-    var customerAddress = $('#customerAddress').val();
-
-    submissionCount++;
-    localStorage.setItem('submissionCount', submissionCount);
-
-    var cardColors = ['rgb(248,165,178)', 'rgb(137,217,226)', 'orange'];
-    var cardColor = cardColors[(submissionCount - 1) % 3];
-
-    var cardHTML = `
-      <div class="col-md-3 mt-3">
-        <div class="card p-3" data-id="${submissionCount}" style="background-color: ${cardColor}; border-radius: 10px; cursor: pointer;">
-          <div class="card-body">
-            <h6 class="card-text"><span class="customer-name">${customerName}</span></h6>
-            <h6 class="card-text"><strong> <span class="company-name">${companyName}</span></strong></h6>
-          </div>
-        </div>
-      </div>
-    `;
-
-    $('#customerContainer').append(cardHTML);
-    localStorage.setItem('customer_hidden_' + submissionCount, JSON.stringify({ 
-      name: customerName, 
-      company: companyName, 
-      phone: phoneNumber, 
-      address: customerAddress 
-    }));
-
-    $('#customerForm')[0].reset();
-    
-    // Close the modal and remove the backdrop
-    $('#customerModal').modal('hide');
-    $('body').removeClass('modal-open');
-    $('.modal-backdrop').remove();
-});
-
-  // Open Edit Modal
-  $('#customerContainer').on('click', '.card', function(){
-    var cardId = $(this).data('id');
-    var data = localStorage.getItem('customer_hidden_' + cardId);
-
-    if(data) {
-      var details = JSON.parse(data);
-      $('#editId').val(cardId);
-      $('#modal-customerName').val(details.name);
-      $('#modal-companyName').val(details.company);
-      $('#modal-phoneNumber').val(details.phone);
-      $('#modal-customerAddress').val(details.address);
-      $('#submitBtn').text('Update');
-      $('#sideModal').addClass('open');
-    }
-  });
-
-  // Handle edit form submission
-  $('#modalForm1').on('submit', function(e){
-    e.preventDefault();
-
-    var editId = $('#editId').val();
-    var customerName = $('#modal-customerName').val();
-    var companyName = $('#modal-companyName').val();
-    var phoneNumber = $('#modal-phoneNumber').val();
-    var customerAddress = $('#modal-customerAddress').val();
-
-    if(editId) {
-      var card = $(`.card[data-id="${editId}"]`);
-      card.find('.customer-name').text(customerName);
-      card.find('.company-name').text(companyName);
-
-      localStorage.setItem('customer_hidden_' + editId, JSON.stringify({
-        name: customerName, 
-        company: companyName, 
-        phone: phoneNumber, 
-        address: customerAddress 
-      }));
-
-      $('#modalForm1')[0].reset();
-      $('#submitBtn').text('Submit');
-      $('#sideModal').removeClass('open');
-    }
-  });
-
-  // Close Side Modal
-  $('#sideModal').on('click', '.close', function(){
-    $('#sideModal').removeClass('open');
-    $('#modalForm1')[0].reset();
-    $('#submitBtn').text('Submit');
-    $('#editId').val('');
-  });
-
-  $('#sideModal').on('click', function(e) {
-    if ($(e.target).is('#sideModal')) {
-      $('#sideModal').removeClass('open');
-    }
-  });
-});
-
-</script>
             <!-- End of Main Content -->
 
             <!-- Footer -->

@@ -297,10 +297,145 @@
 .plus-button:hover .plus-icon {
     transform: rotate(135deg); /* Rotate the plus icon */
 }
+.status-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px; /* Increases space between cards */
+    justify-content: center;
+    margin-top: 10px;
+}
 
 
+  .draggable-card {
+    min-height: 50px;
+    width: 250px;
+    color: black;
+    background-color: var(--card-color);
+    border-radius: 10px;
+    position: relative;
+    transition: transform 0.2s, background-color 0.3s;
+    cursor: pointer;
+    padding: 10px;
+    text-align: center;
+    float:center;
+  }
+
+  .draggable-card:hover {
+    transform: scale(1.05);
+  }
+
+  .card-description {
+    font-size: 12px;
+    color: #555;
+    display: none;
+  }
+
+  .draggable-card:hover .card-description {
+    display: block;
+  }
 </style>
     
+<style>
+  /* Style for Count Box */
+.count-box {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    background-color: rgb(224, 230, 235);
+    color: rgb(140, 147, 159);
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 4px; /* Slightly rounded corners */
+    margin-left: 5px;
+}
+
+/* Optional: Adjust title styling */
+.title {
+    font-size: 14px;
+    color: black;
+}
+
+  /* Container Styling */
+  .status-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  /* Card Styling */
+  .draggable-card {
+    min-height: 50px;
+    width: 250px;
+    color: black;
+    background-color: var(--card-color);
+    border-radius: 10px;
+    text-align: center;
+    padding: 10px;
+    transition: transform 0.2s;
+    cursor: pointer;
+  }
+
+  .draggable-card:hover {
+    transform: scale(1.05);
+  }
+
+  /* Vertical Divider */
+  .vertical-divider {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 1px;
+    height: 100%;
+    background-color: #ccc;
+  }
+
+  /* Prevent Divider on Last Column */
+  .col-md-4:last-child .vertical-divider {
+    display: none;
+  }
+
+  /* Hide default radio button */
+.radio-btn input {
+  display: none;
+}
+
+/* Custom Radio Button Style */
+.custom-radio {
+  display: inline-block;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease-in-out;
+  background-color: #f1f1f1;
+  color: #333;
+  border: 2px solid transparent;
+}
+
+/* Colors for Different Status */
+.ongoing { background-color: #FFD700; }  /* Gold */
+.payment { background-color: #28a745; color: white; } /* Green */
+.newClient { background-color: #007bff; color: white; } /* Blue */
+
+/* Hover Effect */
+.custom-radio:hover {
+  filter: brightness(1.1);
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Active (Selected) State */
+.radio-btn input:checked + .custom-radio {
+  border: 2px solid #000;
+  transform: scale(1.05);
+}
+
+</style>
+
+
 </head>
 <body id="page-top">
     <!-- Page Wrapper -->
@@ -403,66 +538,117 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
 
-
 <!-- Modal -->
 <div class="modal fade" id="designationModal" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 40%;">
-    <div class="modal-content" style="border-radius: 15px;">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
       <div class="modal-body p-0">
         <div class="row no-gutters">
-          
-          <!-- Left Column: Form -->
-          <div class="col-md-10">
-            <div class="ml-3 mt-3 mb-3 mr-3">
-              <form id="designationForm">
-                
-                <!-- Title Field -->
-                <div class="form-group">
-                  <label for="titleInput"><b>Title:</b></label>
-                  <input type="text" class="form-control" id="titleInput" placeholder="Enter title" required>
-                </div>
+          <!-- Form Section -->
+          <div class="col-12 p-3">
+            <form id="designationForm">
+              
+              <!-- Title Field -->
+              <div class="form-group">
+                <label for="titleInput"><b>Title:</b></label>
+                <input type="text" class="form-control" id="titleInput" placeholder="Enter title" required>
+              </div>
 
-                <!-- Short Description Field -->
-                <div class="form-group">
-                  <label for="descriptionInput"><b>Short Description:</b></label>
-                  <textarea class="form-control" id="descriptionInput" rows="2" placeholder="Enter short description" required></textarea>
-                </div>
+              <!-- Short Description Field -->
+              <div class="form-group">
+                <label for="descriptionInput"><b>Short Description:</b></label>
+                <textarea class="form-control" id="descriptionInput" rows="2" placeholder="Enter short description" required></textarea>
+              </div>
 
-                <!-- Dropdown Field -->
-                <div class="form-group">
-                  <label for="statusDropdown"><b>Status:</b></label>
-                  <select class="form-control" id="statusDropdown" required>
-                    <option value="" disabled selected>Select status</option>
-                    <option value="ongoing">Ongoing</option>
-                    <option value="payment">Payment</option>
-                    <option value="new_client">New Client</option>
-                  </select>
+              <!-- Radio Buttons for Status -->
+              <div class="form-group">
+                <label><b>Status:</b></label>
+                <div class="d-flex flex-wrap justify-content-start align-items-center">
+                  <label class="radio-btn">
+                    <input type="radio" name="status" value="ongoing" required>
+                    <span class="custom-radio ongoing">Ongoing</span>
+                  </label>
+                  <label class="radio-btn">
+                    <input type="radio" name="status" value="payment" required>
+                    <span class="custom-radio payment">Payment</span>
+                  </label>
+                  <label class="radio-btn">
+                    <input type="radio" name="status" value="newClient" required>
+                    <span class="custom-radio newClient">New Client</span>
+                  </label>
+                  <div class="text-center">
+                <button type="submit" class="btn submit-btn">Submit</button>
+              </div>
                 </div>
+              </div>
 
-                <!-- Submit Button -->
-                <div class="d-flex justify-content-start">
-                  <button type="submit" class="btn" 
-                    style="background-color: rgb(15,29,64); color: white; border-radius: 25px;">
-                    Submit
-                  </button>
-                </div>
+              <!-- Submit Button -->
+              
 
-              </form>
-            </div>
+            </form>
           </div>
-
-          <!-- Right Column: Icon -->
-          <div class="col-md-2 d-flex align-items-center justify-content-center" 
-               style="background-color: rgb(15,29,64); color: white; 
-                      border-top-right-radius: 14px; border-bottom-right-radius: 14px;">
-            <i class="fa-solid fa-id-badge fa-4x"></i> <!-- Icon -->
-          </div>
-
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Responsive CSS -->
+<style>
+  /* Modal Responsiveness */
+  .modal-dialog {
+    max-width: 35%;
+  }
+
+  @media (max-width: 992px) { /* Tablets */
+    .modal-dialog {
+      max-width: 60%;
+    }
+  }
+
+  @media (max-width: 768px) { /* Mobile */
+    .modal-dialog {
+        max-width: 70%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: auto; /* Ensures it's centered */
+    }
+    .custom-radio {
+        font-size: 12px;
+        width:100%;
+    }
+    .submit-btn {
+        font-size: 10px;
+        padding: 4px 8px;
+        margin-top: 5px;
+    }
+}
+
+
+  /* Styling */
+  .modal-content {
+    border-radius: 15px;
+  }
+
+  .custom-radio {
+    font-size: 14px;
+    margin-right: 10px;
+  }
+
+  .submit-btn {
+    background-color: rgb(15,29,64);
+    color: white;
+    border-radius: 10px;
+    font-size: 14px;
+    padding: 4px 8px;
+  }
+
+  .d-flex.flex-wrap {
+    gap: 10px;
+  }
+</style>
+
             <!-- Sidebar Toggle (Topbar) -->
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
@@ -521,15 +707,39 @@
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
-                <!-- Begin Page Content -->
               <!-- Include Bootstrap -->
 
-           <!-- Designation Cards Container -->
-<div class="container-fluid mt-4">
-    <div class="row" id="designationContainer" style="row-gap: 20px;"></div>
+        <!-- Designation Cards Container -->
+        <div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-md-4 position-relative" ondrop="drop(event, 'ongoing')" ondragover="allowDrop(event)">
+            <h6 class="text-center title">
+                <b>Ongoing</b>
+                <span class="count-box" id="ongoingCount">0</span>
+            </h6>
+            <hr>
+            <div class="status-container" id="ongoingContainer"></div>
+            <div class="vertical-divider"></div> <!-- Divider -->
+        </div>
+        <div class="col-md-4 position-relative" ondrop="drop(event, 'payment')" ondragover="allowDrop(event)">
+            <h6 class="text-center title">
+                <b>Payment</b>
+                <span class="count-box" id="paymentCount">0</span>
+            </h6>
+            <hr>
+            <div class="status-container" id="paymentContainer"></div>
+            <div class="vertical-divider"></div> <!-- Divider -->
+        </div>
+        <div class="col-md-4" ondrop="drop(event, 'newClient')" ondragover="allowDrop(event)">
+            <h6 class="text-center title">
+                <b>New Client</b>
+                <span class="count-box" id="newClientCount">0</span>
+            </h6>
+            <hr>
+            <div class="status-container" id="newClientContainer"></div>
+        </div>
+    </div>
 </div>
-
-
                 <!-- /.container-fluid -->
 
             </div>
@@ -576,6 +786,62 @@
             </div>
         </div>
     </div>
+    <!-- Modal for Editing -->
+    <div class="modal fade" id="editDesignationModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body p-0">
+        <div class="row no-gutters">
+          <!-- Form Section -->
+          <div class="col-12 p-3">
+            <form id="editDesignationForm">
+              <input type="hidden" id="editCardId">
+              
+              <!-- Title Field -->
+              <div class="form-group">
+                <label for="editTitleInput"><b>Title:</b></label>
+                <input type="text" class="form-control" id="editTitleInput" placeholder="Enter title" required>
+              </div>
+
+              <!-- Short Description Field -->
+              <div class="form-group">
+                <label for="editDescriptionInput"><b>Short Description:</b></label>
+                <textarea class="form-control" id="editDescriptionInput" rows="2" placeholder="Enter short description" required></textarea>
+              </div>
+
+              <!-- Radio Buttons for Status -->
+              <div class="form-group">
+                <label><b>Status:</b></label>
+                <div class="d-flex flex-wrap justify-content-start align-items-center">
+                  <label class="radio-btn">
+                    <input type="radio" name="editStatus" value="ongoing" required>
+                    <span class="custom-radio ongoing">Ongoing</span>
+                  </label>
+                  <label class="radio-btn">
+                    <input type="radio" name="editStatus" value="payment" required>
+                    <span class="custom-radio payment">Payment</span>
+                  </label>
+                  <label class="radio-btn">
+                    <input type="radio" name="editStatus" value="newClient" required>
+                    <span class="custom-radio newClient">New Client</span>
+                  </label>
+                  <!-- Submit Button -->
+              <div class="text-center">
+                <button type="submit" class="btn submit-btn">Update</button>
+              </div>
+                </div>
+              </div>
+
+              
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
     <script>
 $(document).ready(function() {
     $('#dataTable').DataTable();
@@ -604,156 +870,129 @@ $(document).ready(function() {
     <!-- Bootstrap JavaScript -->
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
-    <script>
-  let colors = ["#F8A5B2", "#89D9E2", "#E0DB71", "#86E269", "#66D9B2"];
-  let colorIndex = 0;
+<script>
+document.getElementById("designationForm").addEventListener("submit", function(event) {
+  event.preventDefault();
+  
+  let title = document.getElementById("titleInput").value.trim();
+  let description = document.getElementById("descriptionInput").value.trim();
+  let status = document.querySelector('input[name="status"]:checked');
 
-  function getNextColor() {
-    let color = colors[colorIndex];
-    colorIndex = (colorIndex + 1) % colors.length;
-    return color;
+  if (title === "" || !status) return;
+
+  addDesignation(title, description, status.value);
+  $("#designationModal").modal("hide");
+  document.getElementById("designationForm").reset();
+});
+
+
+function getNextColor() {
+  return "rgb(183, 225, 254)"; // Fixed card color
+}
+
+function addDesignation(title, description, status) {
+  let newCardWrapper = document.createElement("div");
+  newCardWrapper.className = "draggable-container";
+  let cardId = "card-" + new Date().getTime();
+  
+  newCardWrapper.innerHTML = `
+    <div id="${cardId}" class="card p-2 draggable-card text-center" draggable="true"
+         style="background-color: ${getNextColor()};" ondragstart="drag(event)">
+        <h6 class="card-title m-1">${title}</h6>
+        <p class="card-description">${description}</p>
+    </div>
+  `;
+
+  let container = document.getElementById(status + "Container");
+  container.appendChild(newCardWrapper);
+
+  updateCounts();
+}
+
+// Drag and Drop Functionality
+function allowDrop(event) {
+  event.preventDefault();
+}
+
+function drag(event) {
+  event.dataTransfer.setData("text", event.target.id);
+}
+
+function drop(event, status) {
+  event.preventDefault();
+  let cardId = event.dataTransfer.getData("text");
+  let card = document.getElementById(cardId);
+  if (card) {
+    document.getElementById(status + "Container").appendChild(card.parentElement);
+    updateCounts();
   }
+}
 
-  // Handle adding new designation
-  document.getElementById("designationForm").addEventListener("submit", function(event) {
-    event.preventDefault();
-    let designationInput = document.getElementById("designationInput");
-    let designation = designationInput.value.trim();
-    if (designation === "") return;
-    addDesignation(designation);
-    $("#designationModal").modal("hide");
-    document.getElementById("designationForm").reset();
-  });
+// Delete Card when dropped into Trash
+document.getElementById("trashIcon").addEventListener("dragover", function(event) {
+  event.preventDefault();
+});
 
-  function addDesignation(designation) {
-    // Create a wrapper div for grid layout
-    let newCardWrapper = document.createElement("div");
-    newCardWrapper.className = "col-md-3 draggable-container";
-    let cardId = "card-" + new Date().getTime();
-    newCardWrapper.innerHTML = `
-      <div id="${cardId}" class="card p-3 draggable-card" draggable="true" 
-           style="min-height: 50px; color:black; background-color: ${getNextColor()}; 
-                  border-radius: 10px; position: relative; transition: transform 0.2s;">
-          <div class="card-body text-center">
-              <h6 class="card-text">${designation}</h6>
-          </div>
-      </div>
-    `;
-
-    let cardElement = newCardWrapper.querySelector(".card");
-
-    // Drag Events on the card
-    cardElement.addEventListener("dragstart", function(event) {
-      event.dataTransfer.setData("text/plain", cardId);
-      setTimeout(() => {
-        cardElement.style.opacity = "0.5";
-      }, 0);
-    });
-
-    cardElement.addEventListener("dragend", function() {
-      cardElement.style.opacity = "1";
-    });
-
-    // Allow dropping on the card for reordering
-    cardElement.addEventListener("dragover", function(event) {
-      event.preventDefault();
-    });
-
-    cardElement.addEventListener("drop", function(event) {
-      event.preventDefault();
-      let draggedCardId = event.dataTransfer.getData("text/plain");
-      if (draggedCardId === this.id) return; 
-      let draggedCardWrapper = document.getElementById(draggedCardId).parentElement;
-      let container = document.getElementById("designationContainer");
-      let rect = this.getBoundingClientRect();
-      let offset = event.clientY - rect.top;
-      if (offset < rect.height / 2) {
-        container.insertBefore(draggedCardWrapper, this.parentElement);
-      } else {
-        container.insertBefore(draggedCardWrapper, this.parentElement.nextSibling);
-      }
-    });
-
-    // Set different click behavior based on device width
-    if (window.innerWidth <= 768) {
-      // On mobile, tapping the text strikes it through and deletes the card.
-      let cardText = cardElement.querySelector(".card-text");
-      cardText.addEventListener("click", function(e) {
-        // Prevent triggering any parent click events
-        e.stopPropagation();
-        // Add strike-through styling
-        this.style.textDecoration = "line-through";
-        // Delete the card after a brief delay (e.g., 300ms)
-        setTimeout(() => {
-          deleteCard(cardId);
-        }, 300);
-      });
-    } else {
-      // On desktop, tapping the card opens the edit modal.
-      cardElement.addEventListener("click", function() {
-        openEditModal(cardId, designation);
-      });
-    }
-
-    document.getElementById("designationContainer").appendChild(newCardWrapper);
+document.getElementById("trashIcon").addEventListener("drop", function(event) {
+  event.preventDefault();
+  let cardId = event.dataTransfer.getData("text");
+  let card = document.getElementById(cardId);
+  if (card) {
+    card.parentElement.remove(); // Remove the card wrapper
+    updateCounts();
   }
+});
 
-  function openEditModal(cardId, designation) {
-    document.getElementById("editDesignationInput").value = designation;
-    document.getElementById("editIndex").value = cardId;
-    $("#editDesignationModal").modal("show");
-  }
+// Update the count dynamically
+function updateCounts() {
+  document.getElementById("ongoingCount").textContent = document.getElementById("ongoingContainer").children.length;
+  document.getElementById("paymentCount").textContent = document.getElementById("paymentContainer").children.length;
+  document.getElementById("newClientCount").textContent = document.getElementById("newClientContainer").children.length;
+}
 
-  // Handle updating the designation
-  document.getElementById("editDesignationForm").addEventListener("submit", function(event) {
-    event.preventDefault();
-    let editInput = document.getElementById("editDesignationInput").value.trim();
-    let cardId = document.getElementById("editIndex").value;
-    if (editInput === "" || !cardId) return;
-    let cardElement = document.getElementById(cardId);
-    if (cardElement) {
-      cardElement.querySelector(".card-text").textContent = editInput;
-    }
-    $("#editDesignationModal").modal("hide");
-  });
-
-  // Delete Functionality
-  function deleteCard(cardId) {
-    let cardElement = document.getElementById(cardId);
-    if (cardElement) {
-      cardElement.parentElement.remove(); // Remove the entire wrapper div
-    }
-  }
-
-  // Trash Icon Drop Handling
-  let trashIcon = document.getElementById("trashIcon");
-
-  trashIcon.addEventListener("dragover", function(event) {
-    event.preventDefault();
-  });
-
-  trashIcon.addEventListener("drop", function(event) {
-    event.preventDefault();
-    let cardId = event.dataTransfer.getData("text/plain");
-    deleteCard(cardId);
-  });
-
-  // Allow dropping on the container (for empty spaces)
-  let container = document.getElementById("designationContainer");
-  container.addEventListener("dragover", function(event) {
-    event.preventDefault();
-  });
-
-  container.addEventListener("drop", function(event) {
-    if (event.target === container) {
-      event.preventDefault();
-      let cardId = event.dataTransfer.getData("text/plain");
-      let draggedCardWrapper = document.getElementById(cardId).parentElement;
-      container.appendChild(draggedCardWrapper);
-    }
-  });
 </script>
 
+<script>
+document.addEventListener("click", function(event) {
+    if (event.target.closest(".draggable-card")) {
+        let card = event.target.closest(".draggable-card");
+        let title = card.querySelector(".card-title").textContent;
+        let description = card.querySelector(".card-description").textContent;
+        let cardId = card.id;
+        let parentId = card.parentElement.parentElement.id;
+
+        document.getElementById("editCardId").value = cardId;
+        document.getElementById("editTitleInput").value = title;
+        document.getElementById("editDescriptionInput").value = description;
+
+        let statusRadios = document.getElementsByName("editStatus");
+        statusRadios.forEach(radio => {
+            radio.checked = radio.value + "Container" === parentId;
+        });
+
+        $("#editDesignationModal").modal("show");
+    }
+});
+
+document.getElementById("editDesignationForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    
+    let cardId = document.getElementById("editCardId").value;
+    let title = document.getElementById("editTitleInput").value;
+    let description = document.getElementById("editDescriptionInput").value;
+    let status = document.querySelector('input[name="editStatus"]:checked').value;
+    
+    let card = document.getElementById(cardId);
+    if (card) {
+        card.querySelector(".card-title").textContent = title;
+        card.querySelector(".card-description").textContent = description;
+        document.getElementById(status + "Container").appendChild(card.parentElement);
+    }
+    
+    $("#editDesignationModal").modal("hide");
+    updateCounts();
+});
+</script>
 
 </body>
 

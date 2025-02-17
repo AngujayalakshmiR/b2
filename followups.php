@@ -308,7 +308,7 @@
 
   .draggable-card {
     min-height: 50px;
-    width: 250px;
+    width: 200epx;
     color: black;
     background-color: var(--card-color);
     border-radius: 10px;

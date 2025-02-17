@@ -426,6 +426,16 @@
 .page-item.active .page-link {
     background: rgb(0, 148, 255);
 }
+@media (max-width:600px) {
+    h4{
+        font-size: small;
+    }
+}
+@media (min-width:600px) {
+    h4{
+        font-size: medium;
+    }
+}
 </style>
 <!-- Modal Styles -->
 
@@ -527,45 +537,222 @@
             <div id="content">
 
                 <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style="background:white;">
+                <nav class="navbar navbar-expand navbar-light bg-white topbar static-top shadow" style="background:white;">
+                    
+<!-- Sidebar Toggle (Topbar) -->
+<button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+    <i class="fa fa-bars"></i>
+</button>
   <!-- Create Customer Button -->
   <div class="mr-auto d-flex align-items-center pl-3 py-2">
     <h4 class="text-dark font-weight-bold mr-4" 
-        style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
+        style="color: rgb(15,29,64); margin-top: 5px;">
         Master &gt; Customer Details
     </h4>
   </div>
-  
+   <!-- Topbar Navbar -->
+   <ul class="navbar-nav ml-auto">
+
+
+
+<div class="topbar-divider d-none d-sm-block"></div>
+
+<!-- Nav Item - User Information -->
+<li class="nav-item dropdown no-arrow">
+    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <img class="img-profile rounded-circle"
+            src="img/p.png" style="width: 2rem;height: 2rem;">
+    </a>
+    <!-- Dropdown - User Information -->
+    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+        aria-labelledby="userDropdown">
+        
+        
+        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+            Logout
+        </a>
+    </div>
+</li>
+
+</ul>
   <!-- (Other topbar items can go here) -->
   
 </nav>
 
-
 <div class="container-fluid">
-<div class="container">
+<div class="container mb-4 mt-4" style="background: white; border-radius: 25px; border: 2px solid rgb(0, 148, 255);">
+<div class="column">
     <div class="row">
-        <div class="col-12">
+        <!-- Left Section (20% width for the button) -->
+       
+        <!-- Right Section (80% width for form fields) -->
+        <div class="col-md-12">
             <form id="customerForm" class="row g-3 mt-3">
                 <!-- Column 1: Name & Company Name -->
-                <div class="col-md-4 p-2">
+                <div class="col-md-4 pb-1">
                     <input type="text" class="form-control mb-2" id="customername" placeholder="Enter Customer Name">
-                    <input type="text" class="form-control" id="companyname" placeholder="Enter Company Name">
-                </div>
-
-                <!-- Column 2: Address -->
-                <div class="col-md-4 p-2">
-                    <textarea class="form-control h-100" id="customeraddress" placeholder="Enter Company Address" rows="3"></textarea>
-                </div>
-
-                <!-- Column 3: Phone Number & Submit Button -->
-                <div class="col-md-4 p-2">
+                    <input type="text" class="form-control mb-2" id="companyname" placeholder="Enter Company Name">
                     <input type="text" class="form-control mb-2" id="customerno" placeholder="Enter Phone Number">
-                    <button type="submit" class="btn btn-primary w-100" id="customerbtn">Add Customer</button>
+                </div>
+
+                <!-- Column 2: Address & District -->
+                <div class="col-md-4 pb-1">
+                    <textarea class="form-control mb-2" id="customeraddress" placeholder="Enter Company Address" rows="2" style="height: 85px;"></textarea>
+                    <!-- Country -->
+                    <select class="form-control mb-2" id="country">
+                        <option value="">Select Country</option>
+                    </select>
+                </div>
+
+                <!-- Column 3: State & Country -->
+                <div class="col-md-4 pb-1">
+                    <!-- State (Dropdown for India, Manual for other countries) -->
+                    <select class="form-control mb-2 d-none" id="stateDropdown">
+                        <option value="">Select State</option>
+                    </select>
+
+                    <input type="text" class="form-control mb-2" id="stateInput" placeholder="Enter State">
+                    <!-- District (Dropdown for India, Manual for other countries) -->
+                    <select class="form-control mb-2 d-none" id="districtDropdown">
+                        <option value="">Select District</option>
+                    </select>
+                    <input type="text" class="form-control mb-2" id="districtInput" placeholder="Enter District">
+                    <input type="text" class="form-control mb-2" id="pincode" placeholder="Enter Pincode">
                 </div>
             </form>
         </div>
-    </div>
+    </div></div>
+    <div class="column"><div class="pb-2 d-flex justify-content-sm-end justify-content-center align-items-center">
+    <button type="submit" class="btn" id="customerbtn" 
+        style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: auto;">
+        <i class="fas fa-user"></i>&nbsp; Add Customer
+    </button>
 </div>
+
+
+</div>
+</div>
+
+
+<script>
+// List of states and districts for India
+const statesAndDistricts = {
+   "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore", "Kurnool", "Chittoor", "Anantapur", "East Godavari", "West Godavari", "Prakasam", "Srikakulam", "Kadapa", "Krishna", "Rayalaseema"],
+"Arunachal Pradesh": ["Itanagar", "Tawang", "Ziro", "Pasighat", "West Kameng", "East Kameng", "Lower Subansiri", "Upper Subansiri", "West Siang", "East Siang", "Lohit", "Namsai"],
+"Assam": ["Guwahati", "Silchar", "Dibrugarh", "Tezpur", "Jorhat", "Nagaon", "Barpeta", "Bongaigaon", "Karimganj", "Sonitpur", "Sivasagar", "Cachar", "Kokrajhar", "Morigaon"],
+"Bihar": ["Patna", "Gaya", "Muzaffarpur", "Bhagalpur", "Darbhanga", "Purnia", "Nalanda", "Samastipur", "Begusarai", "Saran", "Vaishali", "Madhubani", "Katihar", "Araria"],
+"Chhattisgarh": ["Raipur", "Bilaspur", "Durg", "Korba", "Jagdalpur", "Rajnandgaon", "Surguja", "Koriya", "Raigarh", "Jashpur"],
+"Goa": ["North Goa", "South Goa"],
+"Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Gandhinagar", "Bhavnagar", "Jamnagar", "Anand", "Kutch", "Sabarkantha", "Patan", "Junagadh"],
+"Haryana": ["Gurugram", "Faridabad", "Panipat", "Ambala", "Hisar", "Karnal", "Rewari", "Sonipat", "Fatehabad", "Sirsa", "Jhajjar"],
+"Himachal Pradesh": ["Shimla", "Kullu", "Manali", "Dharamshala", "Solan", "Mandi", "Kangra", "Bilaspur", "Hamirpur", "Kullu", "Una", "Chamba"],
+"Jharkhand": ["Ranchi", "Jamshedpur", "Dhanbad", "Bokaro", "Hazaribagh", "Dumka", "Giridih", "Jamtara", "Deoghar", "Ramgarh"],
+"Karnataka": ["Bengaluru", "Mysore", "Hubli", "Mangalore", "Belagavi", "Tumkur", "Udupi", "Dakshina Kannada", "Hassan", "Kodagu", "Bijapur", "Bidar", "Chikkaballapur", "Chikkamagaluru"],
+"Kerala": ["Thiruvananthapuram", "Kochi", "Kozhikode", "Thrissur", "Kottayam", "Malappuram", "Palakkad", "Ernakulam", "Kollam", "Pathanamthitta", "Alappuzha", "Idukki"],
+"Madhya Pradesh": ["Bhopal", "Indore", "Gwalior", "Jabalpur", "Ujjain", "Sagar", "Katni", "Khandwa", "Hoshangabad", "Rewa", "Satna", "Dewas", "Vidisha"],
+"Maharashtra": ["Mumbai", "Pune", "Nagpur", "Nashik", "Thane", "Aurangabad", "Kolhapur", "Solapur", "Nanded", "Amravati", "Chandrapur", "Jalna"],
+"Manipur": ["Imphal", "Churachandpur", "Thoubal", "Bishnupur", "Ukhrul", "Senapati", "Tamenglong", "Chandel", "Kangpokpi"],
+"Meghalaya": ["Shillong", "Tura", "Jowai", "Nongstoin", "East Khasi Hills", "West Khasi Hills", "Ri Bhoi", "South West Khasi Hills"],
+"Mizoram": ["Aizawl", "Lunglei", "Champhai", "Serchhip", "Kolasib", "Mamit"],
+"Nagaland": ["Kohima", "Dimapur", "Mokokchung", "Tuensang", "Mon", "Peren", "Wokha"],
+"Odisha": ["Bhubaneswar", "Cuttack", "Puri", "Sambalpur", "Rourkela", "Berhampur", "Bargarh", "Ganjam", "Balasore", "Dhenkanal"],
+"Punjab": ["Amritsar", "Ludhiana", "Patiala", "Jalandhar", "Bathinda", "Mohali", "Gurdaspur", "Firozpur", "Mansa", "Sangrur"],
+"Rajasthan": ["Jaipur", "Udaipur", "Jodhpur", "Kota", "Ajmer", "Bikaner", "Sikar", "Alwar", "Bharatpur", "Pali"],
+"Sikkim": ["Gangtok", "Namchi", "Mangan", "Gyalshing"],
+"Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem", "Vellore", "Tirunelveli", "Erode", "Dindigul", "Karur", "Tanjore", "Thoothukudi", "Kanyakumari", "Cuddalore", "Villupuram", "Theni", "Ramanathapuram", "Nilgiris", "Virudhunagar", "Perambalur", "Krishnagiri", "Ariyalur", "Namakkal", "Pudukottai", "Sivaganga"],
+"Telangana": ["Hyderabad", "Warangal", "Karimnagar", "Nizamabad", "Khammam", "Mahabubnagar", "Adilabad", "Nalgonda", "Rangareddy", "Medak"],
+"Tripura": ["Agartala", "Udaipur", "Dharmanagar", "Kailashahar"],
+"Uttar Pradesh": ["Lucknow", "Kanpur", "Varanasi", "Noida", "Agra", "Meerut", "Ghaziabad", "Allahabad", "Bareilly", "Aligarh", "Moradabad", "Saharanpur", "Firozabad", "Muzaffarnagar"],
+"Uttarakhand": ["Dehradun", "Haridwar", "Nainital", "Almora", "Udham Singh Nagar", "Pauri Garhwal", "Tehri Garhwal", "Champawat"],
+"West Bengal": ["Kolkata", "Darjeeling", "Siliguri", "Howrah", "Asansol", "Durgapur", "Malda", "Purulia", "Bankura", "Nadia"],
+"Andaman and Nicobar Islands": ["Port Blair"],
+"Chandigarh": ["Chandigarh"],
+"Dadra and Nagar Haveli and Daman and Diu": ["Daman", "Diu", "Silvassa"],
+"Lakshadweep": ["Kavaratti"],
+"Delhi": ["Central Delhi", "East Delhi", "South Delhi", "West Delhi"],
+"Puducherry": ["Pondicherry", "Karaikal", "Mahe", "Yanam"],
+"Jammu and Kashmir": ["Srinagar", "Jammu", "Anantnag", "Baramulla", "Kupwara", "Poonch", "Rajouri", "Kathua"],
+"Ladakh": ["Leh", "Kargil"]
+
+};
+
+// List of all 195 countries
+const countries = [
+    "India", "United States", "United Kingdom", "Canada", "Australia", "Germany", "France", "China", "Japan", "Brazil",
+    "Russia", "South Korea", "Italy", "Spain", "Mexico", "Indonesia", "Netherlands", "Saudi Arabia", "Turkey", "Switzerland",
+    "South Africa", "Sweden", "Argentina", "Poland", "Belgium", "Norway", "Thailand", "Ireland", "Austria", "Singapore",
+    "New Zealand", "Denmark", "Finland", "Malaysia", "Portugal", "Greece", "Czech Republic", "Israel", "United Arab Emirates",
+    "Vietnam", "Hungary", "Philippines", "Colombia", "Pakistan", "Chile", "Bangladesh", "Egypt", "Nigeria", "Ukraine",
+    "Peru", "Venezuela", "Kazakhstan", "Romania", "Algeria", "Ecuador", "Iraq", "Morocco", "Slovakia", "Belarus", "Serbia",
+    "Sri Lanka", "Croatia", "Lithuania", "Bulgaria", "Tunisia", "Slovenia", "Jordan", "Paraguay", "Uruguay", "Lebanon",
+    "Georgia", "Azerbaijan", "Panama", "Armenia", "Oman", "Bolivia", "Myanmar", "Luxembourg", "Cuba", "Sudan", "Afghanistan",
+    "Nepal", "Honduras", "Costa Rica", "North Macedonia", "Estonia", "El Salvador", "Cyprus", "Jamaica", "Latvia", "Bahrain",
+    "Trinidad and Tobago", "Iceland", "Botswana", "Namibia", "Mauritius", "Montenegro", "Moldova", "Zambia", "Ethiopia",
+    "Ghana", "Senegal", "Cameroon", "Madagascar", "Tanzania", "Kenya", "Mozambique", "Fiji", "Malta", "Bosnia and Herzegovina",
+    "Gabon", "Burkina Faso", "Benin", "Guatemala", "Laos", "Papua New Guinea", "Uganda", "Mongolia", "Brunei", "Togo", "Nicaragua",
+    "Seychelles", "Congo", "Malawi", "Suriname", "Maldives", "Somalia", "Eswatini", "Bhutan", "Guyana", "Belize", "Chad",
+    "Burundi", "Mauritania", "Sierra Leone", "Lesotho", "Guinea", "Djibouti", "Comoros", "Liberia", "Saint Lucia", "Saint Vincent",
+    "Grenadines", "Sao Tome and Principe", "Samoa", "Solomon Islands", "Vanuatu", "Gambia"
+];
+
+// Populate Country Dropdown
+let countryDropdown = document.getElementById("country");
+countries.forEach(country => {
+    let option = document.createElement("option");
+    option.value = country;
+    option.textContent = country;
+    countryDropdown.appendChild(option);
+});
+
+// Populate State Dropdown (for India)
+let stateDropdown = document.getElementById("stateDropdown");
+for (let state in statesAndDistricts) {
+    let option = document.createElement("option");
+    option.value = state;
+    option.textContent = state;
+    stateDropdown.appendChild(option);
+}
+
+// Handle State Selection
+stateDropdown.addEventListener("change", function() {
+    let selectedState = this.value;
+    let districtDropdown = document.getElementById("districtDropdown");
+    districtDropdown.innerHTML = '<option value="">Select District</option>';
+
+    if (selectedState && statesAndDistricts[selectedState]) {
+        statesAndDistricts[selectedState].forEach(district => {
+            let option = document.createElement("option");
+            option.value = district;
+            option.textContent = district;
+            districtDropdown.appendChild(option);
+        });
+    }
+});
+
+// Handle Country Selection
+countryDropdown.addEventListener("change", function() {
+    let country = this.value;
+    let stateDropdown = document.getElementById("stateDropdown");
+    let stateInput = document.getElementById("stateInput");
+    let districtDropdown = document.getElementById("districtDropdown");
+    let districtInput = document.getElementById("districtInput");
+
+    if (country === "India") {
+        stateDropdown.classList.remove("d-none");
+        stateInput.classList.add("d-none");
+        districtDropdown.classList.remove("d-none");
+        districtInput.classList.add("d-none");
+    } else {
+        stateDropdown.classList.add("d-none");
+        stateInput.classList.remove("d-none");
+        districtDropdown.classList.add("d-none");
+        districtInput.classList.remove("d-none");
+    }
+});
+</script>
+
 
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
@@ -576,7 +763,7 @@
     text-overflow: ellipsis;
     color: rgb(23, 25, 28);
     font-size: 16px;
-    font-weight: 500;"><b>Employee Details</b> 
+    font-weight: 500;"><b>Customer Details</b> 
         <span class="header-counter">3</span>  <!-- Counter next to heading -->
 </p>
        
@@ -703,6 +890,9 @@
     <!-- Bootstrap JavaScript -->
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
+<!-- Bootstrap JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
 <!-- Bootstrap 4.6.0 JavaScript -->
 <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script> -->

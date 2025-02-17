@@ -29,11 +29,6 @@
     border-collapse: separate; /* Required for border-radius to work properly */
     border-spacing: 0; /* Removes unwanted gaps */
 }
-.thead th {
-    font-size: 16px;  /* Reduce text size */
-    padding: 6px 4px; /* Reduce padding */
-    white-space: nowrap; /* Prevent text from wrapping */
-}
 /* Rounds top corners */
 .table thead tr:first-child th:first-child {
     border-top-left-radius: 15px;
@@ -49,11 +44,6 @@
 .table tbody tr:last-child td:last-child {
     border-bottom-right-radius: 15px;
 }
-        /* Gradient background for thead */
-        thead  {
-            background: linear-gradient(to right, #4568dc, #b06ab3);
-            color: white;
-        }
 
         /* Center align action buttons */
         .action-buttons {
@@ -245,6 +235,110 @@
     color: white;
 }
  /* Styling for the modal */
+/* Style for the table header (thead) */
+#dataTable thead {
+    color: rgb(140, 147, 159);
+    font-weight: 1; 
+    font-style: normal;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Style for table data (td) */
+#dataTable tbody td {
+    font-style: normal;
+    overflow: hidden;
+    line-height: 1rem;
+    text-overflow: ellipsis;
+    color: rgb(23, 25, 28);
+    font-size: 14px;
+    font-weight: 400;
+    padding: 10px; /* Adds spacing inside cells */
+}
+
+/* Style for icons in the status column */
+#dataTable tbody td i {
+    color: rgb(0, 148, 255);
+}
+/* Counter styling similar to .bpKSTa .header-counter */
+.header-counter {
+    margin-left: 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(0, 148, 255);
+    padding: 2px 5px;
+    font-size: 13px;
+    min-width: 20px;
+    min-height: 20px;
+    font-weight: 500;
+    color: white;
+    border-radius: 100px;
+}
+
+/* Styling for the card header */
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Adjust spacing */
+    padding: 12px 16px;
+    background-color: #f8f9fc;
+}
+.page-item.active .page-link {
+    background: rgb(0, 148, 255);
+}
+@media (max-width:600px) {
+    h4{
+        font-size: small;
+    }
+}
+@media (min-width:600px) {
+    h4{
+        font-size: medium;
+    }
+}
+
+#selectedEmployeesDisplay div {
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+#selectedEmployeesDisplay i {
+    margin-right: 8px;
+    font-size: 16px; /* Adjust size of the icon */
+}
+#dropdownContainer {
+    max-width: 100%; /* Prevents overflow */
+    overflow-x: hidden; /* Prevents horizontal overflow */
+    box-sizing: border-box; /* Ensures padding is included in width calculation */
+}
+
+#employeeDropdown {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+#employeeDropdown div {
+    flex: 1 1 100%; /* Ensures the elements wrap on smaller screens */
+    margin-bottom: 10px; /* Adds spacing between items */
+}
+
+/* Prevent overflow on very small screens */
+@media (max-width: 576px) {
+    #dropdownContainer {
+        min-width: 100%; /* Ensure it fills the screen */
+        max-width: 100%;
+    }
+}
+/* Styling the individual employee name elements */
+.employee-name {
+    line-height: 1;  /* Adjust this value as needed for more or less spacing */
+    padding-bottom: 8px; /* Adds space between items */
+}
+.employee-name i {
+    color:rgb(58, 166, 174);
+}
 
 </style>
 
@@ -344,16 +438,19 @@
             <div id="content">
 
                 <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style=" background:white;color:white">
+                <nav class="navbar navbar-expand navbar-light bg-white topbar static-top shadow" style=" background:white;color:white;">
 
 <!-- Sidebar Toggle (Topbar) -->
 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
     <i class="fa fa-bars"></i>
 </button>
+<div class="mr-auto d-flex align-items-center pl-3 py-2">
+    <h4 class="text-dark font-weight-bold mr-3" 
+        style="color: rgb(15,29,64); margin-top: 5px;">
+        Project Creation
+    </h4>
 
-<button class="btn btn-primary" style="float:left; border-radius:25px;" id="openModalBtn">
-                                    <i class="fas fa-plus"></i> Add Project 
-                                     </button>
+</div>
 
 
 
@@ -361,29 +458,7 @@
 <!-- Topbar Navbar -->
 <ul class="navbar-nav ml-auto">
 
-    <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-    <li class="nav-item dropdown no-arrow d-sm-none">
-        <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-search fa-fw"></i>
-        </a>
-        <!-- Dropdown - Messages -->
-        <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-            aria-labelledby="searchDropdown">
-            <form class="form-inline mr-auto w-100 navbar-search">
-                <div class="input-group">
-                    <input type="text" class="form-control bg-light border-0 small"
-                        placeholder="Search for..." aria-label="Search"
-                        aria-describedby="basic-addon2">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" type="button">
-                            <i class="fas fa-search fa-sm"></i>
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </li>
+   
 
     <div class="topbar-divider d-none d-sm-block"></div>
     
@@ -392,7 +467,7 @@
         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <img class="img-profile rounded-circle"
-                src="img/p.png" style="width: 3rem;height: 3rem;">
+                src="img/p.png" style="width: 2rem;height: 2rem;">
         </a>
         <!-- Dropdown - User Information -->
         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -422,20 +497,193 @@
         
                         <!-- Begin Page Content -->
                         <div class="container-fluid">
-        
-                            <!-- Page Heading -->
-                            <h1 class="h3 mb-2 text-gray-800">Project Creation</h1>
-                            
-        
+
+                        <div class="container mb-4 mt-4" style="background: white; border-radius: 25px; border: 2px solid rgb(0, 148, 255);">
+<div class="column">
+    <div class="row">
+        <!-- Left Section (20% width for the button) -->
+       
+        <!-- Right Section (80% width for form fields) -->
+        <div class="col-md-12">
+            <form id="customerForm" class="row g-3 mt-3">
+                <!-- Column 1: Name & Company Name -->
+                <div class="col-md-4 pb-1">
+                   
+                    <select class="form-control mb-2" id="designation">
+    <option value="">Select Company</option>
+    <option value="web_developer">Kurinji Cement</option>
+    <option value="ui_ux_designer">Gowin</option>
+    <option value="mobile_app_designer">RIT</option>
+</select>
+
+<select class="form-control mb-2" id="designation">
+    <option value="">Select Project Type</option>
+    <option value="web_developer">Web Developement</option>
+    <option value="ui_ux_designer">Mobile App Developement</option>
+    <option value="mobile_app_designer">UI/UX Development</option>
+</select>
+                    <input type="number" class="form-control mb-2" id="employeephnno" placeholder="Enter No. of Days">
+                </div>
+
+                <!-- Column 2: Address & District -->
+                <div class="col-md-4 pb-1">
+                <input type="text" class="form-control mb-2" id="projecttitle" placeholder="Enter Project title">
+                    <textarea class="form-control mb-2" id="projectdescription" placeholder="Enter Project Description" rows="2" style="height: 85px;"></textarea>
+                  
+                </div>
+
+                <!-- Column 3: State & Country -->
+                <div class="col-md-2 pb-1">
+                <button type="button" class="btn " id="addEmployeeBtn" style="background:  rgb(238, 153, 129);color:white;">
+        <i class="fas fa-user-plus"></i> Add Employee
+    </button>
+
+   <!-- Dropdown Container -->
+<div id="dropdownContainer" class="mt-2 p-3  rounded shadow" 
+    style="display: none; border: 1px solid #ccc; background: white; position: absolute; width: 50%; min-width: 280px; z-index: 100;">
+    
+    <div id="employeeDropdown" class="row" ></div>
+</div>
+
+
+    <!-- Selected Employees Display -->
+    <div id="selectedEmployeesContainer" class="mt-2">
+        <span id="selectedEmployees">--Nil--</span>
+    </div>
+                </div>
+               <!-- Column 4: File Uploads & Credentials -->
+        <div class="col-md-2 pb-1">
+       
+
+    <div class="container d-flex justify-content-center align-item-center" style="border:3px solid rgb(252, 217, 104);border-radius:25px;">
+                <div class="form-group" style="margin-top: 8px; margin-bottom:8px;">
+    <label for="requirementfile" class="upload-label d-block font-weight-bold" style="margin-bottom: 0px;">
+        <i id="requirement" class="fas fa-folder file-icon fa-lg text-warning upload-icon" style="text-align: center; display: block; cursor: pointer;margin-bottom: 12px;color: rgb(222, 141, 197);"></i> <!-- Add upload-icon class -->
+        <p class="mt-1 justify-content-center" style="font-size: 14px; text-align:center;margin-bottom:10px;">Upload Requirement </p>
+    </label>
+    <input type="file" class="form-control-file d-none" id="requirementfile" onchange="updateIcon(this, 'requirement','requirementfile-name')">
+    <p class="file-name text-muted" id="requirementfile-name" style="font-size: 14px; text-align:center;">No file chosen</p> <!-- Unique ID -->
+</div></div>
+        </div>
+
+            </form>
+        </div>
+    </div></div>
+    <div class="column">
+    <div class="pb-2 d-flex justify-content-sm-end justify-content-center align-items-center">
+    <button type="submit" class="btn" id="customerbtn" 
+        style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: auto;">
+        <i class="fas fa-file-alt"></i>&nbsp; Add Project
+    </button>
+</div>
+
+</div>
+
+</div>
+
+
+
+<script>
+// Employee Dropdown Logic
+let employees = ["Pavitra", "Jayavarshini", "Suriya", "Mohan", "Naveen", "Anbumani", "Sivakumar", "Venkatesh"];
+employees.sort(); // Sort employees alphabetically
+let selectedEmployees = new Set();
+
+const addEmployeeBtn = document.getElementById('addEmployeeBtn');
+const dropdownContainer = document.getElementById('dropdownContainer');
+const dropdownList = document.getElementById('employeeDropdown');
+const selectedEmployeesDisplay = document.getElementById('selectedEmployees');
+
+// Show dropdown when clicking the button
+addEmployeeBtn.addEventListener('click', function () {
+    dropdownContainer.style.display = 'block'; // Show dropdown
+    dropdownList.innerHTML = ''; // Clear previous list
+
+    employees.forEach(emp => {
+        let wrapper = document.createElement('div');
+        wrapper.classList.add('col-6', 'd-flex', 'align-items-center', 'mb-1');
+
+        let checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = emp;
+        checkbox.checked = selectedEmployees.has(emp);
+        checkbox.classList.add('employee-checkbox');
+
+        let label = document.createElement('label');
+        label.textContent = emp;
+        label.classList.add('mr-auto', 'text-wrap', 'employee-label');
+        label.style.wordBreak = 'break-word';
+        label.style.flex = '1';
+        label.style.marginBottom = "0";
+        label.style.whiteSpace = 'normal';
+        label.style.cursor = 'pointer'; // Add pointer cursor for better UX
+
+        // Function to toggle selection
+        function toggleSelection() {
+            if (checkbox.checked) {
+                selectedEmployees.add(emp);
+            } else {
+                selectedEmployees.delete(emp);
+            }
+            updateSelectedEmployees();
+        }
+
+        // Click on label should toggle checkbox
+        label.addEventListener('click', function () {
+            checkbox.checked = !checkbox.checked;
+            toggleSelection();
+        });
+
+        // Checkbox should work independently as well
+        checkbox.addEventListener('change', toggleSelection);
+
+        wrapper.appendChild(checkbox);
+        wrapper.appendChild(label);
+        dropdownList.appendChild(wrapper);
+    });
+});
+
+// Function to update selected employees display
+function updateSelectedEmployees() {
+    // Check if there are any selected employees
+    if (selectedEmployees.size > 0) {
+        selectedEmployeesDisplay.innerHTML = [...selectedEmployees].map(employee => 
+            `<div class="employee-name"><i class="fas fa-check-circle" style="color: green;"></i> ${employee}</div>`
+        ).join('');
+    } else {
+        selectedEmployeesDisplay.textContent = "Nil";
+    }
+}
+
+
+
+
+// Hide dropdown when clicking outside
+document.addEventListener('click', function (event) {
+    if (!dropdownContainer.contains(event.target) && event.target !== addEmployeeBtn) {
+        dropdownContainer.style.display = 'none';
+    }
+});
+
+</script>
+
+
+
                             <!-- DataTales Example -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Project Creation  
-                            </h6>
-                                   
+                                <p class="m-0" style="font-size: 16px;color:rgb(23, 25, 28);font-style: normal;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: rgb(23, 25, 28);
+    font-size: 16px;
+    font-weight: 500;"><b>Project Creation</b> 
+        <span class="header-counter">3</span>  <!-- Counter next to heading -->
+</p>
                                 </div>
                                 <div class="card-body">
-                                    <div<div class="table-responsive">
+                                    <div class="table-responsive">
           <!-- Note: Each row has a data-pdf attribute with the PDF URL -->
           <table class="table table-bordered text-center" id="dataTable" width="100%" cellspacing="0">
             <thead>
@@ -461,7 +709,7 @@
                 <td>JayaVarshini, Surya</td>
                 <td class="action-buttons">
                   <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                  <button class="btn-action btn-delete"><i class="fas fa-trash-alt"></i></button>
+                  <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
                 </td>
               </tr>
               <tr data-pdf="r2.pdf">
@@ -474,7 +722,7 @@
                 <td>JayaVarshini, Surya</td>
                 <td class="action-buttons">
                   <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                  <button class="btn-action btn-delete"><i class="fas fa-trash-alt"></i></button>
+                  <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
                 </td>
               </tr>
               <tr data-pdf="r1.pdf">
@@ -487,7 +735,7 @@
                 <td>JayaVarshini, Surya</td>
                 <td class="action-buttons">
                   <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                  <button class="btn-action btn-delete"><i class="fas fa-trash-alt"></i></button>
+                  <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
                 </td>
               </tr>
             </tbody>
@@ -539,16 +787,17 @@
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <footer class="sticky-footer bg-white">
+           
+            <!-- End of Footer -->
+
+        </div>
+        <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
                        <h6> <b>Copyright &copy; Knock the Globe Technologies 2025</b></h6>
                     </div>
                 </div>
             </footer>
-            <!-- End of Footer -->
-
-        </div>
         <!-- End of Content Wrapper -->
 
     </div>
@@ -615,6 +864,50 @@
       });
     });
   </script>
+  <script>
+    function updateFileName(input, fileNameId) {
+        const fileInput = input.files[0];
+        
+        // Ensure the input has a file
+        const fileNameElement = document.getElementById(fileNameId);
+        
+        if (fileInput) {
+            fileNameElement.textContent = fileInput.name;
+            // Change the color to red when a file is uploaded
+            fileNameElement.style.color = 'red';
+        } else {
+            fileNameElement.textContent = "No file chosen";
+            // Reset the color if no file is selected
+            fileNameElement.style.color = 'initial';
+        }
+
+        // Add bounce animation to the icon
+        const icon = input.previousElementSibling.querySelector(".upload-icon");
+        icon.classList.add("bounce");
+
+        // Remove animation after it plays once
+        setTimeout(() => {
+            icon.classList.remove("bounce");
+        }, 500);
+    }
+
+    
+    function updateIcon(input, iconId, fileNameId) {
+    var fileName = input.files.length > 0 ? input.files[0].name : "No file chosen";
+    document.getElementById(fileNameId).textContent = fileName;
+
+    // Change icon to green check mark if a file is selected
+    var icon = document.getElementById(iconId);
+    if (input.files.length > 0) {
+        icon.className = "fas fa-check-circle fa-lg text-success";
+    } else {
+        // Reset to original icon if no file is selected
+        if (iconId === "requirement") {
+            icon.className = "fas fa-camera-retro fa-lg text-primary";
+        } 
+    }
+}
+</script>
 </body>
 
 </html>

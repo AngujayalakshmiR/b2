@@ -34,11 +34,6 @@
     #dataTable th:nth-child(8), #dataTable td:nth-child(8) { width: 15%; } /* Total Time */
     #dataTable th:nth-child(9), #dataTable td:nth-child(9) { width: 20%; } /* Actual Time */
     #dataTable th:nth-child(10), #dataTable td:nth-child(10) { width: 12%; } /* Status */
-        /* Gradient background for thead */
-        thead  {
-            background: linear-gradient(to right, #4568dc, #b06ab3);
-            color: white;
-        }
 
         /* Center align action buttons */
         .action-buttons {
@@ -334,7 +329,69 @@ tbody{
     color: white;
 }
  /* Styling for the modal */
+ @media (max-width:600px) {
+    h4{
+        font-size: small;
+    }
+}
+@media (min-width:600px) {
+    h4{
+        font-size: medium;
+    }
+}
 
+/* Style for the table header (thead) */
+#dataTable thead {
+    color: rgb(140, 147, 159);
+    font-weight: 1; 
+    font-style: normal;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Style for table data (td) */
+#dataTable tbody td {
+    font-style: normal;
+    overflow: hidden;
+    line-height: 1rem;
+    text-overflow: ellipsis;
+    color: rgb(23, 25, 28);
+    font-size: 14px;
+    font-weight: 400;
+    padding: 10px; /* Adds spacing inside cells */
+}
+
+/* Style for icons in the status column */
+#dataTable tbody td i {
+    color: rgb(0, 148, 255);
+}
+/* Counter styling similar to .bpKSTa .header-counter */
+.header-counter {
+    margin-left: 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(0, 148, 255);
+    padding: 2px 5px;
+    font-size: 13px;
+    min-width: 20px;
+    min-height: 20px;
+    font-weight: 500;
+    color: white;
+    border-radius: 100px;
+}
+
+/* Styling for the card header */
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Adjust spacing */
+    padding: 12px 16px;
+    background-color: #f8f9fc;
+}
+.page-item.active .page-link {
+    background: rgb(0, 148, 255);
+}
 </style>
 
 </head>
@@ -441,35 +498,16 @@ tbody{
 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
     <i class="fa fa-bars"></i>
 </button>
-
+<div class="mr-auto d-flex align-items-center pl-3 py-2">
+    <h4 class="text-dark font-weight-bold mr-4" style="color: rgb(15,29,64); margin-top: 5px;">
+        Daily Updates
+    </h4>
+</div>
 
 
 <!-- Topbar Navbar -->
 <ul class="navbar-nav ml-auto">
 
-    <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-    <li class="nav-item dropdown no-arrow d-sm-none">
-        <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-search fa-fw"></i>
-        </a>
-        <!-- Dropdown - Messages -->
-        <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-            aria-labelledby="searchDropdown">
-            <form class="form-inline mr-auto w-100 navbar-search">
-                <div class="input-group">
-                    <input type="text" class="form-control bg-light border-0 small"
-                        placeholder="Search for..." aria-label="Search"
-                        aria-describedby="basic-addon2">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" type="button">
-                            <i class="fas fa-search fa-sm"></i>
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </li>
 
     <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -478,7 +516,7 @@ tbody{
         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <img class="img-profile rounded-circle"
-                src="img/p.png" style="width: 3rem;height: 3rem;">
+                src="img/p.png" style="width: 2rem;height: 2rem;">
         </a>
         <!-- Dropdown - User Information -->
         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -506,14 +544,18 @@ tbody{
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                    <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Master > Daily Updates</h1>
-                    
-
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Employee Details </h6>
+                        <p class="m-0" style="font-size: 16px;color:rgb(23, 25, 28);font-style: normal;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: rgb(23, 25, 28);
+    font-size: 16px;
+    font-weight: 500;"><b>Daily Updates</b> 
+        <span class="header-counter">2</span>  <!-- Counter next to heading -->
+</p>
                             <div> 
     <input type="date" id="dateFilter" class="form-control d-inline" style="width: auto;">
 </div>
@@ -540,7 +582,7 @@ tbody{
               <tr data-name="Surya">
                 <td>1</td>
                 <td>Surya</td>
-                <td>10-02-2025</td>
+                <td>17-02-2025</td>
                 <td>ABC Corp</td>
                 <td>The project requires inbuilt updations and notifications.</td>
                 <td>5</td>
@@ -552,7 +594,7 @@ tbody{
               <tr data-name="Pavithra">
                 <td>2</td>
                 <td>Pavithra</td>
-                <td>10-02-2025</td>
+                <td>17-02-2025</td>
                 <td>ABC Corp</td>
                 <td>The project requires inbuilt updations and notifications.</td>
                 <td>5</td>

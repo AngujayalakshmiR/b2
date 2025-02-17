@@ -24,11 +24,7 @@
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <style>
         
-        /* Gradient background for thead */
-        thead  {
-            background: linear-gradient(to right, #4568dc, #b06ab3);
-            color: white;
-        }
+       
 
         /* Center align action buttons */
         .action-buttons {
@@ -145,97 +141,23 @@
 }
 
     </style>
-     <style>
-        select {
-            cursor: pointer;
-        }
-     
-
-        .container-fluid {
-            max-width: 850px;
-            margin-top: 20px;
-            margin-bottom: 30px;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .container:hover {
-            transform: scale(1.02);
-        }
-
-        h4 {
-            color: #2562a3;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        .form-control {
-            transition: 0.3s ease-in-out;
-            border-radius: 5px;
-        }
-
-        .form-control:focus {
-            border-color: #4568dc;
-            box-shadow: 0 0 5px rgba(69, 104, 220, 0.5);
-        }
-
-        .card {
-            border-radius: 8px;
-        }
-
-        .upload-label {
-            cursor: pointer;
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .upload-label:hover {
-            transform: scale(1.1);
-        }
-
-        .btn-gradient {
-            background: linear-gradient(to right, #4568dc, #b06ab3);
-            border: none;
-            transition: transform 0.3s ease-in-out, opacity 0.3s;
-            font-weight: bold;
-            color: white;
-        }
-
-        .btn-gradient:hover {
-            transform: scale(1.05);
-            opacity: 0.9;
-            color: white;
-        }
-
-
-        .file-name {
-            font-size: 12px;
-            transition: color 0.3s;
-        }
-
-        .file-name:hover {
-            color: #2562a3;
-        }
-    </style>
 <style>
-    .sidebar-brand-icon, .sidebar-brand-text {
+           .sidebar-brand-icon, .sidebar-brand-text {
         font-size: large;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
+        background: white;
         -webkit-background-clip: text; /* Clip background to text */
         -webkit-text-fill-color: transparent; /* Make text color transparent to show gradient */
         font-weight: bold; /* Optional: Makes text more prominent */
     }
     /* Sidebar background */
     .sidebar {
-        background-color: white !important;
+        background-color: rgb(15,29,64) !important;
         width: 250px; /* Adjust according to sidebar width */
     }
 
     /* Sidebar link styles */
     .l a.k{
-        color: #333 !important; /* Dark text */
+        color: white !important; /* Dark text */
         border-radius: 8px; /* Rounded corners */
         transition: all 0.3s ease-in-out;
         padding: 12px 15px;
@@ -249,15 +171,16 @@
 
     /* Ensure icons are black */
     .l a.k i {
-        color: black !important;
+        color: white !important;
         font-size: 18px; /* Slightly larger icons */
         transition: color 0.3s ease-in-out;
     }
 
+
     /* Hover effect (only for non-active items) */
-    .l:not(.active) a.k:hover {
-        background-color: #f0f0f0 !important; /* Light grey */
-        color: #000 !important; /* Dark text */
+    .l:not(.active)  a.k:hover {
+        background-color: rgb(45, 64, 113) !important; /* Light grey */
+        color: white !important; /* Dark text */
         border-radius: 8px;
         width: 90%; /* Keep it smaller than the sidebar */
         margin: 0 auto; /* Center align */
@@ -265,17 +188,17 @@
 
     /* Keep icons black on hover for non-active items */
     .l:not(.active) a.k:hover i {
-        color: black !important;
+        color: white !important;
     }
 
     /* Active item style */
     .l.active {
-        width: 90%;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
+        background-color: rgb(45, 64, 113) !important; /* Light grey */
+        color: white !important; /* Dark text */
         border-radius: 8px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-        transform: scale(1.02); /* Slight lift effect */
+        width: 90%; /* Keep it smaller than the sidebar */
         margin: 0 auto; /* Center align */
+        padding:1px;
     }
     .collapse-item.active{
         width: 90%;
@@ -293,16 +216,17 @@
 
     /* Ensure icons turn white inside active links */
     .l.active a.k i {
-        color: white !important;
+        color:white !important;
     }
-    footer{
-        background:linear-gradient(to right, #4568dc, #b06ab3);
-        color:white;
-        padding:15px;
-    }
+    footer {
+    background: white;
+    color: rgb(15,29,64);
+    padding: 15px;
+    box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.1); /* Negative Y value for top shadow */
+}
+
     .master.active{
         width: 90%;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
         color:white;
         border-radius: 8px;
         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
@@ -315,19 +239,91 @@
 
     }
     .collapse{
-        background:	#F8F8F8;
+        background:#F8F8F8;
         border-radius: 10px;
         color:white;
     }
     .collapse-item.active{
         width: 90%;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
+        background: rgb(45, 64, 113);
         color:white;
         border-radius: 8px;
         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
         transform: scale(1.02); /* Slight lift effect */
         margin: 0 auto; /* Center align */
     }
+    .action-buttons button {
+      margin: 0 5px;
+    }
+    /* Optional: Change cursor for clickable rows */
+    #dataTable tbody tr {
+      cursor: pointer;
+    }
+    .sidebar-dark .nav-item .nav-link[data-toggle="collapse"]:hover::after {
+    color: white;
+}
+/* Style for the table header (thead) */
+#dataTable thead {
+    color: rgb(140, 147, 159);
+    font-weight: 1; 
+    font-style: normal;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Style for table data (td) */
+#dataTable tbody td {
+    font-style: normal;
+    overflow: hidden;
+    line-height: 1rem;
+    text-overflow: ellipsis;
+    color: rgb(23, 25, 28);
+    font-size: 14px;
+    font-weight: 400;
+    padding: 10px; /* Adds spacing inside cells */
+}
+
+/* Style for icons in the status column */
+#dataTable tbody td i {
+    color: rgb(0, 148, 255);
+}
+/* Counter styling similar to .bpKSTa .header-counter */
+.header-counter {
+    margin-left: 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(0, 148, 255);
+    padding: 2px 5px;
+    font-size: 13px;
+    min-width: 20px;
+    min-height: 20px;
+    font-weight: 500;
+    color: white;
+    border-radius: 100px;
+}
+
+/* Styling for the card header */
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Adjust spacing */
+    padding: 12px 16px;
+    background-color: #f8f9fc;
+}
+.page-item.active .page-link {
+    background: rgb(0, 148, 255);
+}
+@media (max-width:600px) {
+    h4{
+        font-size: small;
+    }
+}
+@media (min-width:600px) {
+    h4{
+        font-size: medium;
+    }
+}
 </style>
 
 </head>
@@ -361,7 +357,7 @@
 <hr class="sidebar-divider" style="margin-bottom: 0px; color:#4568dc">
 
 <!-- Nav Item - Master -->
-<li class="nav-item master l active">
+<li class="nav-item l master active">
     <a class="nav-link k collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
         aria-expanded="true" aria-controls="collapseTwo" style="color: white;">
         <i class="fas fa-fw fa-clipboard-list" style="font-size:20px"></i>
@@ -426,41 +422,31 @@
             <div id="content">
 
                 <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style=" background:linear-gradient(to right, #b06ab3, #4568dc);">
-
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style=" background:white;">
+                    
 <!-- Sidebar Toggle (Topbar) -->
 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
     <i class="fa fa-bars"></i>
 </button>
+                <div class="mr-auto d-flex align-items-center pl-3 py-2">
+    <h4 class="text-dark font-weight-bold mr-3" 
+        style="color: rgb(15,29,64); margin-top: 5px;">
+        Master &gt; Employee Details
+    </h4>
+
+    <button class="btn" style="border-radius:25px;background: rgb(0, 148, 255);color:white;" onclick="window.location.href='add_employee.php'">
+    <i class="fas fa-users"></i>  <!-- Represents a group or team of employees -->
+
+        &nbsp;Add Employee
+    </button>
+</div>
+
 
 
 
 <!-- Topbar Navbar -->
 <ul class="navbar-nav ml-auto">
 
-    <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-    <li class="nav-item dropdown no-arrow d-sm-none">
-        <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-search fa-fw"></i>
-        </a>
-        <!-- Dropdown - Messages -->
-        <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-            aria-labelledby="searchDropdown">
-            <form class="form-inline mr-auto w-100 navbar-search">
-                <div class="input-group">
-                    <input type="text" class="form-control bg-light border-0 small"
-                        placeholder="Search for..." aria-label="Search"
-                        aria-describedby="basic-addon2">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" type="button">
-                            <i class="fas fa-search fa-sm"></i>
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </li>
 
     <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -469,7 +455,7 @@
         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <img class="img-profile rounded-circle"
-                src="img/profile.png" style="width: 3rem;height: 3rem;">
+                src="img/p.png" style="width: 2rem;height: 2rem;">
         </a>
         <!-- Dropdown - User Information -->
         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -488,7 +474,6 @@
 </nav>
                 <!-- End of Topbar -->
 
-                <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <h4>Add Employee</h4>
                     <form action="employee.php" method="GET">
@@ -565,8 +550,6 @@
                         <button type="submit" class="btn btn-gradient btn-lg mt-3">Submit</button>
                     </form>
                 </div>
-                
-                
                 <!-- /.container-fluid -->
 
             </div>

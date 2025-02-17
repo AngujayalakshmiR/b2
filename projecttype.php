@@ -22,11 +22,6 @@
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <style>
-        /* Gradient background for thead */
-        thead  {
-            background: linear-gradient(to right, #4568dc, #b06ab3);
-            color: white;
-        }
 
         /* Center align action buttons */
         .action-buttons {
@@ -156,7 +151,7 @@
 
     #taskButton {
         width: 100%;
-        margin-left: 0px;
+        align-items: center;
     }
 }
     </style>
@@ -281,6 +276,89 @@
     .sidebar-dark .nav-item .nav-link[data-toggle="collapse"]:hover::after {
     color: white;
 }
+
+/* Style for the table header (thead) */
+#dataTable thead {
+    color: rgb(140, 147, 159);
+    font-weight: 1; 
+    font-style: normal;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Style for table data (td) */
+#dataTable tbody td {
+    font-style: normal;
+    overflow: hidden;
+    line-height: 1rem;
+    text-overflow: ellipsis;
+    color: rgb(23, 25, 28);
+    font-size: 14px;
+    font-weight: 400;
+    padding: 10px; /* Adds spacing inside cells */
+}
+
+/* Style for icons in the status column */
+#dataTable tbody td i {
+    color: rgb(0, 148, 255);
+}
+/* Counter styling similar to .bpKSTa .header-counter */
+.header-counter {
+    margin-left: 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(0, 148, 255);
+    padding: 2px 5px;
+    font-size: 13px;
+    min-width: 20px;
+    min-height: 20px;
+    font-weight: 500;
+    color: white;
+    border-radius: 100px;
+}
+
+/* Styling for the card header */
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Adjust spacing */
+    padding: 12px 16px;
+    background-color: #f8f9fc;
+}
+.page-item.active .page-link {
+    background: rgb(0, 148, 255);
+}
+/* Apply custom width for container on larger screens */
+@media (min-width: 992px) {
+    .custom-container {
+        max-width: 800px;  /* Adjust the width as needed */
+        margin: 0 auto;    /* Center the container */
+    }
+}
+@media (max-width: 768px) {
+    .col-md-2 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100px; /* Ensures the container has some height */
+      width: 100%; /* Ensures the container takes up full width on smaller screens */
+    }
+
+    .fa-id-badge {
+      font-size: 3rem; /* Adjust icon size if needed for smaller screens */
+    }
+  }
+  @media (max-width:600px) {
+    h4{
+        font-size: small;
+    }
+}
+@media (min-width:600px) {
+    h4{
+        font-size: medium;
+    }
+}
 </style>
 </head>
 
@@ -377,135 +455,184 @@
 
             <!-- Main Content -->
             <div id="content">
-
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style=" background:white;">
+                      
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>          
+                   <!-- Header Section -->
+<div class="mr-auto d-flex align-items-center pl-3 py-2">
+    <h4 class="text-dark font-weight-bold mr-4" style="color: rgb(15,29,64);  margin-top: 5px;">
+        Master > Project Type
+    </h4>
+</div>
 
-<!-- Sidebar Toggle (Topbar) -->
-<button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-    <i class="fa fa-bars"></i>
-</button>
+<!-- Customer Modal (No header, reduced width) -->
+<!-- Include Font Awesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-
-
-<!-- Topbar Navbar -->
-<ul class="navbar-nav ml-auto">
-
-    <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-    <li class="nav-item dropdown no-arrow d-sm-none">
-        <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-search fa-fw"></i>
-        </a>
-        <!-- Dropdown - Messages -->
-        <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-            aria-labelledby="searchDropdown">
-            <form class="form-inline mr-auto w-100 navbar-search">
-                <div class="input-group">
-                    <input type="text" class="form-control bg-light border-0 small"
-                        placeholder="Search for..." aria-label="Search"
-                        aria-describedby="basic-addon2">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" type="button">
-                            <i class="fas fa-search fa-sm"></i>
-                        </button>
-                    </div>
+<!-- Modal -->
+<div class="modal fade" id="projecttypeModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 40%;">
+    <div class="modal-content" style="border-radius: 15px;">
+      <div class="modal-body p-0">
+        <div class="row no-gutters">
+          <!-- Left Column: Form -->
+          <div class="col-md-10">
+            <div class="ml-3 mt-3 mb-3 mr-3">
+              <form id="projecttypeForm">
+                <div class="form-group">
+                  <label for="projecttypeInput"><b>Project Type Details:</b></label>
+                  <input type="text" class="form-control" id="projecttypeInput" placeholder="Enter Project Type" required>
                 </div>
-            </form>
+                <div class="d-flex justify-content-start">
+                  <button type="submit" class="btn" style="background-color: rgb(15,29,64); color: white; border-radius: 25px;">Submit</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Right Column: Designation Icon -->
+          <div class="col-md-2 d-flex align-items-center justify-content-center" 
+     style="background-color: rgb(15,29,64); color: white; 
+            border-top-right-radius: 14px; border-bottom-right-radius: 14px;">
+    <i class="fa-solid fa-id-badge fa-4x"></i> <!-- Designation Icon -->
+</div>
         </div>
-    </li>
+      </div>
+    </div>
+  </div>
+</div>
 
-    <div class="topbar-divider d-none d-sm-block"></div>
 
-    <!-- Nav Item - User Information -->
-    <li class="nav-item dropdown no-arrow">
-        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img class="img-profile rounded-circle"
-                src="img/p.png" style="width: 3rem;height: 3rem;">
-        </a>
-        <!-- Dropdown - User Information -->
-        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-            aria-labelledby="userDropdown">
-            
-            
-            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                Logout
-            </a>
-        </div>
-    </li>
 
-</ul>
+                   
 
-</nav>
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img class="img-profile rounded-circle"
+                                    src="img/p.png" style="width: 2rem;height: 2rem;">
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                
+                                
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav>
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+              <!-- Include Bootstrap -->
 
-                    <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Master > Project Type</h1>
-                    
-
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Project Details<form id="taskForm" class="d-flex align-items-center">
-        
-        <input type="text" class="form-control" id="taskInput" placeholder="Enter Project Type">
-        <button type="submit" class="btn btn-primary" id="taskButton">Add Project Type</button>
-        
-</form></h6>
-                           
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered text-center" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr class="thead">
-                                            <th>S.no</th>
-                                            <th>Project Type</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Designing</td>
-                                            
-                                            <td class="action-buttons">
-                                                <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                                                <button class="btn-action btn-delete"><i class="fas fa-trash-alt"></i></button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Web Application</td>
-                                           
-                                            <td class="action-buttons">
-                                                <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                                                <button class="btn-action btn-delete"><i class="fas fa-trash-alt"></i></button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>Mobile Application</td>
-                                            
-                                            <td class="action-buttons">
-                                                <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                                                <button class="btn-action btn-delete"><i class="fas fa-trash-alt"></i></button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
+           <!-- Designation Cards Container -->
+           <div class="container-fluid">
+           <div class="container custom-container mb-4 mt-4" style="background: white; border-radius: 25px; border: 2px solid rgb(0, 148, 255);">
+    <div class="row">
+        <div class="col-12">
+            <form id="customerForm" class="row g-10">
+                <!-- Column 1: Name & Company Name -->
+                <div class="col-md-8 pt-2 d-flex align-items-center">
+                    <input type="text" class="form-control mb-2" id="customername" placeholder="Enter Project Type">
                 </div>
-                <!-- /.container-fluid -->
+
+                <!-- Column 4: Submit Button -->
+                <div class="col-md-4 pt-2 pb-2 d-flex justify-content-center align-items-center">
+                    <button type="submit" class="btn" id="customerbtn" 
+                        style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: 190px;">
+                        <i class="fas fa-code"></i>
+                        &nbsp; Add Project Type
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+    <p class="m-0" style="font-size: 16px;color:rgb(23, 25, 28);font-style: normal;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: rgb(23, 25, 28);
+    font-size: 16px;
+    font-weight: 500;"><b>Project Type Details</b> 
+        <span class="header-counter">3</span>  <!-- Counter next to heading -->
+</p>
+
+
+
+</form></h6>
+       
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered text-center" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr class="thead">
+                        <th>S.no</th>
+                        <th>Project Type</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Designing</td>
+                        
+                        <td class="action-buttons">
+                            <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
+                            <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Website</td>
+                       
+                        <td class="action-buttons">
+                            <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
+                            <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Mobile App</td>
+                        
+                        <td class="action-buttons">
+                            <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
+                            <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</div>
+
 
             </div>
 

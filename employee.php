@@ -314,6 +314,16 @@
 .page-item.active .page-link {
     background: rgb(0, 148, 255);
 }
+@media (max-width:600px) {
+    h4{
+        font-size: small;
+    }
+}
+@media (min-width:600px) {
+    h4{
+        font-size: medium;
+    }
+}
 </style>
 
 </head>
@@ -413,43 +423,25 @@
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style=" background:white;">
-                <button class="btn" style="float:right;border-radius:25px;background: rgb(0, 148, 255);color:white;" onclick="window.location.href='add_employee.php'">
-                <i class="fas fa-user"></i>
-                &nbsp Add Employee
-                                </button>
+                    
 <!-- Sidebar Toggle (Topbar) -->
 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
     <i class="fa fa-bars"></i>
 </button>
+                <div class="mr-auto d-flex align-items-center pl-3 py-2">
+    <h4 class="text-dark font-weight-bold mr-3" 
+        style="color: rgb(15,29,64); margin-top: 5px;">
+        Master &gt; Employee Details
+    </h4>
+
+</div>
+
 
 
 
 <!-- Topbar Navbar -->
 <ul class="navbar-nav ml-auto">
 
-    <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-    <li class="nav-item dropdown no-arrow d-sm-none">
-        <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-search fa-fw"></i>
-        </a>
-        <!-- Dropdown - Messages -->
-        <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-            aria-labelledby="searchDropdown">
-            <form class="form-inline mr-auto w-100 navbar-search">
-                <div class="input-group">
-                    <input type="text" class="form-control bg-light border-0 small"
-                        placeholder="Search for..." aria-label="Search"
-                        aria-describedby="basic-addon2">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" type="button">
-                            <i class="fas fa-search fa-sm"></i>
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </li>
 
     <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -458,7 +450,7 @@
         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <img class="img-profile rounded-circle"
-                src="img/p.png" style="width: 3rem;height: 3rem;">
+                src="img/p.png" style="width: 2rem;height: 2rem;">
         </a>
         <!-- Dropdown - User Information -->
         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -479,8 +471,254 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    
+                <div class="container mb-4 mt-4" style="background: white; border-radius: 25px; border: 2px solid rgb(0, 148, 255);">
+<div class="column">
+    <div class="row">
+        <!-- Left Section (20% width for the button) -->
+       
+        <!-- Right Section (80% width for form fields) -->
+        <div class="col-md-12">
+            <form id="customerForm" class="row g-3 mt-3">
+                <!-- Column 1: Name & Company Name -->
+                <div class="col-md-3 pb-1">
+                    <input type="text" class="form-control mb-2" id="employeename" placeholder="Enter Employee Name">
+                    <select class="form-control mb-2" id="designation">
+    <option value="">Select Designation</option>
+    <option value="web_developer">Web Developer</option>
+    <option value="ui_ux_designer">UI/UX Designer</option>
+    <option value="mobile_app_designer">Mobile App Designer</option>
+</select>
 
+                    <input type="text" class="form-control mb-2" id="employeephnno" placeholder="Enter Phone Number">
+                </div>
+
+                <!-- Column 2: Address & District -->
+                <div class="col-md-3 pb-1">
+                    <textarea class="form-control mb-2" id="customeraddress" placeholder="Enter Company Address" rows="2" style="height: 85px;"></textarea>
+                    <!-- Country -->
+                    <select class="form-control mb-2" id="country">
+                        <option value="">Select Country</option>
+                    </select>
+                </div>
+
+                <!-- Column 3: State & Country -->
+                <div class="col-md-2 pb-1">
+                    <!-- State (Dropdown for India, Manual for other countries) -->
+                    <select class="form-control mb-2 d-none" id="stateDropdown">
+                        <option value="">Select State</option>
+                    </select>
+
+                    <input type="text" class="form-control mb-2" id="stateInput" placeholder="Enter State">
+                    <!-- District (Dropdown for India, Manual for other countries) -->
+                    <select class="form-control mb-2 d-none" id="districtDropdown">
+                        <option value="">Select District</option>
+                    </select>
+                    <input type="text" class="form-control mb-2" id="districtInput" placeholder="Enter District">
+                    <input type="text" class="form-control mb-2" id="pincode" placeholder="Enter Pincode">
+                </div>
+               <!-- Column 4: File Uploads & Credentials -->
+        <div class="col-md-4 pb-1">
+        <div class="row"> 
+    <!-- File Upload Section -->
+    <div class="col-md-4 col-sm-6 pb-2">
+        <div class="form-group">
+            <label for="employeePhoto" class="upload-label d-block font-weight-bold" style="margin-bottom: 0px;">
+                <i id="photoIcon" class="fas fa-camera-retro fa-lg" style="text-align: center; display: block; cursor: pointer;margin-bottom: 8px;color: rgb(222, 141, 197);"></i>
+                <p class="mt-1" style="font-size: 14px; text-align:center;margin-bottom: 5px;">Upload Photo</p>
+            </label>
+            <input type="file" class="form-control-file d-none" id="employeePhoto" onchange="updateIcon(this, 'photoIcon', 'photoFileName')">
+            <p class="file-name text-muted" id="photoFileName" style="font-size: 14px; text-align:center;">No file chosen</p>
+        </div>
+    </div>
+
+    <div class="col-md-4 col-sm-6 pb-2">
+        <div class="form-group">
+            <label for="aadharCard" class="upload-label d-block font-weight-bold" style="margin-bottom: 0px;">
+                <i id="aadharIcon" class="fas fa-id-card fa-lg " style="text-align: center; display: block; cursor: pointer;margin-bottom: 8px;color: rgb(140, 221, 130);"></i>
+                <p class="mt-1" style="font-size: 14px; text-align:center;margin-bottom: 5px;">Upload Aadhar</p>
+            </label>
+            <input type="file" class="form-control-file d-none" id="aadharCard" onchange="updateIcon(this, 'aadharIcon', 'aadharFileName')">
+            <p class="file-name text-muted" id="aadharFileName" style="font-size: 14px; text-align:center;">No file chosen</p>
+        </div>
+    </div>
+
+    <div class="col-md-4 col-sm-12 pb-2">
+        <div class="form-group">
+            <label for="panCard" class="upload-label d-block font-weight-bold" style="margin-bottom: 0px;">
+                <i id="panIcon" class="fas fa-id-badge fa-lg " style="text-align: center; display: block; cursor: pointer;margin-bottom: 8px;color: rgb(246, 185, 114);"></i>
+                <p class="mt-1" style="font-size: 14px; text-align:center; margin-bottom: 5px;">Upload Pan</p>
+            </label>
+            <input type="file" class="form-control-file d-none" id="panCard" onchange="updateIcon(this, 'panIcon', 'panFileName')">
+            <p class="file-name text-muted" id="panFileName" style="font-size: 14px; text-align:center;">No file chosen</p>
+        </div>
+    </div>
+</div>
+
+
+
+            <!-- Username and Password Section -->
+            <div class="row">
+                <div class="col-sm-6 pb-2">
+                    <input type="text" class="form-control" id="username" placeholder="Enter Username">
+                </div>
+                <div class="col-sm-6 pb-2">
+                    <input type="password" class="form-control" id="password" placeholder="Enter Password">
+                </div>
+            </div>
+        </div>
+
+            </form>
+        </div>
+    </div></div>
+    <div class="column">
+    <div class="pb-2 d-flex justify-content-sm-end justify-content-center align-items-center">
+    <button type="submit" class="btn" id="customerbtn" 
+        style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: auto;">
+        <i class="fas fa-users"></i>&nbsp; Add Employee
+    </button>
+</div>
+
+</div>
+
+</div>
+<script>
+  
+
+    function updateIcon(input, iconId, fileNameId) {
+    var fileName = input.files.length > 0 ? input.files[0].name : "No file chosen";
+    document.getElementById(fileNameId).textContent = fileName;
+
+    // Change icon to green check mark if a file is selected
+    var icon = document.getElementById(iconId);
+    if (input.files.length > 0) {
+        icon.className = "fas fa-check-circle fa-lg text-success";
+    } else {
+        // Reset to original icon if no file is selected
+        if (iconId === "photoIcon") {
+            icon.className = "fas fa-camera-retro fa-lg text-primary";
+        } else if (iconId === "aadharIcon") {
+            icon.className = "fas fa-id-card fa-lg text-success";
+        } else if (iconId === "panIcon") {
+            icon.className = "fas fa-id-badge fa-lg text-danger";
+        }
+    }
+}
+
+// List of states and districts for India
+const statesAndDistricts = {
+   "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore", "Kurnool", "Chittoor", "Anantapur", "East Godavari", "West Godavari", "Prakasam", "Srikakulam", "Kadapa", "Krishna", "Rayalaseema"],
+"Arunachal Pradesh": ["Itanagar", "Tawang", "Ziro", "Pasighat", "West Kameng", "East Kameng", "Lower Subansiri", "Upper Subansiri", "West Siang", "East Siang", "Lohit", "Namsai"],
+"Assam": ["Guwahati", "Silchar", "Dibrugarh", "Tezpur", "Jorhat", "Nagaon", "Barpeta", "Bongaigaon", "Karimganj", "Sonitpur", "Sivasagar", "Cachar", "Kokrajhar", "Morigaon"],
+"Bihar": ["Patna", "Gaya", "Muzaffarpur", "Bhagalpur", "Darbhanga", "Purnia", "Nalanda", "Samastipur", "Begusarai", "Saran", "Vaishali", "Madhubani", "Katihar", "Araria"],
+"Chhattisgarh": ["Raipur", "Bilaspur", "Durg", "Korba", "Jagdalpur", "Rajnandgaon", "Surguja", "Koriya", "Raigarh", "Jashpur"],
+"Goa": ["North Goa", "South Goa"],
+"Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Gandhinagar", "Bhavnagar", "Jamnagar", "Anand", "Kutch", "Sabarkantha", "Patan", "Junagadh"],
+"Haryana": ["Gurugram", "Faridabad", "Panipat", "Ambala", "Hisar", "Karnal", "Rewari", "Sonipat", "Fatehabad", "Sirsa", "Jhajjar"],
+"Himachal Pradesh": ["Shimla", "Kullu", "Manali", "Dharamshala", "Solan", "Mandi", "Kangra", "Bilaspur", "Hamirpur", "Kullu", "Una", "Chamba"],
+"Jharkhand": ["Ranchi", "Jamshedpur", "Dhanbad", "Bokaro", "Hazaribagh", "Dumka", "Giridih", "Jamtara", "Deoghar", "Ramgarh"],
+"Karnataka": ["Bengaluru", "Mysore", "Hubli", "Mangalore", "Belagavi", "Tumkur", "Udupi", "Dakshina Kannada", "Hassan", "Kodagu", "Bijapur", "Bidar", "Chikkaballapur", "Chikkamagaluru"],
+"Kerala": ["Thiruvananthapuram", "Kochi", "Kozhikode", "Thrissur", "Kottayam", "Malappuram", "Palakkad", "Ernakulam", "Kollam", "Pathanamthitta", "Alappuzha", "Idukki"],
+"Madhya Pradesh": ["Bhopal", "Indore", "Gwalior", "Jabalpur", "Ujjain", "Sagar", "Katni", "Khandwa", "Hoshangabad", "Rewa", "Satna", "Dewas", "Vidisha"],
+"Maharashtra": ["Mumbai", "Pune", "Nagpur", "Nashik", "Thane", "Aurangabad", "Kolhapur", "Solapur", "Nanded", "Amravati", "Chandrapur", "Jalna"],
+"Manipur": ["Imphal", "Churachandpur", "Thoubal", "Bishnupur", "Ukhrul", "Senapati", "Tamenglong", "Chandel", "Kangpokpi"],
+"Meghalaya": ["Shillong", "Tura", "Jowai", "Nongstoin", "East Khasi Hills", "West Khasi Hills", "Ri Bhoi", "South West Khasi Hills"],
+"Mizoram": ["Aizawl", "Lunglei", "Champhai", "Serchhip", "Kolasib", "Mamit"],
+"Nagaland": ["Kohima", "Dimapur", "Mokokchung", "Tuensang", "Mon", "Peren", "Wokha"],
+"Odisha": ["Bhubaneswar", "Cuttack", "Puri", "Sambalpur", "Rourkela", "Berhampur", "Bargarh", "Ganjam", "Balasore", "Dhenkanal"],
+"Punjab": ["Amritsar", "Ludhiana", "Patiala", "Jalandhar", "Bathinda", "Mohali", "Gurdaspur", "Firozpur", "Mansa", "Sangrur"],
+"Rajasthan": ["Jaipur", "Udaipur", "Jodhpur", "Kota", "Ajmer", "Bikaner", "Sikar", "Alwar", "Bharatpur", "Pali"],
+"Sikkim": ["Gangtok", "Namchi", "Mangan", "Gyalshing"],
+"Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem", "Vellore", "Tirunelveli", "Erode", "Dindigul", "Karur", "Tanjore", "Thoothukudi", "Kanyakumari", "Cuddalore", "Villupuram", "Theni", "Ramanathapuram", "Nilgiris", "Virudhunagar", "Perambalur", "Krishnagiri", "Ariyalur", "Namakkal", "Pudukottai", "Sivaganga"],
+"Telangana": ["Hyderabad", "Warangal", "Karimnagar", "Nizamabad", "Khammam", "Mahabubnagar", "Adilabad", "Nalgonda", "Rangareddy", "Medak"],
+"Tripura": ["Agartala", "Udaipur", "Dharmanagar", "Kailashahar"],
+"Uttar Pradesh": ["Lucknow", "Kanpur", "Varanasi", "Noida", "Agra", "Meerut", "Ghaziabad", "Allahabad", "Bareilly", "Aligarh", "Moradabad", "Saharanpur", "Firozabad", "Muzaffarnagar"],
+"Uttarakhand": ["Dehradun", "Haridwar", "Nainital", "Almora", "Udham Singh Nagar", "Pauri Garhwal", "Tehri Garhwal", "Champawat"],
+"West Bengal": ["Kolkata", "Darjeeling", "Siliguri", "Howrah", "Asansol", "Durgapur", "Malda", "Purulia", "Bankura", "Nadia"],
+"Andaman and Nicobar Islands": ["Port Blair"],
+"Chandigarh": ["Chandigarh"],
+"Dadra and Nagar Haveli and Daman and Diu": ["Daman", "Diu", "Silvassa"],
+"Lakshadweep": ["Kavaratti"],
+"Delhi": ["Central Delhi", "East Delhi", "South Delhi", "West Delhi"],
+"Puducherry": ["Pondicherry", "Karaikal", "Mahe", "Yanam"],
+"Jammu and Kashmir": ["Srinagar", "Jammu", "Anantnag", "Baramulla", "Kupwara", "Poonch", "Rajouri", "Kathua"],
+"Ladakh": ["Leh", "Kargil"]
+
+};
+
+// List of all 195 countries
+const countries = [
+    "India", "United States", "United Kingdom", "Canada", "Australia", "Germany", "France", "China", "Japan", "Brazil",
+    "Russia", "South Korea", "Italy", "Spain", "Mexico", "Indonesia", "Netherlands", "Saudi Arabia", "Turkey", "Switzerland",
+    "South Africa", "Sweden", "Argentina", "Poland", "Belgium", "Norway", "Thailand", "Ireland", "Austria", "Singapore",
+    "New Zealand", "Denmark", "Finland", "Malaysia", "Portugal", "Greece", "Czech Republic", "Israel", "United Arab Emirates",
+    "Vietnam", "Hungary", "Philippines", "Colombia", "Pakistan", "Chile", "Bangladesh", "Egypt", "Nigeria", "Ukraine",
+    "Peru", "Venezuela", "Kazakhstan", "Romania", "Algeria", "Ecuador", "Iraq", "Morocco", "Slovakia", "Belarus", "Serbia",
+    "Sri Lanka", "Croatia", "Lithuania", "Bulgaria", "Tunisia", "Slovenia", "Jordan", "Paraguay", "Uruguay", "Lebanon",
+    "Georgia", "Azerbaijan", "Panama", "Armenia", "Oman", "Bolivia", "Myanmar", "Luxembourg", "Cuba", "Sudan", "Afghanistan",
+    "Nepal", "Honduras", "Costa Rica", "North Macedonia", "Estonia", "El Salvador", "Cyprus", "Jamaica", "Latvia", "Bahrain",
+    "Trinidad and Tobago", "Iceland", "Botswana", "Namibia", "Mauritius", "Montenegro", "Moldova", "Zambia", "Ethiopia",
+    "Ghana", "Senegal", "Cameroon", "Madagascar", "Tanzania", "Kenya", "Mozambique", "Fiji", "Malta", "Bosnia and Herzegovina",
+    "Gabon", "Burkina Faso", "Benin", "Guatemala", "Laos", "Papua New Guinea", "Uganda", "Mongolia", "Brunei", "Togo", "Nicaragua",
+    "Seychelles", "Congo", "Malawi", "Suriname", "Maldives", "Somalia", "Eswatini", "Bhutan", "Guyana", "Belize", "Chad",
+    "Burundi", "Mauritania", "Sierra Leone", "Lesotho", "Guinea", "Djibouti", "Comoros", "Liberia", "Saint Lucia", "Saint Vincent",
+    "Grenadines", "Sao Tome and Principe", "Samoa", "Solomon Islands", "Vanuatu", "Gambia"
+];
+
+// Populate Country Dropdown
+let countryDropdown = document.getElementById("country");
+countries.forEach(country => {
+    let option = document.createElement("option");
+    option.value = country;
+    option.textContent = country;
+    countryDropdown.appendChild(option);
+});
+
+// Populate State Dropdown (for India)
+let stateDropdown = document.getElementById("stateDropdown");
+for (let state in statesAndDistricts) {
+    let option = document.createElement("option");
+    option.value = state;
+    option.textContent = state;
+    stateDropdown.appendChild(option);
+}
+
+// Handle State Selection
+stateDropdown.addEventListener("change", function() {
+    let selectedState = this.value;
+    let districtDropdown = document.getElementById("districtDropdown");
+    districtDropdown.innerHTML = '<option value="">Select District</option>';
+
+    if (selectedState && statesAndDistricts[selectedState]) {
+        statesAndDistricts[selectedState].forEach(district => {
+            let option = document.createElement("option");
+            option.value = district;
+            option.textContent = district;
+            districtDropdown.appendChild(option);
+        });
+    }
+});
+
+// Handle Country Selection
+countryDropdown.addEventListener("change", function() {
+    let country = this.value;
+    let stateDropdown = document.getElementById("stateDropdown");
+    let stateInput = document.getElementById("stateInput");
+    let districtDropdown = document.getElementById("districtDropdown");
+    let districtInput = document.getElementById("districtInput");
+
+    if (country === "India") {
+        stateDropdown.classList.remove("d-none");
+        stateInput.classList.add("d-none");
+        districtDropdown.classList.remove("d-none");
+        districtInput.classList.add("d-none");
+    } else {
+        stateDropdown.classList.add("d-none");
+        stateInput.classList.remove("d-none");
+        districtDropdown.classList.add("d-none");
+        districtInput.classList.remove("d-none");
+    }
+});
+</script>
                     
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
@@ -491,7 +729,7 @@
     color: rgb(23, 25, 28);
     font-size: 16px;
     font-weight: 500;"><b>Employee Details</b> 
-        <span class="header-counter">2</span>  <!-- Counter next to heading -->
+        <span class="header-counter">3</span>  <!-- Counter next to heading -->
 </p>
                         </div>
                         <div class="card-body" style="padding: 20px;">

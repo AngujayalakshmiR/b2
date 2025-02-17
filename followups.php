@@ -519,6 +519,9 @@
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style=" background:white;">          
                    <!-- Header Section -->
+                   <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
                    <div class="mr-auto d-flex align-items-center pl-3 py-2">
     <h4 class="text-dark font-weight-bold mr-4" style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
         FollowUps
@@ -560,30 +563,30 @@
                 <textarea class="form-control" id="descriptionInput" rows="2" placeholder="Enter short description" required></textarea>
               </div>
 
-              <!-- Radio Buttons for Status -->
+              <!-- Dropdown for Status -->
               <div class="form-group">
-                <label><b>Status:</b></label>
-                <div class="d-flex flex-wrap justify-content-start align-items-center">
-                  <label class="radio-btn">
-                    <input type="radio" name="status" value="ongoing" required>
-                    <span class="custom-radio ongoing">Ongoing</span>
-                  </label>
-                  <label class="radio-btn">
-                    <input type="radio" name="status" value="payment" required>
-                    <span class="custom-radio payment">Payment</span>
-                  </label>
-                  <label class="radio-btn">
-                    <input type="radio" name="status" value="new-client" required>
-                    <span class="custom-radio newClient">New Client</span>
-                  </label>
-                  <div class="text-center">
-                <button type="submit" class="btn submit-btn">Submit</button>
+                <label for="statusSelect"><b>Status:</b></label>
+                <select class="form-control" id="statusSelect" required>
+                  <option value="ongoing">Ongoing</option>
+                  <option value="payment">Payment</option>
+                  <option value="new-client">New Client</option>
+                </select>
               </div>
-                </div>
+
+              <!-- Dropdown for Assigned To -->
+              <div class="form-group">
+                <label for="assignedToSelect"><b>Assigned To:</b></label>
+                <select class="form-control" id="assignedToSelect" required>
+                  <option value="Naveen">Naveen</option>
+                  <option value="Mohan">Mohan</option>
+                  <option value="Kathir">Kathir</option>
+                </select>
               </div>
 
               <!-- Submit Button -->
-              
+              <div class="text-center">
+                <button type="submit" class="btn submit-btn">Submit</button>
+              </div>
 
             </form>
           </div>
@@ -592,6 +595,7 @@
     </div>
   </div>
 </div>
+
 
 <!-- Responsive CSS -->
 <style>
@@ -650,9 +654,7 @@
 </style>
 
             <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
+                    
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
@@ -687,7 +689,7 @@
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <img class="img-profile rounded-circle"
-                                    src="img/p.png" style="width: 3rem;height: 3rem;">
+                                    src="img/p.png" style="width: 2rem;height: rem;">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -743,6 +745,20 @@
 
   <!-- Custom Styles -->
   <style>
+    /* Flag icon in the right corner */
+.card-body {
+  position: relative; /* Make the parent div relative */
+}
+
+.flag-icon {
+  position: absolute;
+  top: 10px;
+  right: -8px;
+  float:right;
+  font-size: 15px;
+  color: #0B3D91; /* You can change the color */
+}
+
     /* Navigation Styling */
     .custom-nav .nav-link {
       background-color: #0B3D91;
@@ -826,20 +842,20 @@
     }
   </style>
 </div>
-
 <script>
   let allCards = []; // Store all cards globally
 
-  document.getElementById("designationForm").addEventListener("submit", function(event) {
+document.getElementById("designationForm").addEventListener("submit", function(event) {
     event.preventDefault(); // Prevent form submission
 
     // Capture form data
     const title = document.getElementById("titleInput").value;
     const description = document.getElementById("descriptionInput").value;
-    const status = document.querySelector('input[name="status"]:checked').value;
+    const status = document.getElementById("statusSelect").value; // Get selected status from dropdown
+    const assignedTo = document.getElementById("assignedToSelect").value; // Get selected "Assigned To" from dropdown
 
     // Create card
-    const card = createCard(title, description, status);
+    const card = createCard(title, description, status, assignedTo);
 
     // Save card to global array
     allCards.push(card);
@@ -852,33 +868,38 @@
 
     // Clear form fields after submission
     document.getElementById("designationForm").reset();
-  });
+});
 
-  function createCard(title, description, status) {
-    const card = document.createElement("div");
-    card.classList.add("card", "card-container", "col-12", "col-md-6", "col-lg-3", status);
-    card.setAttribute('data-status', status); // Add status as data attribute
-    card.setAttribute('draggable', 'true'); // Make the card draggable
+function createCard(title, description, status, assignedTo) {
+  const card = document.createElement("div");
+card.classList.add("card", "card-container", "col-12", "col-md-6", "col-lg-3", status);
+card.setAttribute('data-status', status); // Add status as data attribute
+card.setAttribute('draggable', 'true'); // Make the card draggable
+card.setAttribute('id', 'card-' + new Date().getTime()); // Unique ID for the card
 
-    card.innerHTML = `
-      <div class="card-body" onclick="toggleDetails(this)">
-        <p class="card-title">${title}</hp>
-        <p class="card-text">${description}</p>
-        <p class="card-status"><strong>Status:</strong> ${status}</p>
-      </div>
-    `;
+card.innerHTML = `
+  <div class="card-body" onclick="toggleDetails(this)">
+    <span class="flag-icon fas fa-flag"></span> <!-- Add the flag icon here -->
+    <p class="card-title">${title}</p>
+    <p class="card-text">${description}</p>
+    <p class="card-status"><strong>Status:</strong> ${status}</p>
+    <p class="card-assigned-to"><strong>Assigned To:</strong> ${assignedTo}</p>
+  </div>
+`;
+
 
     // Add dragstart event
     card.addEventListener('dragstart', dragStart);
-    return card;
-  }
 
-  function appendCardToTab(status, card) {
+    return card;
+}
+
+function appendCardToTab(status, card) {
     let container = document.getElementById("cards-container");
     container.appendChild(card);
-  }
+}
 
-  function setActiveTab(tab) {
+function setActiveTab(tab) {
     const tabs = document.querySelectorAll('.nav-link');
     tabs.forEach(tab => tab.classList.remove('active'));
 
@@ -887,42 +908,45 @@
 
     // Refresh displayed cards
     refreshCards();
-  }
+}
 
-  function refreshCards() {
+function refreshCards() {
     const activeTab = document.querySelector('.nav-link.active').id.replace('-tab', '');
     const container = document.getElementById("cards-container");
     container.innerHTML = ''; // Clear existing cards
 
     allCards.forEach(card => {
-      if (activeTab === 'all' || card.getAttribute('data-status') === activeTab) {
-        container.appendChild(card);
-      }
+        if (activeTab === 'all' || card.getAttribute('data-status') === activeTab) {
+            container.appendChild(card);
+        }
     });
-  }
+}
 
-  function toggleDetails(cardBody) {
+function toggleDetails(cardBody) {
     const description = cardBody.querySelector(".card-text");
     const status = cardBody.querySelector(".card-status");
+    const assignedTo = cardBody.querySelector(".card-assigned-to");
     if (description.style.display === "none") {
-      description.style.display = "block";
-      status.style.display = "block";
+        description.style.display = "block";
+        status.style.display = "block";
+        assignedTo.style.display = "block";
     } else {
-      description.style.display = "none";
-      status.style.display = "none";
+        description.style.display = "none";
+        status.style.display = "none";
+        assignedTo.style.display = "none";
     }
-  }
+}
 
-  // Drag and Drop Functions
-  function allowDrop(event) {
+// Drag and Drop Functions
+function allowDrop(event) {
     event.preventDefault();
-  }
+}
 
-  function dragStart(event) {
+function dragStart(event) {
     event.dataTransfer.setData("text", event.target.id); // Save the dragged card's ID
-  }
+}
 
-  function drop(event) {
+function drop(event) {
     event.preventDefault();
     const draggedCardId = event.dataTransfer.getData("text");
     const draggedCard = document.getElementById(draggedCardId);
@@ -930,14 +954,21 @@
     // Get the card where the dragged card should be placed
     const dropTarget = event.target.closest('.card-container');
 
-    // Move the dragged card to the new position
-    dropTarget.parentNode.insertBefore(draggedCard, dropTarget.nextSibling);
+    // If dropTarget is not null and it's not the same card being dropped
+    if (dropTarget && dropTarget !== draggedCard) {
+        // Move the dragged card to the new position
+        dropTarget.parentNode.insertBefore(draggedCard, dropTarget.nextSibling);
 
-    // Update the global card array to reflect the new order
-    allCards = Array.from(document.querySelectorAll(".card")).map(card => card);
-  }
+        // Update the global card array to reflect the new order
+        allCards = Array.from(document.querySelectorAll(".card")).map(card => card);
+    }
+}
+
+// Add event listeners for the drop zone
+document.getElementById("cards-container").addEventListener('dragover', allowDrop);
+document.getElementById("cards-container").addEventListener('drop', drop);
+
 </script>
-
 
     <!-- /.container-fluid -->
 
@@ -985,67 +1016,346 @@
             </div>
         </div>
     </div>
-    <!-- Modal for Editing -->
-    <div class="modal fade" id="editDesignationModal" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-body p-0">
-        <div class="row no-gutters">
-          <!-- Form Section -->
-          <div class="col-12 p-3">
-            <form id="editDesignationForm">
-              <input type="hidden" id="editCardId">
-              
-              <!-- Title Field -->
-              <div class="form-group">
-                <label for="editTitleInput"><b>Title:</b></label>
-                <input type="text" class="form-control" id="editTitleInput" placeholder="Enter title" required>
-              </div>
-
-              <!-- Short Description Field -->
-              <div class="form-group">
-                <label for="editDescriptionInput"><b>Short Description:</b></label>
-                <textarea class="form-control" id="editDescriptionInput" rows="2" placeholder="Enter short description" required></textarea>
-              </div>
-
-              <!-- Radio Buttons for Status -->
-              <div class="form-group">
-                <label><b>Status:</b></label>
-                <div class="d-flex flex-wrap justify-content-start align-items-center">
-                  <label class="radio-btn">
-                    <input type="radio" name="editStatus" value="ongoing" required>
-                    <span class="custom-radio ongoing">Ongoing</span>
-                  </label>
-                  <label class="radio-btn">
-                    <input type="radio" name="editStatus" value="payment" required>
-                    <span class="custom-radio payment">Payment</span>
-                  </label>
-                  <label class="radio-btn">
-                    <input type="radio" name="editStatus" value="newClient" required>
-                    <span class="custom-radio newClient">New Client</span>
-                  </label>
-                  <!-- Submit Button -->
-              <div class="text-center">
-                <button type="submit" class="btn submit-btn">Update</button>
-              </div>
-                </div>
-              </div>
-
-              
-
-            </form>
-          </div>
-        </div>
+<!-- Side Modal for Card Details -->
+<div id="sideModal" class="side-modal">
+  <div class="side-modal-content">
+    <span class="close-btn" onclick="closeModal()">&times;</span>
+    <h2 class="modal-title">Edit Card Details</h2>
+    <form id="cardEditForm">
+      <div class="form-group">
+        <label for="editTitle">Title:</label>
+        <input type="text" id="editTitle" name="title" required>
       </div>
-    </div>
+
+      <div class="form-group">
+        <label for="editDescription">Description:</label>
+        <input type="text" id="editDescription" name="description" required>
+      </div>
+
+      <div class="form-group">
+        <label for="editStatus">Status:</label>
+        <select id="editStatus" name="status" required>
+          <option value="ongoing">Ongoing</option>
+          <option value="new-client">New Client</option>
+          <option value="payment">Payment</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="editAssignedTo">Assigned To:</label>
+        <select id="editAssignedTo" name="assignedTo" required>
+          <option value="mohan">Mohan</option>
+          <option value="naveen">Naveen</option>
+          <option value="kathir">Kathir</option>
+        </select>
+      </div>
+
+      
+
+      <button type="submit" class="button1">Save Changes</button>
+    </form>
   </div>
 </div>
 
-    <script>
-$(document).ready(function() {
-    $('#dataTable').DataTable();
+<style>
+/* Side Modal Container */
+.side-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 500px;
+  height: 100%;
+  background-color: #ffffff;
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transform: translateX(100%);
+  z-index: 9999;
+  opacity: 0;
+}
+
+.side-modal.open {
+  display: block;
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.side-modal-content {
+  padding: 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: #ffffff;
+  border-left: 3px solid rgb(0, 148, 255);
+  box-sizing: border-box;
+}
+
+.modal-title {
+  margin-top: 0;
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+  color: #333;
+}
+
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 30px;
+  cursor: pointer;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+  color: #4CAF50;
+}
+
+/* Form Styling */
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #333;
+  box-sizing: border-box;
+  transition: border 0.3s ease;
+}
+
+input:focus, select:focus {
+  border-color: rgb(0, 148, 255);
+  outline: none;
+}
+
+/* Row Layout for Added Date and Flag */
+.row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.date-container, .flag-container {
+  flex: 1;
+  margin-right: 15px;
+}
+
+.flag-container {
+  display: flex;
+  align-items: center;
+}
+
+.flag-icon input {
+  width: 35px;
+  height: 35px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.flag-icon-span {
+  margin-left: 10px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.flag-icon-span:hover {
+  transform: scale(1.2);
+}
+
+.button1 {
+  background-color: rgb(0, 148, 255);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  align-self: center;
+}
+
+.button1:hover {
+  background-color: rgb(0, 148, 255);
+}
+
+.button1:focus {
+  outline: none;
+}
+
+
+  /* Style for Side Modal */
+.side-modal {
+  display: none; /* Hidden by default */
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 500px;
+  height: 100%;
+  background-color: #ffffff; /* Set background to white */
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transform: translateX(100%);
+  z-index: 9999;
+  opacity: 0;
+}
+
+.side-modal.open {
+  display: block;
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.side-modal-content {
+  padding: 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: #ffffff; /* Set background to white */
+  border-left: 3px solid rgb(0, 148, 255);
+  box-sizing: border-box;
+}
+
+.modal-title {
+  margin-top: 0;
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+  color: #333;
+}
+
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 30px;
+  cursor: pointer;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+  color: #4CAF50;
+}
+
+/* Styling for form group */
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+  font-weight: bold; /* Make labels bold */
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #333;
+  box-sizing: border-box;
+  transition: border 0.3s ease;
+}
+
+input:focus, select:focus {
+  border-color: rgb(0, 148, 255);
+  outline: none;
+}
+
+.button1 {
+  background-color: rgb(0, 148, 255);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  align-self: center;
+}
+
+.button1:hover {
+  background-color: rgb(0, 148, 255);
+}
+
+.button1:focus {
+  outline: none;
+}
+
+</style>
+<script>
+  let currentCard = null; // Track the current card being edited
+
+function toggleDetails(cardBody) {
+    // Open modal and populate with card data
+    const card = cardBody.closest('.card');
+    const title = card.querySelector(".card-title").textContent;
+    const description = card.querySelector(".card-text").textContent;
+    const status = card.getAttribute("data-status");
+    const assignedTo = card.querySelector(".card-assigned-to").textContent.replace('Assigned To: ', '');
+
+    // Fill the modal with the card's data
+    document.getElementById("editTitle").value = title;
+    document.getElementById("editDescription").value = description;
+    document.getElementById("editStatus").value = status;
+    document.getElementById("editAssignedTo").value = assignedTo;
+
+    // Set the current card
+    currentCard = card;
+
+    // Open the modal
+    document.getElementById("sideModal").classList.add("open");
+}
+
+// Close the side modal
+function closeModal() {
+    document.getElementById("sideModal").classList.remove("open");
+}
+
+// Handle the form submission (save edited card details)
+document.getElementById("cardEditForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent form submission
+
+    // Get the edited values
+    const title = document.getElementById("editTitle").value;
+    const description = document.getElementById("editDescription").value;
+    const status = document.getElementById("editStatus").value;
+    const assignedTo = document.getElementById("editAssignedTo").value;
+
+    // Update the current card with the new values
+    currentCard.querySelector(".card-title").textContent = title;
+    currentCard.querySelector(".card-text").textContent = description;
+    currentCard.setAttribute("data-status", status);
+    currentCard.querySelector(".card-assigned-to").textContent = `Assigned To: ${assignedTo}`;
+
+    // Close the modal
+    closeModal();
 });
+
 </script>
+
+    <script>
+        $(document).ready(function() {
+            $('#dataTable').DataTable();
+        });
+    </script>
 
     
     <!-- Bootstrap core JavaScript-->

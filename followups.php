@@ -307,15 +307,15 @@
 
 
   .draggable-card {
-    min-height: 50px;
-    width: 200epx;
+    min-height: 40px;
+    width: 250px;
     color: black;
     background-color: var(--card-color);
     border-radius: 10px;
     position: relative;
     transition: transform 0.2s, background-color 0.3s;
     cursor: pointer;
-    padding: 10px;
+    padding: 8px;
     text-align: center;
     float:center;
   }
@@ -368,13 +368,13 @@
 
   /* Card Styling */
   .draggable-card {
-    min-height: 50px;
-    width: 250px;
+    min-height: 40px;
+    width: 240px;
     color: black;
     background-color: var(--card-color);
     border-radius: 10px;
     text-align: center;
-    padding: 10px;
+    padding: 8px;
     transition: transform 0.2s;
     cursor: pointer;
   }
@@ -394,7 +394,7 @@
   }
 
   /* Prevent Divider on Last Column */
-  .col-md-4:last-child .vertical-divider {
+  .col-md-3:last-child .vertical-divider {
     display: none;
   }
 
@@ -573,7 +573,7 @@
                     <span class="custom-radio payment">Payment</span>
                   </label>
                   <label class="radio-btn">
-                    <input type="radio" name="status" value="newClient" required>
+                    <input type="radio" name="status" value="new-client" required>
                     <span class="custom-radio newClient">New Client</span>
                   </label>
                   <div class="text-center">
@@ -709,38 +709,237 @@
                 <!-- Begin Page Content -->
               <!-- Include Bootstrap -->
 
-        <!-- Designation Cards Container -->
-        <div class="container-fluid mt-4">
-    <div class="row">
-        <div class="col-md-4 position-relative" ondrop="drop(event, 'ongoing')" ondragover="allowDrop(event)">
-            <h6 class="text-center title">
-                <b>Ongoing</b>
-                <span class="count-box" id="ongoingCount">0</span>
-            </h6>
-            <hr>
-            <div class="status-container" id="ongoingContainer"></div>
-            <div class="vertical-divider"></div> <!-- Divider -->
-        </div>
-        <div class="col-md-4 position-relative" ondrop="drop(event, 'payment')" ondragover="allowDrop(event)">
-            <h6 class="text-center title">
-                <b>Payment</b>
-                <span class="count-box" id="paymentCount">0</span>
-            </h6>
-            <hr>
-            <div class="status-container" id="paymentContainer"></div>
-            <div class="vertical-divider"></div> <!-- Divider -->
-        </div>
-        <div class="col-md-4" ondrop="drop(event, 'newClient')" ondragover="allowDrop(event)">
-            <h6 class="text-center title">
-                <b>New Client</b>
-                <span class="count-box" id="newClientCount">0</span>
-            </h6>
-            <hr>
-            <div class="status-container" id="newClientContainer"></div>
-        </div>
-    </div>
+<!-- Designation Cards Container -->
+<!-- Include Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+<div class="container-fluid mt-4">
+  <!-- Nav Tabs -->
+  <ul class="nav nav-pills custom-nav">
+    <li class="nav-item">
+      <a class="nav-link active" id="all-tab" href="#" onclick="setActiveTab('all')">
+        <i class="fas fa-list-ul"></i> All
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="ongoing-tab" href="#" onclick="setActiveTab('ongoing')">
+        <i class="fas fa-spinner"></i> Ongoing
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="payment-tab" href="#" onclick="setActiveTab('payment')">
+        <i class="fas fa-credit-card"></i> Payment
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="new-client-tab" href="#" onclick="setActiveTab('new-client')">
+        <i class="fas fa-user-plus"></i> New Client
+      </a>
+    </li>
+  </ul>
+
+  <!-- Card Containers -->
+  <div id="cards-container" class="row mt-4" ondrop="drop(event)" ondragover="allowDrop(event)">
+  </div>
+
+  <!-- Custom Styles -->
+  <style>
+    /* Navigation Styling */
+    .custom-nav .nav-link {
+      background-color: #0B3D91;
+      color: white;
+      border-radius: 50px;
+      margin-right: 15px;
+      font-size: 14px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .custom-nav .nav-link.active {
+      background-color: rgb(0, 148, 255);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transform: scale(1.1);
+    }
+
+    .custom-nav .nav-link:hover {
+      background-color: rgb(0, 148, 255);
+      transform: scale(1.05);
+    }
+
+    /* Card Styling */
+    .card {
+      margin: 8px;
+      padding: 2px; /* Reduce padding */
+      width: 100%;
+      min-height: 40px; /* Reduce card height */
+      font-size: 14px; /* Reduce font size */
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      color: black;
+      display: flex;
+      align-items: center; /* Center content vertically */
+      justify-content: center; /* Center content horizontally */
+      text-align: center;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    /* Ensure 4 Cards per Row */
+    .card-container {
+      flex: 1 1 calc(25% - 16px); /* 4 cards per row */
+      max-width: calc(25% - 16px);
+    }
+
+    /* Responsive: Adjust cards for smaller screens */
+    @media (max-width: 992px) {
+      .card-container {
+        flex: 1 1 calc(50% - 16px); /* 2 cards per row */
+        max-width: calc(50% - 16px);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .card-container {
+        flex: 1 1 100%; /* 1 card per row */
+        max-width: 100%;
+      }
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    /* Background Colors for Status */
+    .card.ongoing {
+      background-color: rgb(183, 225, 254);
+    }
+
+    .card.new-client {
+      background-color: rgb(206, 248, 201);
+    }
+
+    .card.payment {
+      background-color: rgb(217, 230, 162);
+    }
+
+    /* Hide Description & Status Initially */
+    .card-text, .card-status {
+      display: none;
+    }
+  </style>
 </div>
-                <!-- /.container-fluid -->
+
+<script>
+  let allCards = []; // Store all cards globally
+
+  document.getElementById("designationForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent form submission
+
+    // Capture form data
+    const title = document.getElementById("titleInput").value;
+    const description = document.getElementById("descriptionInput").value;
+    const status = document.querySelector('input[name="status"]:checked').value;
+
+    // Create card
+    const card = createCard(title, description, status);
+
+    // Save card to global array
+    allCards.push(card);
+
+    // Append the card to the respective tab section
+    appendCardToTab(status, card);
+
+    // Refresh the displayed cards
+    refreshCards();
+
+    // Clear form fields after submission
+    document.getElementById("designationForm").reset();
+  });
+
+  function createCard(title, description, status) {
+    const card = document.createElement("div");
+    card.classList.add("card", "card-container", "col-12", "col-md-6", "col-lg-3", status);
+    card.setAttribute('data-status', status); // Add status as data attribute
+    card.setAttribute('draggable', 'true'); // Make the card draggable
+
+    card.innerHTML = `
+      <div class="card-body" onclick="toggleDetails(this)">
+        <p class="card-title">${title}</hp>
+        <p class="card-text">${description}</p>
+        <p class="card-status"><strong>Status:</strong> ${status}</p>
+      </div>
+    `;
+
+    // Add dragstart event
+    card.addEventListener('dragstart', dragStart);
+    return card;
+  }
+
+  function appendCardToTab(status, card) {
+    let container = document.getElementById("cards-container");
+    container.appendChild(card);
+  }
+
+  function setActiveTab(tab) {
+    const tabs = document.querySelectorAll('.nav-link');
+    tabs.forEach(tab => tab.classList.remove('active'));
+
+    const activeTab = document.getElementById(tab + '-tab');
+    activeTab.classList.add('active');
+
+    // Refresh displayed cards
+    refreshCards();
+  }
+
+  function refreshCards() {
+    const activeTab = document.querySelector('.nav-link.active').id.replace('-tab', '');
+    const container = document.getElementById("cards-container");
+    container.innerHTML = ''; // Clear existing cards
+
+    allCards.forEach(card => {
+      if (activeTab === 'all' || card.getAttribute('data-status') === activeTab) {
+        container.appendChild(card);
+      }
+    });
+  }
+
+  function toggleDetails(cardBody) {
+    const description = cardBody.querySelector(".card-text");
+    const status = cardBody.querySelector(".card-status");
+    if (description.style.display === "none") {
+      description.style.display = "block";
+      status.style.display = "block";
+    } else {
+      description.style.display = "none";
+      status.style.display = "none";
+    }
+  }
+
+  // Drag and Drop Functions
+  function allowDrop(event) {
+    event.preventDefault();
+  }
+
+  function dragStart(event) {
+    event.dataTransfer.setData("text", event.target.id); // Save the dragged card's ID
+  }
+
+  function drop(event) {
+    event.preventDefault();
+    const draggedCardId = event.dataTransfer.getData("text");
+    const draggedCard = document.getElementById(draggedCardId);
+
+    // Get the card where the dragged card should be placed
+    const dropTarget = event.target.closest('.card-container');
+
+    // Move the dragged card to the new position
+    dropTarget.parentNode.insertBefore(draggedCard, dropTarget.nextSibling);
+
+    // Update the global card array to reflect the new order
+    allCards = Array.from(document.querySelectorAll(".card")).map(card => card);
+  }
+</script>
+
+
+    <!-- /.container-fluid -->
 
             </div>
 
@@ -870,129 +1069,8 @@ $(document).ready(function() {
     <!-- Bootstrap JavaScript -->
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
-<script>
-document.getElementById("designationForm").addEventListener("submit", function(event) {
-  event.preventDefault();
-  
-  let title = document.getElementById("titleInput").value.trim();
-  let description = document.getElementById("descriptionInput").value.trim();
-  let status = document.querySelector('input[name="status"]:checked');
-
-  if (title === "" || !status) return;
-
-  addDesignation(title, description, status.value);
-  $("#designationModal").modal("hide");
-  document.getElementById("designationForm").reset();
-});
 
 
-function getNextColor() {
-  return "rgb(183, 225, 254)"; // Fixed card color
-}
-
-function addDesignation(title, description, status) {
-  let newCardWrapper = document.createElement("div");
-  newCardWrapper.className = "draggable-container";
-  let cardId = "card-" + new Date().getTime();
-  
-  newCardWrapper.innerHTML = `
-    <div id="${cardId}" class="card p-2 draggable-card text-center" draggable="true"
-         style="background-color: ${getNextColor()};" ondragstart="drag(event)">
-        <h6 class="card-title m-1">${title}</h6>
-        <p class="card-description">${description}</p>
-    </div>
-  `;
-
-  let container = document.getElementById(status + "Container");
-  container.appendChild(newCardWrapper);
-
-  updateCounts();
-}
-
-// Drag and Drop Functionality
-function allowDrop(event) {
-  event.preventDefault();
-}
-
-function drag(event) {
-  event.dataTransfer.setData("text", event.target.id);
-}
-
-function drop(event, status) {
-  event.preventDefault();
-  let cardId = event.dataTransfer.getData("text");
-  let card = document.getElementById(cardId);
-  if (card) {
-    document.getElementById(status + "Container").appendChild(card.parentElement);
-    updateCounts();
-  }
-}
-
-// Delete Card when dropped into Trash
-document.getElementById("trashIcon").addEventListener("dragover", function(event) {
-  event.preventDefault();
-});
-
-document.getElementById("trashIcon").addEventListener("drop", function(event) {
-  event.preventDefault();
-  let cardId = event.dataTransfer.getData("text");
-  let card = document.getElementById(cardId);
-  if (card) {
-    card.parentElement.remove(); // Remove the card wrapper
-    updateCounts();
-  }
-});
-
-// Update the count dynamically
-function updateCounts() {
-  document.getElementById("ongoingCount").textContent = document.getElementById("ongoingContainer").children.length;
-  document.getElementById("paymentCount").textContent = document.getElementById("paymentContainer").children.length;
-  document.getElementById("newClientCount").textContent = document.getElementById("newClientContainer").children.length;
-}
-
-</script>
-
-<script>
-document.addEventListener("click", function(event) {
-    if (event.target.closest(".draggable-card")) {
-        let card = event.target.closest(".draggable-card");
-        let title = card.querySelector(".card-title").textContent;
-        let description = card.querySelector(".card-description").textContent;
-        let cardId = card.id;
-        let parentId = card.parentElement.parentElement.id;
-
-        document.getElementById("editCardId").value = cardId;
-        document.getElementById("editTitleInput").value = title;
-        document.getElementById("editDescriptionInput").value = description;
-
-        let statusRadios = document.getElementsByName("editStatus");
-        statusRadios.forEach(radio => {
-            radio.checked = radio.value + "Container" === parentId;
-        });
-
-        $("#editDesignationModal").modal("show");
-    }
-});
-
-document.getElementById("editDesignationForm").addEventListener("submit", function(event) {
-    event.preventDefault();
-    
-    let cardId = document.getElementById("editCardId").value;
-    let title = document.getElementById("editTitleInput").value;
-    let description = document.getElementById("editDescriptionInput").value;
-    let status = document.querySelector('input[name="editStatus"]:checked').value;
-    
-    let card = document.getElementById(cardId);
-    if (card) {
-        card.querySelector(".card-title").textContent = title;
-        card.querySelector(".card-description").textContent = description;
-        document.getElementById(status + "Container").appendChild(card.parentElement);
-    }
-    
-    $("#editDesignationModal").modal("hide");
-    updateCounts();
-});
-</script>
 
 </body>
 

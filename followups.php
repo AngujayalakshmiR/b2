@@ -533,9 +533,7 @@
     <i class="fa-solid fa-plus fa-1x plus-icon"></i>&nbsp;
     Add
 </button>
-    <i id="trashIcon" class="fa-solid fa-trash fa-2x ml-3" 
-       style="color: rgb(15,29,64); cursor: pointer; padding: 10px; border-radius: 50%; background: white; box-shadow: 0px 0px 5px rgba(0,0,0,0.2);float:left;font-size:15px;">
-    </i>
+   
 </div>
 <!-- Include Font Awesome for Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -567,6 +565,7 @@
               <div class="form-group">
                 <label for="statusSelect"><b>Status:</b></label>
                 <select class="form-control" id="statusSelect" required>
+                  <option value="">Select</option>
                   <option value="ongoing">Ongoing</option>
                   <option value="payment">Payment</option>
                   <option value="new-client">New Client</option>
@@ -577,6 +576,7 @@
               <div class="form-group">
                 <label for="assignedToSelect"><b>Assigned To:</b></label>
                 <select class="form-control" id="assignedToSelect" required>
+                  <option value="">Select</option>
                   <option value="Naveen">Naveen</option>
                   <option value="Mohan">Mohan</option>
                   <option value="Kathir">Kathir</option>
@@ -658,29 +658,7 @@
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
-                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                        <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-search fa-fw"></i>
-                            </a>
-                            <!-- Dropdown - Messages -->
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                aria-labelledby="searchDropdown">
-                                <form class="form-inline mr-auto w-100 navbar-search">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small"
-                                            placeholder="Search for..." aria-label="Search"
-                                            aria-describedby="basic-addon2">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button">
-                                                <i class="fas fa-search fa-sm"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </li>
+                        
 
                         <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -745,20 +723,7 @@
 
   <!-- Custom Styles -->
   <style>
-    /* Flag icon in the right corner */
-.card-body {
-  position: relative; /* Make the parent div relative */
-}
-
-.flag-icon {
-  position: absolute;
-  top: 10px;
-  right: -8px;
-  float:right;
-  font-size: 15px;
-  color: #0B3D91; /* You can change the color */
-}
-
+ 
     /* Navigation Styling */
     .custom-nav .nav-link {
       background-color: #0B3D91;
@@ -794,7 +759,6 @@
       align-items: center; /* Center content vertically */
       justify-content: center; /* Center content horizontally */
       text-align: center;
-      border: 1px solid #ccc;
       border-radius: 5px;
     }
 
@@ -841,79 +805,172 @@
       display: none;
     }
   </style>
+<style>
+/* Card Styles */
+.card {
+  position: relative; /* Makes absolute positioning work for children */
+  border: 1px solid #ddd;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  min-height: 40px; /* Ensures consistent height */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Ensures spacing */
+}
+/* Flag Icon - Initially only outlined */
+.flag-icon {
+  position: absolute;
+  top: 5px;
+  right: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 5px;
+  color: white; /* Initially transparent */
+  background-color: transparent;
+}
+
+/* When a color is selected */
+.flag-icon.selected {
+  color: inherit; /* Fills the icon */
+  border-color: inherit; /* Changes outline color */
+}
+
+/* Delete Icon - Fixing it to the bottom-right */
+/* Delete Icon - Initially Hidden */
+.delete-icon {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: red;
+  opacity: 0; /* Initially hidden */
+  transform: scale(0.5); /* Starts slightly smaller */
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+/* Show delete icon when hovering over the card */
+.card:hover .delete-icon {
+  opacity: 1; /* Make it visible */
+  transform: scale(1); /* Scale up to normal size */
+}
+
+/* Color Picker */
+.color-picker {
+  display: none;
+  position: absolute;
+  top: 30px;
+  right: 8px;
+  background: white;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.color-picker span {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin: 3px;
+  cursor: pointer;
+  border-radius: 5px;
+  border: 1px solid #000; /* Ensures visibility */
+}
+
+</style>
+
 </div>
+<div id="cards-container" class="row mt-4" ondrop="drop(event)" ondragover="allowDrop(event)">
+</div>
+
 <script>
-  let allCards = []; // Store all cards globally
+let allCards = []; // Store all cards globally
 
 document.getElementById("designationForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // Prevent form submission
+    event.preventDefault();
 
-    // Capture form data
     const title = document.getElementById("titleInput").value;
     const description = document.getElementById("descriptionInput").value;
-    const status = document.getElementById("statusSelect").value; // Get selected status from dropdown
-    const assignedTo = document.getElementById("assignedToSelect").value; // Get selected "Assigned To" from dropdown
+    const status = document.getElementById("statusSelect").value;
+    const assignedTo = document.getElementById("assignedToSelect").value;
 
-    // Create card
     const card = createCard(title, description, status, assignedTo);
-
-    // Save card to global array
     allCards.push(card);
-
-    // Append the card to the respective tab section
     appendCardToTab(status, card);
-
-    // Refresh the displayed cards
     refreshCards();
 
-    // Clear form fields after submission
     document.getElementById("designationForm").reset();
+    $('#designationModal').modal('hide');
 });
 
 function createCard(title, description, status, assignedTo) {
-  const card = document.createElement("div");
-card.classList.add("card", "card-container", "col-12", "col-md-6", "col-lg-3", status);
-card.setAttribute('data-status', status); // Add status as data attribute
-card.setAttribute('draggable', 'true'); // Make the card draggable
-card.setAttribute('id', 'card-' + new Date().getTime()); // Unique ID for the card
+    const card = document.createElement("div");
+    const creationDate = new Date().toISOString();
+    card.classList.add("card", "card-container", "col-12", "col-md-6", "col-lg-3", status);
+    card.setAttribute('data-status', status);
+    card.setAttribute('draggable', 'true');
+    card.setAttribute('id', 'card-' + new Date().getTime());
+    card.setAttribute('data-created-date', creationDate);
 
-card.innerHTML = `
-  <div class="card-body" onclick="toggleDetails(this)">
-    <span class="flag-icon fas fa-flag"></span> <!-- Add the flag icon here -->
-    <p class="card-title">${title}</p>
-    <p class="card-text">${description}</p>
-    <p class="card-status"><strong>Status:</strong> ${status}</p>
-    <p class="card-assigned-to"><strong>Assigned To:</strong> ${assignedTo}</p>
-  </div>
-`;
+    card.innerHTML = `
+        <div class="card-body">
+            <span class="flag-icon fas fa-flag" style="float:right;" onclick="toggleColorPicker(this)"></span>
+            <div class="color-picker">
+                <span style="background: red;" onclick="changeFlagColor(this, 'red')"></span>
+                <span style="background: blue;" onclick="changeFlagColor(this, 'blue')"></span>
+                <span style="background: green;" onclick="changeFlagColor(this, 'green')"></span>
+                <span style="background: black;" onclick="changeFlagColor(this, 'black')"></span>
+                <span style="background: orange;" onclick="changeFlagColor(this, 'orange')"></span>
+            </div>      
+            <p class="card-title">${title}</p>
+            <p class="card-text">${description}</p>
+            <p class="card-status"><strong>Status:</strong> ${status}</p>
+            <p class="card-assigned-to"><strong>Assigned To:</strong> ${assignedTo}</p>
+            <p class="card-date" style="display:none;">Created On: ${creationDate}</p>
+            <span class="delete-icon fas fa-trash" onclick="deleteCard(this)"></span>
+        </div>
+    `;
 
-
-    // Add dragstart event
     card.addEventListener('dragstart', dragStart);
-
     return card;
 }
 
+function toggleColorPicker(icon) {
+    const picker = icon.nextElementSibling;
+    picker.style.display = picker.style.display === "block" ? "none" : "block";
+    event.stopPropagation();
+}
+
+function changeFlagColor(element, color) {
+    const flagIcon = element.parentElement.previousElementSibling;
+    flagIcon.style.color = color;
+    flagIcon.style.borderColor = color;
+    flagIcon.classList.add("selected");
+    element.parentElement.style.display = "none";
+    event.stopPropagation();
+}
+
+function deleteCard(icon) {
+    const card = icon.closest(".card");
+    event.stopPropagation();
+    card.remove();
+    allCards = allCards.filter(existingCard => existingCard.id !== card.id);
+}
+
 function appendCardToTab(status, card) {
-    let container = document.getElementById("cards-container");
+    const container = document.getElementById("cards-container");
     container.appendChild(card);
 }
 
 function setActiveTab(tab) {
-    const tabs = document.querySelectorAll('.nav-link');
-    tabs.forEach(tab => tab.classList.remove('active'));
-
-    const activeTab = document.getElementById(tab + '-tab');
-    activeTab.classList.add('active');
-
-    // Refresh displayed cards
+    document.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active'));
+    document.getElementById(tab + '-tab').classList.add('active');
     refreshCards();
 }
 
 function refreshCards() {
     const activeTab = document.querySelector('.nav-link.active').id.replace('-tab', '');
     const container = document.getElementById("cards-container");
-    container.innerHTML = ''; // Clear existing cards
+    container.innerHTML = '';
 
     allCards.forEach(card => {
         if (activeTab === 'all' || card.getAttribute('data-status') === activeTab) {
@@ -921,55 +978,217 @@ function refreshCards() {
         }
     });
 }
-
-function toggleDetails(cardBody) {
-    const description = cardBody.querySelector(".card-text");
-    const status = cardBody.querySelector(".card-status");
-    const assignedTo = cardBody.querySelector(".card-assigned-to");
-    if (description.style.display === "none") {
-        description.style.display = "block";
-        status.style.display = "block";
-        assignedTo.style.display = "block";
-    } else {
-        description.style.display = "none";
-        status.style.display = "none";
-        assignedTo.style.display = "none";
-    }
-}
-
-// Drag and Drop Functions
+// Allow dragging over the container
 function allowDrop(event) {
     event.preventDefault();
 }
 
+// Handle drag start
 function dragStart(event) {
-    event.dataTransfer.setData("text", event.target.id); // Save the dragged card's ID
+    event.dataTransfer.setData("text/plain", event.target.id);
+    event.target.classList.add("dragging"); // Add visual effect
 }
 
+// Handle dropping the card
 function drop(event) {
     event.preventDefault();
-    const draggedCardId = event.dataTransfer.getData("text");
+
+    const draggedCardId = event.dataTransfer.getData("text/plain");
     const draggedCard = document.getElementById(draggedCardId);
+    const container = document.getElementById("cards-container");
 
-    // Get the card where the dragged card should be placed
-    const dropTarget = event.target.closest('.card-container');
+    // Find the closest card as drop target
+    let dropTarget = event.target.closest(".card");
 
-    // If dropTarget is not null and it's not the same card being dropped
     if (dropTarget && dropTarget !== draggedCard) {
-        // Move the dragged card to the new position
-        dropTarget.parentNode.insertBefore(draggedCard, dropTarget.nextSibling);
+        let bounding = dropTarget.getBoundingClientRect();
+        let offset = event.clientY - bounding.top;
 
-        // Update the global card array to reflect the new order
-        allCards = Array.from(document.querySelectorAll(".card")).map(card => card);
+        if (offset > bounding.height / 2) {
+            // Insert after drop target
+            dropTarget.parentNode.insertBefore(draggedCard, dropTarget.nextSibling);
+        } else {
+            // Insert before drop target
+            dropTarget.parentNode.insertBefore(draggedCard, dropTarget);
+        }
+    } else {
+        // Append to the end if no valid target
+        container.appendChild(draggedCard);
     }
+
+    // Update the global card array order
+    allCards = Array.from(container.children);
+
+    // Remove dragging effect
+    draggedCard.classList.remove("dragging");
 }
 
-// Add event listeners for the drop zone
-document.getElementById("cards-container").addEventListener('dragover', allowDrop);
-document.getElementById("cards-container").addEventListener('drop', drop);
+// Attach event listeners to each card on creation
+function addDragListeners(card) {
+    card.addEventListener('dragstart', dragStart);
+    card.addEventListener('dragover', allowDrop);
+    card.addEventListener('drop', drop);
+}
+
+// Attach event listeners to the container
+document.getElementById("cards-container").addEventListener("dragover", allowDrop);
+document.getElementById("cards-container").addEventListener("drop", drop);
+
 
 </script>
 
+<!-- Edit Modal -->
+<div class="modal fade" id="editDesignationModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body p-0">
+        <div class="row no-gutters">
+          <!-- Form Section -->
+          <div class="col-12 p-3">
+            <form id="editDesignationForm">
+              
+              <!-- Title Field -->
+              <div class="form-group">
+                <label for="editTitleInput"><b>Title:</b></label>
+                <input type="text" class="form-control" id="editTitleInput" placeholder="Enter title" required>
+              </div>
+
+              <!-- Short Description Field -->
+              <div class="form-group">
+                <label for="editDescriptionInput"><b>Short Description:</b></label>
+                <textarea class="form-control" id="editDescriptionInput" rows="2" placeholder="Enter short description" required></textarea>
+              </div>
+
+              <!-- Dropdown for Status -->
+              <div class="form-group">
+                <label for="editStatusSelect"><b>Status:</b></label>
+                <select class="form-control" id="editStatusSelect" required>
+                  <option value="">Select</option>
+                  <option value="ongoing">Ongoing</option>
+                  <option value="payment">Payment</option>
+                  <option value="new-client">New Client</option>
+                </select>
+              </div>
+
+              <!-- Dropdown for Assigned To -->
+              <div class="form-group">
+                <label for="editAssignedToSelect"><b>Assigned To:</b></label>
+                <select class="form-control" id="editAssignedToSelect" required>
+                  <option value="">Select</option>
+                  <option value="Naveen">Naveen</option>
+                  <option value="Mohan">Mohan</option>
+                  <option value="Kathir">Kathir</option>
+                </select>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="text-center">
+                <button type="submit" class="btn submit-btn">Update</button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  let cardToUpdate = null; // Store the card to be updated
+
+// Add an event listener for opening the edit modal
+function openEditModal(card) {
+    // Store the reference to the card being edited
+    cardToUpdate = card;
+
+    // Populate modal fields with the current card values
+    const title = card.querySelector(".card-title").textContent;
+    const description = card.querySelector(".card-text").textContent;
+    const status = card.querySelector(".card-status").textContent.replace("Status: ", "");
+    const assignedTo = card.querySelector(".card-assigned-to").textContent.replace("Assigned To: ", "");
+
+    // Set values in the edit modal
+    document.getElementById("editTitleInput").value = title;
+    document.getElementById("editDescriptionInput").value = description;
+    document.getElementById("editStatusSelect").value = status;
+    document.getElementById("editAssignedToSelect").value = assignedTo;
+
+    // Open the modal
+    $('#editDesignationModal').modal('show');
+}
+
+// Add an event listener to each card to trigger the edit modal
+function addCardListeners(card) {
+    card.addEventListener('click', function() {
+        openEditModal(card);
+    });
+}
+
+// Modify the createCard function to add event listeners to each new card
+function createCard(title, description, status, assignedTo) {
+    const card = document.createElement("div");
+    const creationDate = new Date().toISOString(); // Get the current date and time
+    card.classList.add("card", "card-container", "col-12", "col-md-6", "col-lg-3", status);
+    card.setAttribute('data-status', status); // Add status as data attribute
+    card.setAttribute('draggable', 'true'); // Make the card draggable
+    card.setAttribute('id', 'card-' + new Date().getTime()); // Unique ID for the card
+    card.setAttribute('data-created-date', creationDate); // Store the creation date in a data attribute
+
+    card.innerHTML = `
+        <div class="card-body">
+            <span class="flag-icon fas fa-flag" style="float:right;right:0px;align-items:right;" onclick="toggleColorPicker(this)"></span>
+            <div class="color-picker">
+                <span style="background: red;" onclick="changeFlagColor(this, 'red')"></span>
+                <span style="background: blue;" onclick="changeFlagColor(this, 'blue')"></span>
+                <span style="background: green;" onclick="changeFlagColor(this, 'green')"></span>
+                <span style="background: yellow;" onclick="changeFlagColor(this, 'yellow')"></span>
+                <span style="background: orange;" onclick="changeFlagColor(this, 'orange')"></span>
+            </div>      
+            <p class="card-title">${title}</p>
+            <p class="card-text">${description}</p>
+            <p class="card-status"><strong>Status:</strong> ${status}</p>
+            <p class="card-assigned-to"><strong>Assigned To:</strong> ${assignedTo}</p> 
+            <span class="delete-icon fas fa-trash" onclick="deleteCard(this)"></span>
+        </div>
+    `;
+
+    // Add the click listener for the edit modal
+    addCardListeners(card);
+
+    return card;
+}
+
+document.getElementById("editDesignationForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent form submission from reloading the page
+
+    if (cardToUpdate) {
+        // Get the updated values from the modal
+        const updatedTitle = document.getElementById("editTitleInput").value;
+        const updatedDescription = document.getElementById("editDescriptionInput").value;
+        const updatedStatus = document.getElementById("editStatusSelect").value;
+        const updatedAssignedTo = document.getElementById("editAssignedToSelect").value;
+
+        // Update the card content with the new values
+        cardToUpdate.querySelector(".card-title").textContent = updatedTitle;
+        cardToUpdate.querySelector(".card-text").textContent = updatedDescription;
+        cardToUpdate.querySelector(".card-status").textContent = "Status: " + updatedStatus;
+        cardToUpdate.querySelector(".card-assigned-to").textContent = "Assigned To: " + updatedAssignedTo;
+
+        // Update the card's status
+        cardToUpdate.setAttribute('data-status', updatedStatus);
+        cardToUpdate.classList.remove("ongoing", "new-client", "payment"); // Remove previous status class
+        cardToUpdate.classList.add(updatedStatus); // Add the new status class
+
+        // Re-render the card in the correct tab
+        refreshCards();
+
+        // Close the modal
+        $('#editDesignationModal').modal('hide');
+    }
+});
+
+
+</script>
     <!-- /.container-fluid -->
 
             </div>
@@ -1017,339 +1236,6 @@ document.getElementById("cards-container").addEventListener('drop', drop);
         </div>
     </div>
 <!-- Side Modal for Card Details -->
-<div id="sideModal" class="side-modal">
-  <div class="side-modal-content">
-    <span class="close-btn" onclick="closeModal()">&times;</span>
-    <h2 class="modal-title">Edit Card Details</h2>
-    <form id="cardEditForm">
-      <div class="form-group">
-        <label for="editTitle">Title:</label>
-        <input type="text" id="editTitle" name="title" required>
-      </div>
-
-      <div class="form-group">
-        <label for="editDescription">Description:</label>
-        <input type="text" id="editDescription" name="description" required>
-      </div>
-
-      <div class="form-group">
-        <label for="editStatus">Status:</label>
-        <select id="editStatus" name="status" required>
-          <option value="ongoing">Ongoing</option>
-          <option value="new-client">New Client</option>
-          <option value="payment">Payment</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="editAssignedTo">Assigned To:</label>
-        <select id="editAssignedTo" name="assignedTo" required>
-          <option value="mohan">Mohan</option>
-          <option value="naveen">Naveen</option>
-          <option value="kathir">Kathir</option>
-        </select>
-      </div>
-
-      
-
-      <button type="submit" class="button1">Save Changes</button>
-    </form>
-  </div>
-</div>
-
-<style>
-/* Side Modal Container */
-.side-modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 500px;
-  height: 100%;
-  background-color: #ffffff;
-  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
-  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-  transform: translateX(100%);
-  z-index: 9999;
-  opacity: 0;
-}
-
-.side-modal.open {
-  display: block;
-  transform: translateX(0);
-  opacity: 1;
-}
-
-.side-modal-content {
-  padding: 20px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  background-color: #ffffff;
-  border-left: 3px solid rgb(0, 148, 255);
-  box-sizing: border-box;
-}
-
-.modal-title {
-  margin-top: 0;
-  font-size: 24px;
-  font-weight: 600;
-  text-align: center;
-  color: #333;
-}
-
-.close-btn {
-  position: absolute;
-  top: 15px;
-  right: 20px;
-  font-size: 30px;
-  cursor: pointer;
-  color: #333;
-  transition: color 0.3s ease;
-}
-
-.close-btn:hover {
-  color: #4CAF50;
-}
-
-/* Form Styling */
-.form-group {
-  margin-bottom: 15px;
-}
-
-label {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-input, select {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 16px;
-  color: #333;
-  box-sizing: border-box;
-  transition: border 0.3s ease;
-}
-
-input:focus, select:focus {
-  border-color: rgb(0, 148, 255);
-  outline: none;
-}
-
-/* Row Layout for Added Date and Flag */
-.row {
-  display: flex;
-  justify-content: space-between;
-}
-
-.date-container, .flag-container {
-  flex: 1;
-  margin-right: 15px;
-}
-
-.flag-container {
-  display: flex;
-  align-items: center;
-}
-
-.flag-icon input {
-  width: 35px;
-  height: 35px;
-  padding: 0;
-  border-radius: 50%;
-}
-
-.flag-icon-span {
-  margin-left: 10px;
-  font-size: 20px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
-
-.flag-icon-span:hover {
-  transform: scale(1.2);
-}
-
-.button1 {
-  background-color: rgb(0, 148, 255);
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  align-self: center;
-}
-
-.button1:hover {
-  background-color: rgb(0, 148, 255);
-}
-
-.button1:focus {
-  outline: none;
-}
-
-
-  /* Style for Side Modal */
-.side-modal {
-  display: none; /* Hidden by default */
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 500px;
-  height: 100%;
-  background-color: #ffffff; /* Set background to white */
-  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
-  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-  transform: translateX(100%);
-  z-index: 9999;
-  opacity: 0;
-}
-
-.side-modal.open {
-  display: block;
-  transform: translateX(0);
-  opacity: 1;
-}
-
-.side-modal-content {
-  padding: 20px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  background-color: #ffffff; /* Set background to white */
-  border-left: 3px solid rgb(0, 148, 255);
-  box-sizing: border-box;
-}
-
-.modal-title {
-  margin-top: 0;
-  font-size: 24px;
-  font-weight: 600;
-  text-align: center;
-  color: #333;
-}
-
-.close-btn {
-  position: absolute;
-  top: 15px;
-  right: 20px;
-  font-size: 30px;
-  cursor: pointer;
-  color: #333;
-  transition: color 0.3s ease;
-}
-
-.close-btn:hover {
-  color: #4CAF50;
-}
-
-/* Styling for form group */
-.form-group {
-  margin-bottom: 15px;
-}
-
-label {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 5px;
-  font-weight: bold; /* Make labels bold */
-}
-
-input, select {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 16px;
-  color: #333;
-  box-sizing: border-box;
-  transition: border 0.3s ease;
-}
-
-input:focus, select:focus {
-  border-color: rgb(0, 148, 255);
-  outline: none;
-}
-
-.button1 {
-  background-color: rgb(0, 148, 255);
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  align-self: center;
-}
-
-.button1:hover {
-  background-color: rgb(0, 148, 255);
-}
-
-.button1:focus {
-  outline: none;
-}
-
-</style>
-<script>
-  let currentCard = null; // Track the current card being edited
-
-function toggleDetails(cardBody) {
-    // Open modal and populate with card data
-    const card = cardBody.closest('.card');
-    const title = card.querySelector(".card-title").textContent;
-    const description = card.querySelector(".card-text").textContent;
-    const status = card.getAttribute("data-status");
-    const assignedTo = card.querySelector(".card-assigned-to").textContent.replace('Assigned To: ', '');
-
-    // Fill the modal with the card's data
-    document.getElementById("editTitle").value = title;
-    document.getElementById("editDescription").value = description;
-    document.getElementById("editStatus").value = status;
-    document.getElementById("editAssignedTo").value = assignedTo;
-
-    // Set the current card
-    currentCard = card;
-
-    // Open the modal
-    document.getElementById("sideModal").classList.add("open");
-}
-
-// Close the side modal
-function closeModal() {
-    document.getElementById("sideModal").classList.remove("open");
-}
-
-// Handle the form submission (save edited card details)
-document.getElementById("cardEditForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // Prevent form submission
-
-    // Get the edited values
-    const title = document.getElementById("editTitle").value;
-    const description = document.getElementById("editDescription").value;
-    const status = document.getElementById("editStatus").value;
-    const assignedTo = document.getElementById("editAssignedTo").value;
-
-    // Update the current card with the new values
-    currentCard.querySelector(".card-title").textContent = title;
-    currentCard.querySelector(".card-text").textContent = description;
-    currentCard.setAttribute("data-status", status);
-    currentCard.querySelector(".card-assigned-to").textContent = `Assigned To: ${assignedTo}`;
-
-    // Close the modal
-    closeModal();
-});
-
-</script>
 
     <script>
         $(document).ready(function() {

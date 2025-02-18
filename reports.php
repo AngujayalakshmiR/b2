@@ -31,18 +31,18 @@
         
 #dataTable th:nth-child(1), #dataTable td:nth-child(1) { width: 2%; }  /* S.no */
     #dataTable th:nth-child(2), #dataTable td:nth-child(2) { width: 8%; } /* Name */
-    #dataTable th:nth-child(3), #dataTable td:nth-child(3) { width: 5%; } /* Date */
+    #dataTable th:nth-child(3), #dataTable td:nth-child(3) { width: 13%; } /* Date */
     #dataTable th:nth-child(4), #dataTable td:nth-child(4) { width: 10%; } /* Company */
-    #dataTable th:nth-child(5), #dataTable td:nth-child(5) { width: 12%; } /* Project Title */
-    #dataTable th:nth-child(6), #dataTable td:nth-child(6) { width: 15%; }  /* Total Days */
-    #dataTable th:nth-child(7), #dataTable td:nth-child(7) { width: 18%; } /* Description */
-    #dataTable th:nth-child(8), #dataTable td:nth-child(8) { width: 15%; } /* Total Time */
-    #dataTable th:nth-child(9), #dataTable td:nth-child(9) { width: 20%; } /* Actual Time */
-    #dataTable th:nth-child(10), #dataTable td:nth-child(10) { width: 12%; } /* Status */
+    #dataTable th:nth-child(5), #dataTable td:nth-child(5) { width: 20%; } /* Project Title */
+    #dataTable th:nth-child(6), #dataTable td:nth-child(6) { width: 10%; }  /* Total Days */
+    #dataTable th:nth-child(7), #dataTable td:nth-child(7) { width: 12%; } /* Description */
+    #dataTable th:nth-child(8), #dataTable td:nth-child(8) { width: 12%; } /* Total Time */
+    #dataTable th:nth-child(9), #dataTable td:nth-child(9) { width: 16%; } /* Actual Time */
+    #dataTable th:nth-child(10), #dataTable td:nth-child(10) { width: 9%; } /* Status */
         /* Gradient background for thead */
         thead  {
-            background: linear-gradient(to right, #4568dc, #b06ab3);
-            color: white;
+            
+            color: black;
         }
 
         /* Center align action buttons */
@@ -472,97 +472,78 @@
 
         <!-- Sidebar -->
         <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background: white;">
-
 <!-- Sidebar - Brand -->
 <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
-    <div class="sidebar-brand-icon" style='font-size:20px'><b>KTG</b></div>
-    <div class="sidebar-brand-text mx-2" style='font-size:20px'><b>DASHBOARD</b></div>
+    <div class="sidebar-brand-icon" style='font-size:19px'>KTG</div>
+    <div class="sidebar-brand-text mx-2" style='font-size:19px'>DASHBOARD</div>
 </a>
-
 <!-- Divider -->
-<hr class="sidebar-divider my-0">
-
+<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 <!-- Nav Item - Dashboard -->
 <li class="nav-item l ">
     <a class="nav-link k" href="index.php" style="color: white;">
-        <i class="fas fa-fw fa-tachometer-alt" style="font-size:20px"></i>
-        <span><b>Dashboard</b></span>
+        <i class="fas fa-fw fa-tachometer-alt" style="font-size:16px"></i>
+        <span>Dashboard</span>
     </a>
 </li>
-
+<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
+<li class="nav-item l " style="padding:0px;">
+    <a class="nav-link k" href="followups.php" style="color: white;">
+        <i class="fas fa-fw fa-tachometer-alt" style="font-size:16px"></i>
+        <span>FollowUps</span>
+    </a>
+</li>
 <!-- Divider -->
-<hr class="sidebar-divider" style="margin-bottom: 0px; color:#4568dc">
-
+<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 <!-- Nav Item - Master -->
-<li class="nav-item  l master ">
+<li class="nav-item l master">
     <a class="nav-link k collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-        aria-expanded="true" aria-controls="collapseTwo" style="color: black;">
-        <i class="fas fa-fw fa-clipboard-list" style="font-size:20px; color: black;"></i>
-        <span><b>Master</b></span>
+        aria-expanded="true" aria-controls="collapseTwo" style="color: white;">
+        <i class="fas fa-fw fa-clipboard-list" style="font-size:16px"></i>
+        <span>Master</span>
     </a>
     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item " href="customer.php" style="color: black;"><b>Customer</b></a>
-            <a class="collapse-item " href="employee.php" style="color: black;"><b>Employee</b></a>
-            <a class="collapse-item" href="designation.php" style="color: black;"><b>Designation</b></a>
-            <a class="collapse-item" href="projecttype.php" style="color: black;"><b>Project Type</b></a>
+            <a class="collapse-item " href="customer.php" style="color: black;">Customer</a>
+            <a class="collapse-item " href="employee.php" style="color: black;">Employee</a>
+            <a class="collapse-item" href="designation.php" style="color: black;">Designation</a>
+            <a class="collapse-item" href="projecttype.php" style="color: black;">Project Type</a>
         </div>
     </div>
 </li> 
-
 <!-- Divider -->
-<hr class="sidebar-divider" style="margin-bottom: 0px;">
-
+<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 <!-- Nav Item - Project Creation -->
 <li class="nav-item l">
     <a class="nav-link k" href="projectcreation.php" style="color: black;">
-        <i class="fas fa-fw fa-folder" style="font-size:20px"></i>
-        <span><b>Project Creation</b></span>
+        <i class="fas fa-fw fa-folder" style="font-size:16px"></i>
+        <span>Project Creation</span>
     </a>
 </li>
-
-<hr class="sidebar-divider" style="margin-bottom: 0px;">
-
+<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 <!-- Nav Item - Daily Updates -->
 <li class="nav-item l">
     <a class="nav-link k" href="dailyupdates.php" style="color: black;">
-        <i class="fas fa-fw fa-table" style="font-size:20px"></i>
-        <span><b>Daily Updates</b></span>
+        <i class="fas fa-fw fa-table" style="font-size:16px"></i>
+        <span>Daily Update</span>
     </a>
 </li>
-
-<hr class="sidebar-divider" style="margin-bottom: 0px;">
-
+<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 <!-- Nav Item - Work Reports -->
 <li class="nav-item l active">
     <a class="nav-link k" href="reports.php" style="color: black;">
-        <i class="fas fa-fw fa-chart-area" style="font-size:20px"></i>
-        <span><b>Work Reports</b></span>
-    </a>
-</li>
-<li class="nav-item l">
-    <a class="nav-link k" href="companyreport.php" style="color: black;">
-        <i class="fas fa-fw fa-chart-area" style="font-size:20px"></i>
-        <span><b>Company report</b></span>
-    </a>
-</li>
-<li class="nav-item l">
-    <a class="nav-link k" href="employeereport.php" style="color: black;">
-        <i class="fas fa-fw fa-chart-area" style="font-size:20px"></i>
-        <span><b>Employee report</b></span>
+        <i class="fas fa-fw fa-chart-area" style="font-size:16px"></i>
+        <span>Work Reports</span>
     </a>
 </li>
 <!-- Divider -->
-<hr class="sidebar-divider d-none d-md-block">
-
+<div class="sidebar-divider d-none d-md-block"></div>
 <!-- Sidebar Toggler -->
 <div class="text-center d-none d-md-inline">
     <button class="rounded-circle side border-0" id="sidebarToggle"></button>
 </div>
-
 </ul>
         <!-- End of Sidebar -->
-
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
 
@@ -576,6 +557,10 @@
 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
     <i class="fa fa-bars"></i>
 </button>
+<div class="mr-auto d-flex align-items-center pl-3 py-2">
+    <h4 class="text-dark font-weight-bold mr-4" style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
+        Work Report
+    </h4></div>
 
 
 
@@ -643,7 +628,7 @@
     input[type="date"] {
       padding: 10px;
       border-radius: 5px;
-      border: 2px solid #4568dc;
+      border: 2px solid #0B3D91;
       font-size: 16px;
       color: #333;
       background-color: #fff;
@@ -651,31 +636,12 @@
       width:200px;
     }
     input[type="date"]:focus {
-      border-color: #4568dc;
+      border-color: #0B3D91;
       box-shadow: 0 0 8px rgba(69,104,220,0.6);
       outline: none;
     }
     
-    /* -------------------- Month Dropdown Styling -------------------- */
-    select#monthEmployee, select#monthProject {
-      padding: 10px;
-      border-radius: 5px;
-      border: none;
-      font-size: 16px;
-      background: linear-gradient(to right, #4568dc, #b06ab3);
-      color: #fff;
-      font-weight: bold;
-      transition: background 0.3s ease;
-    }
-    select#monthEmployee:focus, select#monthProject:focus {
-      outline: none;
-      box-shadow: 0 0 8px rgba(69,104,220,0.6);
-    }
-    /* Options will appear in a plain style */
-    select#monthEmployee option, select#monthProject option {
-      background-color: #fff;
-      color: #000;
-    }
+  
     .filter-group {
     gap: 15px; /* Adjust the value as needed */
   }
@@ -684,18 +650,59 @@
 <body>
   <div class="container-fluid">
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Master &gt; Customer Details</h1>
     
     <div class="container-fluid mt-4">
       <!-- Navigation Tabs -->
-      <ul class="nav nav-tabs" id="reportTabs">
-        <li class="nav-item">
-          <a class="nav-link active" id="employeeTab" href="#">Employee Report</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" id="projectTab" href="#">Project Report</a>
-        </li>
-      </ul>
+      <ul class="nav nav-pills custom-nav" id="reportTabs">
+    <li class="nav-item">
+        <a class="nav-link active" id="employeeTab" href="#" onclick="setActiveTab('employee')">
+            <i class="fas fa-user"></i> Employee Report
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="projectTab" href="#" onclick="setActiveTab('project')">
+            <i class="fas fa-project-diagram"></i> Project Report
+        </a>
+    </li>
+</ul>
+
+<style>
+    /* Adjust font size for navigation tabs */
+    .nav-link {
+        font-size: 16px; /* Default font size for larger screens */
+    }
+
+    /* Media query for smaller screens */
+    @media (max-width: 768px) {
+        .nav-link {
+            font-size: 14px; /* Smaller font size for mobile devices */
+        }
+    }
+</style>
+
+<style>
+    /* Navigation Styling */
+    .custom-nav .nav-link {
+      background-color: #0B3D91;
+      color: white;
+      border-radius: 50px;
+      margin-right: 15px;
+      font-size: 14px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .custom-nav .nav-link.active {
+      background-color: rgb(0, 148, 255);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transform: scale(1.1);
+    }
+
+    .custom-nav .nav-link:hover {
+      background-color: rgb(0, 148, 255);
+      transform: scale(1.05);
+    }
+</style>
+
   
       <!-- Employee Report Card -->
       <div class="card shadow mb-4" id="employeeReport">
@@ -712,30 +719,17 @@
             <input type="date" id="startDateEmployee" class="form-control" style="max-width: 150px;">
             To:
             <input type="date" id="endDateEmployee" class="form-control" style="max-width: 150px;">
-            <select id="monthEmployee" class="form-control" style="max-width: 160px;">
-              <option value="all">All Months</option>
-              <option value="1">January</option>
-              <option value="2">February</option>
-              <option value="3">March</option>
-              <option value="4">April</option>
-              <option value="5">May</option>
-              <option value="6">June</option>
-              <option value="7">July</option>
-              <option value="8">August</option>
-              <option value="9">September</option>
-              <option value="10">October</option>
-              <option value="11">November</option>
-              <option value="12">December</option>
-            </select>
-            <button id="exportExcelEmployee" class="btn btn-success export-btn" title="Export to Excel">
-              <i class="fa fa-file-excel-o"></i>
+  
+            <button id="exportPdfEmployee" class="btn btn-danger export-btn" style="position: absolute; right: 20px;" title="Export to PDF">
+              <i class="fa fa-file-pdf-o"></i>&nbsp;&nbsp;Download
             </button>
+
           </div>
         </div>
         <div class="card-body">
           <div class="table-responsive">
             <!-- Employee Report Table -->
-            <table class="table table-bordered text-center" id="dataTable" width="100%" cellspacing="0">
+            <table class="table table-bordered text-center" style="font-size: 13px;" id="dataTable" width="100%" cellspacing="0">
               <thead>
                 <tr class="thead">
                   <th>S.no</th>
@@ -743,7 +737,7 @@
                   <th>Date</th>
                   <th>Company</th>
                   <th>Title</th>
-                  <th>Project Type</th>
+                  <th>Type</th>
                   <th>Description</th>
                   <th>Total Hrs</th>
                   <th>Actual Hrs</th>
@@ -811,32 +805,18 @@
                 <!-- End Date Input -->To:
                 <input type="date" id="endDateProject" class="form-control mr-2" style="max-width: 150px;" placeholder="End Date">
                 <!-- Month Dropdown Filter -->
-                <select id="monthProject" class="form-control mr-2" style="max-width: 160px;">
-                    <!-- <option value="">Select Months</option> -->
-                    <option value="all">All Months</option>
-                    <option value="1">January</option>
-                    <option value="2">February</option>
-                    <option value="3">March</option>
-                    <option value="4">April</option>
-                    <option value="5">May</option>
-                    <option value="6">June</option>
-                    <option value="7">July</option>
-                    <option value="8">August</option>
-                    <option value="9">September</option>
-                    <option value="10">October</option>
-                    <option value="11">November</option>
-                    <option value="12">December</option>
-                </select>
-            <!-- Excel export button for Project Report -->
-            <button id="exportExcelProject" class="btn btn-success export-btn" title="Export to Excel">
-              <i class="fa fa-file-excel-o"></i>
+        <!-- Remove the <select> element for month filtering -->
+
+           
+            <button id="exportExcelProject" class="btn btn-danger export-btn" style="position: absolute; right: 20px;" title="Export to PDF">
+              <i class="fa fa-file-pdf-o"></i>&nbsp;&nbsp;Download
             </button>
           </div>
         
         </div>
-        <div class="card-body">
+        <div class="card-body" >
           <div class="table-responsive">
-            <table class="table table-bordered text-center" id="projectTable" width="100%" cellspacing="0">
+            <table class="table table-bordered text-center" style="font-size: 13px;" id="projectTable" width="100%" cellspacing="0">
               <thead>
                 <tr class="thead">
                   <th>S.No</th>
@@ -895,257 +875,222 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
   <script>
     $(document).ready(function() {
-      var originalData = [];         // Cache for Employee Report rows
-      var originalProjectData = [];  // Cache for Project Report rows
-  
-      // Cache original employee rows
-      $("#tableBody tr").each(function() {
+    var originalData = [];
+    var originalProjectData = [];
+
+    $("#tableBody tr").each(function() {
         originalData.push($(this).clone());
-      });
-  
-      // Cache original project rows
-      $("#projectTable tbody tr").each(function() {
+    });
+
+    $("#projectTable tbody tr").each(function() {
         originalProjectData.push($(this).clone());
-      });
-  
-      // Helper function to parse a date string in dd-mm-yyyy format
-      function parseDate(dateStr) {
+    });
+
+    function parseDate(dateStr) {
         var parts = dateStr.split("-");
         return new Date(parts[2], parts[1] - 1, parts[0]);
-      }
-  
-      // Function to filter Employee Table based on all criteria
-      function filterEmployeeTable() {
+    }
+
+    function filterEmployeeTable() {
         var selectedEmployee = $("#employeeFilter").val();
         var startDateStr = $("#startDateEmployee").val();
         var endDateStr = $("#endDateEmployee").val();
-        var selectedMonth = $("#monthEmployee").val();
-  
+
         var startDate = startDateStr ? new Date(startDateStr) : null;
         var endDate = endDateStr ? new Date(endDateStr) : null;
-  
+
         var filteredRows = originalData.filter(function(row) {
-          var passes = true;
-          // Employee name filter (Column index 1)
-          var employeeName = row.find("td:eq(1)").text().trim();
-          if (selectedEmployee !== "all" && employeeName !== selectedEmployee) {
-            passes = false;
-          }
-          // Date filter (Column index 2; format: dd-mm-yyyy)
-          var dateStr = row.find("td:eq(2)").text().trim();
-          var rowDate = parseDate(dateStr);
-          if (startDate && rowDate < startDate) {
-            passes = false;
-          }
-          if (endDate && rowDate > endDate) {
-            passes = false;
-          }
-          // Month filter
-          if (selectedMonth !== "all") {
-            if ((rowDate.getMonth() + 1) != selectedMonth) {
-              passes = false;
+            var passes = true;
+            var employeeName = row.find("td:eq(1)").text().trim();
+            if (selectedEmployee !== "all" && employeeName !== selectedEmployee) {
+                passes = false;
             }
-          }
-          return passes;
+            var dateStr = row.find("td:eq(2)").text().trim();
+            var rowDate = parseDate(dateStr);
+            if (startDate && rowDate < startDate) {
+                passes = false;
+            }
+            if (endDate && rowDate > endDate) {
+                passes = false;
+            }
+            return passes;
         });
-  
+
         $("#tableBody").empty();
         filteredRows.forEach(function(row, index) {
-          row.find("td:eq(0)").text(index + 1);
-          $("#tableBody").append(row);
+            row.find("td:eq(0)").text(index + 1);
+            $("#tableBody").append(row);
         });
-      }
-  
-      // Function to filter Project Table based on all criteria
-      function filterProjectTable() {
+    }
+
+    function filterProjectTable() {
         var selectedProject = $("#projectFilter").val();
         var startDateStr = $("#startDateProject").val();
         var endDateStr = $("#endDateProject").val();
-        var selectedMonth = $("#monthProject").val();
-  
+
         var startDate = startDateStr ? new Date(startDateStr) : null;
         var endDate = endDateStr ? new Date(endDateStr) : null;
-  
+
         var filteredRows = originalProjectData.filter(function(row) {
-          var passes = true;
-          // Project filter: using normalized text from Company-Title column (index 2)
-          if (selectedProject !== "all") {
-            var normalizedText = row.find("td:eq(2)").text().trim().replace(/\s+/g, '').toLowerCase();
-            var normalizedSelected = selectedProject.replace(/\s+/g, '').toLowerCase();
-            if (normalizedText !== normalizedSelected) {
-              passes = false;
+            var passes = true;
+            if (selectedProject !== "all") {
+                var normalizedText = row.find("td:eq(2)").text().trim().replace(/\s+/g, '').toLowerCase();
+                var normalizedSelected = selectedProject.replace(/\s+/g, '').toLowerCase();
+                if (normalizedText !== normalizedSelected) {
+                    passes = false;
+                }
             }
-          }
-          // Date filter (Column index 1; format: dd-mm-yyyy)
-          var dateStr = row.find("td:eq(1)").text().trim();
-          var rowDate = parseDate(dateStr);
-          if (startDate && rowDate < startDate) {
-            passes = false;
-          }
-          if (endDate && rowDate > endDate) {
-            passes = false;
-          }
-          // Month filter
-          if (selectedMonth !== "all") {
-            if ((rowDate.getMonth() + 1) != selectedMonth) {
-              passes = false;
+            var dateStr = row.find("td:eq(1)").text().trim();
+            var rowDate = parseDate(dateStr);
+            if (startDate && rowDate < startDate) {
+                passes = false;
             }
-          }
-          return passes;
+            if (endDate && rowDate > endDate) {
+                passes = false;
+            }
+            return passes;
         });
-  
+
         $("#projectTable tbody").empty();
         filteredRows.forEach(function(row, index) {
-          row.find("td:eq(0)").text(index + 1);
-          $("#projectTable tbody").append(row);
+            row.find("td:eq(0)").text(index + 1);
+            $("#projectTable tbody").append(row);
         });
-      }
-  
-      // Attach event listeners for Employee filters
-      $("#employeeFilter, #startDateEmployee, #endDateEmployee, #monthEmployee").on("change", function() {
+    }
+
+    $("#employeeFilter, #startDateEmployee, #endDateEmployee").on("change", function() {
         filterEmployeeTable();
-      });
-  
-      // Attach event listeners for Project filters
-      $("#projectFilter, #startDateProject, #endDateProject, #monthProject").on("change", function() {
+    });
+
+    $("#projectFilter, #startDateProject, #endDateProject").on("change", function() {
         filterProjectTable();
-      });
-  
-      // Toggle between Employee and Project Reports
-      $("#employeeTab").click(function(e) {
+    });
+
+    $("#employeeTab").click(function(e) {
         e.preventDefault();
         $("#employeeReport").show();
         $("#projectReport").hide();
         $(".nav-link").removeClass("active");
         $(this).addClass("active");
-      });
-  
-      $("#projectTab").click(function(e) {
+    });
+
+    $("#projectTab").click(function(e) {
         e.preventDefault();
         $("#employeeReport").hide();
         $("#projectReport").show();
         $(".nav-link").removeClass("active");
         $(this).addClass("active");
-      });
-  
-      
     });
+});
     </script>
   <script>
     $(document).ready(function() {
-      // Cache the original HTML of the employee table body.
-      var originalEmployeeHTML = $("#tableBody").html();
-      // (Similarly, you can cache the project table body if needed.)
-  
-      // Helper function to parse a date string in dd-mm-yyyy format.
-      function parseDate(dateStr) {
-        var parts = dateStr.split("-");
-        return new Date(parts[2], parts[1] - 1, parts[0]);
+  // Cache the original HTML of the employee table body.
+  var originalEmployeeHTML = $("#tableBody").html();
+
+  // Helper function to parse a date string in dd-mm-yyyy format.
+  function parseDate(dateStr) {
+    var parts = dateStr.split("-");
+    return new Date(parts[2], parts[1] - 1, parts[0]);
+  }
+
+  // Function to filter Employee Table based on criteria.
+  function filterEmployeeTable() {
+    var selectedEmployee = $("#employeeFilter").val();
+    var startDateStr = $("#startDateEmployee").val();
+    var endDateStr = $("#endDateEmployee").val();
+
+    // If no filter is applied, restore the original HTML.
+    if (selectedEmployee === "all" && !startDateStr && !endDateStr) {
+      $("#tableBody").html(originalEmployeeHTML);
+      return;
+    }
+
+    // Create a jQuery object from the original HTML.
+    var $rows = $("<tbody>" + originalEmployeeHTML + "</tbody>").find("tr");
+
+    $rows = $rows.filter(function() {
+      var $row = $(this);
+      var employeeName = $row.find("td:eq(1)").text().trim();
+      
+      if (selectedEmployee !== "all" && employeeName !== selectedEmployee) {
+        return false;
       }
-  
-      // Function to filter Employee Table based on criteria.
-      function filterEmployeeTable() {
-        var selectedEmployee = $("#employeeFilter").val();
-        var startDateStr = $("#startDateEmployee").val();
-        var endDateStr = $("#endDateEmployee").val();
-        var selectedMonth = $("#monthEmployee").val();
-  
-        // If no filter is applied (i.e. "all" is selected and no date/month is set),
-        // restore the original HTML.
-        if (selectedEmployee === "all" && !startDateStr && !endDateStr && selectedMonth === "all") {
-          $("#tableBody").html(originalEmployeeHTML);
-          return;
-        }
-  
-        // Otherwise, create a jQuery object from the original HTML.
-        var $rows = $("<tbody>" + originalEmployeeHTML + "</tbody>").find("tr");
-  
-        $rows = $rows.filter(function() {
-          var $row = $(this);
-          var employeeName = $row.find("td:eq(1)").text().trim();
-          // If an employee is selected (other than "all") and it doesn't match, skip.
-          if (selectedEmployee !== "all" && employeeName !== selectedEmployee) {
-            return false;
-          }
-          // Date filter (Column index 2, format: dd-mm-yyyy)
-          var dateStr = $row.find("td:eq(2)").text().trim();
-          var rowDate = parseDate(dateStr);
-          if (startDateStr) {
-            var startDate = new Date(startDateStr);
-            if (rowDate < startDate) return false;
-          }
-          if (endDateStr) {
-            var endDate = new Date(endDateStr);
-            if (rowDate > endDate) return false;
-          }
-          // Month filter
-          if (selectedMonth !== "all") {
-            if ((rowDate.getMonth() + 1) != selectedMonth) return false;
-          }
-          return true;
-        });
-  
-        // Rebuild table body with the filtered rows.
-        var newHTML = "";
-        $rows.each(function(index) {
-          // Update the serial number.
-          $(this).find("td:eq(0)").text(index + 1);
-          newHTML += $(this)[0].outerHTML;
-        });
-  
-        $("#tableBody").html(newHTML);
+      
+      // Date filter (Column index 2, format: dd-mm-yyyy)
+      var dateStr = $row.find("td:eq(2)").text().trim();
+      var rowDate = parseDate(dateStr);
+      if (startDateStr) {
+        var startDate = new Date(startDateStr);
+        if (rowDate < startDate) return false;
       }
-  
-      // Attach event listeners for Employee filters.
-      $("#employeeFilter, #startDateEmployee, #endDateEmployee, #monthEmployee").on("change", function() {
-        // When the employee dropdown changes, update the URL query parameter.
-        if ($(this).is("#employeeFilter")) {
-          var val = $(this).val();
-          var url = new URL(window.location.href);
-          if (val === "all") {
-            url.searchParams.delete("name");
-          } else {
-            url.searchParams.set("name", val);
-          }
-          history.pushState(null, "", url);
-        }
-        filterEmployeeTable();
-      });
-  
-      // Attach event listeners for Project filters (similar approach if needed).
-      $("#projectFilter, #startDateProject, #endDateProject, #monthProject").on("change", function() {
-        // (Filtering code for project table would go here.)
-      });
-  
-      // Toggle between Employee and Project Reports.
-      $("#employeeTab").click(function(e) {
-        e.preventDefault();
-        $("#employeeReport").show();
-        $("#projectReport").hide();
-        $(".nav-link").removeClass("active");
-        $(this).addClass("active");
-      });
-  
-      $("#projectTab").click(function(e) {
-        e.preventDefault();
-        $("#employeeReport").hide();
-        $("#projectReport").show();
-        $(".nav-link").removeClass("active");
-        $(this).addClass("active");
-      });
-  
-      // On page load, if a "name" query parameter exists, set the dropdown and filter.
-      function getQueryParameter(param) {
-        var urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(param);
+      if (endDateStr) {
+        var endDate = new Date(endDateStr);
+        if (rowDate > endDate) return false;
       }
-  
-      var selectedName = getQueryParameter("name");
-      if (selectedName) {
-        $("#employeeFilter").val(selectedName);
-        filterEmployeeTable();
-      }
+      return true;
     });
+
+    // Rebuild table body with the filtered rows.
+    var newHTML = "";
+    $rows.each(function(index) {
+      $(this).find("td:eq(0)").text(index + 1);
+      newHTML += $(this)[0].outerHTML;
+    });
+
+    $("#tableBody").html(newHTML);
+  }
+
+  // Attach event listeners for Employee filters.
+  $("#employeeFilter, #startDateEmployee, #endDateEmployee").on("change", function() {
+    if ($(this).is("#employeeFilter")) {
+      var val = $(this).val();
+      var url = new URL(window.location.href);
+      if (val === "all") {
+        url.searchParams.delete("name");
+      } else {
+        url.searchParams.set("name", val);
+      }
+      history.pushState(null, "", url);
+    }
+    filterEmployeeTable();
+  });
+
+  // Attach event listeners for Project filters.
+  $("#projectFilter, #startDateProject, #endDateProject").on("change", function() {
+    // (Filtering code for project table would go here.)
+  });
+
+  // Toggle between Employee and Project Reports.
+  $("#employeeTab").click(function(e) {
+    e.preventDefault();
+    $("#employeeReport").show();
+    $("#projectReport").hide();
+    $(".nav-link").removeClass("active");
+    $(this).addClass("active");
+  });
+
+  $("#projectTab").click(function(e) {
+    e.preventDefault();
+    $("#employeeReport").hide();
+    $("#projectReport").show();
+    $(".nav-link").removeClass("active");
+    $(this).addClass("active");
+  });
+
+  // On page load, if a "name" query parameter exists, set the dropdown and filter.
+  function getQueryParameter(param) {
+    var urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+  }
+
+  var selectedName = getQueryParameter("name");
+  if (selectedName) {
+    $("#employeeFilter").val(selectedName);
+    filterEmployeeTable();
+  }
+});
+
   </script>
   
             <!-- End of Main Content -->

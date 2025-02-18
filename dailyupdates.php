@@ -479,18 +479,7 @@ tbody{
         <span><b>Work Reports</b></span>
     </a>
 </li>
-<li class="nav-item l">
-    <a class="nav-link k" href="companyreport.php" style="color: black;">
-        <i class="fas fa-fw fa-chart-area" style="font-size:20px"></i>
-        <span><b>Company report</b></span>
-    </a>
-</li>
-<li class="nav-item l">
-    <a class="nav-link k" href="employeereport.php" style="color: black;">
-        <i class="fas fa-fw fa-chart-area" style="font-size:20px"></i>
-        <span><b>Employee report</b></span>
-    </a>
-</li>
+
 <!-- Divider -->
 <hr class="sidebar-divider d-none d-md-block">
 
@@ -581,47 +570,47 @@ tbody{
                         <div class="card-body">
                             <div class="table-responsive ">
                             <table class="table text-center" id="dataTable" width="100%">
-                            <thead>
-              <tr>
-                <th>S.no</th>
-                <th>Name</th>
-                <th>Date</th>
-                <th>Company</th>
-                <th>Title</th>
-                <th>Total Days</th>
-                <th>Description</th>
-                <th>Total Hrs</th>
-                <th>Actual Hrs</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr data-name="Surya">
-                <td>1</td>
-                <td>Surya</td>
-                <td>17-02-2025</td>
-                <td>ABC Corp</td>
-                <td>The project requires inbuilt updations and notifications.</td>
-                <td>5</td>
-                <td>I completed half backend work</td>
-                <td>4.5</td>
-                <td>2</td>
-                <td><i class="fas fa-check-circle status-icon completed"></i>&nbsp;&nbsp;Completed</td>
-              </tr>
-              <tr data-name="Pavithra">
-                <td>2</td>
-                <td>Pavithra</td>
-                <td>17-02-2025</td>
-                <td>ABC Corp</td>
-                <td>The project requires inbuilt updations and notifications.</td>
-                <td>5</td>
-                <td>I completed half backend work</td>
-                <td>4.5</td>
-                <td>2</td>
-                <td><i class="fas fa-check-circle status-icon completed"></i>&nbsp;&nbsp;Completed</td>
-              </tr>
-              <!-- Add more rows as needed -->
-            </tbody>
+    <thead>
+        <tr>
+            <th>S.no</th>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Company</th>
+            <th>Title</th>
+            <th>Total Days</th>
+            <th>Description</th>
+            <th>Total Hrs</th>
+            <th>Actual Hrs</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr data-name="Surya" data-company="ABC Corp">
+            <td>1</td>
+            <td class="name-column">Surya</td>
+            <td>18-02-2025</td>
+            <td class="company-column">ABC Corp</td>
+            <td>The project requires inbuilt updations and notifications.</td>
+            <td>5</td>
+            <td>I completed half backend work</td>
+            <td>4.5</td>
+            <td>2</td>
+            <td><i class="fas fa-check-circle status-icon completed"></i>&nbsp;&nbsp;Completed</td>
+        </tr>
+        <tr data-name="Pavithra" data-company="ABC Corp">
+            <td>2</td>
+            <td class="name-column">Pavithra</td>
+            <td>18-02-2025</td>
+            <td class="company-column">ABC Corp</td>
+            <td>The project requires inbuilt updations and notifications.</td>
+            <td>5</td>
+            <td>I completed half backend work</td>
+            <td>4.5</td>
+            <td>2</td>
+            <td><i class="fas fa-check-circle status-icon completed"></i>&nbsp;&nbsp;Completed</td>
+        </tr>
+        <!-- Add more rows as needed -->
+    </tbody>
 </table>
                             </div>
                         </div>
@@ -632,6 +621,36 @@ tbody{
                 <!-- /.container-fluid -->
 
             </div>
+         
+            <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get all rows from the table
+        const rows = document.querySelectorAll('#dataTable tbody tr');
+        
+        rows.forEach(row => {
+            row.addEventListener('click', function(event) {
+                // Check if the clicked element is in the 'name-column' or 'company-column'
+                const nameColumn = event.target.closest('.name-column');
+                const companyColumn = event.target.closest('.company-column');
+
+                // If clicked on the name or company column, redirect to respective pages
+                if (nameColumn) {
+                    const name = nameColumn.textContent;
+                    window.location.href = `employeereport.php?name=${name}`;
+                } else if (companyColumn) {
+                    const company = companyColumn.textContent;
+                    window.location.href = `companyreport.php?company=${company}`;
+                } else {
+                    // For other columns, navigate to the reports page
+                    const name = row.getAttribute('data-name');
+                    if (name) {
+                        window.location.href = `reports.php?name=${encodeURIComponent(name)}`;
+                    }
+                }
+            });
+        });
+    });
+</script>
 
 
 
@@ -770,7 +789,7 @@ function markCompleted(button) {
 }
 </script>
 
-  <script>
+  <!-- <script>
     $(document).ready(function() {
       // When a row is clicked, get the employee name and redirect to the report page with the name as a query parameter.
       $("#dataTable tbody tr").on("click", function() {
@@ -781,7 +800,7 @@ function markCompleted(button) {
         }
       });
     });
-  </script>
+  </script> -->
 </body>
 
 </html>

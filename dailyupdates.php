@@ -422,7 +422,13 @@ tbody{
         <span><b>Dashboard</b></span>
     </a>
 </li>
-
+<hr class="sidebar-divider" style="margin-bottom: 0px;">
+<li class="nav-item l ">
+    <a class="nav-link k" href="followups.php" style="color: white;">
+        <i class="fas fa-fw fa-tachometer-alt" style="font-size:20px"></i>
+        <span><b>FollowUps</b></span>
+    </a>
+</li>
 <!-- Divider -->
 <hr class="sidebar-divider" style="margin-bottom: 0px; color:#4568dc">
 
@@ -473,7 +479,18 @@ tbody{
         <span><b>Work Reports</b></span>
     </a>
 </li>
-
+<li class="nav-item l">
+    <a class="nav-link k" href="companyreport.php" style="color: black;">
+        <i class="fas fa-fw fa-chart-area" style="font-size:20px"></i>
+        <span><b>Company report</b></span>
+    </a>
+</li>
+<li class="nav-item l">
+    <a class="nav-link k" href="employeereport.php" style="color: black;">
+        <i class="fas fa-fw fa-chart-area" style="font-size:20px"></i>
+        <span><b>Employee report</b></span>
+    </a>
+</li>
 <!-- Divider -->
 <hr class="sidebar-divider d-none d-md-block">
 

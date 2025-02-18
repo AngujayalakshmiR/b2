@@ -10,7 +10,11 @@
     <meta name="author" content="">
     <link rel="icon" type="image/png" href="img/ktglogo.jpg">
     <title>Task Manager</title>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
@@ -407,7 +411,7 @@
 <hr class="sidebar-divider my-0">
 
 <!-- Nav Item - Dashboard -->
-<li class="nav-item active l">
+<li class="nav-item  l">
     <a class="nav-link k" href="index.php" style="color: white;">
         <i class="fas fa-fw fa-tachometer-alt" style="font-size:20px"></i>
         <span><b>Dashboard</b></span>
@@ -460,19 +464,18 @@
         <span><b>Work Reports</b></span>
     </a>
 </li>
-<li class="nav-item l">
+<li class="nav-item l active">
     <a class="nav-link k" href="companyreport.php" style="color: black;">
         <i class="fas fa-fw fa-chart-area" style="font-size:20px"></i>
         <span><b>Company report</b></span>
     </a>
 </li>
-<li class="nav-item l">
+<li class="nav-item l ">
     <a class="nav-link k" href="employeereport.php" style="color: black;">
         <i class="fas fa-fw fa-chart-area" style="font-size:20px"></i>
         <span><b>Employee report</b></span>
     </a>
 </li>
-<!-- Divider -->
 <hr class=" d-none d-md-block">
 <!-- Sidebar Toggler -->
 <div class="text-center d-none d-md-inline">
@@ -480,82 +483,6 @@
 </div>
 
 </ul>
-<!-- <style>
-    .sidebar-brand-icon, .sidebar-brand-text {
-        font-size: large;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
-        -webkit-background-clip: text; /* Clip background to text */
-        -webkit-text-fill-color: transparent; /* Make text color transparent to show gradient */
-        font-weight: bold; /* Optional: Makes text more prominent */
-    }
-    /* Sidebar background */
-    .sidebar {
-        background-color: white !important;
-        width: 250px; /* Adjust according to sidebar width */
-    }
-
-    /* Sidebar link styles */
-    .nav-item a.nav-link {
-        color: #333 !important; /* Dark text */
-        border-radius: 8px; /* Rounded corners */
-        transition: all 0.3s ease-in-out;
-        padding: 12px 15px;
-        font-size: 16px; /* Increased font size */
-        display: flex;
-        align-items: center;
-        gap: 10px; /* Space between icon and text */
-        width: 85%; /* Ensure links don’t take full width */
-        margin: 0 auto; /* Center align */
-    }
-
-    /* Ensure icons are black */
-    .nav-item a.nav-link i {
-        color: black !important;
-        font-size: 18px; /* Slightly larger icons */
-        transition: color 0.3s ease-in-out;
-    }
-
-    /* Hover effect (only for non-active items) */
-    .nav-item:not(.active) a.nav-link:hover {
-        background-color: #f0f0f0 !important; /* Light grey */
-        color: #000 !important; /* Dark text */
-        border-radius: 8px;
-        width: 90%; /* Keep it smaller than the sidebar */
-        margin: 0 auto; /* Center align */
-    }
-
-    /* Keep icons black on hover for non-active items */
-    .nav-item:not(.active) a.nav-link:hover i {
-        color: black !important;
-    }
-
-    /* Active item style */
-    .nav-item.active {
-        width: 90%;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
-        border-radius: 8px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-        transform: scale(1.02); /* Slight lift effect */
-        margin: 0 auto; /* Center align */
-    }
-
-    /* Active item text & icon color */
-    .nav-item.active a.nav-link {
-        color: white !important;
-        pointer-events: none; /* Prevent hover effect */
-    }
-
-    /* Ensure icons turn white inside active links */
-    .nav-item.active a.nav-link i {
-        color: white !important;
-    }
-    footer{
-        background:linear-gradient(to right, #4568dc, #b06ab3);
-        color:white;
-        padding:15px;
-    }
-</style> -->
-
 
 <style>
    
@@ -777,7 +704,37 @@
 #dataTable tbody td i {
     color: rgb(0, 148, 255);
 }
-
+.table td, .table th {
+    border-top: 0px;
+    border-bottom: 0px;
+}
+.table thead th {
+    border-top: 0px;
+    border-bottom: 0px;
+}
+.circle-badge {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: 25px;
+        height: 25px;
+        background-color: rgb(0, 148, 255);
+        color: white;
+        font-weight: bold;
+        border-radius: 50%;
+        text-align: center;
+    }
+    .circle-badge {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 30px;
+            height: 30px;
+            background-color: rgb(0, 148, 255);
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+        }
 </style>
 
         <!-- End of Sidebar -->
@@ -796,8 +753,16 @@
                 <div class="mr-auto d-flex align-items-center pl-3 py-2">
 
     <h4 class="text-dark font-weight-bold mr-4" style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
-        Dashboard
+        Company based report > Kurinji Cement
     </h4></div>
+    <div class="d-flex align-items-end ml-auto">
+        <!-- Download Button -->
+        <button onclick="downloadPDF()" class="btn  px-3" style="border-radius: 25px;background:rgb(0, 148, 255);color:white">
+            Download PDF
+        </button> &nbsp;&nbsp;
+        <button id="printPDF" class="btn  px-3" style="border-radius: 25px;background:rgb(255, 154, 53);color:white">
+            Print PDF
+        </button></div>
                     <!-- Sidebar Toggle (Topbar) -->
                    
 
@@ -855,102 +820,95 @@
 
                 </nav>
                 <!-- End of Topbar -->
+                <script>
+function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('p', 'mm', 'a4');
 
+    html2canvas(document.querySelector("#pdf-content"), { scale: 2 }).then(canvas => {
+        const imgData = canvas.toDataURL("image/png");
+        const imgWidth = 210; // A4 width in mm
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+        doc.addImage(imgData, 'PNG', 0, 10, imgWidth, imgHeight);
+        doc.save("Project_Details.pdf");
+    });
+}
+
+document.getElementById("printPDF").addEventListener("click", function () {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF("p", "mm", "a4"); // A4 size PDF
+
+        // Select the container to print
+        const container = document.querySelector(".container");
+
+        html2canvas(container, { scale: 2 }).then(canvas => {
+            const imgData = canvas.toDataURL("image/png");
+            const imgWidth = 190; // Fit in A4 width
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+            pdf.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
+
+            // Convert PDF to Blob
+            const pdfBlob = pdf.output("blob");
+
+            // Create a Blob URL and open in a new tab
+            const blobUrl = URL.createObjectURL(pdfBlob);
+            window.open(blobUrl, "_blank");
+        });
+    });
+</script>
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
-<div class="card hide-below-460" style="background-color:#f8f9fc;border-radius:25px;border:1px solid #f8f9fc;">
-    <div class="row">
-        <div class="col-6 col-md-3 col-sm-6 my-1">
-            <div class="cir">
-                <div class="bo">
-                    <div class="content1">
-                        <div class="stats-box text-center p-3" style="background-color:rgb(45, 64, 113);">
-                            <i class="fas fa-file m-b-5 font-20"></i>
-                            <h1 class="m-b-0 m-t-5">100</h1>
-                            <small class="font-light">Total Projects</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-6 col-md-3 col-sm-6 my-1">
-            <div class="cir">
-                <div class="bo">
-                    <div class="content1">
-                        <div class="stats-box text-center p-3" style="background-color:rgb(45, 64, 113);">
-                            <i class="fas fa-exclamation m-b-5 font-16"></i>
-                            <h1 class="m-b-0 m-t-5">20</h1>
-                            <small class="font-light">Pending Projects</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-6 col-md-3 col-sm-6 my-1">
-            <div class="cir">
-                <div class="bo">
-                    <div class="content1">
-                        <div class="stats-box text-center p-3" style="background-color:rgb(45, 64, 113);">
-                            <i class="fas fa-check m-b-5 font-20"></i>
-                            <h1 class="m-b-0 m-t-5">30</h1>
-                            <small class="font-light">Ongoing Projects</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-6 col-md-3 col-sm-6 my-1">
-            <div class="cir">
-                <div class="bo">
-                    <div class="content1">
-                        <div class="stats-box text-center p-3" style="background-color:rgb(45, 64, 113);">
-                            <i class="fas fa-bell m-b-5 font-20"></i>
-                            <h1 class="m-b-0 m-t-5">30</h1>
-                            <small class="font-light">Payment FollowUps</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                <div class="container" id="pdf-content" style="background: white;padding:40px;">
+                <div class="row d-flex justify-content-between align-items-center">
+    <!-- Logo -->
+    <div class="col-md-6">
+        <img src="img/company.png" width="250px" height="130px">
     </div>
-</div>
 
-<!-- Square box (visible below 460px) -->
-<div class="square-box">
-    <div class="stats-box">
-        <i class="fas fa-file" style="font-size: 20px;"></i>
-        <h1 style="font-size: 20px;">100</h1>
-        <small>Total Projects</small>
-    </div>
-    <div class="stats-box">
-        <i class="fas fa-exclamation" style="font-size: 20px;"></i>
-        <h1 style="font-size: 20px;">20</h1>
-        <small>Pending Projects</small>
-    </div>
-    <div class="stats-box">
-        <i class="fas fa-check" style="font-size: 20px;"></i>
-        <h1 style="font-size: 20px;">30</h1>
-        <small>Ongoing Projects</small>
-    </div>
-    <div class="stats-box">
-        <i class="fas fa-bell" style="font-size: 20px;"></i>
-        <h1 style="font-size: 20px;">30</h1>
-        <small>Payment FollowUps</small>
+    <!-- Knock the Globe Address -->
+    <div class="col-md-6 d-flex flex-column align-items-end text-end ms-auto" style="color: black;">
+        <p class="mb-2"><b>Knock the Globe</b></p>
+        <p class="mb-2">92, 2nd Cross, Vaiyapuri Nagar,</p>
+        <p class="mb-2">Gandhi Puram, Karur,</p>
+        <p class="mb-2">Tamil Nadu - 639002</p>
     </div>
 </div>
-<br>
+<br><br><br>
+<div class="row d-flex justify-content-between align-items-start" style="color: black;">
+    <!-- Left Side: Company Info -->
+    <div class="col-md-8">
+    <p class="mb-2"><b>Kurinji Cement</b></p>
+        <p class="mb-2">123, Street Name,</p>
+        <p class="mb-2">Area, District,</p>
+        <p class="mb-2">State, Country - 123456</p>
+        <p class="mb-2">Contact: +91 xxxxx xxxxx</p>
+    </div>
+
+    <!-- Right Side: Project Details -->
+    <div class="col-md-4 d-flex flex-column align-items-end text-end ms-auto">
+        <p class="mb-2"><b>Project Title:</b> Website Updgradation</p>
+        <p class="mb-2"><b>Project Type:</b> Web Developement</p>
+        <p class="mb-2"><b>Employee Names:</b> Jayavarshini, Surya</p>
+    </div>
+</div>
+<br><br><br>
+<div class="row d-flex justify-content-between align-items-start" style="color: black;">
+    <!-- Left Side: Company Info -->
+    <div class="col-md-4">
+        <p class="mb-2"><b>Total Days Allocated:</b> <span class="circle-badge">10</span></p>
+        <p class="mb-2"><b>Total Hours Allocated:</b> <span class="circle-badge">80</span></p>
+    </div>
+    <!-- Right Side: Project Details -->
+    <div class="col-md-4 d-flex flex-column align-items-end text-end ms-auto">
+        <p class="mb-2"><b>Actual Days:</b> <span class="circle-badge">8</span> days</p>
+        <p class="mb-2"><b>Actual Hours:</b> <span class="circle-badge">47</span> hrs</p>
+    </div>
+</div>
+    <br><br><br>
+    <div class="row d-flex justify-content-center align-items-center" style="color: black;"><b>-- Task Listed below --</b></div><br><br>
 <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                        <p class="m-0" style="font-size: 16px;color:rgb(23, 25, 28);font-style: normal;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    color: rgb(23, 25, 28);
-    font-size: 16px;
-    font-weight: 500;"><b>Daily Updates</b> 
-        <span class="header-counter">2</span>  <!-- Counter next to heading -->
-</p>
-                        </div>
+                       
                         <div class="card-body" style="padding: 0px;">
                             <div class="table-responsive ">
                             <table class="table text-center" id="dataTable" width="100%">
@@ -958,12 +916,10 @@
         <col style="width: 5%;">  <!-- S.no -->
         <col style="width: 8%;">  <!-- Name -->
         <col style="width: 8%;">  <!-- Date -->
-        <col style="width: 12%;">  <!-- Company -->
-        <col style="width: 12%;">  <!-- Title -->
-        <col style="width: 12%;">  <!-- Total Days (Adjusted) -->
-        <col style="width: 14%;">  <!-- Description -->
-        <col style="width: 12%;">  <!-- Total Hrs (Adjusted) -->
-        <col style="width: 12%;">  <!-- Actual Hrs (Adjusted) -->
+        <col style="width: 14%;">  <!-- Title -->
+        <col style="width: 16%;">  <!-- Description -->
+        <col style="width: 10%;">  <!-- Total Hrs (Adjusted) -->
+        <col style="width: 10%;">  <!-- Actual Hrs (Adjusted) -->
         <col style="width: 10%;">  <!-- Status -->
     </colgroup>
                             <thead>
@@ -971,9 +927,7 @@
                 <th>S.no</th>
                 <th>Name</th>
                 <th>Date</th>
-                <th>Company</th>
                 <th>Title</th>
-                <th>Total Days</th>
                 <th>Description</th>
                 <th>Total Hrs</th>
                 <th>Actual Hrs</th>
@@ -985,21 +939,37 @@
                 <td>1</td>
                 <td>Surya</td>
                 <td>10-02-2025</td>
-                <td>ABC Corp</td>
                 <td>The project requires inbuilt updations and notifications.</td>
-                <td>5</td>
                 <td>I completed half backend work</td>
                 <td>4.5</td>
                 <td>2</td>
                 <td><i class="fas fa-check-circle status-icon completed" style="color: rgb(0, 148, 255);"></i>&nbsp;&nbsp;Completed</td>
               </tr>
-              <tr data-name="Pavithra">
+              <tr data-name="JayaVarshini">
                 <td>2</td>
-                <td>Pavithra</td>
+                <td>JayaVarshini</td>
                 <td>10-02-2025</td>
-                <td>ABC Corp</td>
                 <td>The project requires inbuilt updations and notifications.</td>
-                <td>5</td>
+                <td>I completed half backend work</td>
+                <td>4.5</td>
+                <td>2</td>
+                <td><i class="fas fa-check-circle status-icon completed" style="color: rgb(0, 148, 255);"></i>&nbsp;&nbsp;Completed</td>
+              </tr>
+              <tr data-name="Surya">
+                <td>1</td>
+                <td>Surya</td>
+                <td>10-02-2025</td>
+                <td>The project requires inbuilt updations and notifications.</td>
+                <td>I completed half backend work</td>
+                <td>4.5</td>
+                <td>2</td>
+                <td><i class="fas fa-check-circle status-icon completed" style="color: rgb(0, 148, 255);"></i>&nbsp;&nbsp;Completed</td>
+              </tr>
+              <tr data-name="JayaVarshini">
+                <td>2</td>
+                <td>JayaVarshini</td>
+                <td>10-02-2025</td>
+                <td>The project requires inbuilt updations and notifications.</td>
                 <td>I completed half backend work</td>
                 <td>4.5</td>
                 <td>2</td>

@@ -540,7 +540,18 @@
         <span><b>Work Reports</b></span>
     </a>
 </li>
-
+<li class="nav-item l">
+    <a class="nav-link k" href="companyreport.php" style="color: black;">
+        <i class="fas fa-fw fa-chart-area" style="font-size:20px"></i>
+        <span><b>Company report</b></span>
+    </a>
+</li>
+<li class="nav-item l">
+    <a class="nav-link k" href="employeereport.php" style="color: black;">
+        <i class="fas fa-fw fa-chart-area" style="font-size:20px"></i>
+        <span><b>Employee report</b></span>
+    </a>
+</li>
 <!-- Divider -->
 <hr class="sidebar-divider d-none d-md-block">
 

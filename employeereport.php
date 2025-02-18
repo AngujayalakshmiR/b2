@@ -753,7 +753,7 @@
                 <div class="mr-auto d-flex align-items-center pl-3 py-2">
 
     <h4 class="text-dark font-weight-bold mr-4" style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
-        Company based report > Kurinji Cement
+        Employee based report > Jayavarshini
     </h4></div>
     <div class="d-flex align-items-end ml-auto">
         <!-- Download Button -->
@@ -772,28 +772,7 @@
                     <ul class="navbar-nav ml-auto">
 
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                        <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-search fa-fw"></i>
-                            </a>
-                            <!-- Dropdown - Messages -->
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                aria-labelledby="searchDropdown">
-                                <form class="form-inline mr-auto w-100 navbar-search">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small"
-                                            placeholder="Search for..." aria-label="Search"
-                                            aria-describedby="basic-addon2">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button">
-                                                <i class="fas fa-search fa-sm"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </li>
+                       
 
                         <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -836,27 +815,43 @@ function downloadPDF() {
 }
 
 document.getElementById("printPDF").addEventListener("click", function () {
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF("p", "mm", "a4"); // A4 size PDF
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF("p", "mm", "a4"); // A4 size PDF (portrait)
 
-        // Select the container to print
-        const container = document.querySelector(".container");
+    const container = document.querySelector(".container");
 
-        html2canvas(container, { scale: 2 }).then(canvas => {
-            const imgData = canvas.toDataURL("image/png");
-            const imgWidth = 190; // Fit in A4 width
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    html2canvas(container, { scale: 2 }).then(canvas => {
+        const imgWidth = 190; // Adjust width to fit A4
+        const pageHeight = 297; // A4 page height in mm
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        let heightLeft = imgHeight;
+        
+        // Define top and bottom margins
+        const topMargin = 20;  // Top margin in mm
+        const bottomMargin = 20; // Bottom margin in mm
+        let position = topMargin; // Start the content after the top margin
 
-            pdf.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
+        // Convert canvas to image
+        const imgData = canvas.toDataURL("image/png");
 
-            // Convert PDF to Blob
-            const pdfBlob = pdf.output("blob");
+        // Add the first page with the top margin
+        pdf.addImage(imgData, "PNG", 10, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight - topMargin - bottomMargin; // Adjust for top and bottom margins
 
-            // Create a Blob URL and open in a new tab
-            const blobUrl = URL.createObjectURL(pdfBlob);
-            window.open(blobUrl, "_blank");
-        });
+        // If content is longer than one page, add extra pages
+        while (heightLeft > 0) {
+            position = heightLeft - imgHeight;
+            pdf.addPage();
+            pdf.addImage(imgData, "PNG", 10, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight - topMargin - bottomMargin;
+        }
+
+        // Open the PDF in a new tab
+        const pdfBlob = pdf.output("blob");
+        const blobUrl = URL.createObjectURL(pdfBlob);
+        window.open(blobUrl, "_blank");
     });
+});
 </script>
                 <!-- Begin Page Content -->
                 <div class="container" id="pdf-content" style="background: white;padding:40px;">
@@ -878,31 +873,31 @@ document.getElementById("printPDF").addEventListener("click", function () {
 <div class="row d-flex justify-content-between align-items-start" style="color: black;">
     <!-- Left Side: Company Info -->
     <div class="col-md-8">
-    <p class="mb-2"><b>Kurinji Cement</b></p>
-        <p class="mb-2">123, Street Name,</p>
-        <p class="mb-2">Area, District,</p>
-        <p class="mb-2">State, Country - 123456</p>
-        <p class="mb-2">Contact: +91 xxxxx xxxxx</p>
+    <p class="mb-2"><b>Jayavarshini</b></p>
+    <p class="mb-2">Web & Mobile App Developer</p>
     </div>
 
     <!-- Right Side: Project Details -->
     <div class="col-md-4 d-flex flex-column align-items-end text-end ms-auto">
-        <p class="mb-2"><b>Project Title:</b> Website Updgradation</p>
-        <p class="mb-2"><b>Project Type:</b> Web Developement</p>
-        <p class="mb-2"><b>Employee Names:</b> Jayavarshini, Surya</p>
+    <p class="mb-2"><b>Employee Address:</b></p>
+    <p class="mb-2">123, Street Name,</p>
+        <p class="mb-2">Area, District,</p>
+        <p class="mb-2">State, Country - 123456</p>
+        <p class="mb-2">Contact: +91 xxxxx xxxxx</p>
     </div>
 </div>
 <br><br><br>
 <div class="row d-flex justify-content-between align-items-start" style="color: black;">
     <!-- Left Side: Company Info -->
     <div class="col-md-4">
-        <p class="mb-2"><b>Total Days Allocated:</b> <span class="circle-badge">10</span></p>
-        <p class="mb-2"><b>Total Hours Allocated:</b> <span class="circle-badge">80</span></p>
+    <p class="mb-2"><b>Company name - Project Title</b></p>
+    <p class="mb-2">Kurinji Cement - Website Upgradation</p>
+    <p class="mb-2">Land Corner - Mobile Application Development</p>
     </div>
     <!-- Right Side: Project Details -->
     <div class="col-md-4 d-flex flex-column align-items-end text-end ms-auto">
-        <p class="mb-2"><b>Actual Days:</b> <span class="circle-badge">8</span> days</p>
-        <p class="mb-2"><b>Actual Hours:</b> <span class="circle-badge">47</span> hrs</p>
+        <p class="mb-2"><b>Actual Work Days:</b> <span class="circle-badge">8</span> days</p>
+        <p class="mb-2"><b>Actual Work Hours:</b> <span class="circle-badge">47</span> hrs</p>
     </div>
 </div>
     <br><br><br>
@@ -913,21 +908,23 @@ document.getElementById("printPDF").addEventListener("click", function () {
                             <div class="table-responsive ">
                             <table class="table text-center" id="dataTable" width="100%">
                             <colgroup>
-        <col style="width: 5%;">  <!-- S.no -->
-        <col style="width: 8%;">  <!-- Name -->
+        <col style="width: 3%;">  <!-- S.no -->
+        <col style="width: 10%;">  <!-- Name -->
         <col style="width: 8%;">  <!-- Date -->
-        <col style="width: 14%;">  <!-- Title -->
+        <col style="width: 16%;">  <!-- Title -->
+        <col style="width: 8%;">
         <col style="width: 16%;">  <!-- Description -->
-        <col style="width: 10%;">  <!-- Total Hrs (Adjusted) -->
-        <col style="width: 10%;">  <!-- Actual Hrs (Adjusted) -->
-        <col style="width: 10%;">  <!-- Status -->
+        <col style="width: 8%;">  <!-- Total Hrs (Adjusted) -->
+        <col style="width: 8%;">  <!-- Actual Hrs (Adjusted) -->
+        <col style="width: 8%;">  <!-- Status -->
     </colgroup>
                             <thead>
               <tr style="font-family:calibri;">
                 <th>S.no</th>
-                <th>Name</th>
                 <th>Date</th>
+                <th>Company</th>
                 <th>Title</th>
+                <th>Type</th>
                 <th>Description</th>
                 <th>Total Hrs</th>
                 <th>Actual Hrs</th>
@@ -937,9 +934,11 @@ document.getElementById("printPDF").addEventListener("click", function () {
             <tbody>
               <tr data-name="Surya">
                 <td>1</td>
-                <td>Surya</td>
                 <td>10-02-2025</td>
+                <td>Kurinji Cement</td>
+                
                 <td>The project requires inbuilt updations and notifications.</td>
+                <td>Web Development</td>
                 <td>I completed half backend work</td>
                 <td>4.5</td>
                 <td>2</td>
@@ -947,34 +946,21 @@ document.getElementById("printPDF").addEventListener("click", function () {
               </tr>
               <tr data-name="JayaVarshini">
                 <td>2</td>
-                <td>JayaVarshini</td>
                 <td>10-02-2025</td>
+                <td>Land Corner</td>
+                
                 <td>The project requires inbuilt updations and notifications.</td>
+                <td>Mobile App Development</td>
                 <td>I completed half backend work</td>
                 <td>4.5</td>
                 <td>2</td>
                 <td><i class="fas fa-check-circle status-icon completed" style="color: rgb(0, 148, 255);"></i>&nbsp;&nbsp;Completed</td>
               </tr>
-              <tr data-name="Surya">
-                <td>1</td>
-                <td>Surya</td>
-                <td>10-02-2025</td>
-                <td>The project requires inbuilt updations and notifications.</td>
-                <td>I completed half backend work</td>
-                <td>4.5</td>
-                <td>2</td>
-                <td><i class="fas fa-check-circle status-icon completed" style="color: rgb(0, 148, 255);"></i>&nbsp;&nbsp;Completed</td>
-              </tr>
-              <tr data-name="JayaVarshini">
-                <td>2</td>
-                <td>JayaVarshini</td>
-                <td>10-02-2025</td>
-                <td>The project requires inbuilt updations and notifications.</td>
-                <td>I completed half backend work</td>
-                <td>4.5</td>
-                <td>2</td>
-                <td><i class="fas fa-check-circle status-icon completed" style="color: rgb(0, 148, 255);"></i>&nbsp;&nbsp;Completed</td>
-              </tr>
+
+
+
+
+          
             </tbody>
 </table>
                             </div>
@@ -999,7 +985,11 @@ document.getElementById("printPDF").addEventListener("click", function () {
 
     </div>
     <!-- End of Page Wrapper -->
-
+    <script>
+$(document).ready(function() {
+    $('#projectTable').DataTable();
+});
+</script>
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>

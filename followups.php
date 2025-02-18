@@ -58,7 +58,7 @@
             background: #007bff;
             color: white;
             font-size: 16px;
-            padding: 8px 16px;
+          
             border: none;
             border-radius: 10px;
             transition: all 0.3s ease-in-out;
@@ -526,14 +526,217 @@
     <h4 class="text-dark font-weight-bold mr-4" style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
         FollowUps
     </h4>
-  <!-- Button to Open Modal -->
-<button class="btn d-flex align-items-center px-3 plus-button" 
-    style="background-color:rgb(0, 148, 255); color: white; border-radius: 25px;"
-    data-toggle="modal" data-target="#designationModal">
-    <i class="fa-solid fa-plus fa-1x plus-icon"></i>&nbsp;
-    Add
-</button>
-   
+    
+    <!-- Button to Open Modal (Responsive) -->
+    <button class="btn add d-flex align-items-center  plus-button mb-2 mb-md-0" 
+        data-toggle="modal" data-target="#designationModal">
+        <i class="fa-solid fa-plus fa-1x plus-icon"></i>&nbsp;
+        Add
+    </button>
+    &nbsp;&nbsp;&nbsp;
+    <!-- Enhanced Access Button (Responsive) -->
+    <button type="button" class="btn" id="addAccessBtn" >
+        <i class="fas fa-user-shield" style="margin-right: 8px;"></i> Access
+    </button>
+
+
+
+<style>
+ 
+.add{
+  background-color:rgb(0, 148, 255); 
+  color: white; 
+  border-radius: 25px; 
+  font-size: 50px;
+  padding:8px;
+}
+  #addAccessBtn{
+        background: rgb(238, 153, 129); 
+        color: white; 
+        padding: 8px;
+        font-size: 16px; 
+        font-weight: 600; 
+        border-radius: 25px; 
+        transition: all 0.3s ease-in-out;
+        border: none; 
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+    /* Ensure buttons are responsive */
+    .btn-container {
+        display: flex;
+        flex-direction: column; /* Stack vertically on mobile */
+        gap: 10px; /* Space between buttons */
+    }
+
+    /* Responsive Button Sizes */
+    .plus-button, #addAccessBtn {
+        font-size: 16px;
+        width: 100%;  /* Full width on smaller screens */
+    }
+
+    @media (max-width: 868px) {
+        .plus-button, #addAccessBtn {
+            width: 100%;  /* Ensure full width on small screens */
+            font-size: 10px;  /* Slightly smaller font size */
+        }
+        .fa-plus{
+          font-size:10px
+    
+        }
+    }
+
+    @media (min-width: 768px) {
+        .plus-button, #addAccessBtn {
+            width: auto;  /* Auto width on larger screens */
+            font-size: 14px;
+        }
+    }
+</style>
+
+
+<!-- Enhanced Dropdown Container -->
+<div id="accessDropdownContainer" class="mt-2 p-3 rounded shadow" 
+    style="
+        display: none; 
+        border: 1px solid #ccc; 
+        background: white; 
+        position: absolute; 
+        width: 30%; 
+        min-width: 280px; 
+        z-index: 100; 
+        top: 100%; 
+        left: 100px;
+        border-radius: 8px; 
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1); 
+        padding: 15px;
+        transition: all 0.3s ease-in-out;
+    ">
+    <div id="accessDropdown" class="row"></div>
+</div>
+
+<style>
+    /* Access Button Hover Effect */
+    #addAccessBtn:hover {
+        background: rgb(255, 105, 0); /* Slightly darker shade */
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Dropdown Container Hover Effect */
+    #accessDropdownContainer:hover {
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Dropdown Items */
+    .employee-checkbox {
+        margin-right: 10px;
+    }
+
+    .employee-label {
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+        transition: color 0.3s ease-in-out;
+    }
+
+    .employee-label:hover {
+        color: rgb(255, 105, 0);
+        cursor: pointer;
+    }
+
+    /* Dropdown Item Wrapper */
+    .dropdown-item-wrapper {
+        display: flex;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid #f0f0f0;
+        transition: background 0.2s ease-in-out;
+    }
+
+    .dropdown-item-wrapper:last-child {
+        border-bottom: none;
+    }
+
+    /* Highlight on Hover */
+    .dropdown-item-wrapper:hover {
+        background-color: rgba(255, 105, 0, 0.1);
+    }
+</style>
+
+
+<!-- Remove Selected Employees Display -->
+<!-- <div id="selectedAccessContainer" class="mt-2">
+    <span id="selectedAccess">--Nil--</span>
+</div> -->
+
+
+<script>
+  // List of employees who will have access
+let accessEmployees = ["Pavitra", "Jayavarshini", "Suriya", "Mohan", "Naveen", "Anbumani", "Sivakumar", "Venkatesh"];
+accessEmployees.sort(); // Sort employees alphabetically
+let selectedAccessEmployees = new Set();
+
+const addAccessBtn = document.getElementById('addAccessBtn');
+const accessDropdownContainer = document.getElementById('accessDropdownContainer');
+const accessDropdownList = document.getElementById('accessDropdown');
+
+// Show dropdown when clicking the "Access" button
+addAccessBtn.addEventListener('click', function () {
+    accessDropdownContainer.style.display = 'block'; // Show dropdown
+    accessDropdownList.innerHTML = ''; // Clear previous list
+
+    accessEmployees.forEach(emp => {
+        let wrapper = document.createElement('div');
+        wrapper.classList.add('col-6', 'd-flex', 'align-items-center', 'mb-1');
+
+        let checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = emp;
+        checkbox.checked = selectedAccessEmployees.has(emp);
+        checkbox.classList.add('employee-checkbox');
+
+        let label = document.createElement('label');
+        label.textContent = emp;
+        label.classList.add('mr-auto', 'text-wrap', 'employee-label');
+        label.style.wordBreak = 'break-word';
+        label.style.flex = '1';
+        label.style.marginBottom = "0";
+        label.style.whiteSpace = 'normal';
+        label.style.cursor = 'pointer'; // Add pointer cursor for better UX
+
+        // Function to toggle selection
+        function toggleSelection() {
+            if (checkbox.checked) {
+                selectedAccessEmployees.add(emp);
+            } else {
+                selectedAccessEmployees.delete(emp);
+            }
+        }
+
+        // Click on label should toggle checkbox
+        label.addEventListener('click', function () {
+            checkbox.checked = !checkbox.checked;
+            toggleSelection();
+        });
+
+        // Checkbox should work independently as well
+        checkbox.addEventListener('change', toggleSelection);
+
+        wrapper.appendChild(checkbox);
+        wrapper.appendChild(label);
+        accessDropdownList.appendChild(wrapper);
+    });
+});
+
+// Hide dropdown when clicking outside
+document.addEventListener('click', function (event) {
+    if (!accessDropdownContainer.contains(event.target) && event.target !== addAccessBtn) {
+        accessDropdownContainer.style.display = 'none';
+    }
+});
+
+</script>
+
 </div>
 <!-- Include Font Awesome for Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -548,19 +751,16 @@
           <!-- Form Section -->
           <div class="col-12 p-3">
             <form id="designationForm">
-              
               <!-- Title Field -->
               <div class="form-group">
                 <label for="titleInput"><b>Title:</b></label>
                 <input type="text" class="form-control" id="titleInput" placeholder="Enter title" required>
               </div>
-
               <!-- Short Description Field -->
               <div class="form-group">
                 <label for="descriptionInput"><b>Short Description:</b></label>
                 <textarea class="form-control" id="descriptionInput" rows="2" placeholder="Enter short description" required></textarea>
               </div>
-
               <!-- Dropdown for Status -->
               <div class="form-group">
                 <label for="statusSelect"><b>Status:</b></label>
@@ -571,7 +771,6 @@
                   <option value="new-client">New Client</option>
                 </select>
               </div>
-
               <!-- Dropdown for Assigned To -->
               <div class="form-group">
                 <label for="assignedToSelect"><b>Assigned To:</b></label>
@@ -582,12 +781,10 @@
                   <option value="Kathir">Kathir</option>
                 </select>
               </div>
-
               <!-- Submit Button -->
               <div class="text-center">
                 <button type="submit" class="btn submit-btn">Submit</button>
               </div>
-
             </form>
           </div>
         </div>
@@ -696,29 +893,43 @@
   <!-- Nav Tabs -->
   <ul class="nav nav-pills custom-nav">
     <li class="nav-item">
-      <a class="nav-link active" id="all-tab" href="#" onclick="setActiveTab('all')">
-        <i class="fas fa-list-ul"></i> All
-      </a>
+        <a class="nav-link active" id="all-tab" href="#" onclick="setActiveTab('all')">
+            <i class="fas fa-list-ul"></i> All
+        </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" id="ongoing-tab" href="#" onclick="setActiveTab('ongoing')">
-        <i class="fas fa-spinner"></i> Ongoing
-      </a>
+        <a class="nav-link" id="ongoing-tab" href="#" onclick="setActiveTab('ongoing')">
+            <i class="fas fa-spinner"></i> Ongoing
+        </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" id="payment-tab" href="#" onclick="setActiveTab('payment')">
-        <i class="fas fa-credit-card"></i> Payment
-      </a>
+        <a class="nav-link" id="payment-tab" href="#" onclick="setActiveTab('payment')">
+            <i class="fas fa-credit-card"></i> Payment
+        </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" id="new-client-tab" href="#" onclick="setActiveTab('new-client')">
-        <i class="fas fa-user-plus"></i> New Client
-      </a>
+        <a class="nav-link" id="new-client-tab" href="#" onclick="setActiveTab('new-client')">
+            <i class="fas fa-user-plus"></i> New Client
+        </a>
     </li>
-  </ul>
+</ul>
+
+<style>
+    /* Adjust font size for navigation tabs */
+    .nav-link {
+        font-size: 16px; /* Default font size for larger screens */
+    }
+
+    /* Media query for smaller screens */
+    @media (max-width: 768px) {
+        .nav-link {
+            font-size: 14px; /* Smaller font size for mobile devices */
+        }
+    }
+</style>
 
   <!-- Card Containers -->
-  <div id="cards-container" class="row mt-4" ondrop="drop(event)" ondragover="allowDrop(event)">
+  <div id="cards-container" class="row mt-4" >
   </div>
 
   <!-- Custom Styles -->
@@ -881,7 +1092,9 @@
 </div>
 <div id="cards-container" class="row mt-4" ondrop="drop(event)" ondragover="allowDrop(event)">
 </div>
-
+<!-- Card Containers -->
+<div id="cards-container" class="row mt-4" ondragover="dragOver(event)" ondrop="drop(event)">
+</div> 
 <script>
 let allCards = []; // Store all cards globally
 
@@ -905,10 +1118,12 @@ document.getElementById("designationForm").addEventListener("submit", function(e
 function createCard(title, description, status, assignedTo) {
     const card = document.createElement("div");
     const creationDate = new Date().toISOString();
+    const cardId = 'card-' + new Date().getTime();
+
     card.classList.add("card", "card-container", "col-12", "col-md-6", "col-lg-3", status);
     card.setAttribute('data-status', status);
     card.setAttribute('draggable', 'true');
-    card.setAttribute('id', 'card-' + new Date().getTime());
+    card.setAttribute('id', cardId);
     card.setAttribute('data-created-date', creationDate);
 
     card.innerHTML = `
@@ -930,8 +1145,56 @@ function createCard(title, description, status, assignedTo) {
         </div>
     `;
 
+    // Drag and Drop Events
     card.addEventListener('dragstart', dragStart);
+    card.addEventListener('dragover', dragOver);
+    card.addEventListener('drop', drop);
+    card.addEventListener('dragend', dragEnd);
+
     return card;
+}
+
+let draggedCard = null;
+
+function dragStart(event) {
+    draggedCard = event.target;
+    event.dataTransfer.setData("text/plain", draggedCard.id);
+    setTimeout(() => draggedCard.style.display = "none", 0);
+}
+
+function dragOver(event) {
+    event.preventDefault();
+    const container = document.getElementById("cards-container");
+    const afterElement = getDragAfterElement(container, event.clientY);
+    
+    if (afterElement === null) {
+        container.appendChild(draggedCard);
+    } else {
+        container.insertBefore(draggedCard, afterElement);
+    }
+}
+
+function drop(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    const container = document.getElementById("cards-container");
+    draggedCard.style.display = "block";
+    draggedCard = null;
+}
+
+function dragEnd() {
+    draggedCard.style.display = "block";
+    draggedCard = null;
+}
+
+function getDragAfterElement(container, y) {
+    const draggableElements = [...container.querySelectorAll(".card:not(.dragging)")];
+
+    return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        return offset < 0 && offset > closest.offset ? { offset: offset, element: child } : closest;
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
 }
 
 function toggleColorPicker(icon) {
@@ -939,6 +1202,15 @@ function toggleColorPicker(icon) {
     picker.style.display = picker.style.display === "block" ? "none" : "block";
     event.stopPropagation();
 }
+// Close color picker if clicking outside
+document.addEventListener("click", function(event) {
+    const colorPickers = document.querySelectorAll(".color-picker");
+    colorPickers.forEach(picker => {
+        if (!picker.contains(event.target) && !picker.previousElementSibling.contains(event.target)) {
+            picker.style.display = "none";
+        }
+    });
+});
 
 function changeFlagColor(element, color) {
     const flagIcon = element.parentElement.previousElementSibling;
@@ -968,7 +1240,7 @@ function setActiveTab(tab) {
 }
 
 function refreshCards() {
-    const activeTab = document.querySelector('.nav-link.active').id.replace('-tab', '');
+    const activeTab = document.querySelector('.nav-link.active')?.id.replace('-tab', '') || 'all';
     const container = document.getElementById("cards-container");
     container.innerHTML = '';
 
@@ -978,63 +1250,6 @@ function refreshCards() {
         }
     });
 }
-// Allow dragging over the container
-function allowDrop(event) {
-    event.preventDefault();
-}
-
-// Handle drag start
-function dragStart(event) {
-    event.dataTransfer.setData("text/plain", event.target.id);
-    event.target.classList.add("dragging"); // Add visual effect
-}
-
-// Handle dropping the card
-function drop(event) {
-    event.preventDefault();
-
-    const draggedCardId = event.dataTransfer.getData("text/plain");
-    const draggedCard = document.getElementById(draggedCardId);
-    const container = document.getElementById("cards-container");
-
-    // Find the closest card as drop target
-    let dropTarget = event.target.closest(".card");
-
-    if (dropTarget && dropTarget !== draggedCard) {
-        let bounding = dropTarget.getBoundingClientRect();
-        let offset = event.clientY - bounding.top;
-
-        if (offset > bounding.height / 2) {
-            // Insert after drop target
-            dropTarget.parentNode.insertBefore(draggedCard, dropTarget.nextSibling);
-        } else {
-            // Insert before drop target
-            dropTarget.parentNode.insertBefore(draggedCard, dropTarget);
-        }
-    } else {
-        // Append to the end if no valid target
-        container.appendChild(draggedCard);
-    }
-
-    // Update the global card array order
-    allCards = Array.from(container.children);
-
-    // Remove dragging effect
-    draggedCard.classList.remove("dragging");
-}
-
-// Attach event listeners to each card on creation
-function addDragListeners(card) {
-    card.addEventListener('dragstart', dragStart);
-    card.addEventListener('dragover', allowDrop);
-    card.addEventListener('drop', drop);
-}
-
-// Attach event listeners to the container
-document.getElementById("cards-container").addEventListener("dragover", allowDrop);
-document.getElementById("cards-container").addEventListener("drop", drop);
-
-
 </script>
 
 <!-- Edit Modal -->

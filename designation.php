@@ -1,3 +1,46 @@
+<?php
+include 'dbconn.php';
+
+// Add Designation
+if (isset($_POST['action']) && $_POST['action'] == "add") {
+    $designation = $_POST['designation'];
+
+    $sql = "INSERT INTO designation (designationtype) VALUES ('$designation')";
+    if ($conn->query($sql) === TRUE) {
+        $id = $conn->insert_id;
+        echo "<tr id='row_$id'>
+                <td>$id</td>
+                <td class='designation-text' data-id='$id'>$designation</td>
+                <td>
+                    <button class='btn btn-warning btn-edit' data-id='$id'><i class='fas fa-edit'></i></button>
+                    <button class='btn btn-danger btn-delete' data-id='$id'><i class='fas fa-trash-alt'></i></button>
+                </td>
+              </tr>";
+    }
+    exit;
+}
+
+// Update Designation
+if (isset($_POST['action']) && $_POST['action'] == "edit") {
+    $id = $_POST['id'];
+    $designation = $_POST['designation'];
+
+    $sql = "UPDATE designation SET designationtype='$designation' WHERE id=$id";
+    $conn->query($sql);
+    exit;
+}
+
+// Delete Designation
+if (isset($_POST['action']) && $_POST['action'] == "delete") {
+    $id = $_POST['id'];
+
+    $sql = "DELETE FROM designation WHERE id=$id";
+    $conn->query($sql);
+    exit;
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +55,8 @@
     <link rel="icon" type="image/png" href="img/ktglogo.jpg">
 
     <title>Task Manager</title>
-
+<!-- Load jQuery first -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
@@ -464,41 +508,7 @@
 <!-- Customer Modal (No header, reduced width) -->
 <!-- Include Font Awesome for Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-
-<!-- Modal -->
-<div class="modal fade" id="designationModal" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 40%;">
-    <div class="modal-content" style="border-radius: 15px;">
-      <div class="modal-body p-0">
-        <div class="row no-gutters">
-          <!-- Left Column: Form -->
-          <div class="col-md-10">
-            <div class="ml-3 mt-3 mb-3 mr-3">
-              <form id="designationForm">
-                <div class="form-group">
-                  <label for="designationInput"><b>Designation Details:</b></label>
-                  <input type="text" class="form-control" id="designationInput" placeholder="Enter designation" required>
-                </div>
-                <div class="d-flex justify-content-start">
-                  <button type="submit" class="btn" style="background-color: rgb(15,29,64); color: white; border-radius: 25px;">Submit</button>
-                </div>
-              </form>
-            </div>
-          </div>
-
-          <!-- Right Column: Designation Icon -->
-          <div class="col-md-2 d-flex align-items-center justify-content-center" 
-               style="background-color: rgb(15,29,64); color: white; 
-                      border-top-right-radius: 14px; border-bottom-right-radius: 14px;">
-            <i class="fa-solid fa-id-badge fa-4x"></i> <!-- Designation Icon -->
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-                   
+        
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -539,22 +549,22 @@
            <div class="container custom-container mb-4 mt-4" style="background: white; border-radius: 25px; border: 2px solid rgb(0, 148, 255);">
     <div class="row">
         <div class="col-12">
-            <form id="customerForm" class="row g-10">
+            <div class="row g-10">
                 <!-- Column 1: Name & Company Name -->
                 <div class="col-md-8 pt-2 d-flex align-items-center">
-                    <input type="text" class="form-control mb-2" id="customername" placeholder="Enter Designation">
+                    <input type="text" class="form-control mb-2" id="designation_input" placeholder="Enter Designation">
                 </div>
 
                 <!-- Column 4: Submit Button -->
                 <div class="col-md-4 pt-2 pb-2 d-flex justify-content-center align-items-center">
-                    <button type="submit" class="btn" id="customerbtn" 
+                    <button type="submit" class="btn" id="add_btn" 
                         style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: 190px;">
                         <i class="fas fa-briefcase"></i>
 
                         &nbsp; Add Designation
                     </button>
                 </div>
-            </form>
+</div>
         </div>
     </div>
 </div>
@@ -587,34 +597,25 @@
                         <th>Action</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Designer</td>
-                        
-                        <td class="action-buttons">
-                            <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                            <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Web Developer</td>
-                       
-                        <td class="action-buttons">
-                            <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                            <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Mobile App Developer</td>
-                        
-                        <td class="action-buttons">
-                            <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                            <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
-                        </td>
-                    </tr>
+                <tbody id="designation_table">
+                <?php
+$sql = "SELECT * FROM designation";
+$result = $conn->query($sql);
+$count = 1; // Ensuring count starts from 1
+
+while ($row = $result->fetch_assoc()) {
+    echo "<tr id='row_{$row['id']}'>
+            <td>{$count}</td> 
+            <td class='designation-text' data-id='{$row['id']}'>{$row['designationtype']}</td>
+            <td>
+                <button class='btn btn-warning btn-edit' data-id='{$row['id']}'><i class='fas fa-edit'></i></button>
+                <button class='btn btn-danger btn-delete' data-id='{$row['id']}'><i class='fas fa-trash-alt'></i></button>
+            </td>
+          </tr>";
+    $count++; // Increment count for each row
+}                        
+?>
+
                 </tbody>
             </table>
         </div>
@@ -622,71 +623,68 @@
 </div>
 
 </div>
+<script>
+$(document).ready(function(){
+    // Add New Designation
+    $("#add_btn").click(function(){
+        var designation = $("#designation_input").val().trim();
+        if(designation !== ""){
+            $.post("designation.php", { action: "add", designation: designation }, function(response){
+                $("#designation_table").append(response);
+                updateSerialNumbers();
+                $("#designation_input").val(""); 
+            });
+        }
+    });
 
-<!-- Add Designation Modal -->
-<div class="modal fade" id="designationModal" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 40%;">
-    <div class="modal-content" style="border-radius: 15px;">
-      <div class="modal-body p-0">
-        <div class="row no-gutters">
-          <!-- Left Column: Form -->
-          <div class="col-md-10">
-            <div class="ml-3 mt-3 mb-3 mr-3">
-              <form id="designationForm">
-                <div class="form-group">
-                  <label for="designationInput"><b>Designation Details:</b></label>
-                  <input type="text" class="form-control" id="designationInput" placeholder="Enter designation" required>
-                </div>
-                <div class="d-flex justify-content-start">
-                  <button type="submit" class="btn" style="background-color: rgb(15,29,64); color: white; border-radius: 25px;">Submit</button>
-                </div>
-              </form>
-            </div>
-          </div>
-          <!-- Right Column: Designation Icon -->
-          <div class="col-md-2 d-flex align-items-center justify-content-center" 
-               style="background-color: rgb(15,29,64); color: white; 
-                      border-top-right-radius: 14px; border-bottom-right-radius: 14px;">
-            <i class="fa-solid fa-id-badge fa-4x"></i> <!-- Designation Icon -->
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+    // Edit Designation Inline
+    $(document).on("click", ".btn-edit", function(){
+        var id = $(this).data("id");
+        var textCell = $("#row_" + id + " .designation-text");
+        var currentText = textCell.text().trim();
 
-<!-- Edit Designation Modal -->
-<div class="modal fade" id="editDesignationModal" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 40%;">
-    <div class="modal-content" style="border-radius: 15px;">
-      <div class="modal-body p-0">
-        <div class="row no-gutters">
-          <!-- Left Column: Form -->
-          <div class="col-md-10">
-            <div class="ml-3 mt-3 mb-3 mr-3">
-              <form id="editDesignationForm">
-                <input type="hidden" id="editIndex">
-                <div class="form-group">
-                  <label for="editDesignationInput"><b>Designation Details:</b></label>
-                  <input type="text" class="form-control" id="editDesignationInput" placeholder="Edit designation" required>
-                </div>
-                <div class="d-flex justify-content-start">
-                  <button type="submit" class="btn" style="background-color: rgb(15,29,64); color: white; border-radius: 25px;">Update</button>
-                </div>
-              </form>
-            </div>
-          </div>
-          <!-- Right Column: Designation Icon -->
-          <div class="col-md-2 d-flex align-items-center justify-content-center" 
-               style="background-color: rgb(15,29,64); color: white; 
-                      border-top-right-radius: 14px; border-bottom-right-radius: 14px;">
-                <i class="fa-solid fa-pen-to-square fa-3x" style="color: white;"></i>
-                    </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+        textCell.html("<input type='text' class='form-control edit-input' value='" + currentText + "'>");
+        $(this).replaceWith("<button class='btn btn-success btn-save' data-id='" + id + "'><i class='fas fa-save'></i></button>");
+    });
+
+    // Save Edited Designation
+    $(document).on("click", ".btn-save", function(){
+        var id = $(this).data("id");
+        var newText = $("#row_" + id + " .edit-input").val().trim();
+
+        if(newText !== ""){
+            $.post("designation.php", { action: "edit", id: id, designation: newText }, function(){
+                $("#row_" + id + " .designation-text").text(newText);
+                $(".btn-save[data-id='" + id + "']").replaceWith("<button class='btn btn-warning btn-edit' data-id='" + id + "'><i class='fas fa-edit'></i></button>");
+            });
+        }
+    });
+
+    // Delete Designation
+    $(document).on("click", ".btn-delete", function(){
+        var id = $(this).data("id");
+        if(confirm("Are you sure you want to delete this?")){
+            $.post("designation.php", { action: "delete", id: id }, function(){
+                $("#row_" + id).fadeOut(500, function(){ 
+                    $(this).remove(); 
+                    updateSerialNumbers();
+                });
+            });
+        }
+    });
+
+    // Function to update serial numbers dynamically
+    function updateSerialNumbers() {
+        $("#designation_table tr").each(function(index) {
+            $(this).find("td:first").text(index + 1);
+        });
+    }
+
+});
+</script>
+
+
+
 
 
 
@@ -717,30 +715,12 @@
         <i class="fas fa-angle-up"></i>
     </a>
 
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.php">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
     <script>
 $(document).ready(function() {
     $('#dataTable').DataTable();
 });
 </script>
+
 
     
     <!-- Bootstrap core JavaScript-->

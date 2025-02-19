@@ -874,6 +874,35 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
   <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get all rows from the table
+        const rows = document.querySelectorAll('#dataTable tbody tr');
+        
+        rows.forEach(row => {
+            row.addEventListener('click', function(event) {
+                // Get the clicked cell
+                const clickedCell = event.target;
+
+                // Check if the clicked column is "Name" or "Company"
+                const nameCell = row.cells[1]; // "Name" column (index 1)
+                const companyCell = row.cells[3]; // "Company" column (index 3)
+
+                if (clickedCell === nameCell) {
+                    const name = nameCell.textContent.trim();
+                    window.location.href = `employeereport.php?name=${encodeURIComponent(name)}`;
+                } else if (clickedCell === companyCell) {
+                    const company = companyCell.textContent.trim();
+                    window.location.href = `companyreport.php?company=${encodeURIComponent(company)}`;
+                } else {
+                    // For other columns, open the PDF file
+                    window.open("C:/Desktop/Conference paper.pdf", "_blank");
+                }
+            });
+        });
+    });
+</script>
+
+  <script>
     $(document).ready(function() {
     var originalData = [];
     var originalProjectData = [];

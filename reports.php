@@ -1,16 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
     <title>Task Manager</title>
-
     <!-- Custom fonts for this template -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
@@ -27,8 +23,7 @@
           /* Optional: Some spacing and styling for the icon buttons */
     .export-btn {
       margin-left: 15px;
-    }
-        
+    }    
 #dataTable th:nth-child(1), #dataTable td:nth-child(1) { width: 2%; }  /* S.no */
     #dataTable th:nth-child(2), #dataTable td:nth-child(2) { width: 8%; } /* Name */
     #dataTable th:nth-child(3), #dataTable td:nth-child(3) { width: 13%; } /* Date */
@@ -44,14 +39,12 @@
             
             color: black;
         }
-
         /* Center align action buttons */
         .action-buttons {
             display: flex;
             justify-content: center;
             gap: 10px;
         }
-
         /* Styling for buttons */
         .btn-action {
             border: none;
@@ -59,19 +52,15 @@
             font-size: 18px;
             transition: transform 0.2s ease-in-out;
         }
-
         .btn-action:hover {
             transform: scale(1.2);
         }
-
         .btn-edit {
             color: #28a745;
         }
-
         .btn-delete {
             color: #dc3545;
         }
-
         /* Add Customer Button */
         .add-employee-btn {
             float: right;
@@ -83,51 +72,40 @@
             border-radius: 10px;
             transition: all 0.3s ease-in-out;
         }
-
         .add-employee-btn i {
             margin-right: 5px;
         }
-
         .add-employee-btn:hover {
             background: #0056b3;
             transform: scale(1.1);
         }
-
          /* Modal Header Gradient Background */
     .modal-header {
         background: linear-gradient(to right, #4568dc, #b06ab3);
         color: white;
     }
-
     /* Adjust close button color */
     .modal-header .close {
         color: white;
         opacity: 1;
     }
-
     .modal-header .close:hover {
         color: #f8f9fa;
     }
-
-
     .upload-icon {
     transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
 }
-
 .upload-label:hover .upload-icon {
     transform: scale(1.2);
     color: #007bff;
 }
-
 .upload-icon.bounce {
     animation: bounce 0.5s ease-in-out;
 }
-
 @keyframes bounce {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-5px); }
 }
-
 /* Icon Styling */
 .photo-icon{
     color: #5796d8;
@@ -616,14 +594,12 @@
 
 </nav>
                 <!-- End of Topbar -->
-
                 <!-- Begin Page Content -->
                 <style>
     /* Export button styling */
     .export-btn {
       margin-left: 15px;
     }
-    
     /* -------------------- Calendar (Date Input) Styling -------------------- */
     input[type="date"] {
       padding: 10px;
@@ -640,8 +616,6 @@
       box-shadow: 0 0 8px rgba(69,104,220,0.6);
       outline: none;
     }
-    
-  
     .filter-group {
     gap: 15px; /* Adjust the value as needed */
   }
@@ -665,13 +639,11 @@
         </a>
     </li>
 </ul>
-
 <style>
     /* Adjust font size for navigation tabs */
     .nav-link {
         font-size: 16px; /* Default font size for larger screens */
     }
-
     /* Media query for smaller screens */
     @media (max-width: 768px) {
         .nav-link {
@@ -679,7 +651,6 @@
         }
     }
 </style>
-
 <style>
     /* Navigation Styling */
     .custom-nav .nav-link {
@@ -690,20 +661,16 @@
       font-size: 14px;
       transition: background-color 0.3s ease, transform 0.3s ease;
     }
-
     .custom-nav .nav-link.active {
       background-color: rgb(0, 148, 255);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
       transform: scale(1.1);
     }
-
     .custom-nav .nav-link:hover {
       background-color: rgb(0, 148, 255);
       transform: scale(1.05);
     }
 </style>
-
-  
       <!-- Employee Report Card -->
       <div class="card shadow mb-4" id="employeeReport">
         <div class="card-header py-3 ">
@@ -719,11 +686,9 @@
             <input type="date" id="startDateEmployee" class="form-control" style="max-width: 150px;">
             To:
             <input type="date" id="endDateEmployee" class="form-control" style="max-width: 150px;">
-  
             <button id="exportPdfEmployee" class="btn btn-danger export-btn" style="position: absolute; right: 20px;" title="Export to PDF">
               <i class="fa fa-file-pdf-o"></i>&nbsp;&nbsp;Download
             </button>
-
           </div>
         </div>
         <div class="card-body">
@@ -787,7 +752,6 @@
           </div>
         </div>
       </div>
-  
       <!-- Project Report Card (Initially Hidden) -->
       <div class="card shadow mb-4" id="projectReport" style="display: none;">
         <div class="card-header py-3 ">
@@ -800,19 +764,16 @@
               <option value="Kurinji-xyz">Kurinji - xyz</option>
               <option value="xxx-KMN">xxx - KMN</option>
             </select>
-            From:
-                        <input type="date" id="startDateProject" class="form-control mr-2" style="max-width: 150px;" placeholder="Start Date">
-                <!-- End Date Input -->To:
-                <input type="date" id="endDateProject" class="form-control mr-2" style="max-width: 150px;" placeholder="End Date">
-                <!-- Month Dropdown Filter -->
+                From:
+            <input type="date" id="startDateProject" class="form-control mr-2" style="max-width: 150px;" placeholder="Start Date">
+            <!-- End Date Input -->To:
+            <input type="date" id="endDateProject" class="form-control mr-2" style="max-width: 150px;" placeholder="End Date">
+            <!-- Month Dropdown Filter -->
         <!-- Remove the <select> element for month filtering -->
-
-           
             <button id="exportExcelProject" class="btn btn-danger export-btn" style="position: absolute; right: 20px;" title="Export to PDF">
               <i class="fa fa-file-pdf-o"></i>&nbsp;&nbsp;Download
             </button>
           </div>
-        
         </div>
         <div class="card-body" >
           <div class="table-responsive">
@@ -864,11 +825,10 @@
             </table>
           </div>
         </div>
-      </div>
+      </div>    
     </div>
   </div>
 </div>
-  
   <!-- jQuery and Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
@@ -895,39 +855,32 @@
                     window.location.href = `companyreport.php?company=${encodeURIComponent(company)}`;
                 } else {
                     // For other columns, open the PDF file
-                    window.open("C:/Desktop/Conference paper.pdf", "_blank");
+                    window.open("http://localhost/b2/Conference%20paper.pdf", "_blank");
                 }
             });
         });
     });
 </script>
-
   <script>
     $(document).ready(function() {
     var originalData = [];
     var originalProjectData = [];
-
     $("#tableBody tr").each(function() {
         originalData.push($(this).clone());
     });
-
     $("#projectTable tbody tr").each(function() {
         originalProjectData.push($(this).clone());
     });
-
     function parseDate(dateStr) {
         var parts = dateStr.split("-");
         return new Date(parts[2], parts[1] - 1, parts[0]);
     }
-
     function filterEmployeeTable() {
         var selectedEmployee = $("#employeeFilter").val();
         var startDateStr = $("#startDateEmployee").val();
         var endDateStr = $("#endDateEmployee").val();
-
         var startDate = startDateStr ? new Date(startDateStr) : null;
         var endDate = endDateStr ? new Date(endDateStr) : null;
-
         var filteredRows = originalData.filter(function(row) {
             var passes = true;
             var employeeName = row.find("td:eq(1)").text().trim();
@@ -944,22 +897,18 @@
             }
             return passes;
         });
-
         $("#tableBody").empty();
         filteredRows.forEach(function(row, index) {
             row.find("td:eq(0)").text(index + 1);
             $("#tableBody").append(row);
         });
     }
-
     function filterProjectTable() {
         var selectedProject = $("#projectFilter").val();
         var startDateStr = $("#startDateProject").val();
         var endDateStr = $("#endDateProject").val();
-
         var startDate = startDateStr ? new Date(startDateStr) : null;
         var endDate = endDateStr ? new Date(endDateStr) : null;
-
         var filteredRows = originalProjectData.filter(function(row) {
             var passes = true;
             if (selectedProject !== "all") {
@@ -979,22 +928,18 @@
             }
             return passes;
         });
-
         $("#projectTable tbody").empty();
         filteredRows.forEach(function(row, index) {
             row.find("td:eq(0)").text(index + 1);
             $("#projectTable tbody").append(row);
         });
     }
-
     $("#employeeFilter, #startDateEmployee, #endDateEmployee").on("change", function() {
         filterEmployeeTable();
     });
-
     $("#projectFilter, #startDateProject, #endDateProject").on("change", function() {
         filterProjectTable();
     });
-
     $("#employeeTab").click(function(e) {
         e.preventDefault();
         $("#employeeReport").show();
@@ -1002,7 +947,6 @@
         $(".nav-link").removeClass("active");
         $(this).addClass("active");
     });
-
     $("#projectTab").click(function(e) {
         e.preventDefault();
         $("#employeeReport").hide();
@@ -1016,36 +960,29 @@
     $(document).ready(function() {
   // Cache the original HTML of the employee table body.
   var originalEmployeeHTML = $("#tableBody").html();
-
   // Helper function to parse a date string in dd-mm-yyyy format.
   function parseDate(dateStr) {
     var parts = dateStr.split("-");
     return new Date(parts[2], parts[1] - 1, parts[0]);
   }
-
   // Function to filter Employee Table based on criteria.
   function filterEmployeeTable() {
     var selectedEmployee = $("#employeeFilter").val();
     var startDateStr = $("#startDateEmployee").val();
     var endDateStr = $("#endDateEmployee").val();
-
     // If no filter is applied, restore the original HTML.
     if (selectedEmployee === "all" && !startDateStr && !endDateStr) {
       $("#tableBody").html(originalEmployeeHTML);
       return;
     }
-
     // Create a jQuery object from the original HTML.
     var $rows = $("<tbody>" + originalEmployeeHTML + "</tbody>").find("tr");
-
     $rows = $rows.filter(function() {
       var $row = $(this);
       var employeeName = $row.find("td:eq(1)").text().trim();
-      
       if (selectedEmployee !== "all" && employeeName !== selectedEmployee) {
         return false;
       }
-      
       // Date filter (Column index 2, format: dd-mm-yyyy)
       var dateStr = $row.find("td:eq(2)").text().trim();
       var rowDate = parseDate(dateStr);

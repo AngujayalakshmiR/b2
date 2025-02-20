@@ -459,13 +459,8 @@
 
 </div>
 
-
-
-
 <!-- Topbar Navbar -->
 <ul class="navbar-nav ml-auto">
-
-   
 
     <div class="topbar-divider d-none d-sm-block"></div>
     
@@ -504,18 +499,15 @@
         
                         <!-- Begin Page Content -->
                         <div class="container-fluid">
-
                         <div class="container mb-4 mt-4" style="background: white; border-radius: 25px; border: 2px solid rgb(0, 148, 255);">
 <div class="column">
     <div class="row">
         <!-- Left Section (20% width for the button) -->
-       
         <!-- Right Section (80% width for form fields) -->
         <div class="col-md-12">
             <form id="customerForm" class="row g-3 mt-3">
                 <!-- Column 1: Name & Company Name -->
                 <div class="col-md-4 pb-1">
-                   
                     <select class="form-control mb-2" id="designation">
     <option value="">Select Company</option>
     <option value="web_developer">Kurinji Cement</option>
@@ -589,7 +581,6 @@
 </div>
 
 
-
 <script>
 // Employee Dropdown Logic
 let employees = ["Pavitra", "Jayavarshini", "Suriya", "Mohan", "Naveen", "Anbumani", "Sivakumar", "Venkatesh"];
@@ -661,10 +652,6 @@ function updateSelectedEmployees() {
         selectedEmployeesDisplay.textContent = "Nil";
     }
 }
-
-
-
-
 // Hide dropdown when clicking outside
 document.addEventListener('click', function (event) {
     if (!dropdownContainer.contains(event.target) && event.target !== addEmployeeBtn) {

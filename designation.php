@@ -1,44 +1,58 @@
 <?php
-include 'dbconn.php';
+// Database Connection
+$host = 'localhost';
+$user = 'root';
+$pass = '';
+$db = 'ktg';
+$conn = new mysqli($host, $user, $pass, $db, 3307);
 
-// Add Designation
-if (isset($_POST['action']) && $_POST['action'] == "add") {
-    $designation = $_POST['designation'];
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
-    $sql = "INSERT INTO designation (designationtype) VALUES ('$designation')";
-    if ($conn->query($sql) === TRUE) {
-        $id = $conn->insert_id;
-        echo "<tr id='row_$id'>
-                <td>$id</td>
-                <td class='designation-text' data-id='$id'>$designation</td>
-                <td>
-                    <button class='btn btn-warning btn-edit' data-id='$id'><i class='fas fa-edit'></i></button>
-                    <button class='btn btn-danger btn-delete' data-id='$id'><i class='fas fa-trash-alt'></i></button>
-                </td>
-              </tr>";
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $designationtype = trim($_POST['designationtype']); // Prevent SQL injection
+
+    if (!empty($designationtype)) {
+        // Prepare SQL Query
+        $stmt = $conn->prepare("INSERT INTO designation (designationtype) VALUES (?)");
+        $stmt->bind_param("s", $designationtype);
+
+        if ($stmt->execute()) {
+            echo "<script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Designation added successfully!',
+                    confirmButtonColor: '#04aaaafa'
+                }).then(() => {
+                    window.location.href = 'designation.php'; // Refresh page after success
+                });
+            </script>";
+        } else {
+            echo "<script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'Failed to add designation. Please try again!',
+                    confirmButtonColor: '#04aaaafa'
+                }).then(() => {
+                    window.history.back(); 
+                });
+            </script>";
+        }
+
+        $stmt->close();
     }
-    exit;
 }
 
-// Update Designation
-if (isset($_POST['action']) && $_POST['action'] == "edit") {
-    $id = $_POST['id'];
-    $designation = $_POST['designation'];
-
-    $sql = "UPDATE designation SET designationtype='$designation' WHERE id=$id";
-    $conn->query($sql);
-    exit;
-}
-
-// Delete Designation
-if (isset($_POST['action']) && $_POST['action'] == "delete") {
-    $id = $_POST['id'];
-
-    $sql = "DELETE FROM designation WHERE id=$id";
-    $conn->query($sql);
-    exit;
-}
+// Fetch data from the table
+$sql = "SELECT * FROM designation";
+$result = $conn->query($sql);
 ?>
+
 
 
 <!DOCTYPE html>
@@ -53,7 +67,7 @@ if (isset($_POST['action']) && $_POST['action'] == "delete") {
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" type="image/png" href="img/ktglogo.jpg">
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Task Manager</title>
 <!-- Load jQuery first -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -547,27 +561,21 @@ if (isset($_POST['action']) && $_POST['action'] == "delete") {
            <!-- Designation Cards Container -->
            <div class="container-fluid">
            <div class="container custom-container mb-4 mt-4" style="background: white; border-radius: 25px; border: 2px solid rgb(0, 148, 255);">
-    <div class="row">
-        <div class="col-12">
-            <div class="row g-10">
-                <!-- Column 1: Name & Company Name -->
-                <div class="col-md-8 pt-2 d-flex align-items-center">
-                    <input type="text" class="form-control mb-2" id="designation_input" placeholder="Enter Designation">
-                </div>
-
-                <!-- Column 4: Submit Button -->
-                <div class="col-md-4 pt-2 pb-2 d-flex justify-content-center align-items-center">
-                    <button type="submit" class="btn" id="add_btn" 
-                        style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: 190px;">
-                        <i class="fas fa-briefcase"></i>
-
-                        &nbsp; Add Designation
-                    </button>
-                </div>
-</div>
-        </div>
+           <div class="row">
+    <div class="col-12">
+        <form class="row g-10" method="POST" action="designation.php">
+            <div class="col-md-8 pt-3 d-flex align-items-center">
+                <input type="text" class="form-control mb-2" id="designationtype" name="designationtype" placeholder="Enter Designation" required>
+            </div>
+            <div class="col-md-4 pt-2 d-flex justify-content-center align-items-center">
+                <button type="submit" class="btn" style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: 190px;">
+                    <i class="fas fa-briefcase"></i>&nbsp; Add Designation
+                </button>
+            </div>
+        </form>
     </div>
 </div>
+    </div>
 
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
@@ -583,41 +591,35 @@ if (isset($_POST['action']) && $_POST['action'] == "delete") {
 </p>
 
 
-
-</form></h6>
-       
+</h6>
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered text-center" id="dataTable" width="100%" cellspacing="0">
-                <thead>
-                    <tr class="thead">
-                        <th>S.no</th>
-                        <th>Designation Type</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="designation_table">
-                <?php
-$sql = "SELECT * FROM designation";
-$result = $conn->query($sql);
-$count = 1; // Ensuring count starts from 1
-
-while ($row = $result->fetch_assoc()) {
-    echo "<tr id='row_{$row['id']}'>
-            <td>{$count}</td> 
-            <td class='designation-text' data-id='{$row['id']}'>{$row['designationtype']}</td>
-            <td>
-                <button class='btn btn-warning btn-edit' data-id='{$row['id']}'><i class='fas fa-edit'></i></button>
-                <button class='btn btn-danger btn-delete' data-id='{$row['id']}'><i class='fas fa-trash-alt'></i></button>
-            </td>
-          </tr>";
-    $count++; // Increment count for each row
-}                        
-?>
-
-                </tbody>
-            </table>
+        <table class="table table-bordered text-center" id="dataTable" width="100%" cellspacing="0">
+    <thead>
+        <tr class="thead">
+            <th>S.no</th>
+            <th>Designation Type</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="designation_table">
+        <?php
+        $count = 1;
+        while ($row = $result->fetch_assoc()) {
+            echo "<tr id='row_{$row['id']}'>
+                    <td>{$count}</td> 
+                    <td class='designation-text' data-id='{$row['id']}'>{$row['designationtype']}</td>
+                    <td>
+                        <button class='btn btn-warning btn-edit' data-id='{$row['id']}'><i class='fas fa-edit'></i></button>
+                        <button class='btn btn-danger btn-delete' data-id='{$row['id']}'><i class='fas fa-trash-alt'></i></button>
+                    </td>
+                  </tr>";
+            $count++;
+        }
+        ?>
+    </tbody>
+</table>
         </div>
     </div>
 </div>
@@ -625,17 +627,7 @@ while ($row = $result->fetch_assoc()) {
 </div>
 <script>
 $(document).ready(function(){
-    // Add New Designation
-    $("#add_btn").click(function(){
-        var designation = $("#designation_input").val().trim();
-        if(designation !== ""){
-            $.post("designation.php", { action: "add", designation: designation }, function(response){
-                $("#designation_table").append(response);
-                updateSerialNumbers();
-                $("#designation_input").val(""); 
-            });
-        }
-    });
+
 
     // Edit Designation Inline
     $(document).on("click", ".btn-edit", function(){
@@ -745,153 +737,8 @@ $(document).ready(function() {
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
     <script>
-  let colors = ["#F8A5B2", "#89D9E2", "#E0DB71", "#86E269", "#66D9B2"];
-  let colorIndex = 0;
 
-  function getNextColor() {
-    let color = colors[colorIndex];
-    colorIndex = (colorIndex + 1) % colors.length;
-    return color;
-  }
-
-  // Handle adding new designation
-  document.getElementById("designationForm").addEventListener("submit", function(event) {
-    event.preventDefault();
-    let designationInput = document.getElementById("designationInput");
-    let designation = designationInput.value.trim();
-    if (designation === "") return;
-    addDesignation(designation);
-    $("#designationModal").modal("hide");
-    document.getElementById("designationForm").reset();
-  });
-
-  function addDesignation(designation) {
-    // Create a wrapper div for grid layout
-    let newCardWrapper = document.createElement("div");
-    newCardWrapper.className = "col-md-3 draggable-container";
-    let cardId = "card-" + new Date().getTime();
-    newCardWrapper.innerHTML = `
-      <div id="${cardId}" class="card p-3 draggable-card" draggable="true" 
-           style="min-height: 50px; color:black; background-color: ${getNextColor()}; 
-                  border-radius: 10px; position: relative; transition: transform 0.2s;">
-          <div class="card-body text-center">
-              <h6 class="card-text">${designation}</h6>
-          </div>
-      </div>
-    `;
-
-    let cardElement = newCardWrapper.querySelector(".card");
-
-    // Drag Events on the card
-    cardElement.addEventListener("dragstart", function(event) {
-      event.dataTransfer.setData("text/plain", cardId);
-      setTimeout(() => {
-        cardElement.style.opacity = "0.5";
-      }, 0);
-    });
-
-    cardElement.addEventListener("dragend", function() {
-      cardElement.style.opacity = "1";
-    });
-
-    // Allow dropping on the card for reordering
-    cardElement.addEventListener("dragover", function(event) {
-      event.preventDefault();
-    });
-
-    cardElement.addEventListener("drop", function(event) {
-      event.preventDefault();
-      let draggedCardId = event.dataTransfer.getData("text/plain");
-      if (draggedCardId === this.id) return; 
-      let draggedCardWrapper = document.getElementById(draggedCardId).parentElement;
-      let container = document.getElementById("designationContainer");
-      let rect = this.getBoundingClientRect();
-      let offset = event.clientY - rect.top;
-      if (offset < rect.height / 2) {
-        container.insertBefore(draggedCardWrapper, this.parentElement);
-      } else {
-        container.insertBefore(draggedCardWrapper, this.parentElement.nextSibling);
-      }
-    });
-
-    // Set different click behavior based on device width
-    if (window.innerWidth <= 768) {
-      // On mobile, tapping the text strikes it through and deletes the card.
-      let cardText = cardElement.querySelector(".card-text");
-      cardText.addEventListener("click", function(e) {
-        // Prevent triggering any parent click events
-        e.stopPropagation();
-        // Add strike-through styling
-        this.style.textDecoration = "line-through";
-        // Delete the card after a brief delay (e.g., 300ms)
-        setTimeout(() => {
-          deleteCard(cardId);
-        }, 300);
-      });
-    } else {
-      // On desktop, tapping the card opens the edit modal.
-      cardElement.addEventListener("click", function() {
-        openEditModal(cardId, designation);
-      });
-    }
-
-    document.getElementById("designationContainer").appendChild(newCardWrapper);
-  }
-
-  function openEditModal(cardId, designation) {
-    document.getElementById("editDesignationInput").value = designation;
-    document.getElementById("editIndex").value = cardId;
-    $("#editDesignationModal").modal("show");
-  }
-
-  // Handle updating the designation
-  document.getElementById("editDesignationForm").addEventListener("submit", function(event) {
-    event.preventDefault();
-    let editInput = document.getElementById("editDesignationInput").value.trim();
-    let cardId = document.getElementById("editIndex").value;
-    if (editInput === "" || !cardId) return;
-    let cardElement = document.getElementById(cardId);
-    if (cardElement) {
-      cardElement.querySelector(".card-text").textContent = editInput;
-    }
-    $("#editDesignationModal").modal("hide");
-  });
-
-  // Delete Functionality
-  function deleteCard(cardId) {
-    let cardElement = document.getElementById(cardId);
-    if (cardElement) {
-      cardElement.parentElement.remove(); // Remove the entire wrapper div
-    }
-  }
-
-  // Trash Icon Drop Handling
-  let trashIcon = document.getElementById("trashIcon");
-
-  trashIcon.addEventListener("dragover", function(event) {
-    event.preventDefault();
-  });
-
-  trashIcon.addEventListener("drop", function(event) {
-    event.preventDefault();
-    let cardId = event.dataTransfer.getData("text/plain");
-    deleteCard(cardId);
-  });
-
-  // Allow dropping on the container (for empty spaces)
-  let container = document.getElementById("designationContainer");
-  container.addEventListener("dragover", function(event) {
-    event.preventDefault();
-  });
-
-  container.addEventListener("drop", function(event) {
-    if (event.target === container) {
-      event.preventDefault();
-      let cardId = event.dataTransfer.getData("text/plain");
-      let draggedCardWrapper = document.getElementById(cardId).parentElement;
-      container.appendChild(draggedCardWrapper);
-    }
-  });
+  
 </script>
 
 

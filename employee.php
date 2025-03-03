@@ -745,7 +745,7 @@ countryDropdown.addEventListener("change", function() {
         <col style="width: 10%;">  <!-- Status -->
     </colgroup>
                             <thead>
-              <tr style="font-family:calibri;">
+              <tr>
               <th>S.no</th>
                                             <th>Name</th>
                                             <th>Designation</th>

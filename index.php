@@ -794,7 +794,9 @@
 #dataTable tbody td i {
     color: rgb(0, 148, 255);
 }
-
+.page-item.active .page-link {
+    background: rgb(0, 148, 255);
+}
 </style>
 
         <!-- End of Sidebar -->

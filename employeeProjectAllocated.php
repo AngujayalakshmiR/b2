@@ -400,48 +400,49 @@ tbody{
 
     <!-- Page Wrapper -->
     <div id="wrapper">
-
     <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background: white;">
-
 <!-- Sidebar - Brand -->
-<a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
-    <div class="sidebar-brand-icon" style='font-size:20px'><b>KTG</b></div>
-    <div class="sidebar-brand-text mx-2" style='font-size:20px'><b>DASHBOARD</b></div>
+<a class="sidebar-brand d-flex align-items-center justify-content-center" href="employeedash.php">
+    <div class="sidebar-brand-icon" style='font-size:19px'>KTG</div>
+    <div class="sidebar-brand-text mx-2" style='font-size:19px'>DASHBOARD</div>
 </a>
-
-<!-- Divider -->
 <hr class="sidebar-divider my-0">
 
+<!-- Divider -->
+<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 <!-- Nav Item - Dashboard -->
-<li class="nav-item  l">
+<li class="nav-item l ">
     <a class="nav-link k" href="employeedash.php" style="color: white;">
-        <i class="fas fa-fw fa-tachometer-alt" style="font-size:20px"></i>
-        <span><b>Dashboard</b></span>
+        <i class="fas fa-fw fa-tachometer-alt" style="font-size:16px"></i>
+        <span>Dashboard</span>
     </a>
 </li>
-<li class="nav-item active l ">
-    <a class="nav-link k" href="employeeProjectAllocated.php" style="color: white;">
-        <i class="fas fa-fw fa-folder" style="font-size:20px"></i>
-        <span><b>Project Allocated</b></span>
-    </a>
-</li>
-
-<!-- Nav Item - Project Creation -->
-<li class="nav-item l">
-    <a class="nav-link k" href="employeeWorkReports.php" style="color: black;">
-        <i class="fas fa-fw fa-chart-area" style="font-size:20px"></i>
-        <span><b>Workreport</b></span>
-    </a>
-</li>
+<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 
 
 <!-- Divider -->
-<hr class=" d-none d-md-block">
+<!-- Nav Item - Project Creation -->
+<li class="nav-item l active">
+    <a class="nav-link k" href="employeeProjectAllocated.php" style="color: black;">
+        <i class="fas fa-fw fa-folder" style="font-size:16px"></i>
+        <span>Project Allocation</span>
+    </a>
+</li>
+
+<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
+<!-- Nav Item - Work Reports -->
+<li class="nav-item l">
+    <a class="nav-link k" href="employeeWorkReports.php" style="color: black;">
+        <i class="fas fa-fw fa-chart-area" style="font-size:16px"></i>
+        <span>Work Reports</span>
+    </a>
+</li><br>
+<!-- Divider -->
+<div class="sidebar-divider d-none d-md-block"></div>
 <!-- Sidebar Toggler -->
 <div class="text-center d-none d-md-inline">
     <button class="rounded-circle side border-0" id="sidebarToggle"></button>
 </div>
-
 </ul>
         <!-- End of Sidebar -->
 

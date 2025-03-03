@@ -893,6 +893,31 @@ document.addEventListener('click', function (event) {
     }
 }
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all rows from the table
+    const rows = document.querySelectorAll('#dataTable tbody tr');
+    
+    rows.forEach(row => {
+        row.addEventListener('click', function(event) {
+            // Get the customer and company values from the row
+            const companyCell = row.cells[2];  // Company column index
+
+           
+            // If clicked on the Company column, redirect to company report
+             if (event.target === companyCell) {
+                const company = companyCell.textContent.trim();
+                window.location.href = `companyreport.php?company=${encodeURIComponent(company)}`;
+            }
+            // Otherwise, go to general reports
+            else {
+                window.open("http://localhost/b2/aadhar.pdf", "_blank");
+            }
+        });
+    });
+});
+</script>
+
 </body>
 
 </html>

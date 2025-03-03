@@ -769,7 +769,9 @@ tbody{
 #dataTable {
     margin-top: 20px; /* Adds space above the table */
 }
-
+.page-item.active .page-link {
+    background: rgb(0, 148, 255);
+}
 </style>
 
         <!-- End of Sidebar -->

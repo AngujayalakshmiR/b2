@@ -398,90 +398,80 @@
     <!-- Page Wrapper -->
     <div id="wrapper">
 
-        <!-- Sidebar -->
-        <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background: white;">
-
+       
+    <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background: white;">
 <!-- Sidebar - Brand -->
 <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
-    <div class="sidebar-brand-icon" style='font-size:20px'><b>KTG</b></div>
-    <div class="sidebar-brand-text mx-2" style='font-size:20px'><b>DASHBOARD</b></div>
+    <div class="sidebar-brand-icon" style='font-size:19px'>KTG</div>
+    <div class="sidebar-brand-text mx-2" style='font-size:19px'>DASHBOARD</div>
 </a>
-
-<!-- Divider -->
 <hr class="sidebar-divider my-0">
 
+<!-- Divider -->
+<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 <!-- Nav Item - Dashboard -->
-<li class="nav-item  l">
-    <a class="nav-link k" href="index.php" style="color: white;">
-        <i class="fas fa-fw fa-tachometer-alt" style="font-size:20px"></i>
-        <span><b>Dashboard</b></span>
-    </a>
-</li>
 <li class="nav-item l ">
-    <a class="nav-link k" href="followups.php" style="color: white;">
-        <i class="fas fa-fw fa-tachometer-alt" style="font-size:20px"></i>
-        <span><b>FollowUps</b></span>
+    <a class="nav-link k" href="index.php" style="color: white;">
+        <i class="fas fa-fw fa-tachometer-alt" style="font-size:16px"></i>
+        <span>Dashboard</span>
     </a>
 </li>
-
+<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
+<li class="nav-item l" style="padding:0px;">
+    <a class="nav-link k" href="followups.php" style="color: white;">
+        <i class="fas fa-fw fa-comment-dots" style="font-size:16px"></i>
+        <span>FollowUps</span>
+    </a>
+</li>
+<!-- Divider -->
+<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 <!-- Nav Item - Master -->
-<li class="nav-item l master">
+<li class="nav-item l  master">
     <a class="nav-link k collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-        aria-expanded="true" aria-controls="collapseTwo" style="color: black;">
-        <i class="fas fa-fw fa-clipboard-list" style="font-size:20px; color:black;"></i>
-        <span><b>Master</b></span>
+        aria-expanded="true" aria-controls="collapseTwo" style="color: white;">
+        <i class="fas fa-fw fa-clipboard-list" style="font-size:16px"></i>
+        <span>Master</span>
     </a>
     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item" href="customer.php" style="color: black;"><b>Customer</b></a>
-            <a class="collapse-item" href="employee.php" style="color: black;"><b>Employee</b></a>
-            <a class="collapse-item" href="designation.php" style="color: black;"><b>Designation</b></a>
-            <a class="collapse-item" href="projecttype.php" style="color: black;"><b>Project Type</b></a>
+            <a class="collapse-item " href="customer.php" style="color: black;">Customer</a>
+            <a class="collapse-item " href="employee.php" style="color: black;">Employee</a>
+            <a class="collapse-item" href="designation.php" style="color: black;">Designation</a>
+            <a class="collapse-item" href="projecttype.php" style="color: black;">Project Type</a>
         </div>
     </div>
-</li>
-
+</li> 
+<!-- Divider -->
+<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 <!-- Nav Item - Project Creation -->
 <li class="nav-item l">
     <a class="nav-link k" href="projectcreation.php" style="color: black;">
-        <i class="fas fa-fw fa-folder" style="font-size:20px"></i>
-        <span><b>Project Creation</b></span>
+        <i class="fas fa-fw fa-folder" style="font-size:16px"></i>
+        <span>Project Creation</span>
     </a>
 </li>
-
+<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 <!-- Nav Item - Daily Updates -->
 <li class="nav-item l">
     <a class="nav-link k" href="dailyupdates.php" style="color: black;">
-        <i class="fas fa-fw fa-table" style="font-size:20px"></i>
-        <span><b>Daily Updates</b></span>
+        <i class="fas fa-fw fa-table" style="font-size:16px"></i>
+        <span>Daily Update</span>
     </a>
 </li>
-
+<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 <!-- Nav Item - Work Reports -->
-<li class="nav-item l">
-    <a class="nav-link k" href="reports.php" style="color: black;">
-        <i class="fas fa-fw fa-chart-area" style="font-size:20px"></i>
-        <span><b>Work Reports</b></span>
-    </a>
-</li>
-<li class="nav-item l">
-    <a class="nav-link k" href="companyreport.php" style="color: black;">
-        <i class="fas fa-fw fa-chart-area" style="font-size:20px"></i>
-        <span><b>Company report</b></span>
-    </a>
-</li>
 <li class="nav-item l active">
-    <a class="nav-link k" href="employeereport.php" style="color: black;">
-        <i class="fas fa-fw fa-chart-area" style="font-size:20px"></i>
-        <span><b>Employee report</b></span>
+    <a class="nav-link k" href="reports.php" style="color: black;">
+        <i class="fas fa-fw fa-chart-area" style="font-size:16px"></i>
+        <span>Work Reports</span>
     </a>
-</li>
-<hr class=" d-none d-md-block">
+</li><br>
+<!-- Divider -->
+<div class="sidebar-divider d-none d-md-block"></div>
 <!-- Sidebar Toggler -->
 <div class="text-center d-none d-md-inline">
     <button class="rounded-circle side border-0" id="sidebarToggle"></button>
 </div>
-
 </ul>
 
 <style>

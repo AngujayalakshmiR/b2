@@ -356,6 +356,8 @@
     <div class="sidebar-brand-icon" style='font-size:19px'>KTG</div>
     <div class="sidebar-brand-text mx-2" style='font-size:19px'>DASHBOARD</div>
 </a>
+<hr class="sidebar-divider my-0">
+
 <!-- Divider -->
 <div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 <!-- Nav Item - Dashboard -->
@@ -414,7 +416,7 @@
         <i class="fas fa-fw fa-chart-area" style="font-size:16px"></i>
         <span>Work Reports</span>
     </a>
-</li>
+</li><br>
 <!-- Divider -->
 <div class="sidebar-divider d-none d-md-block"></div>
 <!-- Sidebar Toggler -->

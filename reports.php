@@ -26,14 +26,13 @@
     }    
 #dataTable th:nth-child(1), #dataTable td:nth-child(1) { width: 2%; }  /* S.no */
     #dataTable th:nth-child(2), #dataTable td:nth-child(2) { width: 8%; } /* Name */
-    #dataTable th:nth-child(3), #dataTable td:nth-child(3) { width: 13%; } /* Date */
-    #dataTable th:nth-child(4), #dataTable td:nth-child(4) { width: 10%; } /* Company */
-    #dataTable th:nth-child(5), #dataTable td:nth-child(5) { width: 20%; } /* Project Title */
-    #dataTable th:nth-child(6), #dataTable td:nth-child(6) { width: 10%; }  /* Total Days */
+    #dataTable th:nth-child(3), #dataTable td:nth-child(3) { width: 12%; } /* Date */
+    #dataTable th:nth-child(4), #dataTable td:nth-child(4) { width: 15%; } /* Company */
+    #dataTable th:nth-child(5), #dataTable td:nth-child(5) { width: 10%; } /* Project Title */
+    #dataTable th:nth-child(6), #dataTable td:nth-child(6) { width: 20%; }  /* Total Days */
     #dataTable th:nth-child(7), #dataTable td:nth-child(7) { width: 12%; } /* Description */
     #dataTable th:nth-child(8), #dataTable td:nth-child(8) { width: 12%; } /* Total Time */
     #dataTable th:nth-child(9), #dataTable td:nth-child(9) { width: 16%; } /* Actual Time */
-    #dataTable th:nth-child(10), #dataTable td:nth-child(10) { width: 9%; } /* Status */
         /* Gradient background for thead */
         thead  {
             
@@ -455,6 +454,8 @@
     <div class="sidebar-brand-icon" style='font-size:19px'>KTG</div>
     <div class="sidebar-brand-text mx-2" style='font-size:19px'>DASHBOARD</div>
 </a>
+<hr class="sidebar-divider my-0">
+
 <!-- Divider -->
 <div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 <!-- Nav Item - Dashboard -->
@@ -671,6 +672,7 @@
       transform: scale(1.05);
     }
 </style>
+
       <!-- Employee Report Card -->
       <div class="card shadow mb-4" id="employeeReport">
         <div class="card-header py-3 ">
@@ -694,14 +696,13 @@
         <div class="card-body">
           <div class="table-responsive">
             <!-- Employee Report Table -->
-            <table class="table table-bordered text-center" style="font-size: 13px;" id="dataTable" width="100%" cellspacing="0">
+            <table class="table table-bordered text-center" style="font-size: 14px;" id="dataTable" width="100%" cellspacing="0">
               <thead>
                 <tr class="thead">
                   <th>S.no</th>
                   <th>Name</th>
                   <th>Date</th>
                   <th>Company</th>
-                  <th>Title</th>
                   <th>Type</th>
                   <th>Description</th>
                   <th>Total Hrs</th>
@@ -715,8 +716,7 @@
                   <td>1</td>
                   <td>Surya</td>
                   <td>10-02-2025</td>
-                  <td>Govin</td>
-                  <td>ABC</td>
+                  <td>Govin-ABC</td>
                   <td>Web Application</td>
                   <td>XYZ</td>
                   <td>6</td>
@@ -727,8 +727,7 @@
                   <td>2</td>
                   <td>Naveen</td>
                   <td>11-02-2025</td>
-                  <td>Kurinji</td>
-                  <td>xyz</td>
+                  <td>Kurinji-XYZ</td>
                   <td>Mobile Application</td>
                   <td>aaa</td>
                   <td>4</td>
@@ -739,8 +738,7 @@
                   <td>3</td>
                   <td>Pavithra</td>
                   <td>12-02-2025</td>
-                  <td>xxx</td>
-                  <td>KMN</td>
+                  <td>xxx-KMN</td>
                   <td>Web Application</td>
                   <td>bbb</td>
                   <td>7</td>

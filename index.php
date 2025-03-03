@@ -456,7 +456,7 @@
         <i class="fas fa-fw fa-clipboard-list" style="font-size:16px"></i>
         <span>Master</span>
     </a>
-    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar" style="z-index: 1000;">
         <div class="bg-white py-2 collapse-inner rounded">
             <a class="collapse-item " href="customer.php" style="color: black;">Customer</a>
             <a class="collapse-item " href="employee.php" style="color: black;">Employee</a>

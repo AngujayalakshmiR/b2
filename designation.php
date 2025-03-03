@@ -26,6 +26,9 @@
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <style>
+        thead{
+            color:black;
+        }
         /* Center align action buttons */
         .action-buttons {
             display: flex;
@@ -280,16 +283,16 @@
     color: white;
 }
 /* Style for the table header (thead) */
-#dataTable thead {
+/* #dataTable thead {
     color: rgb(140, 147, 159);
     font-weight: 1; 
     font-style: normal;
     text-overflow: ellipsis;
     white-space: nowrap;
-}
+} */
 
 /* Style for table data (td) */
-#dataTable tbody td {
+/* #dataTable tbody td {
     font-style: normal;
     overflow: hidden;
     line-height: 1rem;
@@ -297,13 +300,13 @@
     color: rgb(23, 25, 28);
     font-size: 14px;
     font-weight: 400;
-    padding: 10px; /* Adds spacing inside cells */
-}
+    padding: 10px;
+} */
 
 /* Style for icons in the status column */
-#dataTable tbody td i {
+/* #dataTable tbody td i {
     color: rgb(0, 148, 255);
-}
+} */
 /* Counter styling similar to .bpKSTa .header-counter */
 .header-counter {
     margin-left: 2px;
@@ -501,10 +504,10 @@
            <div class="row">
     <div class="col-12">
         <form class="row g-10" >
-            <div class="col-md-8 pt-3 d-flex align-items-center">
+            <div class="col-md-8 pt-2 d-flex align-items-center">
                 <input type="text" class="form-control mb-2" id="designationtype" name="designationtype" placeholder="Enter Designation" required>
             </div>
-            <div class="col-md-4 pt-2 d-flex justify-content-center align-items-center">
+            <div class="col-md-4 pt-2 pb-2 d-flex justify-content-center align-items-center">
                 <button type="submit" class="btn" style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: 190px;">
                     <i class="fas fa-briefcase"></i>&nbsp; Add Designation
                 </button>
@@ -512,6 +515,8 @@
         </form>
     </div>
 </div>
+
+
     </div>
 
 <!-- DataTales Example -->
@@ -532,7 +537,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-        <table class="table table-bordered text-center" id="dataTable" width="100%" cellspacing="0">
+        <table class="table table-bordered text-center" style="font-size:14px;" id="dataTable" width="100%" cellspacing="0">
     <thead>
         <tr class="thead">
             <th>S.no</th>

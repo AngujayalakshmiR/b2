@@ -20,6 +20,9 @@
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
 <style>
+    thead{
+        color:black;
+    }
     #dataTable th:nth-child(1), #dataTable td:nth-child(1) { width: 2%; }  /* S.no */
 #dataTable th:nth-child(2), #dataTable td:nth-child(2) { width: 12%; } /* Name */
 #dataTable th:nth-child(3), #dataTable td:nth-child(3) { width: 12%; } /* Date */
@@ -724,16 +727,16 @@ tbody{
 }
 
 /* Style for the table header (thead) */
-#dataTable thead {
+/* #dataTable thead {
     color: rgb(140, 147, 159);
     font-weight: 1; 
     font-style: normal;
     text-overflow: ellipsis;
     white-space: nowrap;
-}
+} */
 
 /* Style for table data (td) */
-#dataTable tbody td {
+/* #dataTable tbody td {
     font-style: normal;
     overflow: hidden;
     line-height: 1rem;
@@ -741,8 +744,7 @@ tbody{
     color: rgb(23, 25, 28);
     font-size: 14px;
     font-weight: 400;
-    padding: 10px; /* Adds spacing inside cells */
-}
+    padding: 10px; } */
 
 /* Style for icons in the status column */
 #dataTable tbody td i {
@@ -929,14 +931,14 @@ tbody{
                         </div>
                         <div class="card-body">
                             <div class="table-responsive ">
-                            <table class="table text-center" id="dataTable" width="100%">
+                            <table class="table text-center" style="font-size:14px;" id="dataTable" width="100%">
     <thead>
         <tr>
             <th>S.no</th>
             <th>Date</th>
             <th>Company</th>
             <th>Title</th>
-            <th>Total Days</th>
+            <th>Days</th>
             <th>Description</th>
             <th>Total Hrs</th>
             <th>Actual Hrs</th>

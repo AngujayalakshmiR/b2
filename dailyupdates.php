@@ -574,7 +574,7 @@ tbody{
         <tr data-name="Surya" data-company="ABC Corp">
             <td>1</td>
             <td class="name-column">Surya</td>
-            <td>18-02-2025</td>
+            <td>03-03-2025</td>
             <td class="company-column">ABC Corp</td>
             <td>The project requires inbuilt updations and notifications.</td>
             <td>5</td>
@@ -586,7 +586,7 @@ tbody{
         <tr data-name="Pavithra" data-company="ABC Corp">
             <td>2</td>
             <td class="name-column">Pavithra</td>
-            <td>18-02-2025</td>
+            <td>03-03-2025</td>
             <td class="company-column">ABC Corp</td>
             <td>The project requires inbuilt updations and notifications.</td>
             <td>5</td>

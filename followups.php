@@ -532,7 +532,7 @@
     
     <!-- Button to Open Modal (Responsive) -->
     <button class="btn add d-flex align-items-center  plus-button mb-2 mb-md-0" 
-        data-toggle="modal" data-target="#designationModal">
+        data-toggle="modal" data-target="#designationModal" style="color: white;">
         <i class="fa-solid fa-plus fa-1x plus-icon"></i>&nbsp;
         Add
     </button>

@@ -1,57 +1,3 @@
-<?php
-// Database Connection
-$host = 'localhost';
-$user = 'root';
-$pass = '';
-$db = 'ktg';
-$conn = new mysqli($host, $user, $pass, $db, 3307);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Handle form submission
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $designationtype = trim($_POST['designationtype']); // Prevent SQL injection
-
-    if (!empty($designationtype)) {
-        // Prepare SQL Query
-        $stmt = $conn->prepare("INSERT INTO designation (designationtype) VALUES (?)");
-        $stmt->bind_param("s", $designationtype);
-
-        if ($stmt->execute()) {
-            echo "<script>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: 'Designation added successfully!',
-                    confirmButtonColor: '#04aaaafa'
-                }).then(() => {
-                    window.location.href = 'designation.php'; // Refresh page after success
-                });
-            </script>";
-        } else {
-            echo "<script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'Failed to add designation. Please try again!',
-                    confirmButtonColor: '#04aaaafa'
-                }).then(() => {
-                    window.history.back(); 
-                });
-            </script>";
-        }
-
-        $stmt->close();
-    }
-}
-
-// Fetch data from the table
-$sql = "SELECT * FROM designation";
-$result = $conn->query($sql);
-?>
 
 
 
@@ -554,7 +500,7 @@ $result = $conn->query($sql);
            <div class="container custom-container mb-4 mt-4" style="background: white; border-radius: 25px; border: 2px solid rgb(0, 148, 255);">
            <div class="row">
     <div class="col-12">
-        <form class="row g-10" method="POST" action="designation.php">
+        <form class="row g-10" >
             <div class="col-md-8 pt-3 d-flex align-items-center">
                 <input type="text" class="form-control mb-2" id="designationtype" name="designationtype" placeholder="Enter Designation" required>
             </div>
@@ -595,20 +541,21 @@ $result = $conn->query($sql);
         </tr>
     </thead>
     <tbody id="designation_table">
-        <?php
-        $count = 1;
-        while ($row = $result->fetch_assoc()) {
-            echo "<tr id='row_{$row['id']}'>
-                    <td>{$count}</td> 
-                    <td class='designation-text' data-id='{$row['id']}'>{$row['designationtype']}</td>
-                    <td>
-                        <button class='btn btn-warning btn-edit' data-id='{$row['id']}'><i class='fas fa-edit'></i></button>
-                        <button class='btn btn-danger btn-delete' data-id='{$row['id']}'><i class='fas fa-trash-alt'></i></button>
-                    </td>
-                  </tr>";
-            $count++;
-        }
-        ?>
+    <tr class="thead">
+            <td>1</td>
+            <td>Web Designer</td>
+            <td class="action-buttons">
+                            <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
+                            <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
+                        </td>
+        </tr> <tr class="thead">
+            <td>2</td>
+            <td>React Developer</td>
+            <td class="action-buttons">
+                            <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
+                            <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
+                        </td>
+        </tr>
     </tbody>
 </table>
         </div>

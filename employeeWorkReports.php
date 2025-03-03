@@ -544,7 +544,7 @@
         </form>
     </div>
 </li>
-<h4 class="text-dark font-weight-bold mr-4 d-flex align-items-center pl-3 py-2 " style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
+<h4 class="text-dark font-weight-bold mr-1 d-flex align-items-center pl-3 py-2 " style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
 Jayavarshini 
 </h4>
 <div class="topbar-divider d-none d-sm-block"></div>

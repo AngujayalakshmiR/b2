@@ -3,7 +3,6 @@
 
 <head>
 
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -17,7 +16,7 @@
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
-
+        <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
 <style>
@@ -57,7 +56,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  /* font-family: "Poppins", sans-serif; */
 }
 
 .cir {
@@ -362,6 +360,32 @@
 .content1 a:hover {
   letter-spacing: 0.2rem;
 }
+
+/* Counter styling similar to .bpKSTa .header-counter */
+.header-counter {
+    margin-left: 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(0, 148, 255);
+    padding: 2px 5px;
+    font-size: 13px;
+    min-width: 20px;
+    min-height: 20px;
+    font-weight: 500;
+    color: white;
+    border-radius: 100px;
+}
+
+/* Styling for the card header */
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Adjust spacing */
+    padding: 12px 16px;
+    background-color: #f8f9fc;
+}
+
 </style>
 </head>
 
@@ -374,7 +398,7 @@
         <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background: white;">
 
 <!-- Sidebar - Brand -->
-<a class="sidebar-brand d-flex align-items-center justify-content-center" href="employeedash.php">
+<a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
     <div class="sidebar-brand-icon" style='font-size:20px'><b>KTG</b></div>
     <div class="sidebar-brand-text mx-2" style='font-size:20px'><b>DASHBOARD</b></div>
 </a>
@@ -384,27 +408,19 @@
 
 <!-- Nav Item - Dashboard -->
 <li class="nav-item active l">
-    <a class="nav-link k" href="employeedash.php" style="color: white;">
+    <a class="nav-link k" href="index.php" style="color: white;">
         <i class="fas fa-fw fa-tachometer-alt" style="font-size:20px"></i>
         <span><b>Dashboard</b></span>
     </a>
 </li>
-
-
-<!-- Divider -->
-<hr class="sidebar-divider" style="margin-bottom: 0px;">
-
-<!-- Nav Item - Project Creation -->
-<li class="nav-item l">
-    <a class="nav-link k" href="employeeProjectAllocated.php" style="color: black;">
+<li class="nav-item l ">
+    <a class="nav-link k" href="employeeProjectAllocated.php" style="color: white;">
         <i class="fas fa-fw fa-folder" style="font-size:20px"></i>
         <span><b>Project Allocated</b></span>
     </a>
 </li>
 
-<hr class="sidebar-divider" style="margin-bottom: 0px;">
-
-<!-- Nav Item - Daily Updates -->
+<!-- Nav Item - Project Creation -->
 <li class="nav-item l">
     <a class="nav-link k" href="employeeWorkReports.php" style="color: black;">
         <i class="fas fa-fw fa-table" style="font-size:20px"></i>
@@ -414,8 +430,7 @@
 
 
 <!-- Divider -->
-<hr class="sidebar-divider d-none d-md-block">
-
+<hr class=" d-none d-md-block">
 <!-- Sidebar Toggler -->
 <div class="text-center d-none d-md-inline">
     <button class="rounded-circle side border-0" id="sidebarToggle"></button>
@@ -500,106 +515,7 @@
 
 
 <style>
-    .sidebar-brand-icon, .sidebar-brand-text {
-        font-size: large;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
-        -webkit-background-clip: text; /* Clip background to text */
-        -webkit-text-fill-color: transparent; /* Make text color transparent to show gradient */
-        font-weight: bold; /* Optional: Makes text more prominent */
-    }
-    /* Sidebar background */
-    .sidebar {
-        background-color: white !important;
-        width: 250px; /* Adjust according to sidebar width */
-    }
-
-    /* Sidebar link styles */
-    .l a.k{
-        color: #333 !important; /* Dark text */
-        border-radius: 8px; /* Rounded corners */
-        transition: all 0.3s ease-in-out;
-        padding: 12px 15px;
-        font-size: 16px; /* Increased font size */
-        display: flex;
-        align-items: center;
-        gap: 10px; /* Space between icon and text */
-        width: 85%; /* Ensure links don’t take full width */
-        margin: 0 auto; /* Center align */
-    }
-
-    /* Ensure icons are black */
-    .l a.k i {
-        color: black !important;
-        font-size: 18px; /* Slightly larger icons */
-        transition: color 0.3s ease-in-out;
-    }
-
-    /* Hover effect (only for non-active items) */
-    .l:not(.active) a.k:hover {
-        background-color: #f0f0f0 !important; /* Light grey */
-        color: #000 !important; /* Dark text */
-        border-radius: 8px;
-        width: 90%; /* Keep it smaller than the sidebar */
-        margin: 0 auto; /* Center align */
-    }
-
-    /* Keep icons black on hover for non-active items */
-    .l:not(.active) a.k:hover i {
-        color: black !important;
-    }
-
-    /* Active item style */
-    .l.active {
-        width: 90%;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
-        border-radius: 8px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-        transform: scale(1.02); /* Slight lift effect */
-        margin: 0 auto; /* Center align */
-    }
    
-    /* Active item text & icon color */
-    .l.active a.k{
-        color: white !important;
-    }
-
-    /* Ensure icons turn white inside active links */
-    .l.active a.k i {
-        color: white !important;
-    }
-    footer{
-        background:linear-gradient(to right, #4568dc, #b06ab3);
-        color:white;
-        padding:15px;
-    }
-    .master.active{
-        width: 90%;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
-        color:white;
-        border-radius: 8px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-        transform: scale(1.02); /* Slight lift effect */
-        margin: 0 auto; /* Center align */
-    }
-    .master.active.collapse{
-        background:white;
-        border-radius: 8px;
-
-    }
-    .collapse{
-        background:	#F8F8F8;
-        border-radius: 10px;
-        color:white;
-    }
-    .collapse-item.active{
-        width: 90%;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
-        color:white;
-        border-radius: 8px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-        transform: scale(1.02); /* Slight lift effect */
-        margin: 0 auto; /* Center align */
-    }
 
     .custom-card {
         background: linear-gradient(45deg, rgba(255, 99, 71, 0.8), rgba(255, 165, 0, 0.8));
@@ -618,7 +534,7 @@
     }
 
     .pending-card {
-        background: linear-gradient(45deg,rgb(226, 25, 58), #ff7eb3);
+        background: linear-gradient(45deg, #ff758c, #ff7eb3);
     }
 
     .ongoing-card {
@@ -628,6 +544,197 @@
     .completed-card {
         background: linear-gradient(45deg, #56ab2f, #a8e063);
     }
+
+    .sidebar-brand-icon, .sidebar-brand-text {
+        font-size: large;
+        background: white;
+        -webkit-background-clip: text; /* Clip background to text */
+        -webkit-text-fill-color: transparent; /* Make text color transparent to show gradient */
+        font-weight: bold; /* Optional: Makes text more prominent */
+    }
+    /* Sidebar background */
+    .sidebar {
+        background-color: rgb(15,29,64) !important;
+        width: 250px; /* Adjust according to sidebar width */
+    }
+
+    /* Sidebar link styles */
+    .l a.k{
+        color: white !important; /* Dark text */
+        border-radius: 8px; /* Rounded corners */
+        transition: all 0.3s ease-in-out;
+        padding: 12px 15px;
+        font-size: 16px; /* Increased font size */
+        display: flex;
+        align-items: center;
+        gap: 10px; /* Space between icon and text */
+        width: 85%; /* Ensure links don’t take full width */
+        margin: 0 auto; /* Center align */
+    }
+
+    /* Ensure icons are black */
+    .l a.k i {
+        color: white !important;
+        font-size: 18px; /* Slightly larger icons */
+        transition: color 0.3s ease-in-out;
+    }
+
+
+    /* Hover effect (only for non-active items) */
+    .l:not(.active)  a.k:hover {
+        background-color: rgb(45, 64, 113) !important; /* Light grey */
+        color: white !important; /* Dark text */
+        border-radius: 8px;
+        width: 90%; /* Keep it smaller than the sidebar */
+        margin: 0 auto; /* Center align */
+    }
+
+    /* Keep icons black on hover for non-active items */
+    .l:not(.active) a.k:hover i {
+        color: white !important;
+    }
+
+    /* Active item style */
+    .l.active {
+        background-color: rgb(45, 64, 113) !important; /* Light grey */
+        color: white !important; /* Dark text */
+        border-radius: 8px;
+        width: 90%; /* Keep it smaller than the sidebar */
+        margin: 0 auto; /* Center align */
+        padding:1px;
+    }
+    .collapse-item.active{
+        width: 90%;
+        background:white;
+        color:white;
+        border-radius: 8px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        transform: scale(1.02); /* Slight lift effect */
+        margin: 0 auto; /* Center align */
+    }
+    /* Active item text & icon color */
+    .l.active a.k{
+        color: white !important;
+    }
+
+    /* Ensure icons turn white inside active links */
+    .l.active a.k i {
+        color:white !important;
+    }
+    footer {
+    background: white;
+    color: rgb(15,29,64);
+    padding: 15px;
+    box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.1); /* Negative Y value for top shadow */
+}
+
+    .master.active{
+        width: 90%;
+        background: white;
+        color:white;
+        border-radius: 8px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        transform: scale(1.02); /* Slight lift effect */
+        margin: 0 auto; /* Center align */
+    }
+    .master.active.collapse{
+        background:white;
+        border-radius: 8px;
+
+    }
+    .collapse{
+        background:#F8F8F8;
+        border-radius: 10px;
+        color:white;
+    }
+    .collapse-item.active{
+        width: 90%;
+        background: rgb(45, 64, 113);
+        color:white;
+        border-radius: 8px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        transform: scale(1.02); /* Slight lift effect */
+        margin: 0 auto; /* Center align */
+    }
+    .action-buttons button {
+      margin: 0 5px;
+    }
+    /* Optional: Change cursor for clickable rows */
+    #dataTable tbody tr {
+      cursor: pointer;
+    }
+    .sidebar-dark .nav-item .nav-link[data-toggle="collapse"]:hover::after {
+    color: white;
+}
+ /* Styling for the modal */
+ .bo::before {
+    background: rgb(45, 64, 113);
+ }
+ @media (max-width: 460px) {
+    .hide-below-460 {
+        display: none !important; /* Completely removes the element from the layout */
+    }
+    .square-box {
+        display: flex;  /* Show the square-box */
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        padding: 20px;
+        background-color: #f8f9fc;
+        border-radius: 25px;
+        border: 1px solid #f8f9fc;
+    }
+    .square-box .stats-box {
+        width: calc(50% - 10px); /* 2 items per row */
+        padding-left: 15px;
+        padding-right: 15px;
+        text-align: center;
+        background-color: rgb(45, 64, 113);
+        color: white;
+        border-radius: 15px;
+    }
+}
+/* Hide the section in desktop view */
+@media (min-width: 461px) {  
+    .square-box {
+        display: none !important;
+    }
+}
+
+/* Show the section in mobile view */
+@media (max-width: 460px) {  
+    .hide-below-460 {
+        display: none !important; /* Remove from layout */
+    }
+    
+}
+
+/* Style for the table header (thead) */
+#dataTable thead {
+    color: rgb(140, 147, 159);
+    font-weight: 1; 
+    font-style: normal;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Style for table data (td) */
+#dataTable tbody td {
+    font-style: normal;
+    overflow: hidden;
+    line-height: 1rem;
+    text-overflow: ellipsis;
+    color: rgb(23, 25, 28);
+    font-size: 14px;
+    font-weight: 400;
+    padding: 10px; /* Adds spacing inside cells */
+}
+
+/* Style for icons in the status column */
+#dataTable tbody td i {
+    color: rgb(0, 148, 255);
+}
+
 </style>
 
         <!-- End of Sidebar -->
@@ -639,12 +746,17 @@
             <div id="content">
 
                 <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style=" background:linear-gradient(to right, #b06ab3, #4568dc);">
-
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style=" background:white;">
+                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
+                <div class="mr-auto d-flex align-items-center pl-3 py-2">
+
+    <h4 class="text-dark font-weight-bold mr-4" style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
+        Dashboard
+    </h4></div>
+                    <!-- Sidebar Toggle (Topbar) -->
+                   
 
                    
 
@@ -674,7 +786,9 @@
                                 </form>
                             </div>
                         </li>
-
+                        <h4 class="text-dark font-weight-bold mr-4 d-flex align-items-center pl-3 py-2 " style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
+        Jayavarshini 
+    </h4>
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
@@ -682,7 +796,7 @@
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <img class="img-profile rounded-circle"
-                                    src="img/profile.png" style="width: 3rem;height: 3rem;">
+                                    src="img/p.png" style="width: 2rem;height: 2rem;">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -703,330 +817,152 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
-                    <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+<div class="card hide-below-460" style="background-color:#f8f9fc;border-radius:25px;border:1px solid #f8f9fc;">
+    <div class="row">
+        
+        <div class="col-6 col-md-3 col-sm-6 my-1">
+            <div class="cir">
+                <div class="bo">
+                    <div class="content1">
+                        <div class="stats-box text-center p-3" style="background-color:rgb(45, 64, 113);">
+                            <i class="fas fa-file m-b-5 font-20"></i>
+                            <h1 class="m-b-0 m-t-5">10</h1>
+                            <small class="font-light">Total Projects</small>
+                        </div>
                     </div>
-
-                    <!-- Content Row -->
-                    <div class="row"> 
-                    <div class="col-lg-3 mb-4">
-        <div class="card custom-card pending-card text-white shadow">
-            <div class="card-body" style="font-size: x-large;"><b>NAME</b>
-                <div style="font-size: 20px;">JayaVarshini</div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-lg-3 mb-4">
-        <div class="card custom-card total-card text-white shadow">
-            <div class="card-body" style="font-size: x-large;"><b>TOTAL</b>
-                <div style="font-size: 20px;">100</div>
+        <div class="col-6 col-md-3 col-sm-6 my-1">
+            <div class="cir">
+                <div class="bo">
+                    <div class="content1">
+                        <div class="stats-box text-center p-3" style="background-color:rgb(45, 64, 113);">
+                            <i class="fas fa-exclamation m-b-5 font-16"></i>
+                            <h1 class="m-b-0 m-t-5">4</h1>
+                            <small class="font-light">Pending Projects</small>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-lg-3 mb-4">
-        <div class="card custom-card  ongoing-card text-white shadow">
-            <div class="card-body" style="font-size: x-large;"><b>PENDING</b>
-                <div style="font-size: 20px;">40</div>
+        <div class="col-6 col-md-3 col-sm-6 my-1">
+            <div class="cir">
+                <div class="bo">
+                    <div class="content1">
+                        <div class="stats-box text-center p-3" style="background-color:rgb(45, 64, 113);">
+                            <i class="fas fa-check m-b-5 font-20"></i>
+                            <h1 class="m-b-0 m-t-5">6</h1>
+                            <small class="font-light">Ongoing Projects</small>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-lg-3 mb-4">
-        <div class="card custom-card completed-card text-white shadow">
-            <div class="card-body" style="font-size: x-large;"><b>ONGOING</b>
-                <div style="font-size: 20px;">20</div>
+        <div class="col-6 col-md-3 col-sm-6 my-1">
+            <div class="cir">
+                <div class="bo">
+                    <div class="content1">
+                        <div class="stats-box text-center p-3" style="background-color:rgb(45, 64, 113);">
+                            <i class="fas fa-bell m-b-5 font-20"></i>
+                            <h1 class="m-b-0 m-t-5">2</h1>
+                            <small class="font-light">Today Updates</small>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- 
-<div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title m-b-0"></h4><br>
-                        <div class="row">
-                            <div class="col-12 col-md-3 mb-3">
-                                <div class="cir">
-                                    <div class="bo">
-                                        <div class="content1">
-                                            <div class="stats-box text-center p-3"
-                                                style="background-color:rgb(252, 119, 71);">
-                                                <i class="fas fa-bell m-b-5 font-20"></i>
-                                                <h1 class="m-b-0 m-t-5">10</h1>
-                                                <small class="font-light">Task Completed</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-3 mb-3">
-                                <div class="cir">
-                                    <div class="bo">
-                                        <div class="content1">
-                                            <div class="stats-box text-center p-3"
-                                                style="background-color:rgb(241, 74, 74);">
-                                                <i class="fas fa-exclamation m-b-5 font-16"></i>
-                                                <h1 class="m-b-0 m-t-5">20</h1>
-                                                <small class="font-light">New Tasks</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-3 mb-3">
-                                <div class="cir">
-                                    <div class="bo">
-                                        <div class="content1">
-                                            <div class="stats-box text-center p-3"
-                                                style="background-color:rgb(70, 160, 70);">
-                                                <i class="fas fa-check m-b-5 font-20"></i>
-                                                <h1 class="m-b-0 m-t-5">30</h1>
-                                                <small class="font-light">Task in progress</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-3 mb-3">
-                                <div class="cir">
-                                    <div class="bo">
-                                        <div class="content1">
-                                            <div class="stats-box text-center p-3"
-                                                style="background-color: rgb(187, 187, 35);">
-                                                <i class="fas fa-redo m-b-5 font-20"></i>
-                                                <h1 class="m-b-0 m-t-5">50</h1>
-                                                <small class="font-light">Tasks waiting for approval</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+<!-- Square box (visible below 460px) -->
+<div class="square-box">
+    <div class="stats-box">
+        <i class="fas fa-file" style="font-size: 20px;"></i>
+        <h1 style="font-size: 20px;">100</h1>
+        <small>Total Projects</small>
+    </div>
+    <div class="stats-box">
+        <i class="fas fa-exclamation" style="font-size: 20px;"></i>
+        <h1 style="font-size: 20px;">20</h1>
+        <small>Pending Projects</small>
+    </div>
+    <div class="stats-box">
+        <i class="fas fa-check" style="font-size: 20px;"></i>
+        <h1 style="font-size: 20px;">30</h1>
+        <small>Ongoing Projects</small>
+    </div>
+    <div class="stats-box">
+        <i class="fas fa-bell" style="font-size: 20px;"></i>
+        <h1 style="font-size: 20px;">2</h1>
+        <small>Today Updates</small>
+    </div>
+</div>
+<br>
+<div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                        <p class="m-0" style="font-size: 16px;color:rgb(23, 25, 28);font-style: normal;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: rgb(23, 25, 28);
+    font-size: 16px;
+    font-weight: 500;"><b>Daily Updates</b> 
+        <span class="header-counter">2</span>  <!-- Counter next to heading -->
+</p>
+                        </div>
+                        <div class="card-body" style="padding: 0px;">
+                            <div class="table-responsive ">
+                            <table class="table text-center" id="dataTable" width="100%">
+                            <colgroup>
+        <col style="width: 5%;">  <!-- S.no -->
+        <col style="width: 12%;">  <!-- Company -->
+        <col style="width: 12%;">  <!-- Title -->
+        <col style="width: 12%;">  <!-- Total Days (Adjusted) -->
+        <col style="width: 14%;">  <!-- Description -->
+        <col style="width: 12%;">  <!-- Total Hrs (Adjusted) -->
+        <col style="width: 12%;">  <!-- Actual Hrs (Adjusted) -->
+        <col style="width: 10%;">  <!-- Status -->
+    </colgroup>
+                            <thead>
+              <tr style="font-family:calibri;">
+                <th>S.no</th>
+                <th>Company</th>
+                <th>Title</th>
+                <th>Total Days</th>
+                <th>Description</th>
+                <th>Total Hrs</th>
+                <th>Actual Hrs</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-name="Surya">
+                <td>1</td>
+                <td>ABC Corp</td>
+                <td>The project requires inbuilt updations and notifications.</td>
+                <td>5</td>
+                <td>I completed half backend work</td>
+                <td>4.5</td>
+                <td>2</td>
+                <td><i class="fas fa-check-circle status-icon completed" style="color: rgb(0, 148, 255);"></i>&nbsp;&nbsp;Completed</td>
+              </tr>
+              <tr data-name="Pavithra">
+                <td>2</td>
+                <td>ABC Corp</td>
+                <td>The project requires inbuilt updations and notifications.</td>
+                <td>5</td>
+                <td>I completed half backend work</td>
+                <td>4.5</td>
+                <td>2</td>
+                <td><i class="fas fa-check-circle status-icon completed" style="color: rgb(0, 148, 255);"></i>&nbsp;&nbsp;Completed</td>
+              </tr>
+            </tbody>
+</table>
                             </div>
                         </div>
                     </div>
-                </div> -->
-                    <!-- Content Row -->
-
-                    <!-- <div class="row">
-
-                        <div class="col-xl-8 col-lg-7">
-                            <div class="card shadow mb-4">
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                            aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Dropdown Header:</div>
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="chart-area">
-                                        <canvas id="myAreaChart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-4 col-lg-5">
-                            <div class="card shadow mb-4">
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                            aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Dropdown Header:</div>
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="chart-pie pt-4 pb-2">
-                                        <canvas id="myPieChart"></canvas>
-                                    </div>
-                                    <div class="mt-4 text-center small">
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-primary"></i> Direct
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-success"></i> Social
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-info"></i> Referral
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-
-                        <div class="col-lg-6 mb-4">
-
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
-                                </div>
-                                <div class="card-body">
-                                    <h4 class="small font-weight-bold">Server Migration <span
-                                            class="float-right">20%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 20%"
-                                            aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <h4 class="small font-weight-bold">Sales Tracking <span
-                                            class="float-right">40%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 40%"
-                                            aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <h4 class="small font-weight-bold">Customer Database <span
-                                            class="float-right">60%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar" role="progressbar" style="width: 60%"
-                                            aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <h4 class="small font-weight-bold">Payout Details <span
-                                            class="float-right">80%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-info" role="progressbar" style="width: 80%"
-                                            aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <h4 class="small font-weight-bold">Account Setup <span
-                                            class="float-right">Complete!</span></h4>
-                                    <div class="progress">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
-                                            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-primary text-white shadow">
-                                        <div class="card-body">
-                                            Primary
-                                            <div class="text-white-50 small">#4e73df</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-success text-white shadow">
-                                        <div class="card-body">
-                                            Success
-                                            <div class="text-white-50 small">#1cc88a</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-info text-white shadow">
-                                        <div class="card-body">
-                                            Info
-                                            <div class="text-white-50 small">#36b9cc</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-warning text-white shadow">
-                                        <div class="card-body">
-                                            Warning
-                                            <div class="text-white-50 small">#f6c23e</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-danger text-white shadow">
-                                        <div class="card-body">
-                                            Danger
-                                            <div class="text-white-50 small">#e74a3b</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-secondary text-white shadow">
-                                        <div class="card-body">
-                                            Secondary
-                                            <div class="text-white-50 small">#858796</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-light text-black shadow">
-                                        <div class="card-body">
-                                            Light
-                                            <div class="text-black-50 small">#f8f9fc</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-dark text-white shadow">
-                                        <div class="card-body">
-                                            Dark
-                                            <div class="text-white-50 small">#5a5c69</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="col-lg-6 mb-4">
-
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Illustrations</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="text-center">
-                                        <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
-                                            src="img/undraw_posting_photo.svg" alt="...">
-                                    </div>
-                                    <p>Add some quality, svg illustrations to your project courtesy of <a
-                                            target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a
-                                        constantly updated collection of beautiful svg images that you can use
-                                        completely free and without attribution!</p>
-                                    <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on
-                                        unDraw &rarr;</a>
-                                </div>
-                            </div>
-
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Development Approach</h6>
-                                </div>
-                                <div class="card-body">
-                                    <p>SB Admin 2 makes extensive use of Bootstrap 4 utility classes in order to reduce
-                                        CSS bloat and poor page performance. Custom CSS classes are used to create
-                                        custom components and custom utility classes.</p>
-                                    <p class="mb-0">Before working with this theme, you should become familiar with the
-                                        Bootstrap framework, especially the utility classes.</p>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div> -->
-
                 </div>
-                <!-- /.container-fluid -->
-
             </div>
             <!-- End of Main Content -->
 
@@ -1070,7 +1006,12 @@
             </div>
         </div>
     </div>
-
+    <!-- Page level plugins -->
+    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <!-- Page level custom scripts -->
+    <script src="js/demo/datatables-demo.js"></script>
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

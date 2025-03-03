@@ -20,6 +20,9 @@
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
 <style>
+      thead  {
+            color: black;
+        }
     .stats-box {
   color: #ffffff;
   text-align: center;

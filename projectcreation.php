@@ -29,6 +29,9 @@
     border-collapse: separate; /* Required for border-radius to work properly */
     border-spacing: 0; /* Removes unwanted gaps */
 }
+thead{
+    color:black;
+}
 /* Rounds top corners */
 .table thead tr:first-child th:first-child {
     border-top-left-radius: 15px;
@@ -236,16 +239,16 @@
 }
  /* Styling for the modal */
 /* Style for the table header (thead) */
-#dataTable thead {
+/* #dataTable thead {
     color: rgb(140, 147, 159);
     font-weight: 1; 
     font-style: normal;
     text-overflow: ellipsis;
     white-space: nowrap;
-}
+} */
 
 /* Style for table data (td) */
-#dataTable tbody td {
+/* #dataTable tbody td {
     font-style: normal;
     overflow: hidden;
     line-height: 1rem;
@@ -253,13 +256,13 @@
     color: rgb(23, 25, 28);
     font-size: 14px;
     font-weight: 400;
-    padding: 10px; /* Adds spacing inside cells */
-}
+    padding: 10px; 
+} */
 
 /* Style for icons in the status column */
-#dataTable tbody td i {
+/* #dataTable tbody td i {
     color: rgb(0, 148, 255);
-}
+} */
 /* Counter styling similar to .bpKSTa .header-counter */
 .header-counter {
     margin-left: 2px;
@@ -493,7 +496,7 @@
         <!-- Left Section (20% width for the button) -->
         <!-- Right Section (80% width for form fields) -->
         <div class="col-md-12">
-            <form id="customerForm" class="row g-3 mt-3">
+            <form id="customerForm" style="font-size:14px;"class="row g-3 mt-3">
                 <!-- Column 1: Name & Company Name -->
                 <div class="col-md-4 pb-1">
                     <select class="form-control mb-2" id="designation">
@@ -667,7 +670,7 @@ document.addEventListener('click', function (event) {
                                 <div class="card-body">
                                     <div class="table-responsive">
           <!-- Note: Each row has a data-pdf attribute with the PDF URL -->
-          <table class="table table-bordered text-center" id="dataTable" width="100%" cellspacing="0">
+          <table class="table table-bordered text-center" id="dataTable" width="100%" style="font-size:14px;" cellspacing="0">
             <thead>
               <tr class="thead">
                 <th>S.no</th>

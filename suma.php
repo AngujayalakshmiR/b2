@@ -455,7 +455,7 @@
       
     <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background: white;">
 <!-- Sidebar - Brand -->
-<a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
+<a class="sidebar-brand d-flex align-items-center justify-content-center" href="employeedash.php">
     <div class="sidebar-brand-icon" style='font-size:19px'>KTG</div>
     <div class="sidebar-brand-text mx-2" style='font-size:19px'>DASHBOARD</div>
 </a>
@@ -583,7 +583,6 @@ Jayavarshini
       padding: 10px;
       border-radius: 5px;
       border: 2px solid #0B3D91;
-      font-size: 16px;
       color: #333;
       background-color: #fff;
       transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -606,11 +605,11 @@ Jayavarshini
     <div class="container-fluid mt-4">
       <!-- Navigation Tabs -->
       <ul class="nav nav-pills custom-nav" id="reportTabs">
-    <li class="nav-item">
+    <!-- <li class="nav-item">
         <a class="nav-link active" id="employeeTab" href="#" onclick="setActiveTab('employee')">
             <i class="fas fa-user"></i> Employee Work Report
         </a>
-    </li>
+    </li> -->
     <!-- <li class="nav-item">
         <a class="nav-link" id="projectTab" href="#" onclick="setActiveTab('project')">
             <i class="fas fa-project-diagram"></i> Project Report
@@ -696,7 +695,7 @@ Jayavarshini
                         <th>S.no</th>
                         <th>Date</th>
                         <th>Company - Title</th>
-                        <th>Task Details</th>
+                        <th>Description</th>
                         <th>Total Hrs</th>
                         <th>Actual Hrs</th>
                         <th>Status</th>
@@ -754,16 +753,13 @@ Jayavarshini
                 // Get the clicked cell
                 const clickedCell = event.target;
 
-                // Check if the clicked column is "Name" or "Company"
-                const nameCell = row.cells[1]; // "Name" column (index 1)
-                const companyCell = row.cells[3]; // "Company" column (index 3)
+                // Get the index of the clicked cell
+                const columnIndex = clickedCell.cellIndex;
 
-                if (clickedCell === nameCell) {
-                    const name = nameCell.textContent.trim();
-                    window.location.href = `employeereport.php?name=${encodeURIComponent(name)}`;
-                } else if (clickedCell === companyCell) {
-                    const company = companyCell.textContent.trim();
-                    window.location.href = `companyreport.php?company=${encodeURIComponent(company)}`;
+                // Check if the clicked column is "Company - Title" (index 2)
+                if (columnIndex === 2) {
+                    const companyTitle = clickedCell.textContent.trim();
+                    window.location.href = `companyreport.php?company=${encodeURIComponent(companyTitle)}`;
                 } else {
                     // For other columns, open the PDF file
                     window.open("http://localhost/b2/aadhar.pdf", "_blank");
@@ -772,6 +768,7 @@ Jayavarshini
         });
     });
 </script>
+
 
 
 <script>

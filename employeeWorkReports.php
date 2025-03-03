@@ -1,16 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
     <title>Task Manager</title>
-
     <!-- Custom fonts for this template -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
@@ -27,31 +23,29 @@
           /* Optional: Some spacing and styling for the icon buttons */
     .export-btn {
       margin-left: 15px;
-    }
-        
+    }    
+/* Employee Report Table */
 #dataTable th:nth-child(1), #dataTable td:nth-child(1) { width: 2%; }  /* S.no */
-    #dataTable th:nth-child(2), #dataTable td:nth-child(2) { width: 8%; } /* Name */
-    #dataTable th:nth-child(3), #dataTable td:nth-child(3) { width: 5%; } /* Date */
-    #dataTable th:nth-child(4), #dataTable td:nth-child(4) { width: 10%; } /* Company */
-    #dataTable th:nth-child(5), #dataTable td:nth-child(5) { width: 12%; } /* Project Title */
-    #dataTable th:nth-child(6), #dataTable td:nth-child(6) { width: 15%; }  /* Total Days */
-    #dataTable th:nth-child(7), #dataTable td:nth-child(7) { width: 18%; } /* Description */
-    #dataTable th:nth-child(8), #dataTable td:nth-child(8) { width: 15%; } /* Total Time */
-    #dataTable th:nth-child(9), #dataTable td:nth-child(9) { width: 20%; } /* Actual Time */
-    #dataTable th:nth-child(10), #dataTable td:nth-child(10) { width: 12%; } /* Status */
+#dataTable th:nth-child(2), #dataTable td:nth-child(2) { width: 11%; } /* Name */
+#dataTable th:nth-child(3), #dataTable td:nth-child(3) { width: 18%; } /* Date */
+#dataTable th:nth-child(4), #dataTable td:nth-child(4) { width: 15%; } /* Company */
+#dataTable th:nth-child(5), #dataTable td:nth-child(5) { width: 10%; } /* Project Title */
+#dataTable th:nth-child(6), #dataTable td:nth-child(6) { width: 10%; } /* Total Days */
+#dataTable th:nth-child(7), #dataTable td:nth-child(7) { width: 10%; } /* Description */
+
+
+
         /* Gradient background for thead */
         thead  {
-            background: linear-gradient(to right, #4568dc, #b06ab3);
-            color: white;
+            
+            color: black;
         }
-
         /* Center align action buttons */
         .action-buttons {
             display: flex;
             justify-content: center;
             gap: 10px;
         }
-
         /* Styling for buttons */
         .btn-action {
             border: none;
@@ -59,19 +53,15 @@
             font-size: 18px;
             transition: transform 0.2s ease-in-out;
         }
-
         .btn-action:hover {
             transform: scale(1.2);
         }
-
         .btn-edit {
             color: #28a745;
         }
-
         .btn-delete {
             color: #dc3545;
         }
-
         /* Add Customer Button */
         .add-employee-btn {
             float: right;
@@ -83,51 +73,40 @@
             border-radius: 10px;
             transition: all 0.3s ease-in-out;
         }
-
         .add-employee-btn i {
             margin-right: 5px;
         }
-
         .add-employee-btn:hover {
             background: #0056b3;
             transform: scale(1.1);
         }
-
          /* Modal Header Gradient Background */
     .modal-header {
         background: linear-gradient(to right, #4568dc, #b06ab3);
         color: white;
     }
-
     /* Adjust close button color */
     .modal-header .close {
         color: white;
         opacity: 1;
     }
-
     .modal-header .close:hover {
         color: #f8f9fa;
     }
-
-
     .upload-icon {
     transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
 }
-
 .upload-label:hover .upload-icon {
     transform: scale(1.2);
     color: #007bff;
 }
-
 .upload-icon.bounce {
     animation: bounce 0.5s ease-in-out;
 }
-
 @keyframes bounce {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-5px); }
 }
-
 /* Icon Styling */
 .photo-icon{
     color: #5796d8;
@@ -161,22 +140,22 @@
 
     </style>
 <style>
-    .sidebar-brand-icon, .sidebar-brand-text {
+        .sidebar-brand-icon, .sidebar-brand-text {
         font-size: large;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
+        background: white;
         -webkit-background-clip: text; /* Clip background to text */
         -webkit-text-fill-color: transparent; /* Make text color transparent to show gradient */
         font-weight: bold; /* Optional: Makes text more prominent */
     }
     /* Sidebar background */
     .sidebar {
-        background-color: white !important;
+        background-color: rgb(15,29,64) !important;
         width: 250px; /* Adjust according to sidebar width */
     }
 
     /* Sidebar link styles */
     .l a.k{
-        color: #333 !important; /* Dark text */
+        color: white !important; /* Dark text */
         border-radius: 8px; /* Rounded corners */
         transition: all 0.3s ease-in-out;
         padding: 12px 15px;
@@ -190,15 +169,16 @@
 
     /* Ensure icons are black */
     .l a.k i {
-        color: black !important;
+        color: white !important;
         font-size: 18px; /* Slightly larger icons */
         transition: color 0.3s ease-in-out;
     }
 
+
     /* Hover effect (only for non-active items) */
-    .l:not(.active) a.k:hover {
-        background-color: #f0f0f0 !important; /* Light grey */
-        color: #000 !important; /* Dark text */
+    .l:not(.active)  a.k:hover {
+        background-color: rgb(45, 64, 113) !important; /* Light grey */
+        color: white !important; /* Dark text */
         border-radius: 8px;
         width: 90%; /* Keep it smaller than the sidebar */
         margin: 0 auto; /* Center align */
@@ -206,17 +186,17 @@
 
     /* Keep icons black on hover for non-active items */
     .l:not(.active) a.k:hover i {
-        color: black !important;
+        color: white !important;
     }
 
     /* Active item style */
     .l.active {
-        width: 90%;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
+        background-color: rgb(45, 64, 113) !important; /* Light grey */
+        color: white !important; /* Dark text */
         border-radius: 8px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-        transform: scale(1.02); /* Slight lift effect */
+        width: 90%; /* Keep it smaller than the sidebar */
         margin: 0 auto; /* Center align */
+        padding:1px;
     }
     .collapse-item.active{
         width: 90%;
@@ -234,13 +214,15 @@
 
     /* Ensure icons turn white inside active links */
     .l.active a.k i {
-        color: white !important;
+        color:white !important;
     }
-    footer{
-        background:linear-gradient(to right, #4568dc, #b06ab3);
-        color:white;
-        padding:15px;
-    }
+    footer {
+    background: white;
+    color: rgb(15,29,64);
+    padding: 15px;
+    box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.1); /* Negative Y value for top shadow */
+}
+
     .master.active{
         width: 90%;
         background: linear-gradient(to right, #4568dc, #b06ab3);
@@ -256,20 +238,27 @@
 
     }
     .collapse{
-        background:	#F8F8F8;
+        background:#F8F8F8;
         border-radius: 10px;
         color:white;
     }
     .collapse-item.active{
         width: 90%;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
+        background: rgb(45, 64, 113);
         color:white;
         border-radius: 8px;
         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
         transform: scale(1.02); /* Slight lift effect */
         margin: 0 auto; /* Center align */
     }
-    .sidebar-dark .nav-item .nav-link[data-toggle=collapse]::after:active {
+    .action-buttons button {
+      margin: 0 5px;
+    }
+    /* Optional: Change cursor for clickable rows */
+    #dataTable tbody tr {
+      cursor: pointer;
+    }
+    .sidebar-dark .nav-item .nav-link[data-toggle="collapse"]:hover::after {
     color: white;
 }
 #dataTable {
@@ -444,7 +433,10 @@
     overflow: hidden;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
-
+ .container-fluid, .container-lg, .container-md, .container-sm, .container-xl {
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
+}
  
     /* Additional styling for month dropdowns (if needed, targeting by id) */
     #monthEmployee,
@@ -460,60 +452,53 @@
     <!-- Page Wrapper -->
     <div id="wrapper">
 
-        <!-- Sidebar -->
-        <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background: white;">
-
+      
+    <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background: white;">
 <!-- Sidebar - Brand -->
 <a class="sidebar-brand d-flex align-items-center justify-content-center" href="employeedash.php">
-    <div class="sidebar-brand-icon" style='font-size:20px'><b>KTG</b></div>
-    <div class="sidebar-brand-text mx-2" style='font-size:20px'><b>DASHBOARD</b></div>
+    <div class="sidebar-brand-icon" style='font-size:19px'>KTG</div>
+    <div class="sidebar-brand-text mx-2" style='font-size:19px'>DASHBOARD</div>
 </a>
-
-<!-- Divider -->
 <hr class="sidebar-divider my-0">
 
+<!-- Divider -->
+<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 <!-- Nav Item - Dashboard -->
-<li class="nav-item  l">
+<li class="nav-item l ">
     <a class="nav-link k" href="employeedash.php" style="color: white;">
-        <i class="fas fa-fw fa-tachometer-alt" style="font-size:20px"></i>
-        <span><b>Dashboard</b></span>
+        <i class="fas fa-fw fa-tachometer-alt" style="font-size:16px"></i>
+        <span>Dashboard</span>
     </a>
 </li>
+<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 
 
 <!-- Divider -->
-<hr class="sidebar-divider" style="margin-bottom: 0px;">
-
+<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 <!-- Nav Item - Project Creation -->
 <li class="nav-item l">
     <a class="nav-link k" href="employeeProjectAllocated.php" style="color: black;">
-        <i class="fas fa-fw fa-folder" style="font-size:20px"></i>
-        <span><b>Project Allocated</b></span>
+        <i class="fas fa-fw fa-folder" style="font-size:16px"></i>
+        <span>Project Allocation</span>
     </a>
 </li>
 
-<hr class="sidebar-divider" style="margin-bottom: 0px;">
-
-<!-- Nav Item - Daily Updates -->
+<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
+<!-- Nav Item - Work Reports -->
 <li class="nav-item l active">
     <a class="nav-link k" href="employeeWorkReports.php" style="color: black;">
-        <i class="fas fa-fw fa-table" style="font-size:20px"></i>
-        <span><b>Workreport</b></span>
+        <i class="fas fa-fw fa-chart-area" style="font-size:16px"></i>
+        <span>Work Reports</span>
     </a>
-</li>
-
-
+</li><br>
 <!-- Divider -->
-<hr class="sidebar-divider d-none d-md-block">
-
+<div class="sidebar-divider d-none d-md-block"></div>
 <!-- Sidebar Toggler -->
 <div class="text-center d-none d-md-inline">
     <button class="rounded-circle side border-0" id="sidebarToggle"></button>
 </div>
-
 </ul>
         <!-- End of Sidebar -->
-
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
 
@@ -521,111 +506,92 @@
             <div id="content">
 
                 <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style=" background:linear-gradient(to right, #b06ab3, #4568dc);">
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style=" background:white;">
 
 <!-- Sidebar Toggle (Topbar) -->
 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
     <i class="fa fa-bars"></i>
 </button>
+<div class="mr-auto d-flex align-items-center pl-3 py-2">
+    <h4 class="text-dark font-weight-bold mr-4" style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
+        Work Report
+    </h4></div>
 
 
+   <!-- Topbar Navbar -->
+   <ul class="navbar-nav ml-auto">
 
-<!-- Topbar Navbar -->
-<ul class="navbar-nav ml-auto">
-
-    <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-    <li class="nav-item dropdown no-arrow d-sm-none">
-        <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-search fa-fw"></i>
-        </a>
-        <!-- Dropdown - Messages -->
-        <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-            aria-labelledby="searchDropdown">
-            <form class="form-inline mr-auto w-100 navbar-search">
-                <div class="input-group">
-                    <input type="text" class="form-control bg-light border-0 small"
-                        placeholder="Search for..." aria-label="Search"
-                        aria-describedby="basic-addon2">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" type="button">
-                            <i class="fas fa-search fa-sm"></i>
-                        </button>
-                    </div>
+<!-- Nav Item - Search Dropdown (Visible Only XS) -->
+<li class="nav-item dropdown no-arrow d-sm-none">
+    <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-search fa-fw"></i>
+    </a>
+    <!-- Dropdown - Messages -->
+    <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+        aria-labelledby="searchDropdown">
+        <form class="form-inline mr-auto w-100 navbar-search">
+            <div class="input-group">
+                <input type="text" class="form-control bg-light border-0 small"
+                    placeholder="Search for..." aria-label="Search"
+                    aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button">
+                        <i class="fas fa-search fa-sm"></i>
+                    </button>
                 </div>
-            </form>
-        </div>
-    </li>
+            </div>
+        </form>
+    </div>
+</li>
+<h4 class="text-dark font-weight-bold mr-4 d-flex align-items-center pl-3 py-2 " style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
+Jayavarshini 
+</h4>
+<div class="topbar-divider d-none d-sm-block"></div>
 
-    <div class="topbar-divider d-none d-sm-block"></div>
-
-    <!-- Nav Item - User Information -->
-    <li class="nav-item dropdown no-arrow">
-        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img class="img-profile rounded-circle"
-                src="img/profile.png" style="width: 3rem;height: 3rem;">
+<!-- Nav Item - User Information -->
+<li class="nav-item dropdown no-arrow">
+    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <img class="img-profile rounded-circle"
+            src="img/p.png" style="width: 2rem;height: 2rem;">
+    </a>
+    <!-- Dropdown - User Information -->
+    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+        aria-labelledby="userDropdown">
+        
+        
+        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+            Logout
         </a>
-        <!-- Dropdown - User Information -->
-        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-            aria-labelledby="userDropdown">
-            
-            
-            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                Logout
-            </a>
-        </div>
-    </li>
+    </div>
+</li>
 
 </ul>
 
 </nav>
                 <!-- End of Topbar -->
-
                 <!-- Begin Page Content -->
                 <style>
     /* Export button styling */
     .export-btn {
       margin-left: 15px;
     }
-    
     /* -------------------- Calendar (Date Input) Styling -------------------- */
     input[type="date"] {
       padding: 10px;
       border-radius: 5px;
-      border: 2px solid #4568dc;
-      font-size: 16px;
+      border: 2px solid #0B3D91;
       color: #333;
       background-color: #fff;
       transition: border-color 0.3s ease, box-shadow 0.3s ease;
       width:200px;
     }
     input[type="date"]:focus {
-      border-color: #4568dc;
+      border-color: #0B3D91;
       box-shadow: 0 0 8px rgba(69,104,220,0.6);
       outline: none;
-    }
-    
-    /* -------------------- Month Dropdown Styling -------------------- */
-    select#monthEmployee, select#monthProject {
-      padding: 10px;
-      border-radius: 5px;
-      border: none;
-      font-size: 16px;
-      background: linear-gradient(to right, #4568dc, #b06ab3);
-      color: #fff;
-      font-weight: bold;
-      transition: background 0.3s ease;
-    }
-    select#monthEmployee:focus, select#monthProject:focus {
-      outline: none;
-      box-shadow: 0 0 8px rgba(69,104,220,0.6);
-    }
-    /* Options will appear in a plain style */
-    select#monthEmployee option, select#monthProject option {
-      background-color: #fff;
-      color: #000;
     }
     .filter-group {
     gap: 15px; /* Adjust the value as needed */
@@ -635,162 +601,217 @@
 <body>
   <div class="container-fluid">
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Work Report</h1>
     
     <div class="container-fluid mt-4">
       <!-- Navigation Tabs -->
-      
-  
+      <ul class="nav nav-pills custom-nav" id="reportTabs">
+    <!-- <li class="nav-item">
+        <a class="nav-link active" id="employeeTab" href="#" onclick="setActiveTab('employee')">
+            <i class="fas fa-user"></i> Employee Work Report
+        </a>
+    </li> -->
+    <!-- <li class="nav-item">
+        <a class="nav-link" id="projectTab" href="#" onclick="setActiveTab('project')">
+            <i class="fas fa-project-diagram"></i> Project Report
+        </a>
+    </li> -->
+</ul>
+<style>
+    /* Adjust font size for navigation tabs */
+    .nav-link {
+        font-size: 16px; /* Default font size for larger screens */
+    }
+    /* Media query for smaller screens */
+    @media (max-width: 768px) {
+        .nav-link {
+            font-size: 14px; /* Smaller font size for mobile devices */
+        }
+    }
+</style>
+<style>
+    /* Navigation Styling */
+    .custom-nav .nav-link {
+      background-color: #0B3D91;
+      color: white;
+      border-radius: 50px;
+      margin-right: 15px;
+      font-size: 14px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    .custom-nav .nav-link.active {
+      background-color: rgb(0, 148, 255);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transform: scale(1.1);
+    }
+    .custom-nav .nav-link:hover {
+      background-color: rgb(0, 148, 255);
+      transform: scale(1.05);
+    }
+    .page-item.active .page-link {
+    background: rgb(0, 148, 255);
+}
+
+@media (max-width: 768px) {
+    .export-container {
+        justify-content: center !important; /* Center on mobile */
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    #exportPdfEmployee {
+        position: static !important; /* Remove absolute positioning */
+        width: 100%; /* Make it full width for better mobile UX */
+        max-width: 200px; /* Optional: limit button width */
+    }
+}
+
+
+</style>
+
       <!-- Employee Report Card -->
-      <div class="card shadow mb-4" id="employeeReport">
-        <div class="card-header py-3 ">
-          <!-- First Row: Employee Dropdown Filter and Excel Export -->
-          <div class="d-flex flex-wrap align-items-center justify-content-between filter-group w-100">
-    <!-- Start Date -->
-    <div class="d-flex align-items-center">
-        <span>From:</span>
-        <input type="date" id="startDateEmployee" class="form-control mx-2" style="max-width: 150px;" placeholder="Start Date">
-        <span>To:</span>
-        <input type="date" id="endDateEmployee" class="form-control mx-2" style="max-width: 150px;" placeholder="End Date">
-        <!-- Month Dropdown -->
-        <select id="monthEmployee" class="form-control mx-2" style="max-width: 160px;">
-            <option value="all">All Months</option>
-            <option value="1">January</option>
-            <option value="2">February</option>
-            <option value="3">March</option>
-            <option value="4">April</option>
-            <option value="5">May</option>
-            <option value="6">June</option>
-            <option value="7">July</option>
-            <option value="8">August</option>
-            <option value="9">September</option>
-            <option value="10">October</option>
-            <option value="11">November</option>
-            <option value="12">December</option>
-        </select>
+     
+<div class="card shadow mb-4" id="employeeReport">
+    <div class="card-header py-3">
+        <div class="d-flex flex-wrap align-items-center filter-group">
+            From:
+            <input type="date" id="startDateEmployee" class="form-control" style="max-width: 150px;">
+            To:
+            <input type="date" id="endDateEmployee" class="form-control" style="max-width: 150px;">
+
+            <!-- Export Button -->
+            <div class="d-flex export-container" style="justify-content: flex-end;">
+                <button id="exportPdfEmployee" class="btn btn-danger export-btn" style="background:green;border:green" title="Export to PDF">
+                    <i class="fa fa-file-alt"></i>&nbsp;&nbsp;Generate Report
+                </button>
+
+            </div>
+        </div>
     </div>
-
-    <!-- Excel Export Button (Pushed to End) -->
-    <button id="" class="btn btn-success export-btn" title="Export to Excel">
-        <i class="fa fa-file-excel-o"></i>
-    </button>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered text-center" style="font-size: 14px;" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr class="thead">
+                        <th>S.no</th>
+                        <th>Date</th>
+                        <th>Company - Title</th>
+                        <th>Description</th>
+                        <th>Total Hrs</th>
+                        <th>Actual Hrs</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr>
+                        <td>1</td>
+                        <td>10-02-2025</td>
+                        <td>Govin-ABC</td>
+                        <td>Web Application</td>
+                        <td>6</td>
+                        <td>5</td>
+                        <td>Completed</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>11-02-2025</td>
+                        <td>Kurinji-XYZ</td>
+                        <td>aaa</td>
+                        <td>4</td>
+                        <td>-</td>
+                        <td>Started</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>12-02-2025</td>
+                        <td>xxx-KMN</td>
+                        <td>Web Application</td>
+                        <td>7</td>
+                        <td>8</td>
+                        <td>Completed</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
-
-          <!-- Second Row: Date Range & Month Filters -->
-         
-        </div>
-        <div class="card-body">
-          <div class="table-responsive">
-          <table class="table text-center" id="dataTable" width="100%">
-            <thead>
-                <tr>
-                    <th>S.no</th>
-                    <th>Date</th>
-                    <th>Company-Title</th>
-                    <th>Task Details</th>
-                    <th id="totalHrsHeader">Total Hrs (0)</th>
-                    <th id="actualHrsHeader">Actual Hrs (0)</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody">
-    <tr>
-        <td>1</td>
-        <td>09-02-2025</td>
-        <td>Gowin-ABC</td>
-        <td>UI Work for website</td>
-        <td>10</td>
-        <td>9</td>
-        <td>Completed</td>
-    </tr>
-    <tr>
-        <td>2</td>
-        <td>10-02-2025</td>
-        <td>Gowin-ABC</td>
-        <td>Backend Work for website</td>
-        <td>8</td>
-        <td>-</td>
-        <td>Started</td>
-    </tr>
-</tbody>
-
-        </table>
-          </div>
-        </div>
-      </div>
-  
+      <!-- Project Report Card (Initially Hidden) -->
+      
     </div>
   </div>
 </div>
   <!-- jQuery and Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
   <script>
-    $(document).ready(function() {
-        var originalData = []; // Cache for Employee Report rows
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get all rows from the table
+        const rows = document.querySelectorAll('#dataTable tbody tr');
+        
+        rows.forEach(row => {
+            row.addEventListener('click', function(event) {
+                // Get the clicked cell
+                const clickedCell = event.target;
 
-        // Cache original employee rows
+                // Get the index of the clicked cell
+                const columnIndex = clickedCell.cellIndex;
+
+                // Check if the clicked column is "Company - Title" (index 2)
+                if (columnIndex === 2) {
+                    const companyTitle = clickedCell.textContent.trim();
+                    window.location.href = `companyreport.php?company=${encodeURIComponent(companyTitle)}`;
+                } else {
+                    // For other columns, open the PDF file
+                    window.open("http://localhost/b2/aadhar.pdf", "_blank");
+                }
+            });
+        });
+    });
+</script>
+
+
+
+<script>
+    $(document).ready(function() {
+        var originalData = [];
+
+        // Store original table data
         $("#tableBody tr").each(function() {
             originalData.push($(this).clone());
         });
 
-        // Helper function to parse a date string in dd-mm-yyyy format
+        // Function to parse date in DD-MM-YYYY format
         function parseDate(dateStr) {
             var parts = dateStr.split("-");
             return new Date(parts[2], parts[1] - 1, parts[0]);
         }
 
-        // Function to filter Employee Table based on all criteria
+        // Function to filter Employee Table based on date range
         function filterEmployeeTable() {
             var startDateStr = $("#startDateEmployee").val();
             var endDateStr = $("#endDateEmployee").val();
-            var selectedMonth = $("#monthEmployee").val();
-
             var startDate = startDateStr ? new Date(startDateStr) : null;
             var endDate = endDateStr ? new Date(endDateStr) : null;
 
             var filteredRows = originalData.filter(function(row) {
-                var passes = true;
-
-                // Date filter (Column index 1; format: dd-mm-yyyy)
-                var dateStr = row.find("td:eq(1)").text().trim(); // FIXED INDEX
+                var dateStr = row.find("td:eq(1)").text().trim();
                 var rowDate = parseDate(dateStr);
-
-                if (startDate && rowDate >= startDate) {
-    passes = true;
-}
-
-                if (endDate && rowDate > endDate) {
-                    passes = false;
-                }
-
-                // Month filter
-                if (selectedMonth !== "all") {
-                    if ((rowDate.getMonth() + 1) != selectedMonth) {
-                        passes = false;
-                    }
-                }
-
-                return passes;
+                return (!startDate || rowDate >= startDate) && (!endDate || rowDate <= endDate);
             });
 
             $("#tableBody").empty();
             filteredRows.forEach(function(row, index) {
-                row.find("td:eq(0)").text(index + 1); // Update S.no
+                row.find("td:eq(0)").text(index + 1); // Update serial numbers
                 $("#tableBody").append(row);
             });
         }
 
-        // Attach event listeners for Employee filters
-        $("#startDateEmployee, #endDateEmployee, #monthEmployee").on("change", function() {
-            filterEmployeeTable();
-        });
-
-        // Run filter function on page load
-        filterEmployeeTable();
+        // Attach event listener to date inputs
+        $("#startDateEmployee, #endDateEmployee").on("change", filterEmployeeTable);
     });
 </script>
 
+  
             <!-- End of Main Content -->
 
             <!-- Footer -->
@@ -850,10 +871,110 @@
     <!-- Bootstrap JavaScript -->
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
+<!-- Bootstrap 4.6.0 JavaScript -->
+<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script> -->
+<!-- <script>
+    $(document).ready(function() {
+    let originalData = []; // Store original employee table data
+    let originalProjectData = []; // Store original project table data
 
+    // Store each row as an object in the employee table
+    $("#tableBody tr").each(function() {
+        let rowData = $(this).clone();
+        originalData.push(rowData);
+    });
 
+    // Store each row as an object in the project table
+    $("#projectTable tbody tr").each(function() {
+        let rowData = $(this).clone();
+        originalProjectData.push(rowData);
+    });
+
+    // Employee Report Filtering
+    $("#employeeFilter").change(function() {
+        let selectedEmployee = $(this).val();
+
+        if (selectedEmployee === "all") {
+            $("#tableBody").empty().append(originalData);
+        } else {
+            let filteredRows = originalData.filter(row => 
+                row.find("td:eq(1)").text().trim() === selectedEmployee
+            );
+
+            $("#tableBody").empty();
+            filteredRows.forEach((row, index) => {
+                row.find("td:eq(0)").text(index + 1);
+                $("#tableBody").append(row);
+            });
+        }
+    });
+
+    // Project Report Filtering with normalization
+    $("#projectFilter").change(function() {
+        let selectedProject = $(this).val(); // e.g. "Govin-ABC"
+
+        if (selectedProject === "all") {
+            $("#projectTable tbody").empty().append(originalProjectData);
+        } else {
+            let filteredRows = originalProjectData.filter(row => {
+                // Get the text from the Company-Title column (td:eq(2))
+                let companyTitleText = row.find("td:eq(2)").text().trim(); // e.g. "Govin - ABC"
+                // Normalize by removing all whitespace and converting to lowercase
+                let normalizedText = companyTitleText.replace(/\s+/g, '').toLowerCase();
+                let normalizedSelected = selectedProject.replace(/\s+/g, '').toLowerCase();
+                return normalizedText === normalizedSelected;
+            });
+
+            $("#projectTable tbody").empty();
+            filteredRows.forEach(row => $("#projectTable tbody").append(row));
+        }
+    });
+});
+
+</script> -->
 <script>
+$(document).ready(function() {
+    $('#projectTable').DataTable();
+});
+</script>
+<script>
+    $(document).ready(function() {
+        // Toggle between Employee and Project Reports
+        $("#employeeTab").click(function() {
+            $("#employeeReport").show();
+            $("#projectReport").hide();
+            $(".nav-link").removeClass("active");
+            $(this).addClass("active");
+        });
 
+        $("#projectTab").click(function() {
+            $("#employeeReport").hide();
+            $("#projectReport").show();
+            $(".nav-link").removeClass("active");
+            $(this).addClass("active");
+        });
+
+        // Employee Filter
+        let originalData = $("#tableBody").html(); // Store original table data
+
+        $("#employeeFilter").change(function() {
+            let selectedEmployee = $(this).val();
+            if (selectedEmployee === "all") {
+                $("#tableBody").html(originalData); // Restore original table
+            } else {
+                let filteredRows = "";
+                $("#tableBody tr").each(function(index) {
+                    let employeeName = $(this).find("td:eq(1)").text().trim();
+                    if (employeeName === selectedEmployee) {
+                        $(this).find("td:eq(0)").text(index + 1); // Recalculate S.no
+                        filteredRows += `<tr>${$(this).html()}</tr>`; // Store filtered rows
+                    }
+                });
+                $("#tableBody").html(filteredRows); // Update table with filtered rows
+            }
+        });
+    });
 </script>
 </body>
 

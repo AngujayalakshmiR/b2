@@ -599,7 +599,7 @@ tbody{
                     <input type="text" class="form-control" id="taskInput1" placeholder="Enter Today Task">
                 </div>
                 <div class="col-md-4 col-12">
-                    <input type="text" class="form-control" id="taskInput2" placeholder="Enter Total Hours">
+                    <input type="text" class="form-control" id="taskInput2" placeholder="Enter Total Hrs">
                 </div>
                 <div class="col-md-2 col-12">
                     <button type="submit" class="btn w-100 py-1 text-white" style="background: rgb(0, 148, 255); font-size: 15px;">Add</button>

@@ -22,7 +22,9 @@
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <style>
-
+thead{
+    color:black;
+}
         /* Center align action buttons */
         .action-buttons {
             display: flex;
@@ -278,16 +280,16 @@
 }
 
 /* Style for the table header (thead) */
-#dataTable thead {
+/* #dataTable thead {
     color: rgb(140, 147, 159);
     font-weight: 1; 
     font-style: normal;
     text-overflow: ellipsis;
     white-space: nowrap;
-}
+} */
 
 /* Style for table data (td) */
-#dataTable tbody td {
+/* #dataTable tbody td {
     font-style: normal;
     overflow: hidden;
     line-height: 1rem;
@@ -295,13 +297,13 @@
     color: rgb(23, 25, 28);
     font-size: 14px;
     font-weight: 400;
-    padding: 10px; /* Adds spacing inside cells */
-}
+    padding: 10px;
+} */
 
 /* Style for icons in the status column */
-#dataTable tbody td i {
+/* #dataTable tbody td i {
     color: rgb(0, 148, 255);
-}
+} */
 /* Counter styling similar to .bpKSTa .header-counter */
 .header-counter {
     margin-left: 2px;
@@ -584,7 +586,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered text-center" id="dataTable" width="100%" cellspacing="0">
+            <table class="table table-bordered text-center" style="font-size:14px" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr class="thead">
                         <th>S.no</th>

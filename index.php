@@ -30,16 +30,19 @@
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
 <style>
+    thead{
+        color:black;
+    }
         #dataTable th:nth-child(1), #dataTable td:nth-child(1) { width: 2%; }  /* S.no */
-#dataTable th:nth-child(2), #dataTable td:nth-child(2) { width: 10%; } /* Name */
-#dataTable th:nth-child(3), #dataTable td:nth-child(3) { width: 19%; } /* Date */
-#dataTable th:nth-child(4), #dataTable td:nth-child(4) { width: 15%; } /* Company */
+#dataTable th:nth-child(2), #dataTable td:nth-child(2) { width: 8%; } /* Name */
+#dataTable th:nth-child(3), #dataTable td:nth-child(3) { width: 13%; } /* Date */
+#dataTable th:nth-child(4), #dataTable td:nth-child(4) { width: 13%; } /* Company */
 #dataTable th:nth-child(5), #dataTable td:nth-child(5) { width: 12%; } /* Project Title */
 #dataTable th:nth-child(6), #dataTable td:nth-child(6) { width: 12%; } /* Total Days */
 #dataTable th:nth-child(7), #dataTable td:nth-child(7) { width: 12%; } /* Description */
-#dataTable th:nth-child(8), #dataTable td:nth-child(8) { width: 12%; } /* Total Time */
-#dataTable th:nth-child(9), #dataTable td:nth-child(9) { width: 12%; }
-#dataTable th:nth-child(10), #dataTable td:nth-child(10) { width: 12%; }
+#dataTable th:nth-child(8), #dataTable td:nth-child(8) { width: 14%; } /* Total Time */
+#dataTable th:nth-child(9), #dataTable td:nth-child(9) { width: 15%; }
+#dataTable th:nth-child(10), #dataTable td:nth-child(10) { width: 10%; }
 
       thead  {
             color: black;
@@ -767,16 +770,16 @@
 }
 
 /* Style for the table header (thead) */
-#dataTable thead {
+/* #dataTable thead {
     color: rgb(140, 147, 159);
     font-weight: 1; 
     font-style: normal;
     text-overflow: ellipsis;
     white-space: nowrap;
-}
+} */
 
 /* Style for table data (td) */
-#dataTable tbody td {
+/* #dataTable tbody td {
     font-style: normal;
     overflow: hidden;
     line-height: 1rem;
@@ -784,8 +787,8 @@
     color: rgb(23, 25, 28);
     font-size: 14px;
     font-weight: 400;
-    padding: 10px; /* Adds spacing inside cells */
-}
+    padding: 10px; 
+} */
 
 /* Style for icons in the status column */
 #dataTable tbody td i {
@@ -971,7 +974,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive ">
-                            <table class="table text-center" id="dataTable" width="100%">
+                            <table class="table text-center" style="font-size:14px;"id="dataTable" width="100%">
     <thead>
         <tr>
             <th>S.no</th>

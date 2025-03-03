@@ -441,7 +441,8 @@
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
-        <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background: white;">
+        
+    <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background: white;">
 <!-- Sidebar - Brand -->
 <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
     <div class="sidebar-brand-icon" style='font-size:19px'>KTG</div>
@@ -459,7 +460,7 @@
 <div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 <li class="nav-item l active" style="padding:0px;">
     <a class="nav-link k" href="followups.php" style="color: white;">
-        <i class="fas fa-fw fa-tachometer-alt" style="font-size:16px"></i>
+        <i class="fas fa-fw fa-comment-dots" style="font-size:16px"></i>
         <span>FollowUps</span>
     </a>
 </li>

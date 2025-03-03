@@ -530,7 +530,9 @@ tbody{
 
 <!-- Topbar Navbar -->
 <ul class="navbar-nav ml-auto">
-
+<div class="d-flex justify-content-between align-items-center mb-2">
+        <a href="sample.pdf" target="_blank" class="btn " style="background: rgb(0, 148, 255); font-size: 15px;color:white;">Requirement File</a>
+    </div>
 <h4 class="text-dark font-weight-bold mr-1 d-flex align-items-center pl-3 py-2 " style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
         Jayavarshini 
     </h4>

@@ -398,7 +398,7 @@
         <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background: white;">
 
 <!-- Sidebar - Brand -->
-<a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
+<a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
     <div class="sidebar-brand-icon" style='font-size:20px'><b>KTG</b></div>
     <div class="sidebar-brand-text mx-2" style='font-size:20px'><b>DASHBOARD</b></div>
 </a>
@@ -408,7 +408,7 @@
 
 <!-- Nav Item - Dashboard -->
 <li class="nav-item active l">
-    <a class="nav-link k" href="index.php" style="color: white;">
+    <a class="nav-link k" href="employeedash.php" style="color: white;">
         <i class="fas fa-fw fa-tachometer-alt" style="font-size:20px"></i>
         <span><b>Dashboard</b></span>
     </a>
@@ -423,8 +423,8 @@
 <!-- Nav Item - Project Creation -->
 <li class="nav-item l">
     <a class="nav-link k" href="employeeWorkReports.php" style="color: black;">
-        <i class="fas fa-fw fa-table" style="font-size:20px"></i>
-        <span><b>Workreport</b></span>
+        <i class="fas fa-fw fa-chart-area" style="font-size:20px"></i>
+        <span><b>Work report</b></span>
     </a>
 </li>
 
@@ -659,6 +659,9 @@
     .action-buttons button {
       margin: 0 5px;
     }
+tbody{
+    border-color: #f8f9fa;
+}
     /* Optional: Change cursor for clickable rows */
     #dataTable tbody tr {
       cursor: pointer;
@@ -734,6 +737,27 @@
 #dataTable tbody td i {
     color: rgb(0, 148, 255);
 }
+/* Counter styling similar to .bpKSTa .header-counter */
+.header-counter {
+    margin-left: 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(0, 148, 255);
+    padding: 2px 5px;
+    font-size: 13px;
+    min-width: 20px;
+    min-height: 20px;
+    font-weight: 500;
+    color: white;
+    border-radius: 100px;
+}
+.card {
+    margin-bottom: 20px; /* Adjust as needed */
+}
+#dataTable {
+    margin-top: 20px; /* Adds space above the table */
+}
 
 </style>
 
@@ -763,30 +787,7 @@
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
-                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                        <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-search fa-fw"></i>
-                            </a>
-                            <!-- Dropdown - Messages -->
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                aria-labelledby="searchDropdown">
-                                <form class="form-inline mr-auto w-100 navbar-search">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small"
-                                            placeholder="Search for..." aria-label="Search"
-                                            aria-describedby="basic-addon2">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button">
-                                                <i class="fas fa-search fa-sm"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </li>
-                        <h4 class="text-dark font-weight-bold mr-4 d-flex align-items-center pl-3 py-2 " style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
+                        <h4 class="text-dark font-weight-bold mr-1 d-flex align-items-center pl-3 py-2 " style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
         Jayavarshini 
     </h4>
                         <div class="topbar-divider d-none d-sm-block"></div>
@@ -911,7 +912,7 @@
         <span class="header-counter">2</span>  <!-- Counter next to heading -->
 </p>
                         </div>
-                        <div class="card-body" style="padding: 0px;">
+                        <div class="card-body" style="padding: 0px;margin: 20px;">
                             <div class="table-responsive ">
                             <table class="table text-center" id="dataTable" width="100%">
                             <colgroup>
@@ -939,7 +940,7 @@
             <tbody>
               <tr data-name="Surya">
                 <td>1</td>
-                <td>ABC Corp</td>
+                <td>XYZ Corp</td>
                 <td>The project requires inbuilt updations and notifications.</td>
                 <td>5</td>
                 <td>I completed half backend work</td>
@@ -1006,15 +1007,22 @@
             </div>
         </div>
     </div>
-    <!-- Page level plugins -->
-    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-    <!-- Bootstrap JavaScript -->
-    <!-- Page level custom scripts -->
-    <script src="js/demo/datatables-demo.js"></script>
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- jQuery (Required for DataTables) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap JavaScript -->
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- DataTables JavaScript -->
+<script src="vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+<!-- Initialize DataTable -->
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable();
+    });
+</script>
 
     <!-- Core plugin JavaScript-->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>

@@ -30,11 +30,6 @@
     #dataTable th:nth-child(4), #dataTable td:nth-child(4) { width: 5%; } /* Project Title */
     #dataTable th:nth-child(5), #dataTable td:nth-child(5) { width: 5%; }  /* Project Type */
     #dataTable th:nth-child(6), #dataTable td:nth-child(6) { width: 5%; } /* Description */
-        /* Gradient background for thead */
-        thead  {
-            background: linear-gradient(to right, #4568dc, #b06ab3);
-            color: white;
-        }
 
         /* Center align action buttons */
         .action-buttons {
@@ -208,22 +203,22 @@ tbody{
     </style>
 
 <style>
-    .sidebar-brand-icon, .sidebar-brand-text {
+     .sidebar-brand-icon, .sidebar-brand-text {
         font-size: large;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
+        background: white;
         -webkit-background-clip: text; /* Clip background to text */
         -webkit-text-fill-color: transparent; /* Make text color transparent to show gradient */
         font-weight: bold; /* Optional: Makes text more prominent */
     }
     /* Sidebar background */
     .sidebar {
-        background-color: white !important;
+        background-color: rgb(15,29,64) !important;
         width: 250px; /* Adjust according to sidebar width */
     }
 
     /* Sidebar link styles */
     .l a.k{
-        color: #333 !important; /* Dark text */
+        color: white !important; /* Dark text */
         border-radius: 8px; /* Rounded corners */
         transition: all 0.3s ease-in-out;
         padding: 12px 15px;
@@ -237,15 +232,16 @@ tbody{
 
     /* Ensure icons are black */
     .l a.k i {
-        color: black !important;
+        color: white !important;
         font-size: 18px; /* Slightly larger icons */
         transition: color 0.3s ease-in-out;
     }
 
+
     /* Hover effect (only for non-active items) */
-    .l:not(.active) a.k:hover {
-        background-color: #f0f0f0 !important; /* Light grey */
-        color: #000 !important; /* Dark text */
+    .l:not(.active)  a.k:hover {
+        background-color: rgb(45, 64, 113) !important; /* Light grey */
+        color: white !important; /* Dark text */
         border-radius: 8px;
         width: 90%; /* Keep it smaller than the sidebar */
         margin: 0 auto; /* Center align */
@@ -253,17 +249,17 @@ tbody{
 
     /* Keep icons black on hover for non-active items */
     .l:not(.active) a.k:hover i {
-        color: black !important;
+        color: white !important;
     }
 
     /* Active item style */
     .l.active {
-        width: 90%;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
+        background-color: rgb(45, 64, 113) !important; /* Light grey */
+        color: white !important; /* Dark text */
         border-radius: 8px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-        transform: scale(1.02); /* Slight lift effect */
+        width: 90%; /* Keep it smaller than the sidebar */
         margin: 0 auto; /* Center align */
+        padding:1px;
     }
     .collapse-item.active{
         width: 90%;
@@ -281,13 +277,15 @@ tbody{
 
     /* Ensure icons turn white inside active links */
     .l.active a.k i {
-        color: white !important;
+        color:white !important;
     }
-    footer{
-        background:linear-gradient(to right, #4568dc, #b06ab3);
-        color:white;
-        padding:15px;
-    }
+    footer {
+    background: white;
+    color: rgb(15,29,64);
+    padding: 15px;
+    box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.1); /* Negative Y value for top shadow */
+}
+
     .master.active{
         width: 90%;
         background: linear-gradient(to right, #4568dc, #b06ab3);
@@ -303,46 +301,157 @@ tbody{
 
     }
     .collapse{
-        background:	#F8F8F8;
+        background:#F8F8F8;
         border-radius: 10px;
         color:white;
     }
     .collapse-item.active{
         width: 90%;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
+        background: rgb(45, 64, 113);
         color:white;
         border-radius: 8px;
         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
         transform: scale(1.02); /* Slight lift effect */
         margin: 0 auto; /* Center align */
     }
-    .custom-card {
-        background: linear-gradient(45deg, rgba(255, 99, 71, 0.8), rgba(255, 165, 0, 0.8));
-        transition: background 0.5s ease-in-out, transform 0.2s;
+    .action-buttons button {
+      margin: 0 5px;
+    }
+    /* Optional: Change cursor for clickable rows */
+    #dataTable tbody tr {
+      cursor: pointer;
+    }
+    .sidebar-dark .nav-item .nav-link[data-toggle="collapse"]:hover::after {
+    color: white;
+}
+ /* Styling for the modal */
+ @media (max-width:600px) {
+    h4{
+        font-size: small;
+    }
+}
+@media (min-width:600px) {
+    h4{
+        font-size: medium;
+    }
+}
+
+/* Style for the table header (thead) */
+#dataTable thead {
+    color: rgb(140, 147, 159);
+    font-weight: 1; 
+    font-style: normal;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Style for table data (td) */
+#dataTable tbody td {
+    font-style: normal;
+    overflow: hidden;
+    line-height: 1rem;
+    text-overflow: ellipsis;
+    color: rgb(23, 25, 28);
+    font-size: 14px;
+    font-weight: 400;
+    padding: 10px; /* Adds spacing inside cells */
+}
+
+/* Style for icons in the status column */
+#dataTable tbody td i {
+    color: rgb(0, 148, 255);
+}
+/* Counter styling similar to .bpKSTa .header-counter */
+.header-counter {
+    margin-left: 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(0, 148, 255);
+    padding: 2px 5px;
+    font-size: 13px;
+    min-width: 20px;
+    min-height: 20px;
+    font-weight: 500;
+    color: white;
+    border-radius: 100px;
+}
+
+/* Styling for the card header */
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Adjust spacing */
+    padding: 12px 16px;
+    background-color: #f8f9fc;
+}
+.page-item.active .page-link {
+    background: rgb(0, 148, 255);
+}
+</style>
+<style>
+    .custom-container {
+        background: rgb(0, 148, 255);
         color: white;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        border: none;
+        border-radius: 25px;
+        padding: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .custom-card {
+        flex: 1;
+        padding: 20px;
+        min-width: 100px;
+        text-align: center;
+        border-right: 2px solid white;
+    }
+    .custom-card:last-child {
+        border-right: none;
+    }
+    .custom-card b {
+        font-size: medium;
+    }
+    .custom-card div {
+        font-size: 14px;
+    }
+ /* Responsive Design */
+ @media (max-width: 1024px) { /* Tablet View */
+        .custom-container {
+            justify-content: center;
+        }
+        .custom-card {
+            width: 30%;
+            border-right: none;
+            border-bottom: none;
+        }
+        .custom-card:nth-child(3n) {
+            border-right: none;
+        }
+        .custom-card:nth-child(4), .custom-card:nth-child(5), .custom-card:nth-child(6) {
+            border-bottom: none;
+        }
+    }
+    
+    @media (max-width: 768px) { /* Mobile View */
+        .custom-card {
+            width: 45%;
+            border-right: 2px solid none;
+            border-bottom: 2px solid none;
+        }
+        .custom-card:nth-child(2n) {
+            border-right: none;
+        }
+        
+        .custom-card b, .custom-card div {
+            font-size: medium;
+        }
     }
 
-    .custom-card:hover {
-        transform: translateY(-5px);
-    }
 
-    .total-card {
-        background:rgb(90, 118, 211);
-    }
 
-    .pending-card {
-        background:rgb(90, 118, 211);
-    }
+   
 
-    .ongoing-card {
-        background:rgb(90, 118, 211);
-    }
-
-    .completed-card {
-        background:rgb(90, 118, 211);
-    }
 </style>
 
 </head>
@@ -354,11 +463,10 @@ tbody{
     <!-- Page Wrapper -->
     <div id="wrapper">
 
-        <!-- Sidebar -->
-        <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background: white;">
+    <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background: white;">
 
 <!-- Sidebar - Brand -->
-<a class="sidebar-brand d-flex align-items-center justify-content-center" href="employeedash.php">
+<a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
     <div class="sidebar-brand-icon" style='font-size:20px'><b>KTG</b></div>
     <div class="sidebar-brand-text mx-2" style='font-size:20px'><b>DASHBOARD</b></div>
 </a>
@@ -373,33 +481,24 @@ tbody{
         <span><b>Dashboard</b></span>
     </a>
 </li>
-
-
-<!-- Divider -->
-<hr class="sidebar-divider" style="margin-bottom: 0px;">
-
-<!-- Nav Item - Project Creation -->
-<li class="nav-item l active">
-    <a class="nav-link k" href="employeeProjectAllocated.php" style="color: black;">
+<li class="nav-item active l ">
+    <a class="nav-link k" href="employeeProjectAllocated.php" style="color: white;">
         <i class="fas fa-fw fa-folder" style="font-size:20px"></i>
         <span><b>Project Allocated</b></span>
     </a>
 </li>
 
-<hr class="sidebar-divider" style="margin-bottom: 0px;">
-
-<!-- Nav Item - Daily Updates -->
+<!-- Nav Item - Project Creation -->
 <li class="nav-item l">
     <a class="nav-link k" href="employeeWorkReports.php" style="color: black;">
-        <i class="fas fa-fw fa-table" style="font-size:20px"></i>
-        <span><b>Workreport</b></span>
+        <i class="fas fa-fw fa-chart-area" style="font-size:20px"></i>
+        <span><b>Work report</b></span>
     </a>
 </li>
 
 
 <!-- Divider -->
-<hr class="sidebar-divider d-none d-md-block">
-
+<hr class=" d-none d-md-block">
 <!-- Sidebar Toggler -->
 <div class="text-center d-none d-md-inline">
     <button class="rounded-circle side border-0" id="sidebarToggle"></button>
@@ -415,42 +514,25 @@ tbody{
             <div id="content">
 
                 <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style=" background:linear-gradient(to right, #b06ab3, #4568dc);">
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style=" background:white">
 
 <!-- Sidebar Toggle (Topbar) -->
 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
     <i class="fa fa-bars"></i>
 </button>
-
+<div class="mr-auto d-flex align-items-center pl-3 py-2">
+    <h4 class="text-dark font-weight-bold mr-4" style="color: rgb(15,29,64); margin-top: 5px;">
+        Project Details
+    </h4>
+</div>
 
 
 <!-- Topbar Navbar -->
 <ul class="navbar-nav ml-auto">
 
-    <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-    <li class="nav-item dropdown no-arrow d-sm-none">
-        <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-search fa-fw"></i>
-        </a>
-        <!-- Dropdown - Messages -->
-        <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-            aria-labelledby="searchDropdown">
-            <form class="form-inline mr-auto w-100 navbar-search">
-                <div class="input-group">
-                    <input type="text" class="form-control bg-light border-0 small"
-                        placeholder="Search for..." aria-label="Search"
-                        aria-describedby="basic-addon2">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" type="button">
-                            <i class="fas fa-search fa-sm"></i>
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </li>
-
+<h4 class="text-dark font-weight-bold mr-1 d-flex align-items-center pl-3 py-2 " style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
+        Jayavarshini 
+    </h4>
     <div class="topbar-divider d-none d-sm-block"></div>
 
     <!-- Nav Item - User Information -->
@@ -458,7 +540,7 @@ tbody{
         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <img class="img-profile rounded-circle"
-                src="img/profile.png" style="width: 3rem;height: 3rem;">
+                src="img/p.png" style="width: 2rem;height: 2rem;">
         </a>
         <!-- Dropdown - User Information -->
         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -479,100 +561,76 @@ tbody{
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
-                    <!-- Page Heading -->
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-        <h1 class="h3 text-gray-800">Allocated Projects</h1>
-        <a href="sample.pdf" target="_blank" class="btn btn-warning">Requirement File</a>
+                <div class="custom-container"> 
+    <div class="custom-card"><b>Company Name</b> 
+        <div style="margin-top: 10px;">Kurinji Cement</div>
     </div>
-                    
-                    <div class="row"> 
-                    <div class="col-lg-4 mb-4">
-        <div class="card custom-card pending-card text-white shadow">
-            <div class="card-body" style="font-size: x-large;"><b>Company Name</b>
-                <div style="font-size: 20px;">Kurinji Cement</div>
-            </div>
-        </div>
+    <div class="custom-card"><b>Project Title</b>
+        <div style="margin-top: 10px;">Updation in the existing web page</div>
     </div>
-    <div class="col-lg-4 mb-4">
-        <div class="card custom-card total-card text-white shadow">
-            <div class="card-body" style="font-size: x-large;"><b>Project Title</b>
-                <div style="font-size: 20px;">Updation in the existing web page </div>
-            </div>
-        </div>
+    <div class="custom-card"><b>Project Type</b>
+        <div style="margin-top: 10px;">Web Development</div>
     </div>
-    <div class="col-lg-4 mb-4">
-        <div class="card custom-card  ongoing-card text-white shadow">
-            <div class="card-body" style="font-size: x-large;"><b>Project Type</b>
-                <div style="font-size: 20px;">Web Development</div>
-            </div>
-        </div>
+    <div class="custom-card"><b>Total Days</b>
+        <div style="margin-top: 10px;">20</div>
     </div>
-    <div class="col-lg-4 mb-4">
-        <div class="card custom-card completed-card text-white shadow">
-            <div class="card-body" style="font-size: x-large;"><b>Total Days</b>
-                <div style="font-size: 20px;">20</div>
-            </div>
-        </div>
+    <div class="custom-card"><b>Pending Days</b>
+        <div style="margin-top: 10px;"> 10</div>
     </div>
-    <div class="col-lg-4 mb-4">
-        <div class="card custom-card completed-card text-white shadow">
-            <div class="card-body" style="font-size: x-large;"><b>Pending Days</b>
-                <div style="font-size: 20px;">10</div>
-            </div>
-        </div>
+    <div class="custom-card"><b>Members Allocated</b>
+        <div style="margin-top: 10px;">Jayavarshini, Suriya</div>
     </div>
-    <div class="col-lg-4 mb-4">
-        <div class="card custom-card completed-card text-white shadow">
-            <div class="card-body" style="font-size: x-large;"><b>Members Allocated</b>
-                <div style="font-size: 20px;">Jayavarshini, Suriya</div>
-            </div>
-        </div>
-    </div>
-    
-</div>
+</div><br>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                     <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-primary">Employee Details</h6><br>
-    <div class="row g-3"> <!-- Added g-3 for equal spacing -->
-        <div class="col-md-5">
-            <input type="text" class="form-control" id="taskInput1" placeholder="Enter Today Task">
+    <div class="row align-items-center">
+        <!-- Task Details (One Full Column on Small Screens, One Column on Larger Screens) -->
+        <div class="col-md-3 col-12">
+            <p class="m-0 fw-bold text-truncate" style="font-size: 16px; color: rgb(23, 25, 28);">
+                Task Details <span class="header-counter">2</span>
+            </p>
         </div>
-        <div class="col-md-5">
-            <input type="text" class="form-control" id="taskInput2" placeholder="Enter Total Hours">
-        </div>
-        <div class="col-md-2">
-            <button type="submit" class="btn btn-primary w-100 py-2">Add</button> <!-- w-100 ensures full width -->
+        
+        <!-- Inputs and Button in One Column (Wraps on Small Screens) -->
+        <div class="col-md-9 col-12">
+            <div class="row g-1">
+                <div class="col-md-6 col-12">
+                    <input type="text" class="form-control" id="taskInput1" placeholder="Enter Today Task">
+                </div>
+                <div class="col-md-4 col-12">
+                    <input type="text" class="form-control" id="taskInput2" placeholder="Enter Total Hours">
+                </div>
+                <div class="col-md-2 col-12">
+                    <button type="submit" class="btn w-100 py-1 text-white" style="background: rgb(0, 148, 255); font-size: 15px;">Add</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 
-
-
-                
                         <div class="card-body">
                             <div class="table-responsive ">
                             <table class="table text-center" id="dataTable" width="100%">
-            <thead>
-                <tr>
-                    <th>S.no</th>
+    <thead>
+        <tr>
+        <th>S.no</th>
                     <th>Date</th>
                     <th>Task Details</th>
                     <th id="totalHrsHeader">Total Hrs (0)</th>
                     <th id="actualHrsHeader">Actual Hrs (0)</th>
                     <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
+        </tr>
+    </thead>
+    <tbody>
+    <tr>
                     <td>1</td>
                     <td>10-02-2025</td>
                     <td>The project requires inbuilt updates and notifications.</td>
                     <td>10</td>
                     <td>-</td>
-                    <td><button type="button" class="btn btn-info w-100 py-2" onclick="enableEdit(event, this)">Update</button></td>
+                    <td><button type="button" class="btn  w-80 py-1" style="background: rgb(0, 148, 255);color:white;font-size:15px;" onclick="enableEdit(event, this)">Update</button></td>
                 </tr>
                 <tr>
                     <td>2</td>
@@ -580,10 +638,11 @@ tbody{
                     <td>Fixing the UI issues in the dashboard.</td>
                     <td>8</td>
                     <td>-</td>
-                    <td><button type="button" class="btn btn-info w-100 py-2" onclick="enableEdit(event, this)">Update</button></td>
+                    <td><button type="button" class="btn  w-80 py-1" style="background: rgb(0, 148, 255);color:white;font-size:15px;" onclick="enableEdit(event, this)">Update</button></td>
                 </tr>
-            </tbody>
-        </table>
+        <!-- Add more rows as needed -->
+    </tbody>
+</table>
                             </div>
                         </div>
                         
@@ -593,6 +652,36 @@ tbody{
                 <!-- /.container-fluid -->
 
             </div>
+         
+            <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get all rows from the table
+        const rows = document.querySelectorAll('#dataTable tbody tr');
+        
+        rows.forEach(row => {
+            row.addEventListener('click', function(event) {
+                // Check if the clicked element is in the 'name-column' or 'company-column'
+                const nameColumn = event.target.closest('.name-column');
+                const companyColumn = event.target.closest('.company-column');
+
+                // If clicked on the name or company column, redirect to respective pages
+                if (nameColumn) {
+                    const name = nameColumn.textContent;
+                    window.location.href = `employeereport.php?name=${name}`;
+                } else if (companyColumn) {
+                    const company = companyColumn.textContent;
+                    window.location.href = `companyreport.php?company=${company}`;
+                } else {
+                    // For other columns, navigate to the reports page
+                    const name = row.getAttribute('data-name');
+                    if (name) {
+                        window.location.href = `reports.php?name=${encodeURIComponent(name)}`;
+                    }
+                }
+            });
+        });
+    });
+</script>
 
 
 
@@ -662,6 +751,91 @@ tbody{
 
 
 <script>
+ document.addEventListener("DOMContentLoaded", function () {
+    let today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+    let dateInput = document.getElementById("dateFilter");
+
+    dateInput.value = today; // Set default to today
+    filterByDate(); // Automatically filter on page load
+
+    // Apply filter immediately when date is changed
+    dateInput.addEventListener("change", filterByDate);
+});
+
+function filterByDate() {
+    let selectedDate = document.getElementById("dateFilter").value;
+    if (!selectedDate) return;
+
+    let formattedSelectedDate = selectedDate.split("-").reverse().join("-"); // Convert to DD-MM-YYYY
+    let table = document.getElementById("dataTable");
+    let rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+
+    for (let i = 0; i < rows.length; i++) {
+        let dateCell = rows[i].getElementsByTagName("td")[2];
+        if (dateCell) {
+            let rowDate = dateCell.textContent.trim();
+            rows[i].style.display = (rowDate === formattedSelectedDate) ? "" : "none";
+        }
+    }
+}
+</script>
+<script>
+setTimeout(function () {
+    document.querySelectorAll("tbody tr").forEach(row => {
+        console.log(`Row has ${row.cells.length} cells`);
+        
+        if (row.cells.length < 13) {
+            console.warn("Skipping row: Some cells are missing.");
+            return;
+        }
+        
+        let taskTypeCell = row.cells[7];
+        let moduleStatusCell = row.cells[11];
+        let projectStatusCell = row.cells[12];
+        
+        let taskType = taskTypeCell.innerText.trim();
+        let moduleStatus = moduleStatusCell.innerText.trim();
+        
+        console.log(`Task Type: ${taskType}, Module Status: ${moduleStatus}`);
+        
+        if (moduleStatus.includes("Completed")&&taskType.includes("Testing") ) {
+            projectStatusCell.innerHTML = `
+                <button class="btn btn-success btn-sm" onclick="markCompleted(this)">Mark as Completed</button>
+            `;
+        } else {
+            projectStatusCell.innerHTML = `
+                <button class="btn btn-warning btn-sm">Ongoing</button>
+            `;
+        }
+    });
+}, 2000);
+
+function markCompleted(button) {
+    let row = button.closest("tr");
+    let projectStatusCell = row.cells[12]; // Adjusted to match correct index
+    
+    projectStatusCell.innerHTML = `
+        <span class="text-success"><i class="fas fa-check-circle"></i> Completed</span>
+    `;
+}
+</script>
+
+  <!-- <script>
+    $(document).ready(function() {
+      // When a row is clicked, get the employee name and redirect to the report page with the name as a query parameter.
+      $("#dataTable tbody tr").on("click", function() {
+        var employeeName = $(this).data("name");
+        if(employeeName) {
+          // Redirect to the Customer Details page with the selected name in the URL.
+          window.location.href = "reports.php?name=" + encodeURIComponent(employeeName);
+        }
+      });
+    });
+  </script> -->
+
+
+
+<script>
         function enableEdit(event, btn) {
             event.preventDefault(); // Prevent page reload
 
@@ -724,7 +898,6 @@ tbody{
         // Call function on page load to set initial values
         window.onload = updateTotalHours;
     </script>
-
 
 </body>
 

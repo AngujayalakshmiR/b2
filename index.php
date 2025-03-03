@@ -17,6 +17,16 @@
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
         <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+        <!-- jQuery (Must be before DataTables) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- DataTables CSS -->
+<link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
 <style>
@@ -944,8 +954,8 @@
         <span class="header-counter">2</span>  <!-- Counter next to heading -->
 </p>
                         </div>
-                        <div class="card-body" style="padding: 0px;">
-                            <div class="table-responsive ">
+                        <div class="card-body" style="padding: 0px;margin: 20px;">
+                            <div class="table-responsive " >
                             <table class="table text-center" id="dataTable" width="100%">
                             <colgroup>
         <col style="width: 5%;">  <!-- S.no -->
@@ -1056,6 +1066,11 @@
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable();
+    });
+</script>
 
     <!-- Core plugin JavaScript-->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>

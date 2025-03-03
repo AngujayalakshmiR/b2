@@ -632,10 +632,7 @@ tbody{
                     window.location.href = `companyreport.php?company=${company}`;
                 } else {
                     // For other columns, navigate to the reports page
-                    const name = row.getAttribute('data-name');
-                    if (name) {
-                        window.location.href = `reports.php?name=${encodeURIComponent(name)}`;
-                    }
+                    window.open("http://localhost/b2/aadhar.pdf", "_blank");
                 }
             });
         });

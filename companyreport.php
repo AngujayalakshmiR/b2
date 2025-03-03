@@ -426,7 +426,7 @@
 <!-- Divider -->
 <div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 <!-- Nav Item - Master -->
-<li class="nav-item l active master">
+<li class="nav-item l  master">
     <a class="nav-link k collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
         aria-expanded="true" aria-controls="collapseTwo" style="color: white;">
         <i class="fas fa-fw fa-clipboard-list" style="font-size:16px"></i>
@@ -434,7 +434,7 @@
     </a>
     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item active" href="customer.php" style="color: white;">Customer</a>
+            <a class="collapse-item " href="customer.php" style="color: black;">Customer</a>
             <a class="collapse-item " href="employee.php" style="color: black;">Employee</a>
             <a class="collapse-item" href="designation.php" style="color: black;">Designation</a>
             <a class="collapse-item" href="projecttype.php" style="color: black;">Project Type</a>
@@ -460,7 +460,7 @@
 </li>
 <div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 <!-- Nav Item - Work Reports -->
-<li class="nav-item l">
+<li class="nav-item l active">
     <a class="nav-link k" href="reports.php" style="color: black;">
         <i class="fas fa-fw fa-chart-area" style="font-size:16px"></i>
         <span>Work Reports</span>
@@ -756,7 +756,16 @@
                     <!-- Sidebar Toggle (Topbar) -->
                    
 
-                   
+                    <style>
+  @media (max-width: 1024px) { /* Targets tablets and smaller screens */
+    #printPDF,
+    button[onclick="downloadPDF()"] {
+        display: none !important;
+    }
+}
+
+</style>
+           
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">

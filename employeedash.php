@@ -20,6 +20,16 @@
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
 <style>
+    #dataTable th:nth-child(1), #dataTable td:nth-child(1) { width: 2%; }  /* S.no */
+#dataTable th:nth-child(2), #dataTable td:nth-child(2) { width: 12%; } /* Name */
+#dataTable th:nth-child(3), #dataTable td:nth-child(3) { width: 12%; } /* Date */
+#dataTable th:nth-child(4), #dataTable td:nth-child(4) { width: 15%; } /* Company */
+#dataTable th:nth-child(5), #dataTable td:nth-child(5) { width: 10%; } /* Project Title */
+#dataTable th:nth-child(6), #dataTable td:nth-child(6) { width: 16%; } /* Total Days */
+#dataTable th:nth-child(7), #dataTable td:nth-child(7) { width: 12%; } /* Description */
+#dataTable th:nth-child(8), #dataTable td:nth-child(8) { width: 12%; } /* Total Time */
+#dataTable th:nth-child(9), #dataTable td:nth-child(9) { width: 14%; } /* Actual Time */
+
     .stats-box {
   color: #ffffff;
   text-align: center;
@@ -911,58 +921,58 @@ tbody{
     font-weight: 500;"><b>Daily Updates</b> 
         <span class="header-counter">2</span>  <!-- Counter next to heading -->
 </p>
+                            <div> 
+    <input type="date" id="dateFilter" class="form-control d-inline" style="width: auto;">
+</div>
+
                         </div>
-                        <div class="card-body" style="padding: 0px;margin: 20px;">
+                        <div class="card-body">
                             <div class="table-responsive ">
                             <table class="table text-center" id="dataTable" width="100%">
-                            <colgroup>
-        <col style="width: 5%;">  <!-- S.no -->
-        <col style="width: 12%;">  <!-- Company -->
-        <col style="width: 12%;">  <!-- Title -->
-        <col style="width: 12%;">  <!-- Total Days (Adjusted) -->
-        <col style="width: 14%;">  <!-- Description -->
-        <col style="width: 12%;">  <!-- Total Hrs (Adjusted) -->
-        <col style="width: 12%;">  <!-- Actual Hrs (Adjusted) -->
-        <col style="width: 10%;">  <!-- Status -->
-    </colgroup>
-                            <thead>
-              <tr style="font-family:calibri;">
-                <th>S.no</th>
-                <th>Company</th>
-                <th>Title</th>
-                <th>Total Days</th>
-                <th>Description</th>
-                <th>Total Hrs</th>
-                <th>Actual Hrs</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr data-name="Surya">
-                <td>1</td>
-                <td>XYZ Corp</td>
-                <td>The project requires inbuilt updations and notifications.</td>
-                <td>5</td>
-                <td>I completed half backend work</td>
-                <td>4.5</td>
-                <td>2</td>
-                <td><i class="fas fa-check-circle status-icon completed" style="color: rgb(0, 148, 255);"></i>&nbsp;&nbsp;Completed</td>
-              </tr>
-              <tr data-name="Pavithra">
-                <td>2</td>
-                <td>ABC Corp</td>
-                <td>The project requires inbuilt updations and notifications.</td>
-                <td>5</td>
-                <td>I completed half backend work</td>
-                <td>4.5</td>
-                <td>2</td>
-                <td><i class="fas fa-check-circle status-icon completed" style="color: rgb(0, 148, 255);"></i>&nbsp;&nbsp;Completed</td>
-              </tr>
-            </tbody>
+    <thead>
+        <tr>
+            <th>S.no</th>
+            <th>Date</th>
+            <th>Company</th>
+            <th>Title</th>
+            <th>Total Days</th>
+            <th>Description</th>
+            <th>Total Hrs</th>
+            <th>Actual Hrs</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr  data-company="ABC Corp">
+            <td>1</td>
+            <td>03-03-2025</td>
+            <td class="company-column">ABC Corp</td>
+            <td>The project requires inbuilt updations and notifications.</td>
+            <td>5</td>
+            <td>I completed half backend work</td>
+            <td>4.5</td>
+            <td>2</td>
+            <td><i class="fas fa-check-circle status-icon completed"></i>&nbsp;&nbsp;Completed</td>
+        </tr>
+        <tr  data-company="ABC Corp">
+            <td>2</td>
+            <td>03-03-2025</td>
+            <td class="company-column">ABC Corp</td>
+            <td>The project requires inbuilt updations and notifications.</td>
+            <td>5</td>
+            <td>I completed half backend work</td>
+            <td>4.5</td>
+            <td>2</td>
+            <td><i class="fas fa-check-circle status-icon completed"></i>&nbsp;&nbsp;Completed</td>
+        </tr>
+        <!-- Add more rows as needed -->
+    </tbody>
 </table>
                             </div>
                         </div>
+                        
                     </div>
+
                 </div>
             </div>
             <!-- End of Main Content -->
@@ -1016,7 +1026,28 @@ tbody{
 <!-- DataTables JavaScript -->
 <script src="vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get all rows from the table
+        const rows = document.querySelectorAll('#dataTable tbody tr');
+        
+        rows.forEach(row => {
+            row.addEventListener('click', function(event) {
+                // Check if the clicked element is in the 'name-column' or 'company-column'
+                const companyColumn = event.target.closest('.company-column');
 
+                // If clicked on the name or company column, redirect to respective pages
+                 if (companyColumn) {
+                    const company = companyColumn.textContent;
+                    window.location.href = `companyreport.php?company=${company}`;
+                } else {
+                    // For other columns, navigate to the reports page
+                    window.open("http://localhost/b2/aadhar.pdf", "_blank");
+                }
+            });
+        });
+    });
+</script>
 <!-- Initialize DataTable -->
 <script>
     $(document).ready(function() {
@@ -1037,6 +1068,75 @@ tbody{
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
 
+    <script>
+ document.addEventListener("DOMContentLoaded", function () {
+    let today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+    let dateInput = document.getElementById("dateFilter");
+
+    dateInput.value = today; // Set default to today
+    filterByDate(); // Automatically filter on page load
+
+    // Apply filter immediately when date is changed
+    dateInput.addEventListener("change", filterByDate);
+});
+
+function filterByDate() {
+    let selectedDate = document.getElementById("dateFilter").value;
+    if (!selectedDate) return;
+
+    let formattedSelectedDate = selectedDate.split("-").reverse().join("-"); // Convert to DD-MM-YYYY
+    let table = document.getElementById("dataTable");
+    let rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+
+    for (let i = 0; i < rows.length; i++) {
+        let dateCell = rows[i].getElementsByTagName("td")[1];
+        if (dateCell) {
+            let rowDate = dateCell.textContent.trim();
+            rows[i].style.display = (rowDate === formattedSelectedDate) ? "" : "none";
+        }
+    }
+}
+</script>
+<script>
+setTimeout(function () {
+    document.querySelectorAll("tbody tr").forEach(row => {
+        console.log(`Row has ${row.cells.length} cells`);
+        
+        if (row.cells.length < 13) {
+            console.warn("Skipping row: Some cells are missing.");
+            return;
+        }
+        
+        let taskTypeCell = row.cells[7];
+        let moduleStatusCell = row.cells[11];
+        let projectStatusCell = row.cells[12];
+        
+        let taskType = taskTypeCell.innerText.trim();
+        let moduleStatus = moduleStatusCell.innerText.trim();
+        
+        console.log(`Task Type: ${taskType}, Module Status: ${moduleStatus}`);
+        
+        if (moduleStatus.includes("Completed")&&taskType.includes("Testing") ) {
+            projectStatusCell.innerHTML = `
+                <button class="btn btn-success btn-sm" onclick="markCompleted(this)">Mark as Completed</button>
+            `;
+        } else {
+            projectStatusCell.innerHTML = `
+                <button class="btn btn-warning btn-sm">Ongoing</button>
+            `;
+        }
+    });
+}, 2000);
+
+function markCompleted(button) {
+    let row = button.closest("tr");
+    let projectStatusCell = row.cells[12]; // Adjusted to match correct index
+    
+    projectStatusCell.innerHTML = `
+        <span class="text-success"><i class="fas fa-check-circle"></i> Completed</span>
+    `;
+}
+</script>
 </body>
 
 </html>

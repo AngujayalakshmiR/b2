@@ -757,7 +757,15 @@
                    
 
                    
+<style>
+  @media (max-width: 1024px) { /* Targets tablets and smaller screens */
+    #printPDF,
+    button[onclick="downloadPDF()"] {
+        display: none !important;
+    }
+}
 
+</style>
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 

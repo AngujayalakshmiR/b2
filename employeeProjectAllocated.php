@@ -32,8 +32,8 @@ thead{
     #dataTable th:nth-child(4), #dataTable td:nth-child(4) { width: 18%; } /* Project Title */
     #dataTable th:nth-child(5), #dataTable td:nth-child(5) { width: 10%; }  /* Project Type */
     #dataTable th:nth-child(6), #dataTable td:nth-child(6) { width: 10%; } /* Description */
-    #dataTable th:nth-child(7), #dataTable td:nth-child(7) { width: 15%; } /* Total days */
-    #dataTable th:nth-child(7), #dataTable td:nth-child(7) { width: 15%; } /* Working days */
+    #dataTable th:nth-child(7), #dataTable td:nth-child(7) { width: 11%; } /* Total days */
+    #dataTable th:nth-child(7), #dataTable td:nth-child(7) { width: 11%; } /* Working days */
     #dataTable th:nth-child(8), #dataTable td:nth-child(8) { width: 15%; } /* Teammates */
 
         /* Center align action buttons */

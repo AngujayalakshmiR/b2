@@ -827,25 +827,85 @@ tbody{
 <div class="square-box">
     <div class="stats-box">
         <i class="fas fa-file" style="font-size: 20px;"></i>
-        <h1 style="font-size: 20px;">100</h1>
+        <h1 style="font-size: 20px;">20</h1>
         <small>Total Projects</small>
     </div>
     <div class="stats-box">
         <i class="fas fa-exclamation" style="font-size: 20px;"></i>
-        <h1 style="font-size: 20px;">20</h1>
+        <h1 style="font-size: 20px;">10</h1>
         <small>Pending Projects</small>
     </div>
     <div class="stats-box">
         <i class="fas fa-check" style="font-size: 20px;"></i>
-        <h1 style="font-size: 20px;">30</h1>
+        <h1 style="font-size: 20px;">10</h1>
         <small>Ongoing Projects</small>
     </div>
     <div class="stats-box">
         <i class="fas fa-bell" style="font-size: 20px;"></i>
-        <h1 style="font-size: 20px;">30</h1>
-        <small>Payment FollowUps</small>
+        <h1 style="font-size: 20px;">2</h1>
+        <small>Today Updates</small>
     </div>
 </div>
+<br>
+<div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                        <p class="m-0" style="font-size: 16px;color:rgb(23, 25, 28);font-style: normal;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: rgb(23, 25, 28);
+    font-size: 16px;
+    font-weight: 500;"><b>Project Details</b> 
+        <span class="header-counter">2</span>  <!-- Counter next to heading -->
+</p>
+         
+
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive ">
+                            <table class="table text-center" style="font-size:14px;" id="dataTable1" width="100%">
+    <thead>
+        <tr>
+        <th>S.no</th>
+            <th>Date</th>
+            <th>Company</th>
+            <th>Title</th>
+            <th>Project Type</th>
+            <th>Total Days</th>
+            <th>Working Days</th>
+            <th>Teammates</th>
+        </tr>
+    </thead>
+    <tbody style="cursor: pointer;">
+    <tr>
+            <td>1</td>
+            <td>10-02-2025</td>
+            <td>ABC Corp</td>
+            <td>The project requires inbuilt updations and notifications.</td>
+            <td>Web Development</td>
+            <td>10</td>
+            <td>8</td>
+            <td>Surya, Jayavarshini</td> <!-- Module Status -->
+           
+        </tr>
+        <tr>
+        <td>2</td>
+            <td>11-02-2025</td>
+            <td>ABC Corp</td>
+            <td>The project requires inbuilt updations and notifications.</td>
+            <td>Web Development</td>
+            <td>10</td>
+            <td>7</td>
+            <td>Surya, Jayavarshini</td> <!-- Module Status -->
+          
+        </tr>
+        <!-- Add more rows as needed -->
+    </tbody>
+</table>
+                            </div>
+                        </div>
+                        
+                    </div>
 <br>
 <div class="card shadow mb-4">
 <div class="card-header py-3 d-flex align-items-center justify-content-start flex-wrap">
@@ -873,7 +933,7 @@ tbody{
     <tbody>
         <tr  data-company="ABC Corp">
             <td>1</td>
-            <td>03-03-2025</td>
+            <td>04-03-2025</td>
             <td class="company-column">ABC Corp</td>
             <td>The project requires inbuilt updations and notifications.</td>
             <td>5</td>
@@ -884,7 +944,7 @@ tbody{
         </tr>
         <tr  data-company="ABC Corp">
             <td>2</td>
-            <td>03-03-2025</td>
+            <td>04-03-2025</td>
             <td class="company-column">ABC Corp</td>
             <td>The project requires inbuilt updations and notifications.</td>
             <td>5</td>
@@ -976,10 +1036,26 @@ tbody{
         });
     });
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll("#dataTable1 tbody tr").forEach(row => {
+            row.addEventListener("click", function () {
+                // Assuming the first column contains a unique ID
+                let employeeId = this.cells[0].innerText.trim(); 
+                if (employeeId) {
+                    window.location.href = `employeedailyupdate.php?id=${employeeId}`;
+                }
+            });
+        });
+    });
+</script>
 <!-- Initialize DataTable -->
 <script>
     $(document).ready(function() {
         $('#dataTable').DataTable();
+    });
+    $(document).ready(function() {
+        $('#dataTable1').DataTable();
     });
 </script>
 

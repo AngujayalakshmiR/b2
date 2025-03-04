@@ -1117,12 +1117,11 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
- </script>
+</script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
     // Initialize DataTable
     var table = $('#projectTable').DataTable();
-
     // Event delegation for dynamic table updates
     document.querySelector('#projectTable tbody').addEventListener('click', function (event) {
         let clickedCell = event.target.closest('td'); // Get the clicked <td>

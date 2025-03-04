@@ -635,21 +635,22 @@ data-bs-toggle="modal" data-bs-target="#projectDescModal">Desc</a> &nbsp;
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                     <div class="card-header py-3">
+                    <div class="container-fluid">
     <div class="row align-items-center">
-        <!-- Task Details (One Full Column on Small Screens, One Column on Larger Screens) -->
-        <div class="col-md-3 col-12">
+        <!-- Task Details -->
+        <div class="col-md-2 col-12">
             <p class="m-0 fw-bold text-truncate" style="font-size: 16px; color: rgb(23, 25, 28);">
                 Task Details <span class="header-counter">2</span>
             </p>
         </div>
-        
-        <!-- Inputs and Button in One Column (Wraps on Small Screens) -->
+
+        <!-- Inputs and Button -->
         <div class="col-md-9 col-12">
             <div class="row g-1">
-                <div class="col-md-6 col-12">
+                <div class="col-md-7 col-12">
                     <input type="text" class="form-control" id="taskInput1" placeholder="Enter Today Task">
                 </div>
-                <div class="col-md-4 col-12">
+                <div class="col-md-3 col-12">
                     <input type="text" class="form-control" id="taskInput2" placeholder="Enter Total Hrs">
                 </div>
                 <div class="col-md-2 col-12">
@@ -658,6 +659,8 @@ data-bs-toggle="modal" data-bs-target="#projectDescModal">Desc</a> &nbsp;
             </div>
         </div>
     </div>
+</div>
+
 </div>
 
 

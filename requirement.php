@@ -421,37 +421,140 @@ html, body {
     border-radius: 5px;
 }
 
-/* Flexbox for buttons */
-.btn-wrapper {
-    display: flex;
-    gap: 10px; /* Space between buttons */
-    flex-wrap: nowrap; /* No wrapping, forces horizontal scrollbar */
-}
 
-/* Button styling */
-.btn-custom {
-    min-width: 150px; /* Set a minimum width for buttons */
-    font-size: 14px;
-    background: rgb(15, 29, 64);
-    color: white;
-    border-radius: 5px;
-    padding: 8px 15px;
-    white-space: nowrap; /* Prevent text wrap */
-}
 
-.btn-custom:hover {
-    background: rgb(10, 20, 50); /* Slightly darker on hover */
-}
-
-/* Ensure container does not take too much space on small screens */
-@media (max-width: 768px) {
-    .button-container {
-        height: auto; /* Adjust height for small screens */
-    }
-}
 
 </style>
+<style>
+        /* Container for requirement boxes */
+        .file-container {
+            overflow-x: auto; /* Horizontal scrolling */
+            overflow-y: hidden; /* No vertical scroll */
+            white-space: nowrap;
+            padding: 15px;
+            background: #f8f9fa;
+            scrollbar-width: thin;
+            scrollbar-color: rgb(73, 161, 255) transparent;
+        }
 
+        /* Custom scrollbar for Chrome, Edge, Safari */
+        .file-container::-webkit-scrollbar {
+            height: 6px; /* Thicker scrollbar */
+        }
+        .file-container::-webkit-scrollbar-track {
+            background: #ddd;
+            border-radius: 5px;
+        }
+        .file-container::-webkit-scrollbar-thumb {
+            background: rgb(15, 29, 64);
+            border-radius: 5px;
+        }
+
+        /* Flexbox for boxes */
+        .file-wrapper {
+            display: flex;
+            gap: 15px; /* Space between boxes */
+            flex-wrap: nowrap; /* No wrapping */
+        }
+
+        /* Styling for each requirement file box */
+        .file-box {
+            width: 380px; /* Increased width */
+            height: 150px; /* Increased height */
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            color: white;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+        .file-box:hover {
+            transform: scale(1.05);
+        }
+
+        /* Colors for the first four unique boxes */
+        .file-box:nth-child(4n+1) { background:rgb(254, 115, 84); } /* Red */
+        .file-box:nth-child(4n+2) { background:rgb(86, 192, 111); } /* Green */
+        .file-box:nth-child(4n+3) { background:rgb(73, 161, 255); } /* Blue */
+        .file-box:nth-child(4n+4) { background:rgb(255, 207, 63); } /* Yellow */
+
+        /* Graphic design image */
+        .file-box:nth-child(4n+1) .file-img  {
+            width: 180px;
+            height: 180px;
+            background: url('img/graphicimg.png') no-repeat center;
+            background-size: contain;
+            border-radius: 5px;
+        }
+        .file-box:nth-child(4n+2) .file-img {
+            width: 190px;
+            height: 190px;
+            background: url('img/graphicimg1.png') no-repeat center;
+            background-size: contain;
+            border-radius: 5px;
+        }
+        .file-box:nth-child(4n+3) .file-img  {
+            width: 180px;
+            height: 190px;
+            background: url('img/graphicimg2.jpg') no-repeat center;
+            background-size: contain;
+            border-radius: 5px;
+        }
+        .file-box:nth-child(4n+4) .file-img {
+            width: 150px;
+            height: 150px;
+            background: url('img/graphicimg4.jpg') no-repeat center;
+            background-size: contain;
+            border-radius: 5px;
+        }
+        .file-box {
+        position: relative;
+        width: 380px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px;
+        color: white;
+        font-size: 16px;
+        border-radius: 10px;
+        cursor: pointer;
+        box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s;
+        background: rgb(81, 172, 246);
+        margin: 10px 0;
+    }
+
+    .file-box:hover {
+        transform: scale(1.05);
+    }
+
+    .delete-btn {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: white;
+        color: red;
+        font-size: 14px;
+        padding: 5px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: none;
+    }
+
+    .file-box:hover .delete-btn {
+        display: block;
+    }
+
+    .file-link {
+        color: white;
+        text-decoration: none;
+    }
+    </style>
 </head>
 
 
@@ -483,7 +586,11 @@ html, body {
 <!-- Topbar Navbar -->
 <ul class="navbar-nav ml-auto">
 <div class="d-flex justify-content-between align-items-center mb-2">
-        <a href="" class="btn " style="background: rgb(246, 169, 81); font-size: 15px;color:white;">Add File</a>
+<a href="#" id="addFileBtn" class="btn" style="background: rgb(81, 172, 246); font-size: 15px; color: white;">
+    <i class="fas fa-folder-plus"></i> &nbsp; Add File
+</a>
+<input type="file" id="fileInput" style="display: none;">
+
     </div>
     <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -514,12 +621,11 @@ html, body {
                 <!-- Begin Page Content -->
                 
     <div class="container-fluid" style="padding-left: 5px;padding-right:15px;">
-        <!-- Scrollable Button Container -->
-        <div class="button-container">
-            <div class="btn-wrapper">
-                <!-- Buttons will be generated dynamically -->
-            </div>
+    <div class="file-container">
+        <div class="file-wrapper" id="fileWrapper">
+            <!-- Files will be dynamically added here -->
         </div>
+    </div>
     </div>
                 <!-- /.container-fluid -->
 
@@ -594,23 +700,75 @@ html, body {
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script> -->
 
 <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const btnWrapper = document.querySelector(".btn-wrapper");
+    const fileWrapper = document.getElementById("fileWrapper");
+    const fileInput = document.getElementById("fileInput");
+    const addFileBtn = document.getElementById("addFileBtn");
 
-            for (let i = 1; i <= 15; i++) { // Change 8 to any number
-                const button = document.createElement("button");
-                button.classList.add("btn", "btn-custom");
-                button.innerText = `Requirement File ${i}`;
+    // Load files from local storage (Only filenames, because actual files are stored in "b2" folder)
+    let storedFiles = JSON.parse(localStorage.getItem("uploadedFiles")) || [];
 
-                // Open sample.pdf in a new tab aside on click
-                button.onclick = function () {
-                    window.open("sample.pdf", "_blank");
-                };
+    function renderFiles() {
+        fileWrapper.innerHTML = ""; // Clear existing files
 
-                btnWrapper.appendChild(button);
-            }
+        storedFiles.forEach((fileName, index) => {
+            let fileBox = document.createElement("div");
+            fileBox.classList.add("file-box");
+
+            fileBox.innerHTML = `
+                <div class="delete-btn" onclick="deleteFile('${fileName}')">❌</div>
+                <a href="b2/${fileName}" target="_blank" class="file-link">
+                    <b>Requirement ${index + 1}</b>
+                </a>
+            `;
+
+            fileWrapper.appendChild(fileBox);
         });
-    </script>
+    }
+
+    addFileBtn.addEventListener("click", () => fileInput.click());
+
+    fileInput.addEventListener("change", (event) => {
+        const file = event.target.files[0];
+
+        if (file) {
+            let formData = new FormData();
+            formData.append("file", file);
+
+            fetch("upload.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    storedFiles.push(data.filename);
+                    localStorage.setItem("uploadedFiles", JSON.stringify(storedFiles));
+                    renderFiles();
+                } else {
+                    alert("File upload failed!");
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        }
+    });
+
+    function deleteFile(fileName) {
+        fetch(`delete.php?file=${fileName}`, { method: "GET" })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                storedFiles = storedFiles.filter(name => name !== fileName);
+                localStorage.setItem("uploadedFiles", JSON.stringify(storedFiles));
+                renderFiles();
+            } else {
+                alert("File deletion failed!");
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    }
+
+    renderFiles(); // Initial render
+</script>
 
 </body>
 

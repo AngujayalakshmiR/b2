@@ -580,9 +580,7 @@ tbody{
 <!-- Topbar Navbar -->
 <ul class="navbar-nav ml-auto">
 <div class="d-flex justify-content-between align-items-center mb-2">
-<a href="#" class="btn" style="background: rgb(249, 158, 39); font-size: 15px; color: white;" 
-data-bs-toggle="modal" data-bs-target="#projectDescModal">Desc</a> &nbsp;
-        <a href="sample.pdf" target="_blank" class="btn " style="background: rgb(255, 50, 105); font-size: 15px;color:white;">Req</a>
+        <a href="requirement.php" target="_blank" class="btn " style="background: rgb(255, 197, 50); font-size: 15px;color:white;">Requirement</a>
     </div>
     <div class="topbar-divider d-none d-sm-block"></div>
 

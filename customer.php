@@ -482,12 +482,13 @@
         <i class="fas fa-fw fa-clipboard-list" style="font-size:16px"></i>
         <span>Master</span>
     </a>
-    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar" style="z-index: 1000;">
         <div class="bg-white py-2 collapse-inner rounded">
             <a class="collapse-item active" href="customer.php" style="color: white;">Customer</a>
             <a class="collapse-item " href="employee.php" style="color: black;">Employee</a>
             <a class="collapse-item" href="designation.php" style="color: black;">Designation</a>
             <a class="collapse-item" href="projecttype.php" style="color: black;">Project Type</a>
+            <a class="collapse-item" href="followuptype.php" style="color: black;">FollowUp Type</a>
         </div>
     </div>
 </li> 

@@ -481,6 +481,7 @@
             <a class="collapse-item " href="employee.php" style="color: black;">Employee</a>
             <a class="collapse-item" href="designation.php" style="color: black;">Designation</a>
             <a class="collapse-item" href="projecttype.php" style="color: black;">Project Type</a>
+            <a class="collapse-item" href="followuptype.php" style="color: black;">FollowUp Type</a>
         </div>
     </div>
 </li> 
@@ -902,17 +903,17 @@ document.addEventListener('click', function (event) {
     </li>
     <li class="nav-item">
         <a class="nav-link" id="ongoing-tab" href="#" onclick="setActiveTab('ongoing')">
-            <i class="fas fa-spinner"></i> Ongoing
+            Ongoing
         </a>
     </li>
     <li class="nav-item">
         <a class="nav-link" id="payment-tab" href="#" onclick="setActiveTab('payment')">
-            <i class="fas fa-credit-card"></i> Payment
+            Payment
         </a>
     </li>
     <li class="nav-item">
         <a class="nav-link" id="new-client-tab" href="#" onclick="setActiveTab('new-client')">
-            <i class="fas fa-user-plus"></i> New Client
+            New Client
         </a>
     </li>
 </ul>

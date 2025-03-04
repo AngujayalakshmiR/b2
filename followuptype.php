@@ -409,8 +409,8 @@ thead{
             <a class="collapse-item " href="customer.php" style="color: black;">Customer</a>
             <a class="collapse-item " href="employee.php" style="color: black;">Employee</a>
             <a class="collapse-item" href="designation.php" style="color: black;">Designation</a>
-            <a class="collapse-item active" href="projecttype.php" style="color: white;">Project Type</a>
-            <a class="collapse-item" href="followuptype.php" style="color: black;">FollowUp Type</a>
+            <a class="collapse-item" href="projecttype.php" style="color: black;">Project Type</a>
+            <a class="collapse-item active" href="followuptype.php" style="color: white;">FollowUp Type</a>
         </div>
     </div>
 </li> 
@@ -463,50 +463,13 @@ thead{
                    <!-- Header Section -->
 <div class="mr-auto d-flex align-items-center pl-3 py-2">
     <h4 class="text-dark font-weight-bold mr-4" style="color: rgb(15,29,64);  margin-top: 5px;">
-        Master > Project Type
+        Master > Followup Type
     </h4>
 </div>
 
 <!-- Customer Modal (No header, reduced width) -->
 <!-- Include Font Awesome for Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-
-<!-- Modal -->
-<div class="modal fade" id="projecttypeModal" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 40%;">
-    <div class="modal-content" style="border-radius: 15px;">
-      <div class="modal-body p-0">
-        <div class="row no-gutters">
-          <!-- Left Column: Form -->
-          <div class="col-md-10">
-            <div class="ml-3 mt-3 mb-3 mr-3">
-              <form id="projecttypeForm">
-                <div class="form-group">
-                  <label for="projecttypeInput"><b>Project Type Details:</b></label>
-                  <input type="text" class="form-control" id="projecttypeInput" placeholder="Enter Project Type" required>
-                </div>
-                <div class="d-flex justify-content-start">
-                  <button type="submit" class="btn" style="background-color: rgb(15,29,64); color: white; border-radius: 25px;">Submit</button>
-                </div>
-              </form>
-            </div>
-          </div>
-
-          <!-- Right Column: Designation Icon -->
-          <div class="col-md-2 d-flex align-items-center justify-content-center" 
-     style="background-color: rgb(15,29,64); color: white; 
-            border-top-right-radius: 14px; border-bottom-right-radius: 14px;">
-    <i class="fa-solid fa-id-badge fa-4x"></i> <!-- Designation Icon -->
-</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-                   
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -550,15 +513,15 @@ thead{
             <form id="customerForm" class="row g-10">
                 <!-- Column 1: Name & Company Name -->
                 <div class="col-md-8 pt-2 d-flex align-items-center">
-                    <input type="text" class="form-control mb-2" id="customername" placeholder="Enter Project Type">
+                    <input type="text" class="form-control mb-2" id="customername" placeholder="Enter FollowUp Type">
                 </div>
 
                 <!-- Column 4: Submit Button -->
                 <div class="col-md-4 pt-2 pb-2 d-flex justify-content-center align-items-center">
                     <button type="submit" class="btn" id="customerbtn" 
                         style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: 190px;">
-                        <i class="fas fa-code"></i>
-                        &nbsp; Add Project Type
+                        <i class="fas fa-fw fa-comment-dots"></i>
+                        &nbsp; Add FollowUp
                     </button>
                 </div>
             </form>
@@ -576,7 +539,7 @@ thead{
     text-overflow: ellipsis;
     color: rgb(23, 25, 28);
     font-size: 16px;
-    font-weight: 500;"><b>Project Type Details</b> 
+    font-weight: 500;"><b>FollowUp Type Details</b> 
         <span class="header-counter">3</span>  <!-- Counter next to heading -->
 </p>
 
@@ -591,14 +554,14 @@ thead{
                 <thead>
                     <tr class="thead">
                         <th>S.no</th>
-                        <th>Project Type</th>
+                        <th>FollowUp Type</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>1</td>
-                        <td>Designing</td>
+                        <td>Ongoing</td>
                         
                         <td class="action-buttons">
                             <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
@@ -607,7 +570,7 @@ thead{
                     </tr>
                     <tr>
                         <td>2</td>
-                        <td>Website</td>
+                        <td>Payment</td>
                        
                         <td class="action-buttons">
                             <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
@@ -616,7 +579,7 @@ thead{
                     </tr>
                     <tr>
                         <td>3</td>
-                        <td>Mobile App</td>
+                        <td>New Client</td>
                         
                         <td class="action-buttons">
                             <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>

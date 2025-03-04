@@ -687,43 +687,32 @@ tbody{
  .bo::before {
     background: rgb(45, 64, 113);
  }
- @media (max-width: 460px) {
-    .hide-below-460 {
-        display: none !important; /* Completely removes the element from the layout */
-    }
-    .square-box {
-        display: flex;  /* Show the square-box */
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
-        padding: 20px;
-        background-color: #f8f9fc;
-        border-radius: 25px;
-        border: 1px solid #f8f9fc;
-    }
-    .square-box .stats-box {
-        width: calc(50% - 10px); /* 2 items per row */
-        padding-left: 15px;
-        padding-right: 15px;
-        text-align: center;
-        background-color: rgb(45, 64, 113);
-        color: white;
-        border-radius: 15px;
-    }
-}
-/* Hide the section in desktop view */
-@media (min-width: 461px) {  
-    .square-box {
-        display: none !important;
-    }
+ .square-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Distributes space evenly */
+    gap: 10px;
+    padding: 15px;
+    background-color: #f8f9fc;
+    border-radius: 25px;
+    border: 1px solid #f8f9fc;
 }
 
-/* Show the section in mobile view */
-@media (max-width: 460px) {  
-    .hide-below-460 {
-        display: none !important; /* Remove from layout */
+.square-box .stats-box {
+    width: calc(25% - 20px); /* 4 boxes in one row on large screens */
+    padding: 10px;
+    height: 100px;
+    text-align: center;
+    background-color: rgb(45, 64, 113);
+    color: white;
+    border-radius: 15px;
+}
+
+/* Responsive for screens below 460px (2 boxes per row) */
+@media (max-width: 460px) {
+    .square-box .stats-box {
+        width: calc(50% - 10px); /* 2 boxes per row */
     }
-    
 }
 
 /* Style for the table header (thead) */
@@ -833,63 +822,6 @@ tbody{
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-<div class="card hide-below-460" style="background-color:#f8f9fc;border-radius:25px;border:1px solid #f8f9fc;">
-    <div class="row">
-        
-        <div class="col-6 col-md-3 col-sm-6 my-1">
-            <div class="cir">
-                <div class="bo">
-                    <div class="content1">
-                        <div class="stats-box text-center p-3" style="background-color:rgb(45, 64, 113);">
-                            <i class="fas fa-file m-b-5 font-20"></i>
-                            <h1 class="m-b-0 m-t-5">10</h1>
-                            <small class="font-light">Total Projects</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-6 col-md-3 col-sm-6 my-1">
-            <div class="cir">
-                <div class="bo">
-                    <div class="content1">
-                        <div class="stats-box text-center p-3" style="background-color:rgb(45, 64, 113);">
-                            <i class="fas fa-exclamation m-b-5 font-16"></i>
-                            <h1 class="m-b-0 m-t-5">4</h1>
-                            <small class="font-light">Pending Projects</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-6 col-md-3 col-sm-6 my-1">
-            <div class="cir">
-                <div class="bo">
-                    <div class="content1">
-                        <div class="stats-box text-center p-3" style="background-color:rgb(45, 64, 113);">
-                            <i class="fas fa-check m-b-5 font-20"></i>
-                            <h1 class="m-b-0 m-t-5">6</h1>
-                            <small class="font-light">Ongoing Projects</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-6 col-md-3 col-sm-6 my-1">
-            <div class="cir">
-                <div class="bo">
-                    <div class="content1">
-                        <div class="stats-box text-center p-3" style="background-color:rgb(45, 64, 113);">
-                            <i class="fas fa-bell m-b-5 font-20"></i>
-                            <h1 class="m-b-0 m-t-5">2</h1>
-                            <small class="font-light">Today Updates</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Square box (visible below 460px) -->
 <div class="square-box">
@@ -910,27 +842,18 @@ tbody{
     </div>
     <div class="stats-box">
         <i class="fas fa-bell" style="font-size: 20px;"></i>
-        <h1 style="font-size: 20px;">2</h1>
-        <small>Today Updates</small>
+        <h1 style="font-size: 20px;">30</h1>
+        <small>Payment FollowUps</small>
     </div>
 </div>
 <br>
 <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                        <p class="m-0" style="font-size: 16px;color:rgb(23, 25, 28);font-style: normal;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    color: rgb(23, 25, 28);
-    font-size: 16px;
-    font-weight: 500;"><b>Daily Updates</b> 
-        <span class="header-counter">2</span>  <!-- Counter next to heading -->
-</p>
-                            <div> 
-    <input type="date" id="dateFilter" class="form-control d-inline" style="width: auto;">
+<div class="card-header py-3 d-flex align-items-center justify-content-start flex-wrap">
+    <p class="m-0" style="font-size: 16px; color: rgb(23, 25, 28); font-weight: 500; white-space: nowrap;">
+        <b>Daily Updates</b> <span class="header-counter">2</span>
+    </p> &nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="date" id="dateFilter" class="form-control ms-3 mt-0 mt-sm-0 mt-2" style="width: auto;">
 </div>
-
-                        </div>
                         <div class="card-body">
                             <div class="table-responsive ">
                             <table class="table text-center" style="font-size:14px;" id="dataTable" width="100%">

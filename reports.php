@@ -39,11 +39,11 @@
 #projectTable th:nth-child(1), #projectTable td:nth-child(1) { width: 3%; }  /* S.no */
 #projectTable th:nth-child(2), #projectTable td:nth-child(2) { width: 10%; } /* Date */
 #projectTable th:nth-child(3), #projectTable td:nth-child(3) { width: 19%; } /* Company-Title */
-#projectTable th:nth-child(4), #projectTable td:nth-child(4) { width: 15%; } /* Employees */
+#projectTable th:nth-child(4), #projectTable td:nth-child(4) { width: 10%; } /* Employees */
 #projectTable th:nth-child(5), #projectTable td:nth-child(5) { width: 10%; } /* Updates */
-#projectTable th:nth-child(6), #projectTable td:nth-child(6) { width: 10%; } /* Total Hrs */
+#projectTable th:nth-child(6), #projectTable td:nth-child(6) { width: 15%; } /* Total Hrs */
 #projectTable th:nth-child(7), #projectTable td:nth-child(7) { width: 11%; } /* Actual Hrs */
-#projectTable th:nth-child(8), #projectTable td:nth-child(8) { width: 8%; } /* Status */
+#projectTable th:nth-child(8), #projectTable td:nth-child(8) { width: 10%; } /* Status */
 
         /* Gradient background for thead */
         thead  {
@@ -712,12 +712,7 @@
         <div class="card-header py-3 ">
           <!-- First Row: Employee Dropdown Filter and Excel Export -->
           <div class="d-flex flex-wrap align-items-center filter-group   ">
-          <select id="employeeFilter" class="form-select w-auto" style="max-width: 200px;">
-              <option value="all">All Employees</option>
-              <option value="Naveen">Naveen</option>
-              <option value="Pavithra">Pavithra</option>
-              <option value="Surya">Surya</option>
-            </select>
+         
             From:
             <input type="date" id="startDateEmployee" class="form-control" style="max-width: 150px;">
             To:
@@ -932,13 +927,7 @@
         <div class="card-header py-3 ">
           <!-- First Row: Project Dropdown Filter and Excel Export -->
           <div class="d-flex flex-wrap align-items-center filter-group   ">
-            <select id="projectFilter" class="form-select w-auto">
-              <option value="all">All Projects</option>
-              <!-- Note: The dropdown values are normalized (no extra spaces) -->
-              <option value="Govin-ABC">Govin - ABC</option>
-              <option value="Kurinji-xyz">Kurinji - xyz</option>
-              <option value="xxx-KMN">xxx - KMN</option>
-            </select>
+            
                 From:
             <input type="date" id="startDateProject" class="form-control mr-2" style="max-width: 150px;" placeholder="Start Date">
             <!-- End Date Input -->To:
@@ -964,11 +953,11 @@
                   <th>S.No</th>
                   <th>Date</th>
                   <th>Company-Title</th>
+                  <th>Type</th>
                   <th>Employees</th>
                   <th>Description</th>
-                  <th>Total Hrs</th>
-                  <th>Acutual Hrs</th>
-                  <th>Status</th>
+                  <th>Total days</th>
+                  <th>Work days</th>
                 </tr>
               </thead>
               <tbody>
@@ -976,31 +965,31 @@
                   <td>1</td>
                   <td>11-02-2025</td>
                   <td>Govin - ABC</td>
+                  <td>Web development</td>
                   <td>Surya,Varshini</td>
                   <td>suma</td>
                   <td>5</td>
                   <td>5</td>
-                  <td>Completed</td>
                 </tr>
                 <tr>
                   <td>2</td>
                   <td>11-02-2025</td>
                   <td>Kurinji - xyz</td>
+                  <td>App development</td>
                   <td>Naveen,Mohan</td>
                   <td>suma1</td>
                   <td>6</td>
                   <td>7</td>
-                  <td>Completed</td>
                 </tr>
                 <tr>
                   <td>3</td>
                   <td>11-02-2025</td>
                   <td>xxx - KMN</td>
+                  <td>UI/UX Design</td>
                   <td>Pavithra,Angu</td>
                   <td>suma2</td>
                   <td>4</td>
                   <td>-</td>
-                  <td>Started</td>
                 </tr>
                 
               </tbody>
@@ -1015,258 +1004,126 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Get all rows from the table
-        const rows = document.querySelectorAll('#dataTable tbody tr');
-        
-        rows.forEach(row => {
-            row.addEventListener('click', function(event) {
-                // Get the clicked cell
-                const clickedCell = event.target;
+ <script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Initialize DataTable
+    var table = $('#dataTable').DataTable();
 
-                // Check if the clicked column is "Name" or "Company"
-                const nameCell = row.cells[1]; // "Name" column (index 1)
-                const companyCell = row.cells[3]; // "Company" column (index 3)
+    // Event delegation to handle dynamically generated rows
+    document.querySelector('#dataTable tbody').addEventListener('click', function (event) {
+        let clickedCell = event.target.closest('td');
+        if (!clickedCell) return;
 
-                if (clickedCell === nameCell) {
-                    const name = nameCell.textContent.trim();
-                    window.location.href = `employeereport.php?name=${encodeURIComponent(name)}`;
-                } else if (clickedCell === companyCell) {
-                    const company = companyCell.textContent.trim();
-                    window.location.href = `companyreport.php?company=${encodeURIComponent(company)}`;
-                } else {
-                    // For other columns, open the PDF file
-                    window.open("http://localhost/b2/aadhar.pdf", "_blank");
-                }
-            });
-        });
+        // Get the search input field from DataTables
+        const searchBox = document.querySelector('input[type="search"]');
+
+        // Get column index of the clicked cell
+        const colIndex = clickedCell.cellIndex;
+
+        // Define column indexes
+        const nameCol = 1; // "Name" column
+        const dateCol = 2; // "Date" column
+        const companyCol = 3;
+        const typeCol=4; // "Company - Title" column
+
+        if ([nameCol, dateCol, companyCol,typeCol].includes(colIndex)) {
+            // Get clean text without extra spaces or new lines
+            let searchText = clickedCell.textContent.replace(/\s+/g, ' ').trim();
+
+            // Update search box
+            searchBox.value = searchText;
+
+            // Trigger DataTables search
+            table.search(searchText).draw();
+        }else {
+            // If clicked column is not Date, Company-Title, or Type, open the PDF
+            window.open("http://localhost/b2/aadhar.pdf", "_blank");
+        }
     });
-</script>
+});
+
+
+ </script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Get all rows from the projectTable
-        const rows = document.querySelectorAll('#projectTable tbody tr');
+    document.addEventListener('DOMContentLoaded', function () {
+    // Initialize DataTable
+    var table = $('#projectTable').DataTable();
 
-        rows.forEach(row => {
-            row.addEventListener('click', function(event) {
-                // Get the clicked cell
-                const clickedCell = event.target;
-                
-                // "Company-Title" column (index 2, since index starts from 0)
-                const companyTitleCell = row.cells[2]; 
+    // Event delegation for dynamic table updates
+    document.querySelector('#projectTable tbody').addEventListener('click', function (event) {
+        let clickedCell = event.target.closest('td'); // Get the clicked <td>
+        if (!clickedCell) return;
 
-                if (clickedCell === companyTitleCell) {
-                    // Navigate to companyreport.php with the company title
-                    const companyTitle = companyTitleCell.textContent.trim();
-                    window.location.href = `companyreport.php?company=${encodeURIComponent(companyTitle)}`;
-                } else {
-                    // For other columns, open the PDF file
-                    window.open("http://localhost/b2/aadhar.pdf", "_blank");
-                }
-            });
-        });
+        // Get the search input field from DataTables
+        const searchBox = document.querySelector('input[type="search"]');
+
+        // Get column index of the clicked cell
+        const colIndex = clickedCell.cellIndex;
+
+        // Define searchable columns
+        const dateCol = 1; // "Date" column
+        const companyCol = 2; // "Company-Title" column
+        const typeCol = 3; // "Type" column
+
+        if ([dateCol, companyCol, typeCol].includes(colIndex)) {
+            // Get clean text without extra spaces or new lines
+            let searchText = clickedCell.textContent.replace(/\s+/g, ' ').trim();
+
+            // Update search box
+            searchBox.value = searchText;
+
+            // Trigger DataTables search
+            table.search(searchText).draw();
+        } else {
+            // If clicked column is not Date, Company-Title, or Type, open the PDF
+            window.open("http://localhost/b2/aadhar.pdf", "_blank");
+        }
     });
+});
+
 </script>
 
-  <script>
-    $(document).ready(function() {
-    var originalData = [];
-    var originalProjectData = [];
-    $("#tableBody tr").each(function() {
-        originalData.push($(this).clone());
-    });
-    $("#projectTable tbody tr").each(function() {
-        originalProjectData.push($(this).clone());
-    });
+<script>
+   $(document).ready(function () {
+    var originalData = $("#tableBody tr").clone(); // Store original data for reset
+
     function parseDate(dateStr) {
         var parts = dateStr.split("-");
-        return new Date(parts[2], parts[1] - 1, parts[0]);
+        return new Date(parts[2], parts[1] - 1, parts[0]); // Convert to YYYY-MM-DD format
     }
-    function filterEmployeeTable() {
-        var selectedEmployee = $("#employeeFilter").val();
-        var startDateStr = $("#startDateEmployee").val();
-        var endDateStr = $("#endDateEmployee").val();
-        var startDate = startDateStr ? new Date(startDateStr) : null;
-        var endDate = endDateStr ? new Date(endDateStr) : null;
-        var filteredRows = originalData.filter(function(row) {
-            var passes = true;
-            var employeeName = row.find("td:eq(1)").text().trim();
-            if (selectedEmployee !== "all" && employeeName !== selectedEmployee) {
-                passes = false;
+
+    function filterTable() {
+        var fromDateStr = $("#startDateEmployee").val();
+        var toDateStr = $("#endDateEmployee").val();
+        var fromDate = fromDateStr ? new Date(fromDateStr) : null;
+        var toDate = toDateStr ? new Date(toDateStr) : null;
+
+        $("#tableBody").empty(); // Clear current table data
+
+        originalData.each(function () {
+            var row = $(this);
+            var dateText = row.find("td:nth-child(3)").text().trim(); // Get the date from the 3rd column
+            var rowDate = parseDate(dateText);
+
+            // Show rows only if they match the filter criteria
+            if (
+                (!fromDate || rowDate >= fromDate) &&
+                (!toDate || rowDate <= toDate)
+            ) {
+                $("#tableBody").append(row.clone());
             }
-            var dateStr = row.find("td:eq(2)").text().trim();
-            var rowDate = parseDate(dateStr);
-            if (startDate && rowDate < startDate) {
-                passes = false;
-            }
-            if (endDate && rowDate > endDate) {
-                passes = false;
-            }
-            return passes;
-        });
-        $("#tableBody").empty();
-        filteredRows.forEach(function(row, index) {
-            row.find("td:eq(0)").text(index + 1);
-            $("#tableBody").append(row);
         });
     }
-    function filterProjectTable() {
-        var selectedProject = $("#projectFilter").val();
-        var startDateStr = $("#startDateProject").val();
-        var endDateStr = $("#endDateProject").val();
-        var startDate = startDateStr ? new Date(startDateStr) : null;
-        var endDate = endDateStr ? new Date(endDateStr) : null;
-        var filteredRows = originalProjectData.filter(function(row) {
-            var passes = true;
-            if (selectedProject !== "all") {
-                var normalizedText = row.find("td:eq(2)").text().trim().replace(/\s+/g, '').toLowerCase();
-                var normalizedSelected = selectedProject.replace(/\s+/g, '').toLowerCase();
-                if (normalizedText !== normalizedSelected) {
-                    passes = false;
-                }
-            }
-            var dateStr = row.find("td:eq(1)").text().trim();
-            var rowDate = parseDate(dateStr);
-            if (startDate && rowDate < startDate) {
-                passes = false;
-            }
-            if (endDate && rowDate > endDate) {
-                passes = false;
-            }
-            return passes;
-        });
-        $("#projectTable tbody").empty();
-        filteredRows.forEach(function(row, index) {
-            row.find("td:eq(0)").text(index + 1);
-            $("#projectTable tbody").append(row);
-        });
-    }
-    $("#employeeFilter, #startDateEmployee, #endDateEmployee").on("change", function() {
-        filterEmployeeTable();
-    });
-    $("#projectFilter, #startDateProject, #endDateProject").on("change", function() {
-        filterProjectTable();
-    });
-    $("#employeeTab").click(function(e) {
-        e.preventDefault();
-        $("#employeeReport").show();
-        $("#projectReport").hide();
-        $(".nav-link").removeClass("active");
-        $(this).addClass("active");
-    });
-    $("#projectTab").click(function(e) {
-        e.preventDefault();
-        $("#employeeReport").hide();
-        $("#projectReport").show();
-        $(".nav-link").removeClass("active");
-        $(this).addClass("active");
+
+    // Event listeners for filtering
+    $("#startDateEmployee, #endDateEmployee").on("change", function () {
+        filterTable();
     });
 });
-    </script>
-  <script>
-    $(document).ready(function() {
-  // Cache the original HTML of the employee table body.
-  var originalEmployeeHTML = $("#tableBody").html();
-  // Helper function to parse a date string in dd-mm-yyyy format.
-  function parseDate(dateStr) {
-    var parts = dateStr.split("-");
-    return new Date(parts[2], parts[1] - 1, parts[0]);
-  }
-  // Function to filter Employee Table based on criteria.
-  function filterEmployeeTable() {
-    var selectedEmployee = $("#employeeFilter").val();
-    var startDateStr = $("#startDateEmployee").val();
-    var endDateStr = $("#endDateEmployee").val();
-    // If no filter is applied, restore the original HTML.
-    if (selectedEmployee === "all" && !startDateStr && !endDateStr) {
-      $("#tableBody").html(originalEmployeeHTML);
-      return;
-    }
-    // Create a jQuery object from the original HTML.
-    var $rows = $("<tbody>" + originalEmployeeHTML + "</tbody>").find("tr");
-    $rows = $rows.filter(function() {
-      var $row = $(this);
-      var employeeName = $row.find("td:eq(1)").text().trim();
-      if (selectedEmployee !== "all" && employeeName !== selectedEmployee) {
-        return false;
-      }
-      // Date filter (Column index 2, format: dd-mm-yyyy)
-      var dateStr = $row.find("td:eq(2)").text().trim();
-      var rowDate = parseDate(dateStr);
-      if (startDateStr) {
-        var startDate = new Date(startDateStr);
-        if (rowDate < startDate) return false;
-      }
-      if (endDateStr) {
-        var endDate = new Date(endDateStr);
-        if (rowDate > endDate) return false;
-      }
-      return true;
-    });
 
-    // Rebuild table body with the filtered rows.
-    var newHTML = "";
-    $rows.each(function(index) {
-      $(this).find("td:eq(0)").text(index + 1);
-      newHTML += $(this)[0].outerHTML;
-    });
+</script>
 
-    $("#tableBody").html(newHTML);
-  }
 
-  // Attach event listeners for Employee filters.
-  $("#employeeFilter, #startDateEmployee, #endDateEmployee").on("change", function() {
-    if ($(this).is("#employeeFilter")) {
-      var val = $(this).val();
-      var url = new URL(window.location.href);
-      if (val === "all") {
-        url.searchParams.delete("name");
-      } else {
-        url.searchParams.set("name", val);
-      }
-      history.pushState(null, "", url);
-    }
-    filterEmployeeTable();
-  });
-
-  // Attach event listeners for Project filters.
-  $("#projectFilter, #startDateProject, #endDateProject").on("change", function() {
-    // (Filtering code for project table would go here.)
-  });
-
-  // Toggle between Employee and Project Reports.
-  $("#employeeTab").click(function(e) {
-    e.preventDefault();
-    $("#employeeReport").show();
-    $("#projectReport").hide();
-    $(".nav-link").removeClass("active");
-    $(this).addClass("active");
-  });
-
-  $("#projectTab").click(function(e) {
-    e.preventDefault();
-    $("#employeeReport").hide();
-    $("#projectReport").show();
-    $(".nav-link").removeClass("active");
-    $(this).addClass("active");
-  });
-
-  // On page load, if a "name" query parameter exists, set the dropdown and filter.
-  function getQueryParameter(param) {
-    var urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(param);
-  }
-
-  var selectedName = getQueryParameter("name");
-  if (selectedName) {
-    $("#employeeFilter").val(selectedName);
-    filterEmployeeTable();
-  }
-});
-
-  </script>
-  
             <!-- End of Main Content -->
 
             <!-- Footer -->
@@ -1431,6 +1288,25 @@ $(document).ready(function() {
         });
     });
 </script>
+<script>
+    $(document).ready(function() {
+        var table = $('#dataTable').DataTable();
+
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const name = urlParams.get('name');
+        const company = urlParams.get('company');
+
+        // Check if name or company exists in the URL and filter accordingly
+        if (name) {
+            table.search(name).draw();
+        } else if (company) {
+            table.search(company).draw();
+        }
+    });
+</script>
+
+
 </body>
 
 </html>

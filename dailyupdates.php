@@ -578,8 +578,8 @@ tbody{
         <tr data-name="Surya" data-company="ABC Corp">
             <td>1</td>
             <td class="name-column">Surya</td>
-            <td>03-03-2025</td>
-            <td class="company-column">ABC Corp</td>
+            <td>04-03-2025</td>
+            <td class="company-column">ABC</td>
             <td>The project requires inbuilt updations and notifications.</td>
             <td>5</td>
             <td>I completed half backend work</td>
@@ -590,8 +590,8 @@ tbody{
         <tr data-name="Pavithra" data-company="ABC Corp">
             <td>2</td>
             <td class="name-column">Pavithra</td>
-            <td>03-03-2025</td>
-            <td class="company-column">ABC Corp</td>
+            <td>04-03-2025</td>
+            <td class="company-column">ABC</td>
             <td>The project requires inbuilt updations and notifications.</td>
             <td>5</td>
             <td>I completed half backend work</td>
@@ -616,28 +616,27 @@ tbody{
     document.addEventListener('DOMContentLoaded', function() {
         // Get all rows from the table
         const rows = document.querySelectorAll('#dataTable tbody tr');
-        
+
         rows.forEach(row => {
             row.addEventListener('click', function(event) {
-                // Check if the clicked element is in the 'name-column' or 'company-column'
                 const nameColumn = event.target.closest('.name-column');
                 const companyColumn = event.target.closest('.company-column');
 
-                // If clicked on the name or company column, redirect to respective pages
                 if (nameColumn) {
-                    const name = nameColumn.textContent;
-                    window.location.href = `employeereport.php?name=${name}`;
+                    const name = nameColumn.textContent.trim();
+                    window.location.href = `reports.php?name=${encodeURIComponent(name)}`;
                 } else if (companyColumn) {
-                    const company = companyColumn.textContent;
-                    window.location.href = `companyreport.php?company=${company}`;
+                    const company = companyColumn.textContent.trim();
+                    window.location.href = `reports.php?company=${encodeURIComponent(company)}`;
                 } else {
-                    // For other columns, navigate to the reports page
                     window.open("http://localhost/b2/aadhar.pdf", "_blank");
                 }
             });
         });
     });
 </script>
+
+
 
 
 

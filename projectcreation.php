@@ -448,9 +448,260 @@ thead{
         style="color: rgb(15,29,64); margin-top: 5px;">
         Project Creation
     </h4>
+     <!-- Enhanced Access Button (Responsive) -->
+     <button type="button" class="btn" id="addAccessBtn" >
+        <i class="fas fa-user-shield" style="margin-right: 8px;"></i> Access
+    </button>
+
 
 </div>
 
+
+<!-- Enhanced Dropdown Container -->
+<div id="accessDropdownContainer" class="mt-2 p-3 rounded shadow" 
+    style="
+        display: none; 
+        border: 1px solid #ccc; 
+        background: white; 
+        position: absolute; 
+        width: 8%; 
+        min-width: 260px; 
+        z-index: 100; 
+        top: 100%; 
+        left: 90px;
+        border-radius: 8px; 
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1); 
+        padding: 15px;
+        transition: all 0.3s ease-in-out;
+    ">
+    <div id="accessDropdown" class="row"></div>
+</div>
+
+
+<style>
+
+.add{
+  background-color:rgb(0, 148, 255); 
+  color: white; 
+  border-radius: 25px; 
+  font-size: 50px;
+  padding:8px;
+}
+  #addAccessBtn{
+        background: rgb(238, 153, 129); 
+        color: white; 
+        padding: 8px;
+        font-size: 16px; 
+        font-weight: 600; 
+        border-radius: 25px; 
+        transition: all 0.3s ease-in-out;
+        border: none; 
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+    /* Ensure buttons are responsive */
+    .btn-container {
+        display: flex;
+        flex-direction: column; /* Stack vertically on mobile */
+        gap: 10px; /* Space between buttons */
+    }
+
+    /* Responsive Button Sizes */
+    .plus-button, #addAccessBtn {
+        font-size: 16px;
+        width: 100%;  /* Full width on smaller screens */
+    }
+
+    @media (max-width: 868px) {
+        .plus-button, #addAccessBtn {
+            width: 100%;  /* Ensure full width on small screens */
+            font-size: 10px;  /* Slightly smaller font size */
+        }
+        .fa-plus{
+          font-size:10px
+    
+        }
+    }
+
+    @media (min-width: 768px) {
+        .plus-button, #addAccessBtn {
+            width: auto;  /* Auto width on larger screens */
+            font-size: 14px;
+        }
+    }
+</style>
+
+<style>
+   /* Access Button Hover Effect */
+#addAccessBtn {
+    transition: all 0.3s ease-in-out;
+}
+
+#addAccessBtn:hover {
+    background: rgb(255, 105, 0); /* Slightly darker shade */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Dropdown Container Hover Effect */
+#accessDropdownContainer {
+    transition: all 0.3s ease-in-out;
+}
+
+#accessDropdownContainer:hover {
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+}
+
+/* Dropdown Items */
+.employee-checkbox {
+    margin-right: 10px;
+}
+
+.employee-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    transition: color 0.3s ease-in-out;
+}
+
+.employee-label:hover {
+    color: rgb(255, 105, 0);
+    cursor: pointer;
+}
+
+/* Dropdown Item Wrapper */
+.dropdown-item-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.2s ease-in-out;
+}
+
+.dropdown-item-wrapper:last-child {
+    border-bottom: none;
+}
+
+/* Highlight on Hover */
+.dropdown-item-wrapper:hover {
+    background-color: rgba(255, 105, 0, 0.1);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    #addAccessBtn {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+
+    #accessDropdownContainer {
+        width: 100%; /* Full width on smaller screens */
+        max-height: 300px;
+        overflow-y: auto; /* Scroll if too many items */
+    }
+
+    .dropdown-item-wrapper {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .employee-label {
+        font-size: 14px;
+    }
+
+    .employee-checkbox {
+        margin-right: 6px;
+        transform: scale(0.9); /* Slightly smaller checkboxes */
+    }
+}
+
+@media (max-width: 480px) {
+    #addAccessBtn {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+
+    .employee-label {
+        font-size: 14px;
+    }
+
+    .dropdown-item-wrapper {
+        padding: 6px;
+        font-size: 14px;
+    }
+
+    #accessDropdownContainer {
+        max-height: 250px;
+    }
+}
+
+</style>
+
+<script>
+  // List of employees who will have access
+let accessEmployees = ["Pavitra", "Jayavarshini", "Suriya", "Mohan", "Naveen", "Anbumani", "Sivakumar", "Venkatesh"];
+accessEmployees.sort(); // Sort employees alphabetically
+let selectedAccessEmployees = new Set();
+
+const addAccessBtn = document.getElementById('addAccessBtn');
+const accessDropdownContainer = document.getElementById('accessDropdownContainer');
+const accessDropdownList = document.getElementById('accessDropdown');
+
+// Show dropdown when clicking the "Access" button
+addAccessBtn.addEventListener('click', function () {
+    accessDropdownContainer.style.display = 'block'; // Show dropdown
+    accessDropdownList.innerHTML = ''; // Clear previous list
+
+    accessEmployees.forEach(emp => {
+        let wrapper = document.createElement('div');
+        wrapper.classList.add('col-6', 'd-flex', 'align-items-center', 'mb-1');
+
+        let checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = emp;
+        checkbox.checked = selectedAccessEmployees.has(emp);
+        checkbox.classList.add('employee-checkbox');
+
+        let label = document.createElement('label');
+        label.textContent = emp;
+        label.classList.add('mr-auto', 'text-wrap', 'employee-label');
+        label.style.wordBreak = 'break-word';
+        label.style.flex = '1';
+        label.style.marginBottom = "0";
+        label.style.whiteSpace = 'normal';
+        label.style.cursor = 'pointer'; // Add pointer cursor for better UX
+
+        // Function to toggle selection
+        function toggleSelection() {
+            if (checkbox.checked) {
+                selectedAccessEmployees.add(emp);
+            } else {
+                selectedAccessEmployees.delete(emp);
+            }
+        }
+
+        // Click on label should toggle checkbox
+        label.addEventListener('click', function () {
+            checkbox.checked = !checkbox.checked;
+            toggleSelection();
+        });
+
+        // Checkbox should work independently as well
+        checkbox.addEventListener('change', toggleSelection);
+
+        wrapper.appendChild(checkbox);
+        wrapper.appendChild(label);
+        accessDropdownList.appendChild(wrapper);
+    });
+});
+
+// Hide dropdown when clicking outside
+document.addEventListener('click', function (event) {
+    if (!accessDropdownContainer.contains(event.target) && event.target !== addAccessBtn) {
+        accessDropdownContainer.style.display = 'none';
+    }
+});
+
+</script>
 <!-- Topbar Navbar -->
 <ul class="navbar-nav ml-auto">
 

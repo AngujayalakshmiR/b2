@@ -685,12 +685,12 @@ document.addEventListener('click', function (event) {
               </tr>
             </thead>
             <tbody>
-              <tr data-pdf="r1.pdf">
+              <tr>
                 <td>1</td>
                 <td>ABC</td>
-                <td>Kurinji Cement</td>
-                <td>Web Development</td>
-                <td>An website for cement &amp; steel purchase, sales and administration.</td>
+                <td>Kurinji</td>
+                <td>Web application</td>
+                <td>abc</td>
                 <td>5</td>
                 <td>JayaVarshini, Surya</td>
                 <td class="action-buttons">
@@ -698,12 +698,12 @@ document.addEventListener('click', function (event) {
                   <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
                 </td>
               </tr>
-              <tr data-pdf="r2.pdf">
+              <tr>
                 <td>2</td>
                 <td>ABC</td>
-                <td>Green Home</td>
-                <td>Mobile Development</td>
-                <td>An website for cement &amp; steel purchase, sales and administration.</td>
+                <td>Govin</td>
+                <td>Mobile application</td>
+                <td>kmn</td>
                 <td>5</td>
                 <td>JayaVarshini, Surya</td>
                 <td class="action-buttons">
@@ -711,12 +711,12 @@ document.addEventListener('click', function (event) {
                   <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
                 </td>
               </tr>
-              <tr data-pdf="r1.pdf">
+              <tr>
                 <td>3</td>
                 <td>ABC</td>
-                <td>Gowin</td>
-                <td>Poster Designing</td>
-                <td>An website for cement &amp; steel purchase, sales and administration.</td>
+                <td>xxx</td>
+                <td>Mobile application</td>
+                <td>xyz</td>
                 <td>5</td>
                 <td>JayaVarshini, Surya</td>
                 <td class="action-buttons">
@@ -895,28 +895,42 @@ document.addEventListener('click', function (event) {
 }
 </script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
     // Get all rows from the table
     const rows = document.querySelectorAll('#dataTable tbody tr');
-    
+
     rows.forEach(row => {
         row.addEventListener('click', function(event) {
-            // Get the customer and company values from the row
-            const companyCell = row.cells[2];  // Company column index
+            const companyCell = row.cells[2]; // Company column
+            const projectTypeCell = row.cells[3]; // Project Type column
+            const projectTitleCell = row.cells[4]; // Project Title column
 
-           
-            // If clicked on the Company column, redirect to company report
-             if (event.target === companyCell) {
-                const company = companyCell.textContent.trim();
-                window.location.href = `companyreport.php?company=${encodeURIComponent(company)}`;
+            let paramKey = '';
+            let paramValue = '';
+
+            // Check which column was clicked and set the respective parameter
+            if (event.target === companyCell) {
+                paramKey = 'company';
+                paramValue = companyCell.textContent.trim();
+            } else if (event.target === projectTypeCell) {
+                paramKey = 'projectType';
+                paramValue = projectTypeCell.textContent.trim();
+            } else if (event.target === projectTitleCell) {
+                paramKey = 'projectTitle';
+                paramValue = projectTitleCell.textContent.trim();
             }
-            // Otherwise, go to general reports
+
+            // Navigate to reports.php with the correct parameter
+            if (paramKey && paramValue) {
+                window.location.href = `reports.php?${paramKey}=${encodeURIComponent(paramValue)}`;
+            }
             else {
-                window.open("http://localhost/b2/aadhar.pdf", "_blank");
+            window.open("http://localhost/b2/aadhar.pdf", "_blank");
             }
         });
     });
 });
+
 </script>
 
 </body>

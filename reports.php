@@ -735,6 +735,11 @@
         </div>
         <div class="card-body">
           <div class="table-responsive">
+          <div class="d-flex justify-content-between mb-3">
+            <h5>Total Days: <span id="totalDays">0</span></h5>
+            <h5>Actual Days: <span id="actualDays">0</span></h5>
+        </div>
+
             <!-- Employee Report Table -->
             <table class="table table-bordered text-center" style="font-size: 14px;" id="dataTable" width="100%" cellspacing="0">
               <thead>
@@ -1006,6 +1011,46 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const dataTable = document.getElementById("dataTable");
+    const searchBox = document.querySelector(".dataTables_filter input"); // Assuming a DataTable plugin is used
+    const totalDaysElement = document.getElementById("totalDays");
+    const actualDaysElement = document.getElementById("actualDays");
+
+    function calculateDays() {
+        let totalHrs = 0;
+        let actualHrs = 0;
+        let searchValue = searchBox.value.toLowerCase();
+
+        // Loop through table rows and filter based on Name, Company, or Company-Title
+        Array.from(dataTable.querySelectorAll("tbody tr")).forEach(row => {
+            let name = row.children[1].textContent.toLowerCase();
+            let companyTitle = row.children[3].textContent.toLowerCase();
+            let totalHrsValue = parseFloat(row.children[6].textContent) || 0;
+            let actualHrsValue = parseFloat(row.children[7].textContent) || 0;
+
+            // Match search criteria
+            if (name.includes(searchValue) || companyTitle.includes(searchValue)) {
+                totalHrs += totalHrsValue;
+                actualHrs += actualHrsValue;
+            }
+        });
+
+        // Convert hours to days (8 hrs = 1 day)
+        let totalDays = (totalHrs / 8).toFixed(2);
+        let actualDays = (actualHrs / 8).toFixed(2);
+
+        // Update UI
+        totalDaysElement.textContent = totalDays;
+        actualDaysElement.textContent = actualDays;
+    }
+
+    // Listen for search input changes
+    searchBox.addEventListener("input", calculateDays);
+});
+
+  </script>
  <script>
 document.addEventListener('DOMContentLoaded', function () {
     // Initialize DataTable
@@ -1291,23 +1336,50 @@ $(document).ready(function() {
     });
 </script>
 <script>
-    $(document).ready(function() {
-        var table = $('#dataTable').DataTable();
+$(document).ready(function () {
+    var table = $('#dataTable').DataTable();
 
-        // Get URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        const name = urlParams.get('name');
-        const company = urlParams.get('company');
+    // Get URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const name = urlParams.get('name');
+    const company = urlParams.get('company');
+    const title = urlParams.get('title'); // Get title from URL
 
-        // Check if name or company exists in the URL and filter accordingly
-        if (name) {
-            table.search(name).draw();
-        } else if (company) {
-            table.search(company).draw();
-        }
-    });
+    // Check if name, company, or title exists in the URL and filter accordingly
+    if (name) {
+        table.search(name).draw();
+    } else if (company) {
+        table.search(company).draw();
+    } else if (title) {
+        table.search(title).draw(); // Filter table by title
+    }
+});
+
 </script>
+<script>
+    $(document).ready(function () {
+    var table = $('#dataTable').DataTable();
 
+    // Get URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const company = urlParams.get('company');
+    const projectType = urlParams.get('projectType');
+    const projectTitle = urlParams.get('projectTitle');
+
+    // Check which parameter exists and apply search
+    if (company) {
+        table.search(company).draw();
+        $('#searchInput').val(company); // Set search bar value
+    } else if (projectType) {
+        table.search(projectType).draw();
+        $('#searchInput').val(projectType); // Set search bar value
+    } else if (projectTitle) {
+        table.search(projectTitle).draw();
+        $('#searchInput').val(projectTitle); // Set search bar value
+    }
+});
+
+</script>
 
 </body>
 

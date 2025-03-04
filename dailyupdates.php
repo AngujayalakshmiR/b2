@@ -581,8 +581,8 @@ tbody{
             <td>1</td>
             <td class="name-column">Surya</td>
             <td>04-03-2025</td>
-            <td class="company-column">ABC</td>
-            <td>The project requires inbuilt updations and notifications.</td>
+            <td class="company-column">Govin</td>
+            <td>abc</td>
             <td>5</td>
             <td>I completed half backend work</td>
             <td>4.5</td>
@@ -593,8 +593,8 @@ tbody{
             <td>2</td>
             <td class="name-column">Pavithra</td>
             <td>04-03-2025</td>
-            <td class="company-column">ABC</td>
-            <td>The project requires inbuilt updations and notifications.</td>
+            <td class="company-column">Kurinji</td>
+            <td>xyz</td>
             <td>5</td>
             <td>I completed half backend work</td>
             <td>4.5</td>
@@ -613,30 +613,39 @@ tbody{
                 <!-- /.container-fluid -->
 
             </div>
-         
-            <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Get all rows from the table
-        const rows = document.querySelectorAll('#dataTable tbody tr');
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+    // Initialize DataTable
+    var table = $('#dataTable').DataTable();
 
-        rows.forEach(row => {
-            row.addEventListener('click', function(event) {
-                const nameColumn = event.target.closest('.name-column');
-                const companyColumn = event.target.closest('.company-column');
+    document.querySelector('#dataTable tbody').addEventListener('click', function (event) {
+        const clickedCell = event.target.closest('td'); // Get clicked <td>
+        if (!clickedCell) return;
 
-                if (nameColumn) {
-                    const name = nameColumn.textContent.trim();
-                    window.location.href = `reports.php?name=${encodeURIComponent(name)}`;
-                } else if (companyColumn) {
-                    const company = companyColumn.textContent.trim();
-                    window.location.href = `reports.php?company=${encodeURIComponent(company)}`;
-                } else {
-                    window.open("http://localhost/b2/aadhar.pdf", "_blank");
-                }
-            });
-        });
+        const nameColumn = clickedCell.closest('.name-column');
+        const companyColumn = clickedCell.closest('.company-column');
+        const titleColumn = clickedCell.cellIndex === 4; // Title column index (zero-based)
+
+        const searchBox = document.querySelector('input[type="search"]'); // Search box in DataTable
+
+        if (nameColumn) {
+            const name = nameColumn.textContent.trim();
+            window.location.href = `reports.php?name=${encodeURIComponent(name)}`;
+        } else if (companyColumn) {
+            const company = companyColumn.textContent.trim();
+            window.location.href = `reports.php?company=${encodeURIComponent(company)}`;
+        } else if (titleColumn) {
+            const title = clickedCell.textContent.trim();
+            searchBox.value = title; // Set search box value
+            table.search(title).draw(); // Filter table with title
+            window.location.href = `reports.php?title=${encodeURIComponent(title)}`;
+        } else {
+            window.open("http://localhost/b2/aadhar.pdf", "_blank");
+        }
     });
-</script>
+});
+
+    </script>
 
 
 

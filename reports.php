@@ -769,7 +769,7 @@
                 <tr>
                   <td>2</td>
                   <td>Naveen</td>
-                  <td>11-02-2025</td>
+                  <td>10-02-2025</td>
                   <td>Kurinji-XYZ</td>
                   <td>Mobile Application</td>
                   <td>aaa</td>
@@ -780,12 +780,146 @@
                 <tr>
                   <td>3</td>
                   <td>Pavithra</td>
-                  <td>12-02-2025</td>
+                  <td>10-02-2025</td>
                   <td>xxx-KMN</td>
                   <td>Web Application</td>
                   <td>bbb</td>
                   <td>7</td>
                   <td>8</td>
+                  <td>Completed</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>JayaVarshini</td>
+                  <td>10-02-2025</td>
+                  <td>Govin-ABC</td>
+                  <td>Web Application</td>
+                  <td>XYZ</td>
+                  <td>6</td>
+                  <td>5</td>
+                  <td>Completed</td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>Mohan</td>
+                  <td>10-02-2025</td>
+                  <td>Kurinji-XYZ</td>
+                  <td>Mobile Application</td>
+                  <td>aaa</td>
+                  <td>4</td>
+                  <td>-</td>
+                  <td>Started</td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>Angu</td>
+                  <td>10-02-2025</td>
+                  <td>xxx-KMN</td>
+                  <td>Web Application</td>
+                  <td>bbb</td>
+                  <td>7</td>
+                  <td>8</td>
+                  <td>Completed</td>
+                </tr>
+
+
+                <tr>
+                  <td>7</td>
+                  <td>Surya</td>
+                  <td>11-02-2025</td>
+                  <td>Govin-ABC</td>
+                  <td>Web Application</td>
+                  <td>XYZ</td>
+                  <td>6</td>
+                  <td>5</td>
+                  <td>Completed</td>
+                </tr>
+                <tr>
+                  <td>8</td>
+                  <td>Naveen</td>
+                  <td>11-02-2025</td>
+                  <td>Kurinji-XYZ</td>
+                  <td>Mobile Application</td>
+                  <td>aaa</td>
+                  <td>4</td>
+                  <td>-</td>
+                  <td>Started</td>
+                </tr>
+                <tr>
+                  <td>9</td>
+                  <td>Pavithra</td>
+                  <td>11-02-2025</td>
+                  <td>xxx-KMN</td>
+                  <td>Web Application</td>
+                  <td>bbb</td>
+                  <td>7</td>
+                  <td>8</td>
+                  <td>Completed</td>
+                </tr>
+                <tr>
+                  <td>10</td>
+                  <td>JayaVarshini</td>
+                  <td>11-02-2025</td>
+                  <td>Govin-ABC</td>
+                  <td>Web Application</td>
+                  <td>XYZ</td>
+                  <td>6</td>
+                  <td>5</td>
+                  <td>Completed</td>
+                </tr>
+                <tr>
+                  <td>11</td>
+                  <td>Mohan</td>
+                  <td>11-02-2025</td>
+                  <td>Kurinji-XYZ</td>
+                  <td>Mobile Application</td>
+                  <td>aaa</td>
+                  <td>4</td>
+                  <td>-</td>
+                  <td>Started</td>
+                </tr>
+                <tr>
+                  <td>12</td>
+                  <td>Angu</td>
+                  <td>11-02-2025</td>
+                  <td>xxx-KMN</td>
+                  <td>Web Application</td>
+                  <td>bbb</td>
+                  <td>7</td>
+                  <td>8</td>
+                  <td>Completed</td>
+                </tr>
+                <tr>
+                  <td>13</td>
+                  <td>JayaVarshini</td>
+                  <td>11-02-2025</td>
+                  <td>Govin-mobile app</td>
+                  <td>Web Application</td>
+                  <td>XYZ</td>
+                  <td>6</td>
+                  <td>5</td>
+                  <td>Completed</td>
+                </tr>
+                <tr>
+                  <td>14</td>
+                  <td>surya</td>
+                  <td>12-02-2025</td>
+                  <td>Govin-mobile app</td>
+                  <td>Web Application</td>
+                  <td>XYZ</td>
+                  <td>6</td>
+                  <td>5</td>
+                  <td>Completed</td>
+                </tr>
+                <tr>
+                  <td>15</td>
+                  <td>JayaVarshini</td>
+                  <td>13-02-2025</td>
+                  <td>Govin-web app</td>
+                  <td>Web Application</td>
+                  <td>XYZ</td>
+                  <td>6</td>
+                  <td>5</td>
                   <td>Completed</td>
                 </tr>
               </tbody>
@@ -868,6 +1002,7 @@
                   <td>-</td>
                   <td>Started</td>
                 </tr>
+                
               </tbody>
             </table>
           </div>

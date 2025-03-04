@@ -502,6 +502,8 @@
             <a class="collapse-item " href="employee.php" style="color: black;">Employee</a>
             <a class="collapse-item" href="designation.php" style="color: black;">Designation</a>
             <a class="collapse-item" href="projecttype.php" style="color: black;">Project Type</a>
+            <a class="collapse-item" href="followuptype.php" style="color: black;">FollowUp Type</a>
+
         </div>
     </div>
 </li> 

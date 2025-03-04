@@ -787,7 +787,7 @@ document.addEventListener('click', function (event) {
               </div>
               <!-- Submit Button -->
               <div class="text-center">
-                <button type="submit" class="btn submit-btn">Submit</button>
+                <button type="submit" class="btn submit-btn" style="color: white;">Submit</button>
               </div>
             </form>
           </div>

@@ -33,7 +33,8 @@ thead{
     #dataTable th:nth-child(5), #dataTable td:nth-child(5) { width: 10%; }  /* Project Type */
     #dataTable th:nth-child(6), #dataTable td:nth-child(6) { width: 10%; } /* Description */
     #dataTable th:nth-child(7), #dataTable td:nth-child(7) { width: 15%; } /* Total days */
-    #dataTable th:nth-child(8), #dataTable td:nth-child(8) { width: 30%; } /* Teammates */
+    #dataTable th:nth-child(7), #dataTable td:nth-child(7) { width: 15%; } /* Working days */
+    #dataTable th:nth-child(8), #dataTable td:nth-child(8) { width: 15%; } /* Teammates */
 
         /* Center align action buttons */
         .action-buttons {
@@ -529,6 +530,7 @@ tbody{
             <th>Title</th>
             <th>Project Type</th>
             <th>Total Days</th>
+            <th>Working Days</th>
             <th>Teammates</th>
         </tr>
     </thead>
@@ -540,6 +542,7 @@ tbody{
             <td>The project requires inbuilt updations and notifications.</td>
             <td>Web Development</td>
             <td>10</td>
+            <td>8</td>
             <td>Surya, Jayavarshini</td> <!-- Module Status -->
            
         </tr>
@@ -550,6 +553,7 @@ tbody{
             <td>The project requires inbuilt updations and notifications.</td>
             <td>Web Development</td>
             <td>10</td>
+            <td>7</td>
             <td>Surya, Jayavarshini</td> <!-- Module Status -->
           
         </tr>

@@ -449,10 +449,58 @@ tbody{
         }
     }
 
+/* Modal Responsiveness */
+.modal-dialog {
+    max-width: 35%;
+  }
+
+  @media (max-width: 992px) { /* Tablets */
+    .modal-dialog {
+      max-width: 60%;
+    }
+  }
+
+  @media (max-width: 768px) { /* Mobile */
+    .modal-dialog {
+        max-width: 70%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: auto; /* Ensures it's centered */
+    }
+    .custom-radio {
+        font-size: 12px;
+        width:100%;
+    }
+    .submit-btn {
+        font-size: 10px;
+        padding: 4px 8px;
+        margin-top: 5px;
+    }
+}
 
 
-   
+  /* Styling */
+  .modal-content {
+    border-radius: 15px;
+  }
 
+  .custom-radio {
+    font-size: 14px;
+    margin-right: 10px;
+  }
+
+  .submit-btn {
+    background-color: rgb(15,29,64);
+    color: white;
+    border-radius: 10px;
+    font-size: 14px;
+    padding: 4px 8px;
+  }
+
+  .d-flex.flex-wrap {
+    gap: 10px;
+  }
 </style>
 
 </head>
@@ -474,7 +522,7 @@ tbody{
 <!-- Divider -->
 <div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 <!-- Nav Item - Dashboard -->
-<li class="nav-item l active ">
+<li class="nav-item l  ">
     <a class="nav-link k" href="employeedash.php" style="color: white;">
         <i class="fas fa-fw fa-tachometer-alt" style="font-size:16px"></i>
         <span>Dashboard</span>
@@ -485,7 +533,7 @@ tbody{
 
 <!-- Divider -->
 <!-- Nav Item - Project Creation -->
-<li class="nav-item l">
+<li class="nav-item l active">
     <a class="nav-link k" href="employeeProjectAllocated.php" style="color: black;">
         <i class="fas fa-fw fa-folder" style="font-size:16px"></i>
         <span>Project Allocation</span>
@@ -532,11 +580,10 @@ tbody{
 <!-- Topbar Navbar -->
 <ul class="navbar-nav ml-auto">
 <div class="d-flex justify-content-between align-items-center mb-2">
-        <a href="sample.pdf" target="_blank" class="btn " style="background: rgb(0, 148, 255); font-size: 15px;color:white;">Requirement File</a>
+<a href="#" class="btn" style="background: rgb(249, 158, 39); font-size: 15px; color: white;" 
+data-bs-toggle="modal" data-bs-target="#projectDescModal">Desc</a> &nbsp;
+        <a href="sample.pdf" target="_blank" class="btn " style="background: rgb(255, 50, 105); font-size: 15px;color:white;">Req</a>
     </div>
-<h4 class="text-dark font-weight-bold mr-1 d-flex align-items-center pl-3 py-2 " style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
-        Jayavarshini 
-    </h4>
     <div class="topbar-divider d-none d-sm-block"></div>
 
     <!-- Nav Item - User Information -->
@@ -578,7 +625,7 @@ tbody{
     <div class="custom-card"><b>Total Days</b>
         <div style="margin-top: 10px;">20</div>
     </div>
-    <div class="custom-card"><b>Pending Days</b>
+    <div class="custom-card"><b>Working Days</b>
         <div style="margin-top: 10px;"> 10</div>
     </div>
     <div class="custom-card"><b>Members Allocated</b>
@@ -683,7 +730,29 @@ tbody{
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
+<!-- Project Description Modal -->
+<div class="modal fade" id="projectDescModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
 
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <div class="form-group mt-3">
+          <label for="projectDescription"><b>Project Description:</b></label>
+          <textarea class="form-control" id="projectDescription" rows="3" placeholder="Enter project description"></textarea>
+        </div>
+        <div class="text-center">
+                <button type="submit" class="btn submit-btn" style="color: white;">Update</button>
+              </div>
+      </div>
+
+      <!-- Modal Footer with Buttons -->
+    
+
+    </div>
+  </div>
+</div>
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -793,6 +862,15 @@ function markCompleted(button) {
         <span class="text-success"><i class="fas fa-check-circle"></i> Completed</span>
     `;
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelector("[data-bs-target='#projectDescModal']").addEventListener("click", function (event) {
+        event.preventDefault(); // Prevent default anchor behavior
+        var myModal = new bootstrap.Modal(document.getElementById("projectDescModal"));
+        myModal.show();
+    });
+});
+
 </script>
 
   <!-- <script>

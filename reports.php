@@ -735,10 +735,14 @@
         </div>
         <div class="card-body">
           <div class="table-responsive">
-          <div class="d-flex justify-content-between mb-3">
-            <h5>Total Days: <span id="totalDays">0</span></h5>
-            <h5>Actual Days: <span id="actualDays">0</span></h5>
-        </div>
+        <!-- Display Total Days and Actual Days -->
+        <div class="d-flex justify-content-between my-3">
+    <h5>Total Days: <span id="totalDays">0</span></h5>
+    <h5>Actual Days: <span id="actualDays">0</span></h5>
+</div>
+
+
+<!-- Search Input -->
 
             <!-- Employee Report Table -->
             <table class="table table-bordered text-center" style="font-size: 14px;" id="dataTable" width="100%" cellspacing="0">
@@ -1011,46 +1015,35 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-    const dataTable = document.getElementById("dataTable");
-    const searchBox = document.querySelector(".dataTables_filter input"); // Assuming a DataTable plugin is used
-    const totalDaysElement = document.getElementById("totalDays");
-    const actualDaysElement = document.getElementById("actualDays");
+ <!-- JavaScript Code -->
+<!-- JavaScript to Initialize DataTable and Calculate Days -->
+<script>
+$(document).ready(function() {
+    let table = $('#dataTable').DataTable();
 
-    function calculateDays() {
-        let totalHrs = 0;
-        let actualHrs = 0;
-        let searchValue = searchBox.value.toLowerCase();
+    // Listen for search input change in DataTable's built-in search box
+    $('#dataTable_filter input').on('input', function() {
+        setTimeout(updateDays, 200); // Delay to allow DataTable to process search
+    });
 
-        // Loop through table rows and filter based on Name, Company, or Company-Title
-        Array.from(dataTable.querySelectorAll("tbody tr")).forEach(row => {
-            let name = row.children[1].textContent.toLowerCase();
-            let companyTitle = row.children[3].textContent.toLowerCase();
-            let totalHrsValue = parseFloat(row.children[6].textContent) || 0;
-            let actualHrsValue = parseFloat(row.children[7].textContent) || 0;
+    function updateDays() {
+        let totalHours = 0;
+        let actualHours = 0;
 
-            // Match search criteria
-            if (name.includes(searchValue) || companyTitle.includes(searchValue)) {
-                totalHrs += totalHrsValue;
-                actualHrs += actualHrsValue;
-            }
+        // Loop through only the visible rows after search filter
+        $('#dataTable tbody tr:visible').each(function() {
+            let totalHrs = $(this).find("td:eq(6)").text().trim();
+            let actualHrs = $(this).find("td:eq(7)").text().trim();
+
+            totalHours += totalHrs ? parseFloat(totalHrs) : 0;
+            actualHours += actualHrs && actualHrs !== "-" ? parseFloat(actualHrs) : 0;
         });
 
-        // Convert hours to days (8 hrs = 1 day)
-        let totalDays = (totalHrs / 8).toFixed(2);
-        let actualDays = (actualHrs / 8).toFixed(2);
-
-        // Update UI
-        totalDaysElement.textContent = totalDays;
-        actualDaysElement.textContent = actualDays;
+        $("#totalDays").text((totalHours / 8).toFixed(2));
+        $("#actualDays").text((actualHours / 8).toFixed(2));
     }
-
-    // Listen for search input changes
-    searchBox.addEventListener("input", calculateDays);
 });
-
-  </script>
+</script>
  <script>
 document.addEventListener('DOMContentLoaded', function () {
     // Initialize DataTable

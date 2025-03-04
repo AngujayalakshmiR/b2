@@ -453,6 +453,7 @@
     #monthProject {
       /* Inherits from the above select styles, can add custom styles here */
     }
+    
 </style>
 
 </head>
@@ -713,8 +714,7 @@
       <div class="card shadow mb-4" id="employeeReport">
         <div class="card-header py-3 ">
           <!-- First Row: Employee Dropdown Filter and Excel Export -->
-          <div class="d-flex flex-wrap align-items-center filter-group   ">
-         
+          <div class="d-flex flex-wrap align-items-center filter-group">
             From:
             <input type="date" id="startDateEmployee" class="form-control" style="max-width: 150px;">
             To:
@@ -726,7 +726,6 @@
                 <button id="exportPdfEmployee" class="btn btn-danger export-btn" style="background:green;border:green" title="Export to PDF">
                     <i class="fa fa-file-alt"></i>&nbsp;&nbsp;Generate Report
                 </button>
-
             </div>
 
 
@@ -736,9 +735,9 @@
         <div class="card-body">
           <div class="table-responsive">
         <!-- Display Total Days and Actual Days -->
-        <div class="d-flex justify-content-between my-3">
-    <h5>Total Days: <span id="totalDays">0</span></h5>
-    <h5>Actual Days: <span id="actualDays">0</span></h5>
+        <div class="d-flex justify-content-center my-3">
+    <h5 style="color:black;"><b>Total Days: </b><span id="totalDays">0</span></h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <h5 style="color:black;"><b>Actual Days: </b><span id="actualDays">0</span></h5>
 </div>
 
 
@@ -757,6 +756,8 @@
                   <th>Total Hrs</th>
                   <th>Actual Hrs</th>
                   <th>Status</th>
+                  <th>Total Days</th>
+
                 </tr>
               </thead>
               <tbody id="tableBody">
@@ -765,12 +766,14 @@
                   <td>1</td>
                   <td>Surya</td>
                   <td>10-02-2025</td>
-                  <td>Govin-ABC</td>
+                  <td>Govin-ABCd</td>
                   <td>Web Application</td>
                   <td>XYZ</td>
                   <td>6</td>
                   <td>5</td>
                   <td>Completed</td>
+                  <td>5</td>
+
                 </tr>
                 <tr>
                   <td>2</td>
@@ -782,17 +785,21 @@
                   <td>4</td>
                   <td>-</td>
                   <td>Started</td>
+                  <td>5</td>
+
                 </tr>
                 <tr>
                   <td>3</td>
                   <td>Pavithra</td>
                   <td>10-02-2025</td>
-                  <td>xxx-KMN</td>
+                  <td>xxx-KMNo</td>
                   <td>Web Application</td>
                   <td>bbb</td>
                   <td>7</td>
                   <td>8</td>
                   <td>Completed</td>
+                  <td>5</td>
+
                 </tr>
                 <tr>
                   <td>4</td>
@@ -804,6 +811,8 @@
                   <td>6</td>
                   <td>5</td>
                   <td>Completed</td>
+                  <td>5</td>
+
                 </tr>
                 <tr>
                   <td>5</td>
@@ -815,6 +824,8 @@
                   <td>4</td>
                   <td>-</td>
                   <td>Started</td>
+                  <td>5</td>
+
                 </tr>
                 <tr>
                   <td>6</td>
@@ -826,6 +837,8 @@
                   <td>7</td>
                   <td>8</td>
                   <td>Completed</td>
+                  <td>5</td>
+
                 </tr>
 
 
@@ -839,6 +852,8 @@
                   <td>6</td>
                   <td>5</td>
                   <td>Completed</td>
+                  <td>5</td>
+
                 </tr>
                 <tr>
                   <td>8</td>
@@ -850,6 +865,8 @@
                   <td>4</td>
                   <td>-</td>
                   <td>Started</td>
+                  <td>5</td>
+
                 </tr>
                 <tr>
                   <td>9</td>
@@ -861,6 +878,8 @@
                   <td>7</td>
                   <td>8</td>
                   <td>Completed</td>
+                  <td>5</td>
+
                 </tr>
                 <tr>
                   <td>10</td>
@@ -872,6 +891,8 @@
                   <td>6</td>
                   <td>5</td>
                   <td>Completed</td>
+                  <td>5</td>
+
                 </tr>
                 <tr>
                   <td>11</td>
@@ -883,6 +904,8 @@
                   <td>4</td>
                   <td>-</td>
                   <td>Started</td>
+                  <td>5</td>
+
                 </tr>
                 <tr>
                   <td>12</td>
@@ -894,6 +917,8 @@
                   <td>7</td>
                   <td>8</td>
                   <td>Completed</td>
+                  <td>5</td>
+
                 </tr>
                 <tr>
                   <td>13</td>
@@ -905,6 +930,8 @@
                   <td>6</td>
                   <td>5</td>
                   <td>Completed</td>
+                  <td>5</td>
+
                 </tr>
                 <tr>
                   <td>14</td>
@@ -916,6 +943,8 @@
                   <td>6</td>
                   <td>5</td>
                   <td>Completed</td>
+                  <td>5</td>
+
                 </tr>
                 <tr>
                   <td>15</td>
@@ -927,6 +956,7 @@
                   <td>6</td>
                   <td>5</td>
                   <td>Completed</td>
+                  <td>19</td>
                 </tr>
               </tbody>
             </table>
@@ -1017,7 +1047,7 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
  <!-- JavaScript Code -->
 <!-- JavaScript to Initialize DataTable and Calculate Days -->
-<script>
+<!-- <script>
 document.addEventListener('DOMContentLoaded', function () {
     // Initialize DataTable
     var table = $('#dataTable').DataTable();
@@ -1076,7 +1106,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
-</script>
+</script> -->
 
  <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -1116,7 +1146,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -1153,45 +1182,79 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
-
 </script>
-
 <script>
-   $(document).ready(function () {
-    var originalData = $("#tableBody tr").clone(); // Store original data for reset
+document.addEventListener('DOMContentLoaded', function () {
+    var table = $('#dataTable').DataTable();
 
-    function parseDate(dateStr) {
-        var parts = dateStr.split("-");
-        return new Date(parts[2], parts[1] - 1, parts[0]); // Convert to YYYY-MM-DD format
-    }
+    // Function to update Total Days and Actual Days
+    function updateDays() {
+        let totalDaysMap = new Map(); // Store total days for unique Company-Title
+        let actualHours = 0;
 
-    function filterTable() {
-        var fromDateStr = $("#startDateEmployee").val();
-        var toDateStr = $("#endDateEmployee").val();
-        var fromDate = fromDateStr ? new Date(fromDateStr) : null;
-        var toDate = toDateStr ? new Date(toDateStr) : null;
-
-        $("#tableBody").empty(); // Clear current table data
-
-        originalData.each(function () {
-            var row = $(this);
-            var dateText = row.find("td:nth-child(3)").text().trim(); // Get the date from the 3rd column
-            var rowDate = parseDate(dateText);
-
-            // Show rows only if they match the filter criteria
-            if (
-                (!fromDate || rowDate >= fromDate) &&
-                (!toDate || rowDate <= toDate)
-            ) {
-                $("#tableBody").append(row.clone());
+        // Loop through only the visible rows after filtering
+        $('#dataTable tbody tr:visible').each(function() {
+            let companyTitle = $(this).find("td:eq(3)").text().trim(); // Get Company-Title column (adjust index if needed)
+            let totalDaysValue = parseFloat($(this).find("td:eq(9)").text().trim()) || 0; // Get Total Days column (adjust index if needed)
+            let actualHrs = $(this).find("td:eq(7)").text().trim(); // Get Actual Hours column
+            
+            if (companyTitle) {
+                if (!totalDaysMap.has(companyTitle)) {
+                    totalDaysMap.set(companyTitle, totalDaysValue);
+                }
+            }
+            if (actualHrs && actualHrs !== "-") {
+                actualHours += parseFloat(actualHrs);
             }
         });
+
+        // Sum all total days from unique Company-Title
+        let totalDaysSum = Array.from(totalDaysMap.values()).reduce((sum, days) => sum + days, 0);
+
+        $("#totalDays").text(totalDaysSum); // Display summed total days
+        $("#actualDays").text((actualHours / 8).toFixed(2)); // Divide actual hours by 8
     }
 
-    // Event listeners for filtering
-    $("#startDateEmployee, #endDateEmployee").on("change", function () {
-        filterTable();
+    // Search input event
+    document.querySelector('input[type="search"]').addEventListener('keyup', function () {
+        table.search(this.value).draw();
+        setTimeout(updateDays, 200); // Update days after search
     });
+
+    // Date filter event
+    function filterByDate() {
+        table.draw();
+        setTimeout(updateDays, 200); // Update days after filtering
+    }
+
+    document.getElementById('startDateEmployee').addEventListener('change', filterByDate);
+    document.getElementById('endDateEmployee').addEventListener('change', filterByDate);
+
+    // Custom DataTable filtering function
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            let min = document.getElementById('startDateEmployee').value;
+            let max = document.getElementById('endDateEmployee').value;
+            let date = data[2]; // Column index for 'Date'
+            
+            // Convert date format to YYYY-MM-DD
+            let dateParts = date.split('-');
+            let formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+            let tableDate = new Date(formattedDate);
+            
+            if ((min === "" || new Date(min) <= tableDate) && (max === "" || new Date(max) >= tableDate)) {
+                return true;
+            }
+            return false;
+        }
+    );
+
+    // Ensure updateDays is called after filtering
+    table.on('draw', function () {
+        updateDays();
+    });
+
+    updateDays(); // Call initially to set the correct values
 });
 
 </script>

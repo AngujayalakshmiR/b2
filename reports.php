@@ -1018,19 +1018,16 @@
  <!-- JavaScript Code -->
 <!-- JavaScript to Initialize DataTable and Calculate Days -->
 <script>
-$(document).ready(function() {
-    let table = $('#dataTable').DataTable();
+document.addEventListener('DOMContentLoaded', function () {
+    // Initialize DataTable
+    var table = $('#dataTable').DataTable();
 
-    // Listen for search input change in DataTable's built-in search box
-    $('#dataTable_filter input').on('input', function() {
-        setTimeout(updateDays, 200); // Delay to allow DataTable to process search
-    });
-
+    // Function to update Total Days and Actual Days
     function updateDays() {
         let totalHours = 0;
         let actualHours = 0;
 
-        // Loop through only the visible rows after search filter
+        // Loop through only the visible rows after filtering
         $('#dataTable tbody tr:visible').each(function() {
             let totalHrs = $(this).find("td:eq(6)").text().trim();
             let actualHrs = $(this).find("td:eq(7)").text().trim();
@@ -1042,8 +1039,45 @@ $(document).ready(function() {
         $("#totalDays").text((totalHours / 8).toFixed(2));
         $("#actualDays").text((actualHours / 8).toFixed(2));
     }
+
+    // Listen for input in DataTable's built-in search bar
+    $('#dataTable_filter input').on('input', function() {
+        setTimeout(updateDays, 200); // Wait for DataTable to process search
+    });
+
+    // Event delegation for clicks on table cells
+    document.querySelector('#dataTable tbody').addEventListener('click', function (event) {
+        let clickedCell = event.target.closest('td');
+        if (!clickedCell) return;
+
+        // Get the search input field from DataTables
+        const searchBox = document.querySelector('input[type="search"]');
+
+        // Get column index of the clicked cell
+        const colIndex = clickedCell.cellIndex;
+
+        // Define column indexes for search-triggering columns
+        const searchableColumns = [1, 2, 3, 4]; // Name, Date, Company, Type columns
+
+        if (searchableColumns.includes(colIndex)) {
+            let searchText = clickedCell.textContent.replace(/\s+/g, ' ').trim();
+
+            // Update search box
+            searchBox.value = searchText;
+
+            // Trigger DataTables search
+            table.search(searchText).draw();
+
+            // Call updateDays after DataTables search completes
+            setTimeout(updateDays, 200);
+        } else {
+            // If clicked column is not searchable, open the PDF
+            window.open("http://localhost/b2/aadhar.pdf", "_blank");
+        }
+    });
 });
 </script>
+
  <script>
 document.addEventListener('DOMContentLoaded', function () {
     // Initialize DataTable

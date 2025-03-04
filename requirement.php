@@ -511,27 +511,7 @@ html, body {
             background-size: contain;
             border-radius: 5px;
         }
-        .file-box {
-        position: relative;
-        width: 380px;
-        height: 50px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 15px;
-        color: white;
-        font-size: 16px;
-        border-radius: 10px;
-        cursor: pointer;
-        box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2);
-        transition: transform 0.2s;
-        background: rgb(81, 172, 246);
-        margin: 10px 0;
-    }
 
-    .file-box:hover {
-        transform: scale(1.05);
-    }
 
     .delete-btn {
         position: absolute;
@@ -589,7 +569,8 @@ html, body {
 <a href="#" id="addFileBtn" class="btn" style="background: rgb(81, 172, 246); font-size: 15px; color: white;">
     <i class="fas fa-folder-plus"></i> &nbsp; Add File
 </a>
-<input type="file" id="fileInput" style="display: none;">
+<input type="file" id="fileInput" accept=".pdf, .jpg, .jpeg, .png, .doc, .docx, .ppt, .pptx">
+
 
     </div>
     <div class="topbar-divider d-none d-sm-block"></div>
@@ -708,22 +689,29 @@ html, body {
     let storedFiles = JSON.parse(localStorage.getItem("uploadedFiles")) || [];
 
     function renderFiles() {
-        fileWrapper.innerHTML = ""; // Clear existing files
+    fileWrapper.innerHTML = ""; // Clear existing files
 
-        storedFiles.forEach((fileName, index) => {
-            let fileBox = document.createElement("div");
-            fileBox.classList.add("file-box");
+    storedFiles.forEach((fileName, index) => {
+        let fileBox = document.createElement("div");
+        fileBox.classList.add("file-box");
 
-            fileBox.innerHTML = `
-                <div class="delete-btn" onclick="deleteFile('${fileName}')">❌</div>
-                <a href="b2/${fileName}" target="_blank" class="file-link">
-                    <b>Requirement ${index + 1}</b>
-                </a>
-            `;
+        // Create an image container for styling
+        let fileImg = document.createElement("div");
+        fileImg.classList.add("file-img");
 
-            fileWrapper.appendChild(fileBox);
-        });
-    }
+        fileBox.innerHTML = `
+            <div class="delete-btn" onclick="deleteFile('${fileName}')">❌</div>
+            <a href="b2/${fileName}" target="_blank" class="file-link">
+                <b>Requirement ${index + 1}</b>
+            </a>
+        `;
+
+        // Append the image container
+        fileBox.appendChild(fileImg);
+        fileWrapper.appendChild(fileBox);
+    });
+}
+
 
     addFileBtn.addEventListener("click", () => fileInput.click());
 

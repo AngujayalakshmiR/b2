@@ -1,25 +1,28 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 if ($_FILES['file']) {
-    $uploadDir = __DIR__ . "/b2/"; // Correct path using __DIR__
-    
-    if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0777, true); // Create folder if not exists
-    }
+    $file = $_FILES['file'];
+    $fileName = $file['name'];
+    $fileTmpName = $file['tmp_name'];
+    $fileSize = $file['size'];
+    $fileError = $file['error'];
+    $fileType = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
-    $fileName = basename($_FILES["file"]["name"]);
-    $targetFilePath = $uploadDir . $fileName;
+    // Allowed file types
+    $allowed = ['pdf', 'jpg', 'jpeg', 'png', 'doc', 'docx', 'ppt', 'pptx'];
 
-    if (move_uploaded_file($_FILES["file"]["tmp_name"], $targetFilePath)) {
-        echo json_encode(["success" => true, "filename" => $fileName]);
+    if (in_array($fileType, $allowed)) {
+        $uploadDir = "b2/";  // Ensure this directory exists
+        $destination = $uploadDir . basename($fileName);
+
+        if (move_uploaded_file($fileTmpName, $destination)) {
+            echo json_encode(["success" => true, "filename" => $fileName]);
+        } else {
+            echo json_encode(["success" => false, "error" => "Upload failed."]);
+        }
     } else {
-        echo json_encode(["success" => false, "error" => "File move failed!"]);
+        echo json_encode(["success" => false, "error" => "Invalid file type."]);
     }
-    exit();
 } else {
-    echo json_encode(["success" => false, "error" => "No file uploaded!"]);
-    exit();
+    echo json_encode(["success" => false, "error" => "No file uploaded."]);
 }
 ?>

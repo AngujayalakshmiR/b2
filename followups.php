@@ -1090,13 +1090,6 @@ document.addEventListener('click', function (event) {
   border-radius: 5px;
   border: 1px solid #000; /* Ensures visibility */
 }
-@media (max-width: 768px) { /* Apply only for mobile */
-    .strikeout {
-        opacity: 0.5;
-        transform: translateX(-100px); /* Move card slightly left */
-        transition: opacity 0.3s ease, transform 0.3s ease;
-    }
-}
 
 </style>
 
@@ -1106,38 +1099,6 @@ document.addEventListener('click', function (event) {
 <!-- Card Containers -->
 <div id="cards-container" class="row mt-4" ondragover="dragOver(event)" ondrop="drop(event)">
 </div> 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-    let touchStartX = 0;
-    let touchEndX = 0;
-
-    document.querySelectorAll(".card").forEach(card => {
-        card.addEventListener("touchstart", function (event) {
-            touchStartX = event.touches[0].clientX;
-        });
-
-        card.addEventListener("touchmove", function (event) {
-            touchEndX = event.touches[0].clientX;
-        });
-
-        card.addEventListener("touchend", function () {
-            let swipeDistance = touchStartX - touchEndX;
-            
-            // Check if it's a left swipe and long enough (e.g., > 50px)
-            if (swipeDistance > 50) {
-                card.classList.add("strikeout");
-                
-                // Delay deletion for a visual effect
-                setTimeout(() => {
-                    card.remove();
-                    allCards = allCards.filter(existingCard => existingCard.id !== card.id);
-                }, 300);
-            }
-        });
-    });
-});
-
-</script>
 <script>
 let allCards = []; // Store all cards globally
 

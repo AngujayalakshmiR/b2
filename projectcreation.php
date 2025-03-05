@@ -1204,8 +1204,7 @@ document.addEventListener('click', function (event) {
                 window.location.href = `reports.php?${paramKey}=${encodeURIComponent(paramValue)}`;
             }
             else {
-            window.open("http://localhost/b2/aadhar.pdf", "_blank");
-            }
+                window.location.href = "requirement.php";            }
         });
     });
 });

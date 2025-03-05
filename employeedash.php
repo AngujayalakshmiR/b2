@@ -933,9 +933,9 @@ tbody{
     <tbody>
         <tr  data-company="ABC Corp">
             <td>1</td>
-            <td>04-03-2025</td>
-            <td class="company-column">ABC Corp</td>
-            <td>The project requires inbuilt updations and notifications.</td>
+            <td>05-03-2025</td>
+            <td class="company-column">ABc</td>
+            <td>xyz</td>
             <td>5</td>
             <td>I completed half backend work</td>
             <td>4.5</td>
@@ -944,9 +944,9 @@ tbody{
         </tr>
         <tr  data-company="ABC Corp">
             <td>2</td>
-            <td>04-03-2025</td>
-            <td class="company-column">ABC Corp</td>
-            <td>The project requires inbuilt updations and notifications.</td>
+            <td>05-03-2025</td>
+            <td class="company-column">ABC</td>
+            <td>kmn</td>
             <td>5</td>
             <td>I completed half backend work</td>
             <td>4.5</td>
@@ -964,7 +964,45 @@ tbody{
                 </div>
             </div>
             <!-- End of Main Content -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    // Initialize DataTable
+    var table = $('#dataTable').DataTable();
 
+    // Handle row click event
+    document.querySelector('#dataTable tbody').addEventListener('click', function (event) {
+        const clickedCell = event.target.closest('td'); // Get clicked <td>
+        if (!clickedCell) return;
+
+        const row = clickedCell.closest('tr'); // Get parent row
+        const columnIndex = clickedCell.cellIndex; // Get column index
+
+        // Define column indices based on your table structure
+        const companyColumnIndex = 2; // Company column
+        const titleColumnIndex = 3; // Title column
+
+        // Search box inside DataTable
+        const searchBox = document.querySelector('input[type="search"]');
+
+        if (columnIndex === companyColumnIndex || columnIndex === titleColumnIndex) {
+            const clickedText = clickedCell.textContent.trim();
+            window.location.href = `employeeWorkReports.php?search=${encodeURIComponent(clickedText)}`;
+        } else {
+            window.location.href = "requirement.php";
+        }
+    });
+
+    // Check if there's a search query in the URL and apply it to DataTable
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchValue = urlParams.get("search");
+
+    if (searchValue) {
+        $('#dataTable_filter input').val(searchValue); // Set search box value
+        table.search(searchValue).draw(); // Apply search filter
+    }
+});
+
+</script>
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
@@ -1014,28 +1052,7 @@ tbody{
 <!-- DataTables JavaScript -->
 <script src="vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Get all rows from the table
-        const rows = document.querySelectorAll('#dataTable tbody tr');
-        
-        rows.forEach(row => {
-            row.addEventListener('click', function(event) {
-                // Check if the clicked element is in the 'name-column' or 'company-column'
-                const companyColumn = event.target.closest('.company-column');
 
-                // If clicked on the name or company column, redirect to respective pages
-                 if (companyColumn) {
-                    const company = companyColumn.textContent;
-                    window.location.href = `companyreport.php?company=${company}`;
-                } else {
-                    // For other columns, navigate to the reports page
-                    window.open("http://localhost/b2/aadhar.pdf", "_blank");
-                }
-            });
-        });
-    });
-</script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll("#dataTable1 tbody tr").forEach(row => {

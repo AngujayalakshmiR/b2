@@ -535,7 +535,7 @@ tbody{
                 <!-- End of Topbar -->
 <style>
     #dataTable th:nth-child(3), 
-#dataTable td:nth-child(3) {
+    #dataTable td:nth-child(3) {
     display: none;
 }
 </style>
@@ -545,66 +545,66 @@ tbody{
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                        <p class="m-0" style="font-size: 16px;color:rgb(23, 25, 28);font-style: normal;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    color: rgb(23, 25, 28);
-    font-size: 16px;
-    font-weight: 500;"><b>Daily Updates</b> 
-        <span class="header-counter">2</span>  <!-- Counter next to heading -->
-</p>
-                            <div> 
-    <input type="date" id="dateFilter" class="form-control d-inline" style="width: auto;">
-</div>
+                                                <p class="m-0" style="font-size: 16px;color:rgb(23, 25, 28);font-style: normal;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                            color: rgb(23, 25, 28);
+                            font-size: 16px;
+                            font-weight: 500;"><b>Daily Updates</b> 
+                                <span class="header-counter">2</span>  <!-- Counter next to heading -->
+                        </p>
+                                                    <div> 
+                            <input type="date" id="dateFilter" class="form-control d-inline" style="width: auto;">
+                        </div>
 
                         </div>
                         <div class="card-body">
                             <div class="table-responsive ">
-                            <table class="table text-center" id="dataTable" width="100%">
-    <thead>
-        <tr>
-            <th>S.no</th>
-            <th>Name</th>
-            <th>Date</th>
-            <th>Company</th>
-            <th>Title</th>
-            <th>Total Days</th>
-            <th>Description</th>
-            <th>Total Hrs</th>
-            <th>Actual Hrs</th>
-            <th>Status</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr data-name="Surya" data-company="ABC Corp">
-            <td>1</td>
-            <td class="name-column">Surya</td>
-            <td>04-03-2025</td>
-            <td class="company-column">Govin</td>
-            <td>abc</td>
-            <td>5</td>
-            <td>I completed half backend work</td>
-            <td>4.5</td>
-            <td>2</td>
-            <td><i class="fas fa-check-circle status-icon completed"></i>&nbsp;&nbsp;Completed</td>
-        </tr>
-        <tr data-name="Pavithra" data-company="ABC Corp">
-            <td>2</td>
-            <td class="name-column">Pavithra</td>
-            <td>04-03-2025</td>
-            <td class="company-column">Kurinji</td>
-            <td>xyz</td>
-            <td>5</td>
-            <td>I completed half backend work</td>
-            <td>4.5</td>
-            <td>2</td>
-            <td><i class="fas fa-check-circle status-icon completed"></i>&nbsp;&nbsp;Completed</td>
-        </tr>
-        <!-- Add more rows as needed -->
-    </tbody>
-</table>
-                            </div>
+                                                    <table class="table text-center" id="dataTable" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>S.no</th>
+                                    <th>Name</th>
+                                    <th>Date</th>
+                                    <th>Company</th>
+                                    <th>Title</th>
+                                    <th>Total Days</th>
+                                    <th>Description</th>
+                                    <th>Total Hrs</th>
+                                    <th>Actual Hrs</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-name="Surya" data-company="ABC Corp">
+                                    <td>1</td>
+                                    <td class="name-column">Surya</td>
+                                    <td>05-03-2025</td>
+                                    <td class="company-column">Govin</td>
+                                    <td>abc</td>
+                                    <td>5</td>
+                                    <td>I completed half backend work</td>
+                                    <td>4.5</td>
+                                    <td>2</td>
+                                    <td><i class="fas fa-check-circle status-icon completed"></i>&nbsp;&nbsp;Completed</td>
+                                </tr>
+                                <tr data-name="Pavithra" data-company="ABC Corp">
+                                    <td>2</td>
+                                    <td class="name-column">Pavithra</td>
+                                    <td>05-03-2025</td>
+                                    <td class="company-column">Kurinji</td>
+                                    <td>xyz</td>
+                                    <td>5</td>
+                                    <td>I completed half backend work</td>
+                                    <td>4.5</td>
+                                    <td>2</td>
+                                    <td><i class="fas fa-check-circle status-icon completed"></i>&nbsp;&nbsp;Completed</td>
+                                </tr>
+                                <!-- Add more rows as needed -->
+                            </tbody>
+                        </table>
+                                                    </div>
                         </div>
                         
                     </div>
@@ -640,8 +640,7 @@ tbody{
             table.search(title).draw(); // Filter table with title
             window.location.href = `reports.php?title=${encodeURIComponent(title)}`;
         } else {
-            window.open("http://localhost/b2/aadhar.pdf", "_blank");
-        }
+            window.location.href = "requirement.php";        }
     });
 });
 

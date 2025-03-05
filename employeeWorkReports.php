@@ -643,6 +643,18 @@ Jayavarshini
     }
 }
 
+.count-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px; /* Adjust size as needed */
+    height: 27px;
+    border-radius: 10%;
+    background-color: #007bff; /* Change color as needed */
+    color: white;
+    /* font-weight: bold; */
+    font-size: 12px;
+}
 
 </style>
 
@@ -660,7 +672,7 @@ Jayavarshini
             <!-- Wrap the button inside a flex container -->
         <!-- Wrap the button inside a flex container -->
             <div class="d-flex export-container" style="justify-content: flex-end;">
-                <button id="exportPdfEmployee" class="btn btn-danger export-btn" style="background:green;border:green" title="Export to PDF">
+                <button style='background:green;'id="exportExcel" class="btn btn-success export-btn" onclick="exportToExcel()" title="Export to Excel">
                     <i class="fa fa-file-alt"></i>&nbsp;&nbsp;Generate Report
                 </button>
             </div>
@@ -1124,6 +1136,43 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 </script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+function exportToExcel() {
+    let table = $('#dataTable').DataTable(); // Get DataTable instance
+
+    // Get only filtered data (visible after search/filter) from all pages
+    let filteredData = table.rows({ search: 'applied' }).data().toArray();
+
+    // Prepare the worksheet data with correct columns
+    let dataArray = [["S.no", "Date", "Company - Title", "Description", "Total Hrs", "Actual Hrs", "Status", "Total Days"]];
+
+    filteredData.forEach((row, index) => {
+        dataArray.push([index + 1, row[1], row[2], row[3], row[4], row[5], row[6], row[7]]);
+    });
+
+    // Get "Total Days" and "Actual Days" from the page
+    let totalDays = document.getElementById("totalDays").innerText;
+    let actualDays = document.getElementById("actualDays").innerText;
+
+    dataArray.push(["", "Total Days:", totalDays]);
+    dataArray.push(["", "Actual Days:", actualDays]);
+
+    // Convert array to worksheet
+    let ws = XLSX.utils.aoa_to_sheet(dataArray);
+
+    // Create a workbook and append worksheet
+    let wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Filtered Report");
+
+    // Export file
+    XLSX.writeFile(wb, "Filtered_Employee_Report.xlsx");
+}
+
+// Attach event listener to the new button ID
+document.getElementById("exportExcelEmployee").addEventListener("click", exportToExcel);
+
+</script>
 <script>
 $(document).ready(function() {
     $('#projectTable').DataTable();
@@ -1166,6 +1215,22 @@ $(document).ready(function() {
             }
         });
     });
+</script>
+<script>
+    $(document).ready(function () {
+    var table = $('#dataTable').DataTable();
+
+    // Get URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchQuery = urlParams.get('search'); // Unified search parameter
+
+    // Apply search if a parameter exists
+    if (searchQuery) {
+        table.search(searchQuery).draw();
+        $('#dataTable_filter input').val(searchQuery); // Auto-fill search bar
+    }
+});
+
 </script>
 </body>
 

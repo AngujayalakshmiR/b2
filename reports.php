@@ -735,9 +735,10 @@
             <!-- Wrap the button inside a flex container -->
         <!-- Wrap the button inside a flex container -->
             <div class="d-flex export-container" style="justify-content: flex-end;">
-                <button id="exportPdfEmployee" class="btn btn-danger export-btn" style="background:green;border:green" title="Export to PDF">
-                    <i class="fa fa-file-alt"></i>&nbsp;&nbsp;Generate Report
-                </button>
+            <button style='background:green;' id="exportEmployeeExcel" class="btn btn-success export-btn" onclick="exportEmployeeReport()" title="Export Employee Report">
+    <i class="fa fa-file-alt"></i>&nbsp;&nbsp;Generate Report
+</button>
+
             </div>
 
 
@@ -979,113 +980,113 @@
         </div>
       </div>
       <!-- Project Report Card (Initially Hidden) -->
-      <div class="card shadow mb-4" id="projectReport" style="display: none;">
-    <div class="card-header py-3 ">
-        <!-- First Row: Project Dropdown Filter and Excel Export -->
-        <div class="d-flex flex-wrap align-items-center filter-group">
-            From:
-            <input type="date" id="startDateProject" class="form-control mr-2" style="max-width: 150px;" placeholder="Start Date">
-            To:
-            <input type="date" id="endDateProject" class="form-control mr-2" style="max-width: 150px;" placeholder="End Date">
-            
-            <div class="d-flex export-container" style="justify-content: flex-end;">
-                <button id="exportExcelProject" class="btn btn-danger export-btn" style="background:green;border:green" title="Export to PDF">
-                    <i class="fa fa-file-alt"></i>&nbsp;&nbsp;Generate Report
-                </button>
-            </div>
-        </div>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <div class="d-flex justify-content-center my-3">
-                <h5 style="color:black; font-size:14px;">
-                    <b>Total Days: </b><span id="totalProjectDays" class="count-circle">0</span>
-                </h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <h5 style="color:black; font-size:14px;">
-                    <b>Actual Days: </b><span id="actualProjectDays" class="count-circle">0</span>
-                </h5>
-            </div>
+        <div class="card shadow mb-4" id="projectReport" style="display: none;">
+                <div class="card-header py-3 ">
+                    <!-- First Row: Project Dropdown Filter and Excel Export -->
+                    <div class="d-flex flex-wrap align-items-center filter-group">
+                        From:
+                        <input type="date" id="startDateProject" class="form-control mr-2" style="max-width: 150px;" placeholder="Start Date">
+                        To:
+                        <input type="date" id="endDateProject" class="form-control mr-2" style="max-width: 150px;" placeholder="End Date">
+                        
+                        <div class="d-flex export-container" style="justify-content: flex-end;">
+                        <button style='background:green;' id="exportProjectExcel" class="btn btn-primary export-btn" onclick="exportProjectReport()" title="Export Project Report">
+    <i class="fa fa-file-alt"></i>&nbsp;&nbsp;Generate Report
+</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <div class="d-flex justify-content-center my-3">
+                            <h5 style="color:black; font-size:14px;">
+                                <b>Total Days: </b><span id="totalProjectDays" class="count-circle">0</span>
+                            </h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <h5 style="color:black; font-size:14px;">
+                                <b>Actual Days: </b><span id="actualProjectDays" class="count-circle">0</span>
+                            </h5>
+                        </div>
 
-            <table class="table table-bordered text-center" style="font-size: 14px;" id="projectTable" width="100%" cellspacing="0">
-                <thead>
-                    <tr class="thead">
-                        <th>S.No</th>
-                        <th>Date</th>
-                        <th>Company-Title</th>
-                        <th>Type</th>
-                        <th>Employees</th>
-                        <th>Description</th>
-                        <th>Total days</th>
-                        <th>Work days</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>11-02-2025</td>
-                        <td>Govin - ABC</td>
-                        <td>Web development</td>
-                        <td>Surya,Varshini</td>
-                        <td>suma</td>
-                        <td>5</td>
-                        <td>5</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>11-02-2025</td>
-                        <td>Kurinji - xyz</td>
-                        <td>App development</td>
-                        <td>Naveen,Mohan</td>
-                        <td>suma1</td>
-                        <td>6</td>
-                        <td>7</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>11-02-2025</td>
-                        <td>xxx - KMN</td>
-                        <td>UI/UX Design</td>
-                        <td>Pavithra,Angu</td>
-                        <td>suma2</td>
-                        <td>4</td>
-                        <td>-</td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>12-02-2025</td>
-                        <td>Govin - ABC</td>
-                        <td>Web development</td>
-                        <td>Surya,Varshini</td>
-                        <td>suma</td>
-                        <td>5</td>
-                        <td>5</td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>12-02-2025</td>
-                        <td>Kurinji - xyz</td>
-                        <td>App development</td>
-                        <td>Naveen,Mohan</td>
-                        <td>suma1</td>
-                        <td>6</td>
-                        <td>7</td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td>12-02-2025</td>
-                        <td>xxx - KMN</td>
-                        <td>UI/UX Design</td>
-                        <td>Pavithra,Angu</td>
-                        <td>suma2</td>
-                        <td>4</td>
-                        <td>-</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-   
+                        <table class="table table-bordered text-center" style="font-size: 14px;" id="projectTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr class="thead">
+                                    <th>S.No</th>
+                                    <th>Date</th>
+                                    <th>Company-Title</th>
+                                    <th>Type</th>
+                                    <th>Employees</th>
+                                    <th>Description</th>
+                                    <th>Total days</th>
+                                    <th>Work days</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>11-02-2025</td>
+                                    <td>Govin - ABC</td>
+                                    <td>Web development</td>
+                                    <td>Surya,Varshini</td>
+                                    <td>suma</td>
+                                    <td>5</td>
+                                    <td>5</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>11-02-2025</td>
+                                    <td>Kurinji - xyz</td>
+                                    <td>App development</td>
+                                    <td>Naveen,Mohan</td>
+                                    <td>suma1</td>
+                                    <td>6</td>
+                                    <td>7</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>11-02-2025</td>
+                                    <td>xxx - KMN</td>
+                                    <td>UI/UX Design</td>
+                                    <td>Pavithra,Angu</td>
+                                    <td>suma2</td>
+                                    <td>4</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>12-02-2025</td>
+                                    <td>Govin - ABC</td>
+                                    <td>Web development</td>
+                                    <td>Surya,Varshini</td>
+                                    <td>suma</td>
+                                    <td>5</td>
+                                    <td>5</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>12-02-2025</td>
+                                    <td>Kurinji - xyz</td>
+                                    <td>App development</td>
+                                    <td>Naveen,Mohan</td>
+                                    <td>suma1</td>
+                                    <td>6</td>
+                                    <td>7</td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td>12-02-2025</td>
+                                    <td>xxx - KMN</td>
+                                    <td>UI/UX Design</td>
+                                    <td>Pavithra,Angu</td>
+                                    <td>suma2</td>
+                                    <td>4</td>
+                                    <td>-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
     </div>
   </div>
 </div>
@@ -1318,74 +1319,82 @@ document.addEventListener('DOMContentLoaded', function () {
 <!-- ######### PROJECT REPORT ########## -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-    var table = $('#projectTable').DataTable();
+        var table = $('#projectTable').DataTable();
 
-    // Function to update Total Days and Work Days across all pages
-    function updateDays() {
-        let totalDaysSum = 0;
-        let workDaysSum = 0;
-        let companyTotalDays = {}; // Object to store unique company total days
+        // Function to update Total Days and Work Days across all pages
+        function updateDays() {
+            let totalDaysSum = 0;
+            let workDaysSum = 0;
+            let companyTotalDays = {}; // Object to store unique company total days
 
-        // Loop through all filtered rows, regardless of pagination
-        table.rows({ search: 'applied' }).data().each(function (row) {
-            let companyTitle = row[2].trim(); // Get Company Title column
-            let totalDaysValue = parseFloat(row[6].trim()) || 0; // Get Total Days column
-            let workDaysValue = parseFloat(row[7].trim()) || 0; // Get Work Days column
-            
-            if (!companyTotalDays[companyTitle]) {
-                companyTotalDays[companyTitle] = totalDaysValue;
-                totalDaysSum += totalDaysValue;
+            // Check if the search bar is empty
+            let searchValue = document.querySelector('input[type="search"]').value.trim();
+            if (searchValue === "") {
+                $("#totalProjectDays").text(0); // Reset total days
+                $("#actualProjectDays").text(0); // Reset work days
+                return; // Stop execution
             }
-            workDaysSum += workDaysValue;
+
+            // Loop through all filtered rows, regardless of pagination
+            table.rows({ search: 'applied' }).data().each(function (row) {
+                let companyTitle = row[2].trim(); // Get Company Title column
+                let totalDaysValue = parseFloat(row[6].trim()) || 0; // Get Total Days column
+                let workDaysValue = parseFloat(row[7].trim()) || 0; // Get Work Days column
+
+                if (!companyTotalDays[companyTitle]) {
+                    companyTotalDays[companyTitle] = totalDaysValue;
+                    totalDaysSum += totalDaysValue;
+                }
+                workDaysSum += workDaysValue;
+            });
+
+            $("#totalProjectDays").text(totalDaysSum); // Display summed total days
+            $("#actualProjectDays").text(workDaysSum); // Display summed work days
+        }
+
+        // Search input event
+        document.querySelector('input[type="search"]').addEventListener('keyup', function () {
+            table.search(this.value).draw();
+            setTimeout(updateDays, 200); // Update days after search
         });
 
-        $("#totalProjectDays").text(totalDaysSum); // Display summed total days
-        $("#actualProjectDays").text(workDaysSum); // Display summed work days
-    }
-
-    // Search input event
-    document.querySelector('input[type="search"]').addEventListener('keyup', function () {
-        table.search(this.value).draw();
-        setTimeout(updateDays, 200); // Update days after search
-    });
-
-    // Date filter event
-    function filterByDate() {
-        table.draw();
-        setTimeout(updateDays, 200); // Update days after filtering
-    }
-
-    document.getElementById('startDateProject').addEventListener('change', filterByDate);
-    document.getElementById('endDateProject').addEventListener('change', filterByDate);
-
-    // Custom DataTable filtering function
-    $.fn.dataTable.ext.search.push(
-        function (settings, data, dataIndex) {
-            let min = document.getElementById('startDateProject').value;
-            let max = document.getElementById('endDateProject').value;
-            let date = data[1]; // Column index for 'Date'
-
-            // Convert date format to YYYY-MM-DD
-            let dateParts = date.split('-');
-            let formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
-            let tableDate = new Date(formattedDate);
-            
-            if ((min === "" || new Date(min) <= tableDate) && (max === "" || new Date(max) >= tableDate)) {
-                return true;
-            }
-            return false;
+        // Date filter event
+        function filterByDate() {
+            table.draw();
+            setTimeout(updateDays, 200); // Update days after filtering
         }
-    );
 
-    // Ensure updateDays is called after filtering and pagination changes
-    table.on('draw', function () {
-        updateDays();
+        document.getElementById('startDateProject').addEventListener('change', filterByDate);
+        document.getElementById('endDateProject').addEventListener('change', filterByDate);
+
+        // Custom DataTable filtering function
+        $.fn.dataTable.ext.search.push(
+            function (settings, data, dataIndex) {
+                let min = document.getElementById('startDateProject').value;
+                let max = document.getElementById('endDateProject').value;
+                let date = data[1]; // Column index for 'Date'
+
+                // Convert date format to YYYY-MM-DD
+                let dateParts = date.split('-');
+                let formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+                let tableDate = new Date(formattedDate);
+
+                if ((min === "" || new Date(min) <= tableDate) && (max === "" || new Date(max) >= tableDate)) {
+                    return true;
+                }
+                return false;
+            }
+        );
+
+        // Ensure updateDays is called after filtering and pagination changes
+        table.on('draw', function () {
+            updateDays();
+        });
+
+        updateDays(); // Call initially to set the correct values
     });
-
-    updateDays(); // Call initially to set the correct values
-});
-
 </script>
+
             <!-- End of Main Content -->
 
             <!-- Footer -->
@@ -1507,6 +1516,73 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 </script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+    function exportEmployeeReport() {
+    let table = $('#dataTable').DataTable(); // Get DataTable instance
+
+    // Get only filtered data (visible after search/filter) from all pages
+    let filteredData = table.rows({ search: 'applied' }).data().toArray();
+
+    // Prepare the worksheet data
+    let dataArray = [["S.no", "Name", "Date", "Company - Title", "Type", "Description", "Total Hrs", "Actual Hrs", "Status"]];
+
+    filteredData.forEach((row, index) => {
+        dataArray.push([index + 1, row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8]]);
+    });
+
+    // Get "Total Days" and "Actual Days" from the page
+    let totalDays = document.getElementById("totalDays").innerText;
+    let actualDays = document.getElementById("actualDays").innerText;
+
+    dataArray.push(["", "Total Days:", totalDays]);
+    dataArray.push(["", "Actual Days:", actualDays]);
+
+    // Convert array to worksheet
+    let ws = XLSX.utils.aoa_to_sheet(dataArray);
+
+    // Create a workbook and append worksheet
+    let wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Employee Report");
+
+    // Export file
+    XLSX.writeFile(wb, "Employee_Report.xlsx");
+}
+
+function exportProjectReport() {
+    let table = $('#projectTable').DataTable(); // Get DataTable instance
+
+    // Get only filtered data from all pages
+    let filteredData = table.rows({ search: 'applied' }).data().toArray();
+
+    // Prepare the worksheet data
+    let dataArray = [["S.No", "Date", "Company - Title", "Type", "Employees", "Description", "Total Days", "Work Days"]];
+
+    filteredData.forEach((row, index) => {
+        dataArray.push([index + 1, row[1], row[2], row[3], row[4], row[5], row[6], row[7]]);
+    });
+
+    // Get "Total Days" and "Actual Days" from the page
+    let totalDays = document.getElementById("totalProjectDays").innerText;
+    let actualDays = document.getElementById("actualProjectDays").innerText;
+
+    // Append totals at the end
+    dataArray.push(["", "Total Days:", totalDays, "", "", "", "", ""]);
+    dataArray.push(["", "Actual Days:", actualDays, "", "", "", "", ""]);
+
+    // Convert array to worksheet
+    let ws = XLSX.utils.aoa_to_sheet(dataArray);
+
+    // Create a workbook and append worksheet
+    let wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Project Report");
+
+    // Export file
+    XLSX.writeFile(wb, "Filtered_Project_Report.xlsx");
+}
+
+</script>
+
 <script>
 $(document).ready(function() {
     $('#projectTable').DataTable();

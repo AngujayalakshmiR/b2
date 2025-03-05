@@ -723,7 +723,261 @@
 </style>
 
       <!-- Employee Report Card -->
-     
+      <div class="card shadow mb-4" id="employeeReport">
+        <div class="card-header py-3 ">
+          <!-- First Row: Employee Dropdown Filter and Excel Export -->
+          <div class="d-flex flex-wrap align-items-center filter-group">
+            From:
+            <input type="date" id="startDateEmployee" class="form-control" style="max-width: 150px;">
+            To:
+            <input type="date" id="endDateEmployee" class="form-control" style="max-width: 150px;">
+            <!-- Wrap the button inside a flex container -->
+            <!-- Wrap the button inside a flex container -->
+        <!-- Wrap the button inside a flex container -->
+            <div class="d-flex export-container" style="justify-content: flex-end;">
+                <button id="exportPdfEmployee" class="btn btn-danger export-btn" style="background:green;border:green" title="Export to PDF">
+                    <i class="fa fa-file-alt"></i>&nbsp;&nbsp;Generate Report
+                </button>
+            </div>
+
+
+
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <!-- Display Total Days and Actual Days -->
+            
+            <div class="d-flex justify-content-center my-3">
+                <h5 style="color:black; font-size:14px;">
+                    <b>Total Days: </b><span id="totalDays" class="count-circle">0</span>
+                </h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <h5 style="color:black; font-size:14px;">
+                    <b>Actual Days: </b><span id="actualDays" class="count-circle">0</span>
+                </h5>
+            </div>
+
+
+            <!-- Employee Report Table -->
+            <table class="table table-bordered text-center" style="font-size: 14px;" id="dataTable" width="100%" cellspacing="0">
+              <thead>
+                <tr class="thead">
+                  <th>S.no</th>
+                  <th>Name</th>
+                  <th>Date</th>
+                  <th>Company - Title</th>
+                  <th>Type</th>
+                  <th>Description</th>
+                  <th>Total Hrs</th>
+                  <th>Actual Hrs</th>
+                  <th>Status</th>
+                  <th>Total Days</th>
+
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                <!-- Example rows; these would normally be generated dynamically -->
+                <tr>
+                  <td>1</td>
+                  <td>Surya</td>
+                  <td>10-02-2025</td>
+                  <td>Govin-ABCd</td>
+                  <td>Web Application</td>
+                  <td>XYZ</td>
+                  <td>6</td>
+                  <td>5</td>
+                  <td>Completed</td>
+                  <td>5</td>
+
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Naveen</td>
+                  <td>10-02-2025</td>
+                  <td>Kurinji-XYZ</td>
+                  <td>Mobile Application</td>
+                  <td>aaa</td>
+                  <td>4</td>
+                  <td>-</td>
+                  <td>Started</td>
+                  <td>5</td>
+
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>Pavithra</td>
+                  <td>10-02-2025</td>
+                  <td>xxx-KMNo</td>
+                  <td>Web Application</td>
+                  <td>bbb</td>
+                  <td>7</td>
+                  <td>8</td>
+                  <td>Completed</td>
+                  <td>5</td>
+
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>JayaVarshini</td>
+                  <td>10-02-2025</td>
+                  <td>Govin-ABC</td>
+                  <td>Web Application</td>
+                  <td>XYZ</td>
+                  <td>6</td>
+                  <td>5</td>
+                  <td>Completed</td>
+                  <td>5</td>
+
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>Mohan</td>
+                  <td>10-02-2025</td>
+                  <td>Kurinji-XYZ</td>
+                  <td>Mobile Application</td>
+                  <td>aaa</td>
+                  <td>4</td>
+                  <td>-</td>
+                  <td>Started</td>
+                  <td>5</td>
+
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>Angu</td>
+                  <td>10-02-2025</td>
+                  <td>xxx-KMN</td>
+                  <td>Web Application</td>
+                  <td>bbb</td>
+                  <td>7</td>
+                  <td>8</td>
+                  <td>Completed</td>
+                  <td>5</td>
+
+                </tr>
+
+
+                <tr>
+                  <td>7</td>
+                  <td>Surya</td>
+                  <td>11-02-2025</td>
+                  <td>Govin-ABC</td>
+                  <td>Web Application</td>
+                  <td>XYZ</td>
+                  <td>6</td>
+                  <td>5</td>
+                  <td>Completed</td>
+                  <td>5</td>
+
+                </tr>
+                <tr>
+                  <td>8</td>
+                  <td>Naveen</td>
+                  <td>11-02-2025</td>
+                  <td>Kurinji-XYZ</td>
+                  <td>Mobile Application</td>
+                  <td>aaa</td>
+                  <td>4</td>
+                  <td>-</td>
+                  <td>Started</td>
+                  <td>5</td>
+
+                </tr>
+                <tr>
+                  <td>9</td>
+                  <td>Pavithra</td>
+                  <td>11-02-2025</td>
+                  <td>xxx-KMN</td>
+                  <td>Web Application</td>
+                  <td>bbb</td>
+                  <td>7</td>
+                  <td>8</td>
+                  <td>Completed</td>
+                  <td>5</td>
+
+                </tr>
+                <tr>
+                  <td>10</td>
+                  <td>JayaVarshini</td>
+                  <td>11-02-2025</td>
+                  <td>Govin-ABC</td>
+                  <td>Web Application</td>
+                  <td>XYZ</td>
+                  <td>6</td>
+                  <td>5</td>
+                  <td>Completed</td>
+                  <td>5</td>
+
+                </tr>
+                <tr>
+                  <td>11</td>
+                  <td>Mohan</td>
+                  <td>11-02-2025</td>
+                  <td>Kurinji-XYZ</td>
+                  <td>Mobile Application</td>
+                  <td>aaa</td>
+                  <td>4</td>
+                  <td>-</td>
+                  <td>Started</td>
+                  <td>5</td>
+
+                </tr>
+                <tr>
+                  <td>12</td>
+                  <td>Angu</td>
+                  <td>11-02-2025</td>
+                  <td>xxx-KMN</td>
+                  <td>Web Application</td>
+                  <td>bbb</td>
+                  <td>7</td>
+                  <td>8</td>
+                  <td>Completed</td>
+                  <td>5</td>
+
+                </tr>
+                <tr>
+                  <td>13</td>
+                  <td>JayaVarshini</td>
+                  <td>11-02-2025</td>
+                  <td>Govin-mobile app</td>
+                  <td>Web Application</td>
+                  <td>XYZ</td>
+                  <td>6</td>
+                  <td>5</td>
+                  <td>Completed</td>
+                  <td>5</td>
+
+                </tr>
+                <tr>
+                  <td>14</td>
+                  <td>surya</td>
+                  <td>12-02-2025</td>
+                  <td>Govin-mobile app</td>
+                  <td>Web Application</td>
+                  <td>XYZ</td>
+                  <td>6</td>
+                  <td>5</td>
+                  <td>Completed</td>
+                  <td>5</td>
+
+                </tr>
+                <tr>
+                  <td>15</td>
+                  <td>JayaVarshini</td>
+                  <td>13-02-2025</td>
+                  <td>Govin-web app</td>
+                  <td>Web Application</td>
+                  <td>XYZ</td>
+                  <td>6</td>
+                  <td>5</td>
+                  <td>Completed</td>
+                  <td>19</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
       <!-- Project Report Card (Initially Hidden) -->
       <div class="card shadow mb-4" id="projectReport" style="display: none;">
     <div class="card-header py-3 ">
@@ -935,7 +1189,7 @@ document.addEventListener('DOMContentLoaded', function () {
             table.search(searchText).draw();
         }else {
             // If clicked column is not Date, Company-Title, or Type, open the PDF
-            window.open("http://localhost/b2/aadhar.pdf", "_blank");
+            window.location.href = "requirement.php";
         }
     });
 });
@@ -972,7 +1226,7 @@ document.addEventListener('DOMContentLoaded', function () {
             table.search(searchText).draw();
         } else {
             // If clicked column is not Date, Company-Title, or Type, open the PDF
-            window.open("http://localhost/b2/aadhar.pdf", "_blank");
+            window.location.href = "requirement.php";
         }
     });
 });

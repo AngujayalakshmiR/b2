@@ -912,7 +912,7 @@ document.addEventListener('DOMContentLoaded', function () {
             table.search(searchText).draw();
         }else {
             // If clicked column is not Date, Company-Title, or Type, open the PDF
-            window.open("http://localhost/b2/aadhar.pdf", "_blank");
+            window.location.href = "requirement.php";
         }
     });
 });

@@ -404,7 +404,7 @@ html, body {
     padding: 10px;
     background: #f8f9fa; /* Light background */
     scrollbar-width: thin; /* Makes scrollbar thin for Firefox */
-    scrollbar-color: rgba(144, 144, 144, 0.64) transparent; /* Dark blue color */
+    scrollbar-color: rgb(15, 29, 64) transparent; /* Dark blue color */
 }
 
 /* Custom Scrollbar for Chrome, Edge, Safari */
@@ -417,9 +417,10 @@ html, body {
 }
 
 .button-container::-webkit-scrollbar-thumb {
-    background: rgba(144, 144, 144, 0.64) transparent;
+    background: rgb(15, 29, 64); /* Dark blue scrollbar */
     border-radius: 5px;
 }
+
 
 
 
@@ -431,14 +432,16 @@ html, body {
             overflow-y: hidden; /* No vertical scroll */
             white-space: nowrap;
             padding: 15px;
+            padding-top: 35px;
+            padding-bottom: 35px;
             background: #f8f9fa;
             scrollbar-width: thin;
-            scrollbar-color: rgba(144, 144, 144, 0.64) transparent;
+            scrollbar-color: white transparent;
         }
 
         /* Custom scrollbar for Chrome, Edge, Safari */
         .file-container::-webkit-scrollbar {
-            height: 2px; /* Thicker scrollbar */
+            height: 6px; /* Thicker scrollbar */
         }
         .file-container::-webkit-scrollbar-track {
             background: #ddd;
@@ -458,7 +461,8 @@ html, body {
 
         /* Styling for each requirement file box */
         .file-box {
-    height: 50px;
+    width: 380px;
+    height: 150px;
     display: flex;
     align-items: center; 
     padding: 15px;
@@ -479,7 +483,6 @@ html, body {
     align-items: flex-start; /* Align text to the left */
     gap: 5px;
     width: 70%; /* Ensure text takes most of the space */
-    margin:40px;
 }
 
 .file-img {
@@ -498,31 +501,35 @@ html, body {
         /* Colors for the first four unique boxes */
         .file-box:nth-child(4n+1) { background:rgb(254, 115, 84); } /* Red */
         .file-box:nth-child(4n+2) { background:rgb(86, 192, 111); } /* Green */
-        .file-box:nth-child(4n+3) { background:rgb(62, 222, 201); } /* Blue */
+        .file-box:nth-child(4n+3) { background:rgb(35, 207, 181); } /* Blue */
         .file-box:nth-child(4n+4) { background:rgb(255, 207, 63); } /* Yellow */
 
         /* Graphic design image */
         .file-box:nth-child(4n+1) .file-img  {
             width: 180px;
             height: 180px;
+            background: url('img/graphicimg.png') no-repeat center;
             background-size: contain;
             border-radius: 5px;
         }
         .file-box:nth-child(4n+2) .file-img {
             width: 190px;
             height: 190px;
+            background: url('img/graphicimg1.png') no-repeat center;
             background-size: contain;
             border-radius: 5px;
         }
         .file-box:nth-child(4n+3) .file-img  {
             width: 180px;
             height: 190px;
+            background: url('img/graphicimg2.jpg') no-repeat center;
             background-size: contain;
             border-radius: 5px;
         }
         .file-box:nth-child(4n+4) .file-img {
             width: 150px;
             height: 150px;
+            background: url('img/graphicimg4.jpg') no-repeat center;
             background-size: contain;
             border-radius: 5px;
         }
@@ -530,8 +537,8 @@ html, body {
 
     .delete-btn {
         position: absolute;
-        top: 5px;
-        left: 5px;
+        top: 10px;
+        left: 10px;
         background: white;
         color: red;
         font-size: 14px;
@@ -769,7 +776,7 @@ html, body {
                 <!-- Begin Page Content -->
                 
     <div class="container-fluid" style="padding-left: 5px;padding-right:15px;">
-    <div class="file-container" >
+    <div class="file-container" style="background: rgb(15, 29, 64);">
         <div class="file-wrapper" id="fileWrapper">
             <!-- Files will be dynamically added here -->
         </div>
@@ -949,12 +956,6 @@ html, body {
   color: #6c757d; /* Lighter text color */
   font-size: 14px; /* Optional: Adjust font size */
 }
-.delete-btn {
-    font-size: 6px;  /* Adjust size as needed */
-    color: white;  /* Optional: Set color */
-    cursor: pointer;
-
-}
 
 </style>
 
@@ -1074,13 +1075,15 @@ function toggleDesc(id) {
         textContainer.appendChild(requirementText);
         textContainer.appendChild(fileNameText);
 
+        let fileImg = document.createElement("div");
+        fileImg.classList.add("file-img");
 
-         let deleteBtn = document.createElement("div");
+        let deleteBtn = document.createElement("div");
         deleteBtn.classList.add("delete-btn");
         deleteBtn.textContent = "❌";
         deleteBtn.onclick = (event) => {
-            event.stopPropagation(); // Prevent file opening
-            deleteFile(index); // Pass the specific index of the clicked file
+            event.stopPropagation(); // Prevent opening file when clicking delete button
+            deleteFile(fileName);
         };
 
         // Make the entire fileBox clickable
@@ -1090,6 +1093,7 @@ function toggleDesc(id) {
 
         fileBox.appendChild(deleteBtn);
         fileBox.appendChild(textContainer);
+        fileBox.appendChild(fileImg); // Image on the right
 
         fileWrapper.appendChild(fileBox);
     });
@@ -1123,26 +1127,22 @@ function toggleDesc(id) {
         }
     });
 
-    function deleteFile(fileIndex) { 
-    let fileName = storedFiles[fileIndex]; // Get the specific file name to delete
-    console.log("Attempting to delete:", fileName, "at index:", fileIndex); // Debugging
-    
+    function deleteFile(fileName) {
+    console.log("Attempting to delete:", fileName); // Debugging
     fetch(`delete.php?file=${encodeURIComponent(fileName)}`, { method: "GET" })
     .then(response => response.json())
     .then(data => {
         console.log("Server Response:", data); // Debugging
         if (data.success) {
-            // Remove only the clicked instance (specific index)
-            storedFiles.splice(fileIndex, 1);
+            storedFiles = storedFiles.filter(name => name !== fileName);
             localStorage.setItem("uploadedFiles", JSON.stringify(storedFiles));
-            renderFiles(); // Re-render list
+            renderFiles();
         } else {
             alert("File deletion failed!");
         }
     })
     .catch(error => console.error("Error:", error));
 }
-
 
 
     renderFiles(); // Initial render

@@ -659,6 +659,21 @@ html, body {
   .toggle-btn:hover {
     background: lightgray;
   }
+  .toggle-btn1 {
+    background: white;
+    color: rgb(81, 172, 246);
+    border: none;
+    padding: 4px 8px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .toggle-btn1:hover {
+    background: lightgray;
+  }
+
+
 </style>
 </head>
 
@@ -693,14 +708,41 @@ html, body {
 <div class="d-flex justify-content-between align-items-center mb-2">
 <input type="file" id="fileInput" accept=".pdf, .jpg, .jpeg, .png, .doc, .docx, .ppt, .pptx, .xlsx, .xls" style="display: none;">
 
-<a href="#" id="addFileBtn" class="btn" style="background: rgb(81, 172, 246); font-size: 13px; color: white; padding: 8px 10px; display: inline-block; text-decoration: none; border-radius: 5px; cursor: pointer;">
-    <i class="fas fa-folder-plus"></i> &nbsp; Add File
+<style>
+  .btn-custom {
+    background: rgb(81, 172, 246);
+    font-size: 13px;
+    color: white;
+    padding: 8px 10px;
+    display: inline-block;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  /* Hide text and adjust padding for mobile screens */
+  @media (max-width: 576px) {
+    .btn-custom {
+      font-size: 12px; /* Reduce icon size slightly */
+      padding: 6px 6px; /* Reduce padding */
+      width: 40px; /* Ensure square button */
+      text-align: center;
+    }
+
+    .btn-custom span {
+      display: none; /* Hide the text */
+    }
+  }
+</style>
+
+<a href="#" id="addFileBtn" class="btn btn-custom">
+    <i class="fas fa-folder-plus"></i> <span>&nbsp; Add File</span>
 </a> &nbsp; &nbsp;
-<a href="#" class="btn" data-toggle="modal" data-target="#descModal"
-   style="background: rgb(81, 172, 246); font-size: 13px; color: white; padding: 8px 10px; 
-          display: inline-block; text-decoration: none; border-radius: 5px; cursor: pointer;">
-    <i class="fas fa-pen"></i> &nbsp; Add Desc
+
+<a href="#" class="btn btn-custom" data-toggle="modal" data-target="#descModal">
+    <i class="fas fa-pen"></i> <span>&nbsp; Add Desc</span>
 </a>
+
 
 
 
@@ -740,7 +782,7 @@ html, body {
         </div>
     </div>
 
-    <div class="row" id="entriesContainer">
+    <div class=" row" id="entriesContainer">
     <!-- Entries will be dynamically added here -->
   </div>
     </div>
@@ -783,6 +825,34 @@ html, body {
 </div>
         
 
+<!-- Edit Description Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body p-4">
+        <form id="editForm">
+          <div class="form-group d-flex">
+            <div class="w-50 pr-2">
+              <label for="editDateInput"><b>Date:</b></label>
+              <input type="date" class="form-control" id="editDateInput" required>
+            </div>
+            <div class="w-50 pl-2">
+              <label for="editTitleInput"><b>Title:</b></label>
+              <input type="text" class="form-control" id="editTitleInput" placeholder="Enter title" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="editDescInput"><b>Description:</b></label>
+            <textarea class="form-control" id="editDescInput" rows="3" placeholder="Enter description" required></textarea>
+          </div>
+          <div class="text-center">
+            <button type="submit" class="btn submit-btn mx-2" style="color: white;">Update</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
@@ -848,8 +918,50 @@ html, body {
 <!-- Bootstrap 4.6.0 JavaScript -->
 <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script> -->
+<style>
+  /* Responsive font size adjustments */
+  .entry-title, .entry-date, .desc-content {
+    font-size: 14px;
+  }
+
+  .toggle-btn {
+    font-size: 12px;
+  }
+
+  /* Adjust font size for smaller screens */
+  @media (max-width: 768px) { /* Tablets */
+    .entry-title, .entry-date, .desc-content {
+      font-size: 12px;
+    }
+    .toggle-btn {
+      font-size: 10px;
+    }
+  }
+
+  @media (max-width: 576px) { /* Mobile */
+    .entry-title, .desc-content {
+      font-size: 12px;
+    }
+    .entry-date{
+        font-size:10px;
+    }
+    .toggle-btn {
+      font-size: 9px;
+    }
+    .toggle-btn1 {
+      font-size: 11px;
+    }
+  }
+  .desc-content {
+  color: #6c757d; /* Lighter text color */
+  font-size: 14px; /* Optional: Adjust font size */
+}
+
+</style>
+
 <script>
-  let entryCount = 0;
+let entryCount = 0;
+let editEntryId = null; // To track which entry is being edited
 
 document.getElementById("descForm").addEventListener("submit", function (event) {
   event.preventDefault();
@@ -857,58 +969,73 @@ document.getElementById("descForm").addEventListener("submit", function (event) 
   // Get input values
   let date = document.getElementById("dateInput").value;
   let title = document.getElementById("titleInput").value;
-  let desc = document.getElementById("descInput").value;
+  let desc = document.getElementById("descInput").value.replace(/\n/g, "<br>");
 
-  // Validation check
   if (!date || !title || !desc) {
     alert("All fields are required!");
     return;
   }
 
-  // Determine which column to add the entry in
-  let columnClass = "col-lg-4 col-md-6 col-12"; 
-  // Large Screens (3 columns), Medium Screens (2 columns), Small Screens (1 column)
+  let entryId = entryCount++;
+  let columnClass = "col-lg-4 col-md-6 col-sm-12"; // Responsive layout
 
-  // Create unique ID for toggling description
-  let descId = `desc-${entryCount}`;
-
-  // Create entry box
   let entryHTML = `
-    <div class="${columnClass}">
-      <div class="entry-box">
+    <div class="${columnClass}" id="entry-${entryId}">
+      <div class="entry-box p-2">
         <div class="row align-items-center">
-          <div class="col-6"><span class="entry-title">${title}</span></div>
-          <div class="col-3 justify-content-end d-flex"><span class="entry-date">${date}</span></div>
-          <div class="col-3 text-right">
-          <button class="toggle-btn" style="font-size:14px;"><i class="fas fa-pen"></i></button>
-            <button class="toggle-btn" onclick="toggleDesc('${descId}')">+</button>
-            
+          <div class="col-6"><span id="title-${entryId}" class="entry-title">${title}</span></div>
+          <div class="col-3 text-end"><span id="date-${entryId}" class="entry-date">${date}</span></div>
+          <div class="col-3 text-end">
+            <button class="toggle-btn" onclick="openEditModal(${entryId})"><i class="fas fa-pen"></i></button>
+            <button class="toggle-btn1" onclick="toggleDesc(${entryId})">+</button>
           </div>
         </div>
-        <div class="desc-content" id="${descId}" style="display: none;">${desc}</div>
+        <div class="desc-content mt-2" id="desc-${entryId}" style="display: none; color: #6c757d;">
+  ${desc}
+</div>
+
       </div>
     </div>
   `;
 
-  // Append to container
   document.getElementById("entriesContainer").innerHTML += entryHTML;
 
   // Reset form & close modal
   document.getElementById("descForm").reset();
   $('#descModal').modal('hide');
+});
 
-  entryCount++;
+// Open Edit Modal with Existing Data
+function openEditModal(id) {
+  editEntryId = id;
+  document.getElementById("editDateInput").value = document.getElementById(`date-${id}`).innerText;
+  document.getElementById("editTitleInput").value = document.getElementById(`title-${id}`).innerText;
+  document.getElementById("editDescInput").value = document.getElementById(`desc-${id}`).innerText;
+  
+  $('#editModal').modal('show');
+}
+
+// Handle Update Functionality
+document.getElementById("editForm").addEventListener("submit", function (event) {
+  event.preventDefault();
+
+  if (editEntryId !== null) {
+    document.getElementById(`title-${editEntryId}`).innerText = document.getElementById("editTitleInput").value;
+    document.getElementById(`date-${editEntryId}`).innerText = document.getElementById("editDateInput").value;
+    document.getElementById(`desc-${editEntryId}`).innerHTML = document.getElementById("editDescInput").value.replace(/\n/g, "<br>");
+    
+    editEntryId = null; // Reset after update
+    $('#editModal').modal('hide'); // Close modal
+  }
 });
 
 // Toggle Description Visibility
 function toggleDesc(id) {
-  let descBox = document.getElementById(id);
-  if (descBox.style.display === "none") {
-    descBox.style.display = "block";
-  } else {
-    descBox.style.display = "none";
-  }
+  let descBox = document.getElementById(`desc-${id}`);
+  descBox.style.display = (descBox.style.display === "none") ? "block" : "none";
 }
+
+
 </script>
 
 

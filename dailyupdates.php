@@ -167,7 +167,7 @@ tbody{
         }
         .ongoing { color: orange; animation: spin 1s linear infinite; }
         .pending { color: red; animation: pulse 1s infinite alternate; }
-        .completed { color: green; }
+        .completed { color:  rgb(0, 148, 255); }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes pulse { 0% { opacity: 0.6; } 100% { opacity: 1; } }
         

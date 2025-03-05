@@ -706,337 +706,132 @@
         max-width: 200px; /* Optional: limit button width */
     }
 }
+.count-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px; /* Adjust size as needed */
+    height: 27px;
+    border-radius: 10%;
+    background-color: #007bff; /* Change color as needed */
+    color: white;
+    /* font-weight: bold; */
+    font-size: 12px;
+}
 
 
 </style>
 
       <!-- Employee Report Card -->
-      <div class="card shadow mb-4" id="employeeReport">
-        <div class="card-header py-3 ">
-          <!-- First Row: Employee Dropdown Filter and Excel Export -->
-          <div class="d-flex flex-wrap align-items-center filter-group">
-            From:
-            <input type="date" id="startDateEmployee" class="form-control" style="max-width: 150px;">
-            To:
-            <input type="date" id="endDateEmployee" class="form-control" style="max-width: 150px;">
-            <!-- Wrap the button inside a flex container -->
-            <!-- Wrap the button inside a flex container -->
-        <!-- Wrap the button inside a flex container -->
-            <div class="d-flex export-container" style="justify-content: flex-end;">
-                <button id="exportPdfEmployee" class="btn btn-danger export-btn" style="background:green;border:green" title="Export to PDF">
-                    <i class="fa fa-file-alt"></i>&nbsp;&nbsp;Generate Report
-                </button>
-            </div>
-
-
-
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="table-responsive">
-            <!-- Display Total Days and Actual Days -->
-            <div class="d-flex justify-content-center my-3">
-                <h5 style="color:black; font-size:14px;"><b>Total Days: </b><span id="totalDays">0</span></h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <h5 style="color:black; font-size:14px;"><b>Actual Days: </b><span id="actualDays">0</span></h5>
-            </div>
-
-
-
-            <!-- Employee Report Table -->
-            <table class="table table-bordered text-center" style="font-size: 14px;" id="dataTable" width="100%" cellspacing="0">
-              <thead>
-                <tr class="thead">
-                  <th>S.no</th>
-                  <th>Name</th>
-                  <th>Date</th>
-                  <th>Company - Title</th>
-                  <th>Type</th>
-                  <th>Description</th>
-                  <th>Total Hrs</th>
-                  <th>Actual Hrs</th>
-                  <th>Status</th>
-                  <th>Total Days</th>
-
-                </tr>
-              </thead>
-              <tbody id="tableBody">
-                <!-- Example rows; these would normally be generated dynamically -->
-                <tr>
-                  <td>1</td>
-                  <td>Surya</td>
-                  <td>10-02-2025</td>
-                  <td>Govin-ABCd</td>
-                  <td>Web Application</td>
-                  <td>XYZ</td>
-                  <td>6</td>
-                  <td>5</td>
-                  <td>Completed</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>Naveen</td>
-                  <td>10-02-2025</td>
-                  <td>Kurinji-XYZ</td>
-                  <td>Mobile Application</td>
-                  <td>aaa</td>
-                  <td>4</td>
-                  <td>-</td>
-                  <td>Started</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>Pavithra</td>
-                  <td>10-02-2025</td>
-                  <td>xxx-KMNo</td>
-                  <td>Web Application</td>
-                  <td>bbb</td>
-                  <td>7</td>
-                  <td>8</td>
-                  <td>Completed</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td>JayaVarshini</td>
-                  <td>10-02-2025</td>
-                  <td>Govin-ABC</td>
-                  <td>Web Application</td>
-                  <td>XYZ</td>
-                  <td>6</td>
-                  <td>5</td>
-                  <td>Completed</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>5</td>
-                  <td>Mohan</td>
-                  <td>10-02-2025</td>
-                  <td>Kurinji-XYZ</td>
-                  <td>Mobile Application</td>
-                  <td>aaa</td>
-                  <td>4</td>
-                  <td>-</td>
-                  <td>Started</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>6</td>
-                  <td>Angu</td>
-                  <td>10-02-2025</td>
-                  <td>xxx-KMN</td>
-                  <td>Web Application</td>
-                  <td>bbb</td>
-                  <td>7</td>
-                  <td>8</td>
-                  <td>Completed</td>
-                  <td>5</td>
-
-                </tr>
-
-
-                <tr>
-                  <td>7</td>
-                  <td>Surya</td>
-                  <td>11-02-2025</td>
-                  <td>Govin-ABC</td>
-                  <td>Web Application</td>
-                  <td>XYZ</td>
-                  <td>6</td>
-                  <td>5</td>
-                  <td>Completed</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>8</td>
-                  <td>Naveen</td>
-                  <td>11-02-2025</td>
-                  <td>Kurinji-XYZ</td>
-                  <td>Mobile Application</td>
-                  <td>aaa</td>
-                  <td>4</td>
-                  <td>-</td>
-                  <td>Started</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>9</td>
-                  <td>Pavithra</td>
-                  <td>11-02-2025</td>
-                  <td>xxx-KMN</td>
-                  <td>Web Application</td>
-                  <td>bbb</td>
-                  <td>7</td>
-                  <td>8</td>
-                  <td>Completed</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>10</td>
-                  <td>JayaVarshini</td>
-                  <td>11-02-2025</td>
-                  <td>Govin-ABC</td>
-                  <td>Web Application</td>
-                  <td>XYZ</td>
-                  <td>6</td>
-                  <td>5</td>
-                  <td>Completed</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>11</td>
-                  <td>Mohan</td>
-                  <td>11-02-2025</td>
-                  <td>Kurinji-XYZ</td>
-                  <td>Mobile Application</td>
-                  <td>aaa</td>
-                  <td>4</td>
-                  <td>-</td>
-                  <td>Started</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>12</td>
-                  <td>Angu</td>
-                  <td>11-02-2025</td>
-                  <td>xxx-KMN</td>
-                  <td>Web Application</td>
-                  <td>bbb</td>
-                  <td>7</td>
-                  <td>8</td>
-                  <td>Completed</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>13</td>
-                  <td>JayaVarshini</td>
-                  <td>11-02-2025</td>
-                  <td>Govin-mobile app</td>
-                  <td>Web Application</td>
-                  <td>XYZ</td>
-                  <td>6</td>
-                  <td>5</td>
-                  <td>Completed</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>14</td>
-                  <td>surya</td>
-                  <td>12-02-2025</td>
-                  <td>Govin-mobile app</td>
-                  <td>Web Application</td>
-                  <td>XYZ</td>
-                  <td>6</td>
-                  <td>5</td>
-                  <td>Completed</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>15</td>
-                  <td>JayaVarshini</td>
-                  <td>13-02-2025</td>
-                  <td>Govin-web app</td>
-                  <td>Web Application</td>
-                  <td>XYZ</td>
-                  <td>6</td>
-                  <td>5</td>
-                  <td>Completed</td>
-                  <td>19</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+     
       <!-- Project Report Card (Initially Hidden) -->
       <div class="card shadow mb-4" id="projectReport" style="display: none;">
-        <div class="card-header py-3 ">
-          <!-- First Row: Project Dropdown Filter and Excel Export -->
-          <div class="d-flex flex-wrap align-items-center filter-group   ">
-            
-                From:
+    <div class="card-header py-3 ">
+        <!-- First Row: Project Dropdown Filter and Excel Export -->
+        <div class="d-flex flex-wrap align-items-center filter-group">
+            From:
             <input type="date" id="startDateProject" class="form-control mr-2" style="max-width: 150px;" placeholder="Start Date">
-            <!-- End Date Input -->To:
+            To:
             <input type="date" id="endDateProject" class="form-control mr-2" style="max-width: 150px;" placeholder="End Date">
-            <!-- Month Dropdown Filter -->
-        <!-- Remove the <select> element for month filtering -->
-            <!-- <button id="exportExcelProject" class="btn btn-danger export-btn" style="position: absolute; right: 20px;" title="Export to PDF">
-              <i class="fa fa-file-pdf-o"></i>&nbsp;&nbsp;Download
-            </button> -->
+            
             <div class="d-flex export-container" style="justify-content: flex-end;">
-                <button id="exportExcelProject" class="btn btn-danger export-btn" style="background:green;border:green"  title="Export to PDF">
+                <button id="exportExcelProject" class="btn btn-danger export-btn" style="background:green;border:green" title="Export to PDF">
                     <i class="fa fa-file-alt"></i>&nbsp;&nbsp;Generate Report
                 </button>
-
             </div>
-          </div>
         </div>
-        <div class="card-body" >
-          <div class="table-responsive">
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <div class="d-flex justify-content-center my-3">
+                <h5 style="color:black; font-size:14px;">
+                    <b>Total Days: </b><span id="totalProjectDays" class="count-circle">0</span>
+                </h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <h5 style="color:black; font-size:14px;">
+                    <b>Actual Days: </b><span id="actualProjectDays" class="count-circle">0</span>
+                </h5>
+            </div>
+
             <table class="table table-bordered text-center" style="font-size: 14px;" id="projectTable" width="100%" cellspacing="0">
-              <thead>
-                <tr class="thead">
-                  <th>S.No</th>
-                  <th>Date</th>
-                  <th>Company-Title</th>
-                  <th>Type</th>
-                  <th>Employees</th>
-                  <th>Description</th>
-                  <th>Total days</th>
-                  <th>Work days</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>11-02-2025</td>
-                  <td>Govin - ABC</td>
-                  <td>Web development</td>
-                  <td>Surya,Varshini</td>
-                  <td>suma</td>
-                  <td>5</td>
-                  <td>5</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>11-02-2025</td>
-                  <td>Kurinji - xyz</td>
-                  <td>App development</td>
-                  <td>Naveen,Mohan</td>
-                  <td>suma1</td>
-                  <td>6</td>
-                  <td>7</td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>11-02-2025</td>
-                  <td>xxx - KMN</td>
-                  <td>UI/UX Design</td>
-                  <td>Pavithra,Angu</td>
-                  <td>suma2</td>
-                  <td>4</td>
-                  <td>-</td>
-                </tr>
-                
-              </tbody>
+                <thead>
+                    <tr class="thead">
+                        <th>S.No</th>
+                        <th>Date</th>
+                        <th>Company-Title</th>
+                        <th>Type</th>
+                        <th>Employees</th>
+                        <th>Description</th>
+                        <th>Total days</th>
+                        <th>Work days</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>11-02-2025</td>
+                        <td>Govin - ABC</td>
+                        <td>Web development</td>
+                        <td>Surya,Varshini</td>
+                        <td>suma</td>
+                        <td>5</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>11-02-2025</td>
+                        <td>Kurinji - xyz</td>
+                        <td>App development</td>
+                        <td>Naveen,Mohan</td>
+                        <td>suma1</td>
+                        <td>6</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>11-02-2025</td>
+                        <td>xxx - KMN</td>
+                        <td>UI/UX Design</td>
+                        <td>Pavithra,Angu</td>
+                        <td>suma2</td>
+                        <td>4</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>12-02-2025</td>
+                        <td>Govin - ABC</td>
+                        <td>Web development</td>
+                        <td>Surya,Varshini</td>
+                        <td>suma</td>
+                        <td>5</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>12-02-2025</td>
+                        <td>Kurinji - xyz</td>
+                        <td>App development</td>
+                        <td>Naveen,Mohan</td>
+                        <td>suma1</td>
+                        <td>6</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>12-02-2025</td>
+                        <td>xxx - KMN</td>
+                        <td>UI/UX Design</td>
+                        <td>Pavithra,Angu</td>
+                        <td>suma2</td>
+                        <td>4</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
             </table>
-          </div>
         </div>
-      </div>    
+    </div>
+</div>
+   
     </div>
   </div>
 </div>
@@ -1182,21 +977,30 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
+<!-- ######### EMPLOYEE REPORT ########## -->
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
     var table = $('#dataTable').DataTable();
 
-    // Function to update Total Days and Actual Days
+    // Function to update Total Days and Actual Days across all pages
     function updateDays() {
+        let searchValue = document.querySelector('input[type="search"]').value.trim();
+        if (searchValue === "") {
+            $("#totalDays").text(0);
+            $("#actualDays").text(0);
+            return;
+        }
+
         let totalDaysMap = new Map(); // Store total days for unique Company-Title
         let actualHours = 0;
 
-        // Loop through only the visible rows after filtering
-        $('#dataTable tbody tr:visible').each(function() {
-            let companyTitle = $(this).find("td:eq(3)").text().trim(); // Get Company-Title column (adjust index if needed)
-            let totalDaysValue = parseFloat($(this).find("td:eq(9)").text().trim()) || 0; // Get Total Days column (adjust index if needed)
-            let actualHrs = $(this).find("td:eq(7)").text().trim(); // Get Actual Hours column
-            
+        // Loop through **all rows in the dataset**, not just the displayed ones
+        table.rows({ search: 'applied' }).every(function () {
+            let row = this.data(); // Get row data
+            let companyTitle = row[3].trim(); // Get Company-Title column (adjust index if needed)
+            let totalDaysValue = parseFloat(row[9].trim()) || 0; // Get Total Days column (adjust index if needed)
+            let actualHrs = row[7].trim(); // Get Actual Hours column
+
             if (companyTitle) {
                 if (!totalDaysMap.has(companyTitle)) {
                     totalDaysMap.set(companyTitle, totalDaysValue);
@@ -1257,8 +1061,77 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 </script>
+<!-- ######### PROJECT REPORT ########## -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    var table = $('#projectTable').DataTable();
 
+    // Function to update Total Days and Work Days across all pages
+    function updateDays() {
+        let totalDaysSum = 0;
+        let workDaysSum = 0;
+        let companyTotalDays = {}; // Object to store unique company total days
 
+        // Loop through all filtered rows, regardless of pagination
+        table.rows({ search: 'applied' }).data().each(function (row) {
+            let companyTitle = row[2].trim(); // Get Company Title column
+            let totalDaysValue = parseFloat(row[6].trim()) || 0; // Get Total Days column
+            let workDaysValue = parseFloat(row[7].trim()) || 0; // Get Work Days column
+            
+            if (!companyTotalDays[companyTitle]) {
+                companyTotalDays[companyTitle] = totalDaysValue;
+                totalDaysSum += totalDaysValue;
+            }
+            workDaysSum += workDaysValue;
+        });
+
+        $("#totalProjectDays").text(totalDaysSum); // Display summed total days
+        $("#actualProjectDays").text(workDaysSum); // Display summed work days
+    }
+
+    // Search input event
+    document.querySelector('input[type="search"]').addEventListener('keyup', function () {
+        table.search(this.value).draw();
+        setTimeout(updateDays, 200); // Update days after search
+    });
+
+    // Date filter event
+    function filterByDate() {
+        table.draw();
+        setTimeout(updateDays, 200); // Update days after filtering
+    }
+
+    document.getElementById('startDateProject').addEventListener('change', filterByDate);
+    document.getElementById('endDateProject').addEventListener('change', filterByDate);
+
+    // Custom DataTable filtering function
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            let min = document.getElementById('startDateProject').value;
+            let max = document.getElementById('endDateProject').value;
+            let date = data[1]; // Column index for 'Date'
+
+            // Convert date format to YYYY-MM-DD
+            let dateParts = date.split('-');
+            let formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+            let tableDate = new Date(formattedDate);
+            
+            if ((min === "" || new Date(min) <= tableDate) && (max === "" || new Date(max) >= tableDate)) {
+                return true;
+            }
+            return false;
+        }
+    );
+
+    // Ensure updateDays is called after filtering and pagination changes
+    table.on('draw', function () {
+        updateDays();
+    });
+
+    updateDays(); // Call initially to set the correct values
+});
+
+</script>
             <!-- End of Main Content -->
 
             <!-- Footer -->

@@ -32,6 +32,7 @@
 #dataTable th:nth-child(5), #dataTable td:nth-child(5) { width: 10%; } /* Project Title */
 #dataTable th:nth-child(6), #dataTable td:nth-child(6) { width: 10%; } /* Total Days */
 #dataTable th:nth-child(7), #dataTable td:nth-child(7) { width: 10%; } /* Description */
+#dataTable th:nth-child(8), #dataTable td:nth-child(8) { width: 10%; } /* Description */
 
 
 
@@ -521,30 +522,7 @@
    <!-- Topbar Navbar -->
    <ul class="navbar-nav ml-auto">
 
-<!-- Nav Item - Search Dropdown (Visible Only XS) -->
-<li class="nav-item dropdown no-arrow d-sm-none">
-    <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fas fa-search fa-fw"></i>
-    </a>
-    <!-- Dropdown - Messages -->
-    <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-        aria-labelledby="searchDropdown">
-        <form class="form-inline mr-auto w-100 navbar-search">
-            <div class="input-group">
-                <input type="text" class="form-control bg-light border-0 small"
-                    placeholder="Search for..." aria-label="Search"
-                    aria-describedby="basic-addon2">
-                <div class="input-group-append">
-                    <button class="btn btn-primary" type="button">
-                        <i class="fas fa-search fa-sm"></i>
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-</li>
-<h4 class="text-dark font-weight-bold mr-4 d-flex align-items-center pl-3 py-2 " style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
+<h4 class="text-dark font-weight-bold mr-1 d-flex align-items-center pl-3 py-2 " style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
 Jayavarshini 
 </h4>
 <div class="topbar-divider d-none d-sm-block"></div>
@@ -670,70 +648,229 @@ Jayavarshini
 
       <!-- Employee Report Card -->
      
-<div class="card shadow mb-4" id="employeeReport">
-    <div class="card-header py-3">
-        <div class="d-flex flex-wrap align-items-center filter-group">
+      <div class="card shadow mb-4" id="employeeReport">
+        <div class="card-header py-3 ">
+          <!-- First Row: Employee Dropdown Filter and Excel Export -->
+          <div class="d-flex flex-wrap align-items-center filter-group">
             From:
             <input type="date" id="startDateEmployee" class="form-control" style="max-width: 150px;">
             To:
             <input type="date" id="endDateEmployee" class="form-control" style="max-width: 150px;">
-
-            <!-- Export Button -->
+            <!-- Wrap the button inside a flex container -->
+            <!-- Wrap the button inside a flex container -->
+        <!-- Wrap the button inside a flex container -->
             <div class="d-flex export-container" style="justify-content: flex-end;">
                 <button id="exportPdfEmployee" class="btn btn-danger export-btn" style="background:green;border:green" title="Export to PDF">
                     <i class="fa fa-file-alt"></i>&nbsp;&nbsp;Generate Report
                 </button>
-
             </div>
+
+
+
+          </div>
         </div>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive">
+        <div class="card-body">
+          <div class="table-responsive">
+            <!-- Display Total Days and Actual Days -->
+            
+            <div class="d-flex justify-content-center my-3">
+                <h5 style="color:black; font-size:14px;">
+                    <b>Total Days: </b><span id="totalDays" class="count-circle">0</span>
+                </h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <h5 style="color:black; font-size:14px;">
+                    <b>Actual Days: </b><span id="actualDays" class="count-circle">0</span>
+                </h5>
+            </div>
+
+
+            <!-- Employee Report Table -->
             <table class="table table-bordered text-center" style="font-size: 14px;" id="dataTable" width="100%" cellspacing="0">
-                <thead>
-                    <tr class="thead">
-                        <th>S.no</th>
-                        <th>Date</th>
-                        <th>Company - Title</th>
-                        <th>Description</th>
-                        <th>Total Hrs</th>
-                        <th>Actual Hrs</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    <tr>
-                        <td>1</td>
-                        <td>10-02-2025</td>
-                        <td>Govin-ABC</td>
-                        <td>Web Application</td>
-                        <td>6</td>
-                        <td>5</td>
-                        <td>Completed</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>11-02-2025</td>
-                        <td>Kurinji-XYZ</td>
-                        <td>aaa</td>
-                        <td>4</td>
-                        <td>-</td>
-                        <td>Started</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>12-02-2025</td>
-                        <td>xxx-KMN</td>
-                        <td>Web Application</td>
-                        <td>7</td>
-                        <td>8</td>
-                        <td>Completed</td>
-                    </tr>
-                </tbody>
+              <thead>
+                <tr class="thead">
+                  <th>S.no</th>
+                  <th>Date</th>
+                  <th>Company - Title</th>
+                  <th>Description</th>
+                  <th>Total Hrs</th>
+                  <th>Actual Hrs</th>
+                  <th>Status</th>
+                  <th>Total Days</th>
+
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                <!-- Example rows; these would normally be generated dynamically -->
+                <tr>
+                  <td>1</td>
+                  <td>10-02-2025</td>
+                  <td>Govin-ABCd</td>
+                  <td>XYZ</td>
+                  <td>6</td>
+                  <td>5</td>
+                  <td>Completed</td>
+                  <td>5</td>
+
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>10-02-2025</td>
+                  <td>Kurinji-XYZ</td>
+                  <td>aaa</td>
+                  <td>4</td>
+                  <td>-</td>
+                  <td>Started</td>
+                  <td>5</td>
+
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>10-02-2025</td>
+                  <td>xxx-KMNo</td>
+                  <td>bbb</td>
+                  <td>7</td>
+                  <td>8</td>
+                  <td>Completed</td>
+                  <td>5</td>
+
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>10-02-2025</td>
+                  <td>Govin-ABC</td>
+                  <td>XYZ</td>
+                  <td>6</td>
+                  <td>5</td>
+                  <td>Completed</td>
+                  <td>5</td>
+
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>10-02-2025</td>
+                  <td>Kurinji-XYZ</td>
+                  <td>aaa</td>
+                  <td>4</td>
+                  <td>-</td>
+                  <td>Started</td>
+                  <td>5</td>
+
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>10-02-2025</td>
+                  <td>xxx-KMN</td>
+                  <td>bbb</td>
+                  <td>7</td>
+                  <td>8</td>
+                  <td>Completed</td>
+                  <td>5</td>
+
+                </tr>
+
+
+                <tr>
+                  <td>7</td>
+                  <td>11-02-2025</td>
+                  <td>Govin-ABC</td>
+                  <td>XYZ</td>
+                  <td>6</td>
+                  <td>5</td>
+                  <td>Completed</td>
+                  <td>5</td>
+
+                </tr>
+                <tr>
+                  <td>8</td>
+                  <td>11-02-2025</td>
+                  <td>Kurinji-XYZ</td>
+                  <td>aaa</td>
+                  <td>4</td>
+                  <td>-</td>
+                  <td>Started</td>
+                  <td>5</td>
+
+                </tr>
+                <tr>
+                  <td>9</td>
+                  <td>11-02-2025</td>
+                  <td>xxx-KMN</td>
+                  <td>bbb</td>
+                  <td>7</td>
+                  <td>8</td>
+                  <td>Completed</td>
+                  <td>5</td>
+
+                </tr>
+                <tr>
+                  <td>10</td>
+                  <td>11-02-2025</td>
+                  <td>Govin-ABC</td>
+                  <td>XYZ</td>
+                  <td>6</td>
+                  <td>5</td>
+                  <td>Completed</td>
+                  <td>5</td>
+
+                </tr>
+                <tr>
+                  <td>11</td>
+                  <td>11-02-2025</td>
+                  <td>Kurinji-XYZ</td>
+                  <td>aaa</td>
+                  <td>4</td>
+                  <td>-</td>
+                  <td>Started</td>
+                  <td>5</td>
+
+                </tr>
+                <tr>
+                  <td>12</td>
+                  <td>11-02-2025</td>
+                  <td>xxx-KMN</td>
+                  <td>bbb</td>
+                  <td>7</td>
+                  <td>8</td>
+                  <td>Completed</td>
+                  <td>5</td>
+
+                </tr>
+                <tr>
+                  <td>13</td>
+                  <td>11-02-2025</td>
+                  <td>Govin-mobile app</td>
+                  <td>XYZ</td>
+                  <td>6</td>
+                  <td>5</td>
+                  <td>Completed</td>
+                  <td>5</td>
+
+                </tr>
+                <tr>
+                  <td>14</td>
+                  <td>12-02-2025</td>
+                  <td>Govin-mobile app</td>
+                  <td>XYZ</td>
+                  <td>6</td>
+                  <td>5</td>
+                  <td>Completed</td>
+                  <td>5</td>
+
+                </tr>
+                <tr>
+                  <td>15</td>
+                  <td>13-02-2025</td>
+                  <td>Govin-web app</td>
+                  <td>XYZ</td>
+                  <td>6</td>
+                  <td>5</td>
+                  <td>Completed</td>
+                  <td>19</td>
+                </tr>
+              </tbody>
             </table>
+          </div>
         </div>
-    </div>
-</div>
+      </div>
       <!-- Project Report Card (Initially Hidden) -->
       
     </div>
@@ -743,74 +880,128 @@ Jayavarshini
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Get all rows from the table
-        const rows = document.querySelectorAll('#dataTable tbody tr');
-        
-        rows.forEach(row => {
-            row.addEventListener('click', function(event) {
-                // Get the clicked cell
-                const clickedCell = event.target;
+document.addEventListener('DOMContentLoaded', function () {
+    // Initialize DataTable
+    var table = $('#dataTable').DataTable();
 
-                // Get the index of the clicked cell
-                const columnIndex = clickedCell.cellIndex;
+    // Event delegation to handle dynamically generated rows
+    document.querySelector('#dataTable tbody').addEventListener('click', function (event) {
+        let clickedCell = event.target.closest('td');
+        if (!clickedCell) return;
 
-                // Check if the clicked column is "Company - Title" (index 2)
-                if (columnIndex === 2) {
-                    const companyTitle = clickedCell.textContent.trim();
-                    window.location.href = `companyreport.php?company=${encodeURIComponent(companyTitle)}`;
-                } else {
-                    // For other columns, open the PDF file
-                    window.open("http://localhost/b2/aadhar.pdf", "_blank");
-                }
-            });
-        });
+        // Get the search input field from DataTables
+        const searchBox = document.querySelector('input[type="search"]');
+
+        // Get column index of the clicked cell
+        const colIndex = clickedCell.cellIndex;
+
+        // Define column indexes
+        const dateCol = 1; // "Date" column
+        const companyCol = 2;
+
+        if ([ dateCol, companyCol].includes(colIndex)) {
+            // Get clean text without extra spaces or new lines
+            let searchText = clickedCell.textContent.replace(/\s+/g, ' ').trim();
+
+            // Update search box
+            searchBox.value = searchText;
+
+            // Trigger DataTables search
+            table.search(searchText).draw();
+        }else {
+            // If clicked column is not Date, Company-Title, or Type, open the PDF
+            window.open("http://localhost/b2/aadhar.pdf", "_blank");
+        }
     });
+});
+
 </script>
-
-
-
+<!-- ######### EMPLOYEE REPORT ########## -->
 <script>
-    $(document).ready(function() {
-        var originalData = [];
+    document.addEventListener('DOMContentLoaded', function () {
+    var table = $('#dataTable').DataTable();
 
-        // Store original table data
-        $("#tableBody tr").each(function() {
-            originalData.push($(this).clone());
+    // Function to update Total Days and Actual Days across all pages
+    function updateDays() {
+        let searchValue = document.querySelector('input[type="search"]').value.trim();
+        if (searchValue === "") {
+            $("#totalDays").text(0);
+            $("#actualDays").text(0);
+            return;
+        }
+
+        let totalDaysMap = new Map(); // Store total days for unique Company-Title
+        let actualHours = 0;
+
+        // Loop through **all rows in the dataset**, not just the displayed ones
+        table.rows({ search: 'applied' }).every(function () {
+            let row = this.data(); // Get row data
+            let companyTitle = row[2].trim(); // Get Company-Title column (adjust index if needed)
+            let totalDaysValue = parseFloat(row[7].trim()) || 0; // Get Total Days column (adjust index if needed)
+            let actualHrs = row[5].trim(); // Get Actual Hours column
+
+            if (companyTitle) {
+                if (!totalDaysMap.has(companyTitle)) {
+                    totalDaysMap.set(companyTitle, totalDaysValue);
+                }
+            }
+            if (actualHrs && actualHrs !== "-") {
+                actualHours += parseFloat(actualHrs);
+            }
         });
 
-        // Function to parse date in DD-MM-YYYY format
-        function parseDate(dateStr) {
-            var parts = dateStr.split("-");
-            return new Date(parts[2], parts[1] - 1, parts[0]);
-        }
+        // Sum all total days from unique Company-Title
+        let totalDaysSum = Array.from(totalDaysMap.values()).reduce((sum, days) => sum + days, 0);
 
-        // Function to filter Employee Table based on date range
-        function filterEmployeeTable() {
-            var startDateStr = $("#startDateEmployee").val();
-            var endDateStr = $("#endDateEmployee").val();
-            var startDate = startDateStr ? new Date(startDateStr) : null;
-            var endDate = endDateStr ? new Date(endDateStr) : null;
+        $("#totalDays").text(totalDaysSum); // Display summed total days
+        $("#actualDays").text((actualHours / 8).toFixed(2)); // Divide actual hours by 8
+    }
 
-            var filteredRows = originalData.filter(function(row) {
-                var dateStr = row.find("td:eq(1)").text().trim();
-                var rowDate = parseDate(dateStr);
-                return (!startDate || rowDate >= startDate) && (!endDate || rowDate <= endDate);
-            });
-
-            $("#tableBody").empty();
-            filteredRows.forEach(function(row, index) {
-                row.find("td:eq(0)").text(index + 1); // Update serial numbers
-                $("#tableBody").append(row);
-            });
-        }
-
-        // Attach event listener to date inputs
-        $("#startDateEmployee, #endDateEmployee").on("change", filterEmployeeTable);
+    // Search input event
+    document.querySelector('input[type="search"]').addEventListener('keyup', function () {
+        table.search(this.value).draw();
+        setTimeout(updateDays, 200); // Update days after search
     });
-</script>
 
+    // Date filter event
+    function filterByDate() {
+        table.draw();
+        setTimeout(updateDays, 200); // Update days after filtering
+    }
+
+    document.getElementById('startDateEmployee').addEventListener('change', filterByDate);
+    document.getElementById('endDateEmployee').addEventListener('change', filterByDate);
+
+    // Custom DataTable filtering function
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            let min = document.getElementById('startDateEmployee').value;
+            let max = document.getElementById('endDateEmployee').value;
+            let date = data[2]; // Column index for 'Date'
+            
+            // Convert date format to YYYY-MM-DD
+            let dateParts = date.split('-');
+            let formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+            let tableDate = new Date(formattedDate);
+            
+            if ((min === "" || new Date(min) <= tableDate) && (max === "" || new Date(max) >= tableDate)) {
+                return true;
+            }
+            return false;
+        }
+    );
+
+    // Ensure updateDays is called after filtering
+    table.on('draw', function () {
+        updateDays();
+    });
+
+    updateDays(); // Call initially to set the correct values
+});
+
+</script>
   
             <!-- End of Main Content -->
 

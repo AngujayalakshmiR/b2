@@ -633,7 +633,14 @@ thead{
         max-height: 250px;
     }
 }
+#addEmployeeBtn {
+    align-self: flex-start;
+    white-space: nowrap; /* Ensures button text does not wrap */
+}
 
+.text-muted {
+    color: white !important;
+}
 </style>
 
 <script>
@@ -784,37 +791,39 @@ document.addEventListener('click', function (event) {
                 <!-- Column 3: File Upload -->
                 <div class="col-md-4 pb-1">
                     <div class="container d-flex justify-content-center align-items-center" 
-                        style="border: 3px solid rgb(252, 217, 104); border-radius: 25px; min-height: 120px;">
+                        style="border: 3px solid rgb(252, 217, 104); background: rgb(252, 217, 104); border-radius: 25px; min-height: 120px;">
                         <div class="form-group" style="margin-top: 8px; margin-bottom: 8px;">
                             <label for="requirementfile" class="upload-label d-block font-weight-bold" style="margin-bottom: 0px;">
-                                <i id="requirement" class="fas fa-folder file-icon fa-lg text-warning upload-icon" 
-                                    style="text-align: center; display: block; cursor: pointer; margin-bottom: 12px; color: rgb(222, 141, 197);">
+                                <i id="requirement" class="fas fa-folder file-icon fa-lg upload-icon" 
+                                    style="text-align: center; display: block; cursor: pointer; margin-bottom: 12px; color: white;">
                                 </i> 
-                                <p class="mt-1 justify-content-center" style="font-size: 14px; text-align: center; margin-bottom: 10px;">
+                                <p class="mt-1 justify-content-center" style="font-size: 14px; text-align: center; margin-bottom: 10px; color: white;">
                                     Upload Requirement 
                                 </p>
                             </label>
                             <input type="file" class="form-control-file d-none" id="requirementfile" 
                                 onchange="updateIcon(this, 'requirement', 'requirementfile-name')">
                             <p class="file-name text-muted" id="requirementfile-name" 
-                                style="font-size: 14px; text-align: center;">No file chosen</p>
+                                style="font-size: 14px; text-align: center; color: black;">No file chosen</p>
                         </div>
                     </div>
                 </div>
+
 
             </form>
         </div>
     </div>
 
     <!-- Employee Selection and Project Submission Row -->
-    <div class="row align-items-center mt-3 mb-3">
+    <div class="row align-items-center  mb-3">
         <!-- Employees (9 columns) -->
-        <div class="col-md-10 d-flex align-items-center">
+        <div class="col-md-9 d-flex align-items-center">
             <!-- Add Employee Button -->
             <button type="button" class="btn mt-2 d-flex align-items-center" id="addEmployeeBtn" 
-                style="background: rgb(238, 153, 129); color: white;">
-                <i class="fas fa-user-plus"></i> Add Employee
+                style="background: rgb(238, 153, 129); color: white; font-size: 14px; align-self: flex-start; white-space: nowrap;">
+                <i class="fas fa-user-plus"></i>&nbsp; Employee
             </button>
+
             <span onclick="window.location.href='employee.php'" >
             <i class="fas fa-plus-circle text-primary ml-2" style="cursor: pointer;"></i></span>
 
@@ -825,13 +834,13 @@ document.addEventListener('click', function (event) {
 
             <!-- Dropdown Container -->
             <div id="dropdownContainer" class="mt-2 p-3 rounded shadow" 
-                style="display: none; border: 1px solid #ccc; background: white; position: absolute; width: 50%; min-width: 280px; z-index: 100;">
+                style="display: none; border: 1px solid #ccc; background: white; position: absolute; width: 10%; min-width: 280px; z-index: 100;">
                 <div id="employeeDropdown" class="row"></div>
             </div>
         </div>
 
         <!-- Add Project Button (3 columns) -->
-        <div class="col-md-2 d-flex justify-content-md-end justify-content-center">
+        <div class="col-md-3 d-flex justify-content-md-end justify-content-center">
             <button type="submit" class="btn" id="customerbtn" 
                 style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: auto;">
                

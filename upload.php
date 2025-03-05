@@ -1,5 +1,5 @@
 <?php
-if ($_FILES['file']) {
+if (isset($_FILES['file'])) {
     $file = $_FILES['file'];
     $fileName = $file['name'];
     $fileTmpName = $file['tmp_name'];
@@ -8,7 +8,7 @@ if ($_FILES['file']) {
     $fileType = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
     // Allowed file types
-    $allowed = ['pdf', 'jpg', 'jpeg', 'png', 'doc', 'docx', 'ppt', 'pptx'];
+    $allowed = ['pdf', 'jpg', 'jpeg', 'png', 'doc', 'docx', 'ppt', 'pptx', 'xlsx', 'xls'];
 
     if (in_array($fileType, $allowed)) {
         $uploadDir = "b2/";  // Ensure this directory exists
@@ -20,7 +20,7 @@ if ($_FILES['file']) {
             echo json_encode(["success" => false, "error" => "Upload failed."]);
         }
     } else {
-        echo json_encode(["success" => false, "error" => "Invalid file type."]);
+        echo json_encode(["success" => false, "error" => "Invalid file type: " . $fileType]);
     }
 } else {
     echo json_encode(["success" => false, "error" => "No file uploaded."]);

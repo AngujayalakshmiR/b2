@@ -421,37 +421,245 @@ html, body {
     border-radius: 5px;
 }
 
-/* Flexbox for buttons */
-.btn-wrapper {
+
+
+
+</style>
+<style>
+        /* Container for requirement boxes */
+        .file-container {
+            overflow-x: auto; /* Horizontal scrolling */
+            overflow-y: hidden; /* No vertical scroll */
+            white-space: nowrap;
+            padding: 15px;
+            padding-top: 35px;
+            padding-bottom: 35px;
+            background: #f8f9fa;
+            scrollbar-width: thin;
+            scrollbar-color: white transparent;
+        }
+
+        /* Custom scrollbar for Chrome, Edge, Safari */
+        .file-container::-webkit-scrollbar {
+            height: 6px; /* Thicker scrollbar */
+        }
+        .file-container::-webkit-scrollbar-track {
+            background: #ddd;
+            border-radius: 5px;
+        }
+        .file-container::-webkit-scrollbar-thumb {
+            background: rgb(15, 29, 64);
+            border-radius: 5px;
+        }
+
+        /* Flexbox for boxes */
+        .file-wrapper {
+            display: flex;
+            gap: 15px; /* Space between boxes */
+            flex-wrap: nowrap; /* No wrapping */
+        }
+
+        /* Styling for each requirement file box */
+        .file-box {
+    width: 380px;
+    height: 150px;
     display: flex;
-    gap: 10px; /* Space between buttons */
-    flex-wrap: nowrap; /* No wrapping, forces horizontal scrollbar */
-}
-
-/* Button styling */
-.btn-custom {
-    min-width: 150px; /* Set a minimum width for buttons */
-    font-size: 14px;
-    background: rgb(15, 29, 64);
+    align-items: center; 
+    padding: 15px;
     color: white;
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+    flex-direction: row; /* Row layout */
+    justify-content: space-between; /* Space between text & image */
+    text-align: left;
+}
+
+.text-container {
+    display: flex;
+    flex-direction: column; /* Stack text elements */
+    align-items: flex-start; /* Align text to the left */
+    gap: 5px;
+    width: 70%; /* Ensure text takes most of the space */
+}
+
+.file-img {
+    width: 60px; /* Adjust image width */
+    height: 60px; /* Adjust image height */
+    background-color: rgba(255, 255, 255, 0.2); /* Placeholder for image */
     border-radius: 5px;
-    padding: 8px 15px;
-    white-space: nowrap; /* Prevent text wrap */
 }
 
-.btn-custom:hover {
-    background: rgb(10, 20, 50); /* Slightly darker on hover */
+
+
+        .file-box:hover {
+            transform: scale(1.05);
+        }
+
+        /* Colors for the first four unique boxes */
+        .file-box:nth-child(4n+1) { background:rgb(254, 115, 84); } /* Red */
+        .file-box:nth-child(4n+2) { background:rgb(86, 192, 111); } /* Green */
+        .file-box:nth-child(4n+3) { background:rgb(35, 207, 181); } /* Blue */
+        .file-box:nth-child(4n+4) { background:rgb(255, 207, 63); } /* Yellow */
+
+        /* Graphic design image */
+        .file-box:nth-child(4n+1) .file-img  {
+            width: 180px;
+            height: 180px;
+            background: url('img/graphicimg.png') no-repeat center;
+            background-size: contain;
+            border-radius: 5px;
+        }
+        .file-box:nth-child(4n+2) .file-img {
+            width: 190px;
+            height: 190px;
+            background: url('img/graphicimg1.png') no-repeat center;
+            background-size: contain;
+            border-radius: 5px;
+        }
+        .file-box:nth-child(4n+3) .file-img  {
+            width: 180px;
+            height: 190px;
+            background: url('img/graphicimg2.jpg') no-repeat center;
+            background-size: contain;
+            border-radius: 5px;
+        }
+        .file-box:nth-child(4n+4) .file-img {
+            width: 150px;
+            height: 150px;
+            background: url('img/graphicimg4.jpg') no-repeat center;
+            background-size: contain;
+            border-radius: 5px;
+        }
+
+
+    .delete-btn {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: white;
+        color: red;
+        font-size: 14px;
+        padding: 5px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: none;
+    }
+
+    .file-box:hover .delete-btn {
+        display: block;
+    }
+
+    .file-link {
+        color: white;
+        text-decoration: none;
+    }
+ 
+    .no-file-message {
+    display: flex;
+    justify-content: center;  /* Centers horizontally */
+    align-items: center;      /* Centers vertically */
+    height: 100%;             /* Adjust based on parent container */
+    width: 100%;              /* Ensures it takes full width */
+    color: white;             
+    font-size: 16px;          
+    font-weight: bold;
 }
 
-/* Ensure container does not take too much space on small screens */
-@media (max-width: 768px) {
-    .button-container {
-        height: auto; /* Adjust height for small screens */
+/* Modal Responsiveness */
+.modal-dialog {
+    max-width: 35%;
+  }
+
+  @media (max-width: 992px) { /* Tablets */
+    .modal-dialog {
+      max-width: 60%;
+    }
+  }
+
+  @media (max-width: 768px) { /* Mobile */
+    .modal-dialog {
+        max-width: 70%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: auto; /* Ensures it's centered */
+    }
+    .custom-radio {
+        font-size: 12px;
+        width:100%;
+    }
+    .submit-btn {
+        font-size: 10px;
+        padding: 4px 8px;
+        margin-top: 5px;
     }
 }
 
-</style>
 
+  /* Styling */
+  .modal-content {
+    border-radius: 15px;
+  }
+
+  .custom-radio {
+    font-size: 14px;
+    margin-right: 10px;
+  }
+
+  .submit-btn {
+    background-color: rgb(15,29,64);
+    color: white;
+    border-radius: 10px;
+    font-size: 14px;
+    padding: 4px 8px;
+  }
+
+  .d-flex.flex-wrap {
+    gap: 10px;
+  }
+    </style>
+
+<style>
+ /* Entry Box Styling */
+ .entry-box {
+    background-color: rgb(81, 172, 246);
+    color: white;
+    padding: 10px 15px;
+    margin: 8px 0;
+    border-radius: 10px;
+    font-weight: bold;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+  }
+
+  /* Description Box Styling */
+  .desc-content {
+    background-color: rgb(255, 255, 255);
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 5px;
+    color: black;
+    display: none;
+  }
+
+  /* Toggle Button Styling */
+  .toggle-btn {
+    background: white;
+    color: rgb(81, 172, 246);
+    border: none;
+    padding: 4px 8px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .toggle-btn:hover {
+    background: lightgray;
+  }
+</style>
 </head>
 
 
@@ -483,7 +691,19 @@ html, body {
 <!-- Topbar Navbar -->
 <ul class="navbar-nav ml-auto">
 <div class="d-flex justify-content-between align-items-center mb-2">
-        <a href="" class="btn " style="background: rgb(246, 169, 81); font-size: 15px;color:white;">Add File</a>
+<input type="file" id="fileInput" accept=".pdf, .jpg, .jpeg, .png, .doc, .docx, .ppt, .pptx, .xlsx, .xls" style="display: none;">
+
+<a href="#" id="addFileBtn" class="btn" style="background: rgb(81, 172, 246); font-size: 13px; color: white; padding: 8px 10px; display: inline-block; text-decoration: none; border-radius: 5px; cursor: pointer;">
+    <i class="fas fa-folder-plus"></i> &nbsp; Add File
+</a> &nbsp; &nbsp;
+<a href="#" class="btn" data-toggle="modal" data-target="#descModal"
+   style="background: rgb(81, 172, 246); font-size: 13px; color: white; padding: 8px 10px; 
+          display: inline-block; text-decoration: none; border-radius: 5px; cursor: pointer;">
+    <i class="fas fa-pen"></i> &nbsp; Add Desc
+</a>
+
+
+
     </div>
     <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -514,18 +734,54 @@ html, body {
                 <!-- Begin Page Content -->
                 
     <div class="container-fluid" style="padding-left: 5px;padding-right:15px;">
-        <!-- Scrollable Button Container -->
-        <div class="button-container">
-            <div class="btn-wrapper">
-                <!-- Buttons will be generated dynamically -->
-            </div>
+    <div class="file-container" style="background: rgb(15, 29, 64);">
+        <div class="file-wrapper" id="fileWrapper">
+            <!-- Files will be dynamically added here -->
         </div>
+    </div>
+
+    <div class="row" id="entriesContainer">
+    <!-- Entries will be dynamically added here -->
+  </div>
     </div>
                 <!-- /.container-fluid -->
 
             </div>
          
-           
+   <!-- Modal -->
+<div class="modal fade" id="descModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body p-4">
+        <form id="descForm">
+          <!-- Date & Title in Same Row -->
+          <div class="form-group d-flex">
+            <div class="w-50 pr-2">
+              <label for="dateInput"><b>Date:</b></label>
+              <input type="date" class="form-control" id="dateInput" required>
+            </div>
+            <div class="w-50 pl-2">
+              <label for="titleInput"><b>Title:</b></label>
+              <input type="text" class="form-control" id="titleInput" placeholder="Enter title" required>
+            </div>
+          </div>
+
+          <!-- Description Field -->
+          <div class="form-group">
+            <label for="descInput"><b>Description:</b></label>
+            <textarea class="form-control" id="descInput" rows="3" placeholder="Enter description" required></textarea>
+          </div>
+
+          <!-- Buttons -->
+          <div class="text-center">
+            <button type="submit" class="btn submit-btn mx-2" style="color: white;">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+        
 
 
 
@@ -592,25 +848,179 @@ html, body {
 <!-- Bootstrap 4.6.0 JavaScript -->
 <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script> -->
+<script>
+  let entryCount = 0;
+
+document.getElementById("descForm").addEventListener("submit", function (event) {
+  event.preventDefault();
+
+  // Get input values
+  let date = document.getElementById("dateInput").value;
+  let title = document.getElementById("titleInput").value;
+  let desc = document.getElementById("descInput").value;
+
+  // Validation check
+  if (!date || !title || !desc) {
+    alert("All fields are required!");
+    return;
+  }
+
+  // Determine which column to add the entry in
+  let columnClass = "col-lg-4 col-md-6 col-12"; 
+  // Large Screens (3 columns), Medium Screens (2 columns), Small Screens (1 column)
+
+  // Create unique ID for toggling description
+  let descId = `desc-${entryCount}`;
+
+  // Create entry box
+  let entryHTML = `
+    <div class="${columnClass}">
+      <div class="entry-box">
+        <div class="row align-items-center">
+          <div class="col-6"><span class="entry-title">${title}</span></div>
+          <div class="col-3 justify-content-end d-flex"><span class="entry-date">${date}</span></div>
+          <div class="col-3 text-right">
+          <button class="toggle-btn" style="font-size:14px;"><i class="fas fa-pen"></i></button>
+            <button class="toggle-btn" onclick="toggleDesc('${descId}')">+</button>
+            
+          </div>
+        </div>
+        <div class="desc-content" id="${descId}" style="display: none;">${desc}</div>
+      </div>
+    </div>
+  `;
+
+  // Append to container
+  document.getElementById("entriesContainer").innerHTML += entryHTML;
+
+  // Reset form & close modal
+  document.getElementById("descForm").reset();
+  $('#descModal').modal('hide');
+
+  entryCount++;
+});
+
+// Toggle Description Visibility
+function toggleDesc(id) {
+  let descBox = document.getElementById(id);
+  if (descBox.style.display === "none") {
+    descBox.style.display = "block";
+  } else {
+    descBox.style.display = "none";
+  }
+}
+</script>
+
 
 <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const btnWrapper = document.querySelector(".btn-wrapper");
+    const fileWrapper = document.getElementById("fileWrapper");
+    const fileInput = document.getElementById("fileInput");
+    const addFileBtn = document.getElementById("addFileBtn");
 
-            for (let i = 1; i <= 15; i++) { // Change 8 to any number
-                const button = document.createElement("button");
-                button.classList.add("btn", "btn-custom");
-                button.innerText = `Requirement File ${i}`;
+    // Load files from local storage (Only filenames, because actual files are stored in "b2" folder)
+    let storedFiles = JSON.parse(localStorage.getItem("uploadedFiles")) || [];
 
-                // Open sample.pdf in a new tab aside on click
-                button.onclick = function () {
-                    window.open("sample.pdf", "_blank");
-                };
+    function renderFiles() {
+    fileWrapper.innerHTML = ""; // Clear existing files
+    if (storedFiles.length === 0) {
+        let noFileMessage = document.createElement("div");
+        noFileMessage.classList.add("no-file-message");
+        noFileMessage.textContent = "-- No Requirement File Uploaded --";
+        fileWrapper.appendChild(noFileMessage);
+        return;
+    }
+    storedFiles.forEach((fileName, index) => {
+        let fileBox = document.createElement("div");
+        fileBox.classList.add("file-box");
 
-                btnWrapper.appendChild(button);
-            }
-        });
-    </script>
+        let textContainer = document.createElement("div");
+        textContainer.classList.add("text-container");
+
+        let requirementText = document.createElement("b");
+        requirementText.textContent = `Requirement ${index + 1}`;
+
+        let fileNameText = document.createElement("div");
+        fileNameText.classList.add("file-name");
+        fileNameText.textContent = fileName;
+        fileNameText.style.fontSize = "14px";
+        fileNameText.style.marginTop = "5px";
+
+        textContainer.appendChild(requirementText);
+        textContainer.appendChild(fileNameText);
+
+        let fileImg = document.createElement("div");
+        fileImg.classList.add("file-img");
+
+        let deleteBtn = document.createElement("div");
+        deleteBtn.classList.add("delete-btn");
+        deleteBtn.textContent = "❌";
+        deleteBtn.onclick = (event) => {
+            event.stopPropagation(); // Prevent opening file when clicking delete button
+            deleteFile(fileName);
+        };
+
+        // Make the entire fileBox clickable
+        fileBox.onclick = () => {
+            window.open(`b2/${fileName}`, "_blank");
+        };
+
+        fileBox.appendChild(deleteBtn);
+        fileBox.appendChild(textContainer);
+        fileBox.appendChild(fileImg); // Image on the right
+
+        fileWrapper.appendChild(fileBox);
+    });
+}
+
+
+    addFileBtn.addEventListener("click", () => fileInput.click());
+
+    fileInput.addEventListener("change", (event) => {
+        const file = event.target.files[0];
+
+        if (file) {
+            let formData = new FormData();
+            formData.append("file", file);
+
+            fetch("upload.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    storedFiles.push(data.filename);
+                    localStorage.setItem("uploadedFiles", JSON.stringify(storedFiles));
+                    renderFiles();
+                } else {
+                    alert("File upload failed!");
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        }
+    });
+
+    function deleteFile(fileName) {
+    console.log("Attempting to delete:", fileName); // Debugging
+    fetch(`delete.php?file=${encodeURIComponent(fileName)}`, { method: "GET" })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Server Response:", data); // Debugging
+        if (data.success) {
+            storedFiles = storedFiles.filter(name => name !== fileName);
+            localStorage.setItem("uploadedFiles", JSON.stringify(storedFiles));
+            renderFiles();
+        } else {
+            alert("File deletion failed!");
+        }
+    })
+    .catch(error => console.error("Error:", error));
+}
+
+
+    renderFiles(); // Initial render
+</script>
+
 
 </body>
 

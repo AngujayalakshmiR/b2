@@ -481,19 +481,25 @@
                 <!-- Column 1: Name & Company Name -->
                 <div class="col-md-3 pb-1">
                     <input type="text" class="form-control mb-2" id="employeename" placeholder="Enter Employee Name">
-                    <select class="form-control mb-2" id="designation">
-    <option value="">Select Designation</option>
-    <option value="web_developer">Web Developer</option>
-    <option value="ui_ux_designer">UI/UX Designer</option>
-    <option value="mobile_app_designer">Mobile App Designer</option>
-</select>
+                    <div class="d-flex align-items-center">
+                        <select class="form-control mb-2 w-100" id="designation">
+                            <option value="">Select Designation</option>
+                            <option value="web_developer">Web Developer</option>
+                            <option value="ui_ux_designer">UI/UX Designer</option>
+                            <option value="mobile_app_designer">Mobile App Designer</option>
+                        </select>
+                        <span onclick="window.location.href='designation.php'" 
+                            style="cursor: pointer; margin-left: 8px; align-items:center;">
+                            <i class="fas fa-plus-circle text-primary" style="vertical-align: middle;"></i>
+                        </span>
+                    </div>
 
                     <input type="text" class="form-control mb-2" id="employeephnno" placeholder="Enter Phone Number">
                 </div>
 
                 <!-- Column 2: Address & District -->
                 <div class="col-md-3 pb-1">
-                    <textarea class="form-control mb-2" id="customeraddress" placeholder="Enter Company Address" rows="2" style="height: 85px;"></textarea>
+                    <textarea class="form-control mb-2" id="customeraddress" placeholder="Enter Employee Address" rows="2" style="height: 85px;"></textarea>
                     <!-- Country -->
                     <select class="form-control mb-2" id="country">
                         <option value="">Select Country</option>

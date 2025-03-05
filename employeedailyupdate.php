@@ -891,66 +891,73 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <script>
         function enableEdit(event, btn) {
-            event.preventDefault(); // Prevent page reload
+    event.preventDefault(); // Prevent page reload
 
-            let row = btn.closest("tr"); // Get the row
-            let taskField = row.cells[2]; // Task Details field
-            let actualHrsField = row.cells[4]; // Actual Hrs field
-            let button = row.cells[5].querySelector("button"); // Get the button
+    let row = btn.closest("tr"); // Get the row
+    let taskField = row.cells[2]; // Task Details field
+    let actualHrsField = row.cells[4]; // Actual Hrs field
+    let button = row.cells[5].querySelector("button"); // Get the button
 
-            if (button.innerText === "Update") {
-                // Enable content editing for Task Details
-                taskField.contentEditable = "true";
-                taskField.focus();
+    if (button.innerText === "Update") {
+        // Replace Task Details text with an input field
+        let taskInput = document.createElement("input");
+        taskInput.type = "text";
+        taskInput.className = "form-control";
+        taskInput.value = taskField.innerText.trim();
+        taskField.innerHTML = "";
+        taskField.appendChild(taskInput);
+        taskInput.focus();
 
-                // Create input field for Actual Hrs
-                let inputField = document.createElement("input");
-                inputField.type = "number";
-                inputField.className = "form-control";
-                inputField.value = actualHrsField.innerText.trim() === "-" ? "" : actualHrsField.innerText;
-                actualHrsField.innerHTML = "";
-                actualHrsField.appendChild(inputField);
-                inputField.focus();
+        // Replace Actual Hrs text with an input field
+        let actualInput = document.createElement("input");
+        actualInput.type = "number";
+        actualInput.className = "form-control";
+        actualInput.value = actualHrsField.innerText.trim() === "-" ? "" : actualHrsField.innerText;
+        actualHrsField.innerHTML = "";
+        actualHrsField.appendChild(actualInput);
 
-                // Change button text to "Save"
-                button.innerText = "Save";
-                button.classList.replace("btn-info", "btn-success");
-            } else {
-                // Save the updated values
-                taskField.contentEditable = "false";
-                let newActualHrs = actualHrsField.querySelector("input").value;
-                actualHrsField.innerHTML = newActualHrs || "-";
+        // Change button text to "Save"
+        button.innerText = "Save";
+        button.classList.replace("btn-info", "btn-success");
+    } else {
+        // Save the updated values
+        let newTaskDetails = taskField.querySelector("input").value;
+        let newActualHrs = actualHrsField.querySelector("input").value;
 
-                // Disable the button after saving
-                button.innerText = "Saved";
-                button.classList.replace("btn-success", "btn-secondary");
-                button.disabled = true;
+        taskField.innerHTML = newTaskDetails || "-";
+        actualHrsField.innerHTML = newActualHrs || "-";
 
-                // Update the total hours dynamically
-                updateTotalHours();
-            }
+        // Disable the button after saving
+        button.innerText = "Saved";
+        button.classList.replace("btn-success", "btn-secondary");
+        button.disabled = true;
+
+        // Update the total hours dynamically
+        updateTotalHours();
+    }
+}
+
+function updateTotalHours() {
+    let totalHrs = 0;
+    let actualHrs = 0;
+
+    // Loop through the table rows
+    document.querySelectorAll("#dataTable tbody tr").forEach(row => {
+        totalHrs += parseFloat(row.cells[3].innerText) || 0;
+        let actualValue = parseFloat(row.cells[4].innerText);
+        if (!isNaN(actualValue)) {
+            actualHrs += actualValue;
         }
+    });
 
-        function updateTotalHours() {
-            let totalHrs = 0;
-            let actualHrs = 0;
+    // Update table headers dynamically
+    document.getElementById("totalHrsHeader").innerText = `Total Hrs (${totalHrs})`;
+    document.getElementById("actualHrsHeader").innerText = `Actual Hrs (${actualHrs})`;
+}
 
-            // Loop through the table rows
-            document.querySelectorAll("#dataTable tbody tr").forEach(row => {
-                totalHrs += parseFloat(row.cells[3].innerText) || 0;
-                let actualValue = parseFloat(row.cells[4].innerText);
-                if (!isNaN(actualValue)) {
-                    actualHrs += actualValue;
-                }
-            });
+// Call function on page load to set initial values
+window.onload = updateTotalHours;
 
-            // Update table headers dynamically
-            document.getElementById("totalHrsHeader").innerText = `Total Hrs (${totalHrs})`;
-            document.getElementById("actualHrsHeader").innerText = `Actual Hrs (${actualHrs})`;
-        }
-
-        // Call function on page load to set initial values
-        window.onload = updateTotalHours;
     </script>
 
 </body>

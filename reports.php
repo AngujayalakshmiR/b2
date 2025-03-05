@@ -734,14 +734,13 @@
         </div>
         <div class="card-body">
           <div class="table-responsive">
-        <!-- Display Total Days and Actual Days -->
-        <div class="d-flex justify-content-center my-3">
-    <h5 style="color:black;"><b>Total Days: </b><span id="totalDays">0</span></h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <h5 style="color:black;"><b>Actual Days: </b><span id="actualDays">0</span></h5>
-</div>
+            <!-- Display Total Days and Actual Days -->
+            <div class="d-flex justify-content-center my-3">
+                <h5 style="color:black; font-size:14px;"><b>Total Days: </b><span id="totalDays">0</span></h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <h5 style="color:black; font-size:14px;"><b>Actual Days: </b><span id="actualDays">0</span></h5>
+            </div>
 
 
-<!-- Search Input -->
 
             <!-- Employee Report Table -->
             <table class="table table-bordered text-center" style="font-size: 14px;" id="dataTable" width="100%" cellspacing="0">

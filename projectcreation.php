@@ -743,84 +743,102 @@ document.addEventListener('click', function (event) {
                         <!-- Begin Page Content -->
                         <div class="container-fluid">
                         <div class="container mb-4 mt-4" style="background: white; border-radius: 25px; border: 2px solid rgb(0, 148, 255);">
-<div class="column">
     <div class="row">
-        <!-- Left Section (20% width for the button) -->
-        <!-- Right Section (80% width for form fields) -->
         <div class="col-md-12">
-            <form id="customerForm" style="font-size:14px;"class="row g-3 mt-3">
-                <!-- Column 1: Name & Company Name -->
-                <div class="col-md-4 pb-1">
-                    <select class="form-control mb-2" id="designation">
-    <option value="">Select Company</option>
-    <option value="web_developer">Kurinji Cement</option>
-    <option value="ui_ux_designer">Gowin</option>
-    <option value="mobile_app_designer">RIT</option>
-</select>
+            <form id="customerForm" style="font-size:14px;" class="row g-3 mt-3">
 
-<select class="form-control mb-2" id="designation">
-    <option value="">Select Project Type</option>
-    <option value="web_developer">Web Developement</option>
-    <option value="ui_ux_designer">Mobile App Developement</option>
-    <option value="mobile_app_designer">UI/UX Development</option>
-</select>
+                <!-- Column 1: Company, Project Type & No. of Days -->
+                <div class="col-md-4 pb-1">
+                    <div class="d-flex align-items-center mb-2">
+                        <select class="form-control" id="companySelect">
+                            <option value="">Select Company</option>
+                            <option value="web_developer">Kurinji Cement</option>
+                            <option value="ui_ux_designer">Gowin</option>
+                            <option value="mobile_app_designer">RIT</option>
+                        </select>
+                        <span onclick="window.location.href='customer.php'" >
+                        <i class="fas fa-plus-circle text-primary ml-2" style="cursor: pointer;"></i></span>
+                    </div>
+
+                    <div class="d-flex align-items-center mb-2">
+                        <select class="form-control" id="projectTypeSelect">
+                            <option value="">Select Project Type</option>
+                            <option value="web_developer">Web Development</option>
+                            <option value="ui_ux_designer">Mobile App Development</option>
+                            <option value="mobile_app_designer">UI/UX Development</option>
+                        </select>
+                        <span onclick="window.location.href='projecttype.php'" >
+                        <i class="fas fa-plus-circle text-primary ml-2" style="cursor: pointer;"></i>
+                        </span>
+                    </div>
+
                     <input type="number" class="form-control mb-2" id="employeephnno" placeholder="Enter No. of Days">
                 </div>
 
-                <!-- Column 2: Address & District -->
+                <!-- Column 2: Project Title & Description -->
                 <div class="col-md-4 pb-1">
-                <input type="text" class="form-control mb-2" id="projecttitle" placeholder="Enter Project title">
+                    <input type="text" class="form-control mb-2" id="projecttitle" placeholder="Enter Project title">
                     <textarea class="form-control mb-2" id="projectdescription" placeholder="Enter Project Description" rows="2" style="height: 85px;"></textarea>
-                  
                 </div>
 
-                <!-- Column 3: State & Country -->
-                <div class="col-md-2 pb-1">
-                <button type="button" class="btn " id="addEmployeeBtn" style="background:  rgb(238, 153, 129);color:white;">
-        <i class="fas fa-user-plus"></i> Add Employee
-    </button>
-
-   <!-- Dropdown Container -->
-<div id="dropdownContainer" class="mt-2 p-3  rounded shadow" 
-    style="display: none; border: 1px solid #ccc; background: white; position: absolute; width: 50%; min-width: 280px; z-index: 100;">
-    
-    <div id="employeeDropdown" class="row" ></div>
-</div>
-
-
-    <!-- Selected Employees Display -->
-    <div id="selectedEmployeesContainer" class="mt-2">
-        <span id="selectedEmployees">--Nil--</span>
-    </div>
+                <!-- Column 3: File Upload -->
+                <div class="col-md-4 pb-1">
+                    <div class="container d-flex justify-content-center align-items-center" 
+                        style="border: 3px solid rgb(252, 217, 104); border-radius: 25px; min-height: 120px;">
+                        <div class="form-group" style="margin-top: 8px; margin-bottom: 8px;">
+                            <label for="requirementfile" class="upload-label d-block font-weight-bold" style="margin-bottom: 0px;">
+                                <i id="requirement" class="fas fa-folder file-icon fa-lg text-warning upload-icon" 
+                                    style="text-align: center; display: block; cursor: pointer; margin-bottom: 12px; color: rgb(222, 141, 197);">
+                                </i> 
+                                <p class="mt-1 justify-content-center" style="font-size: 14px; text-align: center; margin-bottom: 10px;">
+                                    Upload Requirement 
+                                </p>
+                            </label>
+                            <input type="file" class="form-control-file d-none" id="requirementfile" 
+                                onchange="updateIcon(this, 'requirement', 'requirementfile-name')">
+                            <p class="file-name text-muted" id="requirementfile-name" 
+                                style="font-size: 14px; text-align: center;">No file chosen</p>
+                        </div>
+                    </div>
                 </div>
-               <!-- Column 4: File Uploads & Credentials -->
-        <div class="col-md-2 pb-1">
-       
-
-    <div class="container d-flex justify-content-center align-item-center" style="border:3px solid rgb(252, 217, 104);border-radius:25px;">
-                <div class="form-group" style="margin-top: 8px; margin-bottom:8px;">
-    <label for="requirementfile" class="upload-label d-block font-weight-bold" style="margin-bottom: 0px;">
-        <i id="requirement" class="fas fa-folder file-icon fa-lg text-warning upload-icon" style="text-align: center; display: block; cursor: pointer;margin-bottom: 12px;color: rgb(222, 141, 197);"></i> <!-- Add upload-icon class -->
-        <p class="mt-1 justify-content-center" style="font-size: 14px; text-align:center;margin-bottom:10px;">Upload Requirement </p>
-    </label>
-    <input type="file" class="form-control-file d-none" id="requirementfile" onchange="updateIcon(this, 'requirement','requirementfile-name')">
-    <p class="file-name text-muted" id="requirementfile-name" style="font-size: 14px; text-align:center;">No file chosen</p> <!-- Unique ID -->
-</div></div>
-        </div>
 
             </form>
         </div>
-    </div></div>
-    <div class="column">
-    <div class="pb-2 d-flex justify-content-sm-end justify-content-center align-items-center">
-    <button type="submit" class="btn" id="customerbtn" 
-        style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: auto;">
-        <i class="fas fa-file-alt"></i>&nbsp; Add Project
-    </button>
-</div>
+    </div>
 
-</div>
+    <!-- Employee Selection and Project Submission Row -->
+    <div class="row align-items-center mt-3 mb-3">
+        <!-- Employees (9 columns) -->
+        <div class="col-md-10 d-flex align-items-center">
+            <!-- Add Employee Button -->
+            <button type="button" class="btn mt-2 d-flex align-items-center" id="addEmployeeBtn" 
+                style="background: rgb(238, 153, 129); color: white;">
+                <i class="fas fa-user-plus"></i> Add Employee
+            </button>
+            <span onclick="window.location.href='employee.php'" >
+            <i class="fas fa-plus-circle text-primary ml-2" style="cursor: pointer;"></i></span>
 
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <div id="selectedEmployeesContainer" class="mt-2">
+                <span id="selectedEmployees">--Nil--</span>
+            </div>
+
+            <!-- Dropdown Container -->
+            <div id="dropdownContainer" class="mt-2 p-3 rounded shadow" 
+                style="display: none; border: 1px solid #ccc; background: white; position: absolute; width: 50%; min-width: 280px; z-index: 100;">
+                <div id="employeeDropdown" class="row"></div>
+            </div>
+        </div>
+
+        <!-- Add Project Button (3 columns) -->
+        <div class="col-md-2 d-flex justify-content-md-end justify-content-center">
+            <button type="submit" class="btn" id="customerbtn" 
+                style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: auto;">
+               
+                <i class="fas fa-file-alt"></i>&nbsp; Add Project
+            </button>
+        </div>
+    </div>
 </div>
 
 
@@ -833,7 +851,7 @@ let selectedEmployees = new Set();
 const addEmployeeBtn = document.getElementById('addEmployeeBtn');
 const dropdownContainer = document.getElementById('dropdownContainer');
 const dropdownList = document.getElementById('employeeDropdown');
-const selectedEmployeesDisplay = document.getElementById('selectedEmployees');
+const selectedEmployeesDisplay = document.getElementById('selectedEmployeesContainer');
 
 // Show dropdown when clicking the button
 addEmployeeBtn.addEventListener('click', function () {
@@ -886,21 +904,22 @@ addEmployeeBtn.addEventListener('click', function () {
 
 // Function to update selected employees display
 function updateSelectedEmployees() {
-    // Check if there are any selected employees
     if (selectedEmployees.size > 0) {
-        selectedEmployeesDisplay.innerHTML = [...selectedEmployees].map(employee => 
-            `<div class="employee-name"><i class="fas fa-check-circle" style="color: green;"></i> ${employee}</div>`
-        ).join('');
+        selectedEmployeesDisplay.innerHTML = [...selectedEmployees]
+            .map(employee => `<span class="employee-name"><i class="fas fa-check-circle" style="color: green;"></i> ${employee}</span>`)
+            .join(', '); // Display employees inline separated by commas
     } else {
-        selectedEmployeesDisplay.textContent = "Nil";
+        selectedEmployeesDisplay.innerHTML = `<span style="white-space: nowrap;">Nil</span>`; // Keep "Nil" in a single line
     }
 }
+
 // Hide dropdown when clicking outside
 document.addEventListener('click', function (event) {
     if (!dropdownContainer.contains(event.target) && event.target !== addEmployeeBtn) {
         dropdownContainer.style.display = 'none';
     }
 });
+
 
 </script>
 

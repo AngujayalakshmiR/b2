@@ -1,0 +1,33 @@
+<table class="table table-bordered text-center dataTable no-footer" id="projectTable" width="100%" cellspacing="0" role="grid" aria-describedby="projectTable_info" style="width: 100%;">
+              <thead>
+                <tr class="thead" role="row"><th class="sorting sorting_asc" tabindex="0" aria-controls="projectTable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="S.No: activate to sort column descending" style="width: 0px;">S.No</th><th class="sorting" tabindex="0" aria-controls="projectTable" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">Date</th><th class="sorting" tabindex="0" aria-controls="projectTable" rowspan="1" colspan="1" aria-label="Company-Title: activate to sort column ascending" style="width: 0px;">Company-Title</th><th class="sorting" tabindex="0" aria-controls="projectTable" rowspan="1" colspan="1" aria-label="Employees: activate to sort column ascending" style="width: 0px;">Employees</th><th class="sorting" tabindex="0" aria-controls="projectTable" rowspan="1" colspan="1" aria-label="Updates: activate to sort column ascending" style="width: 0px;">Updates</th><th class="sorting" tabindex="0" aria-controls="projectTable" rowspan="1" colspan="1" aria-label="Total Hrs: activate to sort column ascending" style="width: 0px;">Total Hrs</th><th class="sorting" tabindex="0" aria-controls="projectTable" rowspan="1" colspan="1" aria-label="Acutual Hrs: activate to sort column ascending" style="width: 0px;">Acutual Hrs</th><th class="sorting" tabindex="0" aria-controls="projectTable" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 0px;">Status</th></tr>
+              </thead>
+              <tbody><tr>
+                  <td>1</td>
+                  <td>11-02-2025</td>
+                  <td>Govin - ABC</td>
+                  <td>Surya,Varshini</td>
+                  <td>suma</td>
+                  <td>5</td>
+                  <td>5</td>
+                  <td>Completed</td>
+                </tr><tr>
+                  <td>2</td>
+                  <td>11-02-2025</td>
+                  <td>Kurinji - xyz</td>
+                  <td>Naveen,Mohan</td>
+                  <td>suma1</td>
+                  <td>6</td>
+                  <td>7</td>
+                  <td>Completed</td>
+                </tr><tr>
+                  <td>3</td>
+                  <td>11-02-2025</td>
+                  <td>xxx - KMN</td>
+                  <td>Pavithra,Angu</td>
+                  <td>suma2</td>
+                  <td>4</td>
+                  <td>-</td>
+                  <td>Started</td>
+                </tr></tbody>
+            </table>

@@ -735,11 +735,11 @@ html, body {
   }
 </style>
 
-<a href="#" id="addFileBtn" class="btn btn-custom">
+<a href="#" id="addFileBtn" class="btn btn-custom" style="color: white;">
     <i class="fas fa-folder-plus"></i> <span>&nbsp; Add File</span>
 </a> &nbsp; &nbsp;
 
-<a href="#" class="btn btn-custom" data-toggle="modal" data-target="#descModal">
+<a href="#" class="btn btn-custom" data-toggle="modal" data-target="#descModal" style="color: white;">
     <i class="fas fa-pen"></i> <span>&nbsp; Add Desc</span>
 </a>
 

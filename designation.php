@@ -504,7 +504,7 @@
            <div class="container custom-container mb-4 mt-4" style="background: white; border-radius: 25px; border: 2px solid rgb(0, 148, 255);">
            <div class="row">
     <div class="col-12">
-        <form class="row g-10" >
+        <form class="row g-10" id="designationForm">
             <div class="col-md-8 pt-2 d-flex align-items-center">
                 <input type="text" class="form-control mb-2" id="designationtype" name="designationtype" placeholder="Enter Designation" required>
             </div>
@@ -514,6 +514,8 @@
                 </button>
             </div>
         </form>
+
+       
     </div>
 </div>
 
@@ -547,21 +549,7 @@
         </tr>
     </thead>
     <tbody id="designation_table">
-    <tr class="thead">
-            <td>1</td>
-            <td>Web Designer</td>
-            <td class="action-buttons">
-                            <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                            <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
-                        </td>
-        </tr> <tr class="thead">
-            <td>2</td>
-            <td>React Developer</td>
-            <td class="action-buttons">
-                            <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                            <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
-                        </td>
-        </tr>
+             <!-- Designations will be loaded here dynamically -->
     </tbody>
 </table>
         </div>
@@ -618,11 +606,6 @@ $(document).ready(function(){
 
 });
 </script>
-
-
-
-
-
 
                 <!-- /.container-fluid -->
 
@@ -681,10 +664,67 @@ $(document).ready(function() {
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
     <script>
+        $(document).ready(function(){
+    // Fetch designations on page load
+    fetchDesignations();
 
-  
-</script>
+    // Add Designation
+    $("#designationForm").submit(function(e){
+        e.preventDefault();
+        var designation = $("#designationtype").val().trim();
+        if (designation === "") {
+            alert("Please enter a designation!");
+            return;
+        }
+        $.ajax({
+            url: "designationBackend.php",
+            type: "POST",
+            data: { designationtype: designation },
+            dataType: "json",
+            success: function(response) {
+                alert(response.message);
+                $("#designationtype").val("");
+                fetchDesignations(); // Reload table
+            },
+            error: function() {
+                alert("Something went wrong!");
+            }
+        });
+    });
 
+    // Fetch Designations
+    function fetchDesignations() {
+        $.ajax({
+            url: "designationBackend.php",
+            type: "GET",
+            success: function(data) {
+                $("#designation_table").html(data);
+            }
+        });
+    }
+
+    // Delete Designation
+    $(document).off("click").on("click", ".btn-delete", function() {
+        var id = $(this).data("id");
+        if (confirm("Are you sure you want to delete this designation?")) {
+            $.ajax({
+                url: "designationBackend.php",
+                type: "POST",
+                data: { delete_id: id }, // Change 'id' to 'delete_id' to avoid conflict with add operation
+                dataType: "json",
+                success: function(response) {
+                    alert(response.message);
+                    fetchDesignations(); // Reload table
+                },
+                error: function() {
+                    alert("Something went wrong!");
+                }
+            });
+        }
+    });
+});
+
+    </script>
 
 </body>
 

@@ -12,7 +12,8 @@
     <link rel="icon" type="image/png" href="img/ktglogo.jpg">
 
     <title>Task Manager</title>
-
+<!-- Load jQuery first -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
@@ -471,38 +472,7 @@ thead{
 <!-- Include Font Awesome for Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-<!-- Modal -->
-<div class="modal fade" id="projecttypeModal" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 40%;">
-    <div class="modal-content" style="border-radius: 15px;">
-      <div class="modal-body p-0">
-        <div class="row no-gutters">
-          <!-- Left Column: Form -->
-          <div class="col-md-10">
-            <div class="ml-3 mt-3 mb-3 mr-3">
-              <form id="projecttypeForm">
-                <div class="form-group">
-                  <label for="projecttypeInput"><b>Project Type Details:</b></label>
-                  <input type="text" class="form-control" id="projecttypeInput" placeholder="Enter Project Type" required>
-                </div>
-                <div class="d-flex justify-content-start">
-                  <button type="submit" class="btn" style="background-color: rgb(15,29,64); color: white; border-radius: 25px;">Submit</button>
-                </div>
-              </form>
-            </div>
-          </div>
 
-          <!-- Right Column: Designation Icon -->
-          <div class="col-md-2 d-flex align-items-center justify-content-center" 
-     style="background-color: rgb(15,29,64); color: white; 
-            border-top-right-radius: 14px; border-bottom-right-radius: 14px;">
-    <i class="fa-solid fa-id-badge fa-4x"></i> <!-- Designation Icon -->
-</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 
 
@@ -547,21 +517,16 @@ thead{
            <div class="container custom-container mb-4 mt-4" style="background: white; border-radius: 25px; border: 2px solid rgb(0, 148, 255);">
     <div class="row">
         <div class="col-12">
-            <form id="customerForm" class="row g-10">
-                <!-- Column 1: Name & Company Name -->
-                <div class="col-md-8 pt-2 d-flex align-items-center">
-                    <input type="text" class="form-control mb-2" id="customername" placeholder="Enter Project Type">
-                </div>
-
-                <!-- Column 4: Submit Button -->
-                <div class="col-md-4 pt-2 pb-2 d-flex justify-content-center align-items-center">
-                    <button type="submit" class="btn" id="customerbtn" 
-                        style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: 190px;">
-                        <i class="fas fa-code"></i>
-                        &nbsp; Add Project Type
-                    </button>
-                </div>
-            </form>
+        <form class="row g-10" id="projecttypeForm">
+    <div class="col-md-8 pt-2 d-flex align-items-center">
+        <input type="text" class="form-control mb-2" id="projecttypeName" name="projecttypeName" placeholder="Enter Project Type" required>
+    </div>
+    <div class="col-md-4 pt-2 pb-2 d-flex justify-content-center align-items-center">
+        <button type="submit" id="projecttypeBtn" class="btn" style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: 190px;">
+            <i class="fas fa-project-diagram"></i>&nbsp; Add Project Type
+        </button>
+    </div>
+</form>
         </div>
     </div>
 </div>
@@ -569,62 +534,32 @@ thead{
 
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
-    <div class="card-header py-3">
+<div class="card-header py-3">
     <p class="m-0" style="font-size: 16px;color:rgb(23, 25, 28);font-style: normal;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    color: rgb(23, 25, 28);
     font-size: 16px;
-    font-weight: 500;"><b>Project Type Details</b> 
-        <span class="header-counter">3</span>  <!-- Counter next to heading -->
-</p>
-
-
-
-</form></h6>
-       
-    </div>
+    font-weight: 500;">
+        <b>Project Type Details</b> 
+        <span class="header-counter">0</span> <!-- Counter next to heading -->
+    </p>
+</div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered text-center" style="font-size:14px" id="dataTable" width="100%" cellspacing="0">
-                <thead>
-                    <tr class="thead">
-                        <th>S.no</th>
-                        <th>Project Type</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Designing</td>
-                        
-                        <td class="action-buttons">
-                            <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                            <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Website</td>
-                       
-                        <td class="action-buttons">
-                            <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                            <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Mobile App</td>
-                        
-                        <td class="action-buttons">
-                            <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                            <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <table class="table table-bordered text-center" style="font-size:14px;" id="dataTable" width="100%" cellspacing="0"> 
+    <thead>
+        <tr class="thead">
+            <th>S.no</th>
+            <th>Project Type</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="projecttype_table">
+        <!-- Project Types will be loaded here dynamically -->
+    </tbody>
+</table>
+
         </div>
     </div>
 </div>
@@ -676,34 +611,128 @@ thead{
             </div>
         </div>
     </div>
-    <script>
-$(document).ready(function() {
-    $('#dataTable').DataTable();
-});
+   <!-- jQuery (Must be loaded first) -->
+<script src="vendor/jquery/jquery.min.js"></script>
+
+<!-- Bootstrap core JavaScript -->
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript -->
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages -->
+<script src="js/sb-admin-2.min.js"></script>
+
+<!-- DataTables Plugin (Ensure it's loaded after jQuery) -->
+<script src="vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+<!-- Initialize DataTable AFTER all dependencies are loaded -->
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable();
+    });
 </script>
 
-    
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Page level custom scripts -->
+<script src="js/demo/datatables-demo.js"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script>
+$(document).ready(function(){
+    let editId = null;
+    let dataTable = $("#dataTable").DataTable(); // Initialize DataTable
 
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+    function fetchProjectTypes() {
+    $.ajax({
+        url: "projecttypeBackend.php",
+        type: "GET",
+        dataType: "json",
+        success: function (data) {
+            // Destroy DataTable ONLY if it exists AND the table has data
+            if ($.fn.DataTable.isDataTable("#dataTable") && data.count > 0) {
+                dataTable.destroy();
+            }
 
-    <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
+            if (data.count === 0) {
+                $("#projecttype_table").html("<tr><td colspan='3'>No project types found</td></tr>");
+            } else {
+                $("#projecttype_table").html(data.tableData); // Insert new rows
+            }
 
-    <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
-    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-    <!-- Bootstrap JavaScript -->
-    <!-- Page level custom scripts -->
-    <script src="js/demo/datatables-demo.js"></script>
+            $(".header-counter").text(data.count);
+
+            // Reinitialize DataTable only when there are rows
+            if (data.count > 0) {
+                dataTable = $("#dataTable").DataTable();
+            }
+        },
+        error: function () {
+            console.error("Error fetching data.");
+        }
+    });
+}
+
+
+    fetchProjectTypes(); // Fetch data on page load
+
+    $("#projecttypeForm").submit(function (e) {
+        e.preventDefault();
+        var projecttype = $("#projecttypeName").val().trim();
+        if (projecttype === "") {
+            alert("Please enter a project type!");
+            return;
+        }
+
+        let requestData = editId ? { edit_id: editId, projecttypeName: projecttype } : { projecttypeName: projecttype };
+
+        $.ajax({
+            url: "projecttypeBackend.php",
+            type: "POST",
+            data: requestData,
+            dataType: "json",
+            success: function (response) {
+                alert(response.message);
+                $("#projecttypeName").val("");
+                $("#projecttypeBtn").html('<i class="fas fa-project-diagram"></i>&nbsp; Add Project Type');
+                editId = null;
+                fetchProjectTypes();
+            },
+            error: function () {
+                alert("Something went wrong!");
+            }
+        });
+    });
+
+    $(document).on("click", ".btn-delete", function () {
+        var id = $(this).data("id");
+        if (confirm("Are you sure you want to delete this project type?")) {
+            $.ajax({
+                url: "projecttypeBackend.php",
+                type: "POST",
+                data: { delete_id: id },
+                dataType: "json",
+                success: function (response) {
+                    alert(response.message);
+                    fetchProjectTypes();
+                },
+                error: function () {
+                    alert("Something went wrong!");
+                }
+            });
+        }
+    });
+
+    $(document).on("click", ".btn-edit", function () {
+        editId = $(this).data("id");
+        var currentName = $(this).closest("tr").find("td:nth-child(2)").text();
+        $("#projecttypeName").val(currentName);
+        $("#projecttypeBtn").html('<i class="fas fa-edit"></i>&nbsp; Update');
+    });
+});
+
+</script>
+
+
 </body>
 
 </html>

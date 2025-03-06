@@ -501,112 +501,60 @@
 
            <!-- Designation Cards Container -->
            <div class="container-fluid">
-           <div class="container custom-container mb-4 mt-4" style="background: white; border-radius: 25px; border: 2px solid rgb(0, 148, 255);">
-           <div class="row">
-    <div class="col-12">
-        <form class="row g-10" id="designationForm">
-            <div class="col-md-8 pt-2 d-flex align-items-center">
-                <input type="text" class="form-control mb-2" id="designationtype" name="designationtype" placeholder="Enter Designation" required>
-            </div>
-            <div class="col-md-4 pt-2 pb-2 d-flex justify-content-center align-items-center">
-                <button type="submit" id="designationBtn" class="btn" style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: 190px;">
-                    <i class="fas fa-briefcase"></i>&nbsp; Add Designation
-                </button>
+                <div class="container custom-container mb-4 mt-4" style="background: white; border-radius: 25px; border: 2px solid rgb(0, 148, 255);">
+                    <div class="row">
+                        <div class="col-12">
+                            <form class="row g-10" id="designationForm">
+                                <div class="col-md-8 pt-2 d-flex align-items-center">
+                                    <input type="text" class="form-control mb-2" id="designationtype" name="designationtype" placeholder="Enter Designation" required>
+                                </div>
+                                <div class="col-md-4 pt-2 pb-2 d-flex justify-content-center align-items-center">
+                                    <button type="submit" id="designationBtn" class="btn" style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: 190px;">
+                                        <i class="fas fa-briefcase"></i>&nbsp; Add Designation
+                                    </button>
 
-            </div>
-        </form>
+                                </div>
+                            </form>
 
-       
-    </div>
-</div>
-
-
-    </div>
-
-<!-- DataTales Example -->
-<div class="card shadow mb-4">
-    <div class="card-header py-3">
-    <p class="m-0" style="font-size: 16px;color:rgb(23, 25, 28);font-style: normal;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    color: rgb(23, 25, 28);
-    font-size: 16px;
-    font-weight: 500;"><b>Designation Details</b> 
-        <span class="header-counter">3</span>  <!-- Counter next to heading -->
-</p>
+                        
+                        </div>
+                    </div>
 
 
-</h6>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive">
-        <table class="table table-bordered text-center" style="font-size:14px;" id="dataTable" width="100%" cellspacing="0">
-    <thead>
-        <tr class="thead">
-            <th>S.no</th>
-            <th>Designation Type</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody id="designation_table">
-             <!-- Designations will be loaded here dynamically -->
-    </tbody>
-</table>
-        </div>
-    </div>
-</div>
+                </div>
 
-</div>
-<script>
-$(document).ready(function(){
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <p class="m-0" style="font-size: 16px;color:rgb(23, 25, 28);font-style: normal;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                            color: rgb(23, 25, 28);
+                            font-size: 16px;
+                            font-weight: 500;"><b>Designation Details</b> 
+                                <span class="header-counter">3</span>  <!-- Counter next to heading -->
+                                            </p>
+                        </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered text-center" style="font-size:14px;" id="dataTable" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr class="thead">
+                                                <th>S.no</th>
+                                                <th>Designation Type</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="designation_table">
+                                                <!-- Designations will be loaded here dynamically -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                    </div>
 
-
-    // Edit Designation Inline
-    $(document).on("click", ".btn-edit", function(){
-        var id = $(this).data("id");
-        var textCell = $("#row_" + id + " .designation-text");
-        var currentText = textCell.text().trim();
-
-        textCell.html("<input type='text' class='form-control edit-input' value='" + currentText + "'>");
-        $(this).replaceWith("<button class='btn btn-success btn-save' data-id='" + id + "'><i class='fas fa-save'></i></button>");
-    });
-
-    // Save Edited Designation
-    $(document).on("click", ".btn-save", function(){
-        var id = $(this).data("id");
-        var newText = $("#row_" + id + " .edit-input").val().trim();
-
-        if(newText !== ""){
-            $.post("designation.php", { action: "edit", id: id, designation: newText }, function(){
-                $("#row_" + id + " .designation-text").text(newText);
-                $(".btn-save[data-id='" + id + "']").replaceWith("<button class='btn btn-warning btn-edit' data-id='" + id + "'><i class='fas fa-edit'></i></button>");
-            });
-        }
-    });
-
-    // Delete Designation
-    $(document).on("click", ".btn-delete", function(){
-        var id = $(this).data("id");
-        if(confirm("Are you sure you want to delete this?")){
-            $.post("designation.php", { action: "delete", id: id }, function(){
-                $("#row_" + id).fadeOut(500, function(){ 
-                    $(this).remove(); 
-                    updateSerialNumbers();
-                });
-            });
-        }
-    });
-
-    // Function to update serial numbers dynamically
-    function updateSerialNumbers() {
-        $("#designation_table tr").each(function(index) {
-            $(this).find("td:first").text(index + 1);
-        });
-    }
-
-});
-</script>
+                </div>
 
                 <!-- /.container-fluid -->
 
@@ -634,15 +582,6 @@ $(document).ready(function(){
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-
-    <script>
-$(document).ready(function() {
-    $('#dataTable').DataTable();
-});
-</script>
-
-
-    
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -665,6 +604,10 @@ $(document).ready(function() {
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
     <script>
+        $(document).ready(function () {
+    $('#dataTable').DataTable();
+});
+
    $(document).ready(function () {
     let editId = null;
 
@@ -709,12 +652,16 @@ $(document).ready(function() {
             type: "GET",
             success: function (data) {
                 $("#designation_table").html(data);
+                $('#dataTable').DataTable().destroy(); // Destroy the previous instance
+                $("#designation_table").html(data);
+                $('#dataTable').DataTable(); // Reinitialize DataTable
+
             }
         });
     }
 
     // Delete Designation
-    $(document).off("click").on("click", ".btn-delete", function () {
+    $(document).on("click", ".btn-delete", function () {
         var id = $(this).data("id");
         if (confirm("Are you sure you want to delete this designation?")) {
             $.ajax({
@@ -741,8 +688,6 @@ $(document).ready(function() {
         $("#designationBtn").html('<i class="fas fa-edit"></i>&nbsp; Update'); // Change button text
     });
 });
-
-
     </script>
 </body>
 

@@ -613,7 +613,20 @@
 
     // Fetch designations on page load
     fetchDesignations();
+// Fetch Designations
+function fetchDesignations() {
+        $.ajax({
+            url: "designationBackend.php",
+            type: "GET",
+            success: function (data) {
+                $("#designation_table").html(data);
+                $('#dataTable').DataTable().destroy(); // Destroy the previous instance
+                $("#designation_table").html(data);
+                $('#dataTable').DataTable(); // Reinitialize DataTable
 
+            }
+        });
+    }
     // Add or Update Designation
     $("#designationForm").submit(function (e) {
         e.preventDefault();
@@ -645,21 +658,17 @@
         });
     });
 
-    // Fetch Designations
-    function fetchDesignations() {
-        $.ajax({
-            url: "designationBackend.php",
-            type: "GET",
-            success: function (data) {
-                $("#designation_table").html(data);
-                $('#dataTable').DataTable().destroy(); // Destroy the previous instance
-                $("#designation_table").html(data);
-                $('#dataTable').DataTable(); // Reinitialize DataTable
+    
 
-            }
-        });
-    }
+    
 
+    // Edit Designation
+    $(document).on("click", ".btn-edit", function () {
+        editId = $(this).data("id"); // Capture ID for update
+        var currentName = $(this).closest("tr").find("td:nth-child(2)").text();
+        $("#designationtype").val(currentName);
+        $("#designationBtn").html('<i class="fas fa-edit"></i>&nbsp; Update'); // Change button text
+    });
     // Delete Designation
     $(document).on("click", ".btn-delete", function () {
         var id = $(this).data("id");
@@ -679,15 +688,8 @@
             });
         }
     });
-
-    // Edit Designation
-    $(document).on("click", ".btn-edit", function () {
-        editId = $(this).data("id"); // Capture ID for update
-        var currentName = $(this).closest("tr").find("td:nth-child(2)").text();
-        $("#designationtype").val(currentName);
-        $("#designationBtn").html('<i class="fas fa-edit"></i>&nbsp; Update'); // Change button text
-    });
 });
+
     </script>
 </body>
 

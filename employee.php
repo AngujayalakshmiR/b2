@@ -1,3 +1,10 @@
+<?php
+include ("dbconn.php");
+// Fetch data from database
+$sql = "SELECT * FROM employeedetails";
+$result = $conn->query($sql);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -78,7 +85,7 @@
 
          /* Modal Header Gradient Background */
     .modal-header {
-        background: linear-gradient(to right, #4568dc, #b06ab3);
+        background:rgb(0, 148, 255);
         color: white;
     }
 
@@ -470,122 +477,115 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                <div class="container mb-4 mt-4" style="background: white; border-radius: 25px; border: 2px solid rgb(0, 148, 255);">
-<div class="column">
-    <div class="row">
-        <!-- Left Section (20% width for the button) -->
-       
-        <!-- Right Section (80% width for form fields) -->
-        <div class="col-md-12">
-            <form id="customerForm" class="row g-3 mt-3">
-                <!-- Column 1: Name & Company Name -->
-                <div class="col-md-3 pb-1">
-                    <input type="text" class="form-control mb-2" id="employeename" placeholder="Enter Employee Name">
-                    <div class="d-flex align-items-center">
-                        <select class="form-control mb-2 w-100" id="designation">
-                            <option value="">Select Designation</option>
-                            <option value="web_developer">Web Developer</option>
-                            <option value="ui_ux_designer">UI/UX Designer</option>
-                            <option value="mobile_app_designer">Mobile App Designer</option>
-                        </select>
-                        <span onclick="window.location.href='designation.php'" 
-                            style="cursor: pointer; margin-left: 8px; align-items:center;">
-                            <i class="fas fa-plus-circle text-primary" style="vertical-align: middle;"></i>
-                        </span>
-                    </div>
-
-                    <input type="text" class="form-control mb-2" id="employeephnno" placeholder="Enter Phone Number">
-                </div>
-
-                <!-- Column 2: Address & District -->
-                <div class="col-md-3 pb-1">
-                    <textarea class="form-control mb-2" id="customeraddress" placeholder="Enter Employee Address" rows="2" style="height: 85px;"></textarea>
-                    <!-- Country -->
-                    <select class="form-control mb-2" id="country">
-                        <option value="">Select Country</option>
-                    </select>
-                </div>
-
-                <!-- Column 3: State & Country -->
-                <div class="col-md-2 pb-1">
-                    <!-- State (Dropdown for India, Manual for other countries) -->
-                    <select class="form-control mb-2 d-none" id="stateDropdown">
-                        <option value="">Select State</option>
-                    </select>
-
-                    <input type="text" class="form-control mb-2" id="stateInput" placeholder="Enter State">
-                    <!-- District (Dropdown for India, Manual for other countries) -->
-                    <select class="form-control mb-2 d-none" id="districtDropdown">
-                        <option value="">Select District</option>
-                    </select>
-                    <input type="text" class="form-control mb-2" id="districtInput" placeholder="Enter District">
-                    <input type="text" class="form-control mb-2" id="pincode" placeholder="Enter Pincode">
-                </div>
-               <!-- Column 4: File Uploads & Credentials -->
-        <div class="col-md-4 pb-1">
-        <div class="row"> 
-    <!-- File Upload Section -->
-    <div class="col-md-4 col-sm-6 pb-2">
-        <div class="form-group">
-            <label for="employeePhoto" class="upload-label d-block font-weight-bold" style="margin-bottom: 0px;">
-                <i id="photoIcon" class="fas fa-camera-retro fa-lg" style="text-align: center; display: block; cursor: pointer;margin-bottom: 8px;color: rgb(222, 141, 197);"></i>
-                <p class="mt-1" style="font-size: 14px; text-align:center;margin-bottom: 5px;">Upload Photo</p>
-            </label>
-            <input type="file" class="form-control-file d-none" id="employeePhoto" onchange="updateIcon(this, 'photoIcon', 'photoFileName')">
-            <p class="file-name text-muted" id="photoFileName" style="font-size: 14px; text-align:center;">No file chosen</p>
-        </div>
-    </div>
-
-    <div class="col-md-4 col-sm-6 pb-2">
-        <div class="form-group">
-            <label for="aadharCard" class="upload-label d-block font-weight-bold" style="margin-bottom: 0px;">
-                <i id="aadharIcon" class="fas fa-id-card fa-lg " style="text-align: center; display: block; cursor: pointer;margin-bottom: 8px;color: rgb(140, 221, 130);"></i>
-                <p class="mt-1" style="font-size: 14px; text-align:center;margin-bottom: 5px;">Upload Aadhar</p>
-            </label>
-            <input type="file" class="form-control-file d-none" id="aadharCard" onchange="updateIcon(this, 'aadharIcon', 'aadharFileName')">
-            <p class="file-name text-muted" id="aadharFileName" style="font-size: 14px; text-align:center;">No file chosen</p>
-        </div>
-    </div>
-
-    <div class="col-md-4 col-sm-12 pb-2">
-        <div class="form-group">
-            <label for="panCard" class="upload-label d-block font-weight-bold" style="margin-bottom: 0px;">
-                <i id="panIcon" class="fas fa-id-badge fa-lg " style="text-align: center; display: block; cursor: pointer;margin-bottom: 8px;color: rgb(246, 185, 114);"></i>
-                <p class="mt-1" style="font-size: 14px; text-align:center; margin-bottom: 5px;">Upload Pan</p>
-            </label>
-            <input type="file" class="form-control-file d-none" id="panCard" onchange="updateIcon(this, 'panIcon', 'panFileName')">
-            <p class="file-name text-muted" id="panFileName" style="font-size: 14px; text-align:center;">No file chosen</p>
-        </div>
-    </div>
-</div>
-
-
-
-            <!-- Username and Password Section -->
+    <div class="container mb-4 mt-4" style="background: white; border-radius: 25px; border: 2px solid rgb(0, 148, 255);">
+        <div class="column">
             <div class="row">
-                <div class="col-sm-6 pb-2">
-                    <input type="text" class="form-control" id="username" placeholder="Enter Username">
-                </div>
-                <div class="col-sm-6 pb-2">
-                    <input type="password" class="form-control" id="password" placeholder="Enter Password">
+                <div class="col-md-12">
+                    <form id="customerForm" class="row g-3 mt-3" action="addEmployeeBackend.php" method="POST" enctype="multipart/form-data">
+                <!-- Column 1: Name & Company Name -->
+                        <div class="col-md-3 pb-1">
+                            <input type="text" class="form-control mb-2" id="employeename" name="employeename" placeholder="Enter Employee Name" required>
+                            <div class="d-flex align-items-center">
+                                <select class="form-control mb-2 w-100" id="designation" name="designation" required>
+                                    <option value="">Select Designation</option>
+                                    <option value="web_developer">Web Developer</option>
+                                    <option value="ui_ux_designer">UI/UX Designer</option>
+                                    <option value="mobile_app_designer">Mobile App Designer</option>
+                                </select>
+                                <span onclick="window.location.href='designation.php'" style="cursor: pointer; margin-left: 8px; align-items:center;">
+                                    <i class="fas fa-plus-circle text-primary" style="vertical-align: middle;"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control mb-2" id="employeephnno" name="employeephnno" placeholder="Enter Phone Number" required>
+                        </div>
+
+                        <!-- Column 2: Address & District -->
+                        <div class="col-md-3 pb-1">
+                            <textarea class="form-control mb-2" id="customeraddress" name="customeraddress" placeholder="Enter Employee Address" rows="2" style="height: 85px;" required></textarea>
+                            <select class="form-control mb-2" id="country" name="country" required>
+                                <option value="">Select Country</option>
+                            </select>
+                        </div>
+
+                        <!-- Column 3: State & District -->
+                        <div class="col-md-2 pb-1">
+                            <select class="form-control mb-2 d-none" id="stateDropdown" name="stateDropdown">
+                                <option value="">Select State</option>
+                            </select>
+                            <input type="text" class="form-control mb-2" id="stateInput" name="state" placeholder="Enter State" required>
+                            <select class="form-control mb-2 d-none" id="districtDropdown" name="districtDropdown">
+                                <option value="">Select District</option>
+                            </select>
+                            <input type="text" class="form-control mb-2" id="districtInput" name="district" placeholder="Enter District" >
+                            <input type="text" class="form-control mb-2" id="pincode" name="pincode" placeholder="Enter Pincode" required>
+                        </div>
+
+                        <!-- Column 4: File Uploads & Credentials -->
+                        <div class="col-md-4 pb-1">
+                            <div class="row">
+                                <!-- File Upload Section -->
+                                <div class="col-md-4 col-sm-6 pb-2">
+                                    <div class="form-group">
+                                        <label for="employeePhoto" class="upload-label d-block font-weight-bold" style="margin-bottom: 0px;">
+                                            <i id="photoIcon" class="fas fa-camera-retro fa-lg" style="text-align: center; display: block; cursor: pointer;margin-bottom: 8px;color: rgb(222, 141, 197);"></i>
+                                            <p class="mt-1" style="font-size: 14px; text-align:center;margin-bottom: 5px;">Upload Photo</p>
+                                        </label>
+                                        <input type="file" class="form-control-file d-none" id="employeePhoto" name="employeePhoto" required onchange="updateIcon(this, 'photoIcon', 'photoFileName')">
+                                        <p class="file-name text-muted" id="photoFileName" style="font-size: 14px; text-align:center;">No file chosen</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 col-sm-6 pb-2">
+                                    <div class="form-group">
+                                        <label for="aadharCard" class="upload-label d-block font-weight-bold" style="margin-bottom: 0px;">
+                                            <i id="aadharIcon" class="fas fa-id-card fa-lg " style="text-align: center; display: block; cursor: pointer;margin-bottom: 8px;color: rgb(140, 221, 130);"></i>
+                                            <p class="mt-1" style="font-size: 14px; text-align:center;margin-bottom: 5px;">Upload Aadhar</p>
+                                        </label>
+                                        <input type="file" class="form-control-file d-none" id="aadharCard" name="aadharCard" required onchange="updateIcon(this, 'aadharIcon', 'aadharFileName')">
+                                        <p class="file-name text-muted" id="aadharFileName" style="font-size: 14px; text-align:center;">No file chosen</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 col-sm-12 pb-2">
+                                    <div class="form-group">
+                                        <label for="panCard" class="upload-label d-block font-weight-bold" style="margin-bottom: 0px;">
+                                            <i id="panIcon" class="fas fa-id-badge fa-lg " style="text-align: center; display: block; cursor: pointer;margin-bottom: 8px;color: rgb(246, 185, 114);"></i>
+                                            <p class="mt-1" style="font-size: 14px; text-align:center; margin-bottom: 5px;">Upload Pan</p>
+                                        </label>
+                                        <input type="file" class="form-control-file d-none" id="panCard" name="panCard" required onchange="updateIcon(this, 'panIcon', 'panFileName')">
+                                        <p class="file-name text-muted" id="panFileName" style="font-size: 14px; text-align:center;">No file chosen</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Username and Password Section -->
+                            <div class="row">
+                                <div class="col-sm-6 pb-2">
+                                    <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username" required>
+                                </div>
+                                <div class="col-sm-6 pb-2">
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" required>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Submit Button -->
+        <div class="column">
+            <div class="pb-2 d-flex justify-content-sm-end justify-content-center align-items-center">
+                <button type="submit" class="btn" id="customerbtn" 
+                    style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: auto;">
+                    <i class="fas fa-users"></i>&nbsp; Add Employee
+                </button>
+            </div>
+        </div>
+                    </form>
                 </div>
             </div>
         </div>
 
-            </form>
-        </div>
-    </div></div>
-    <div class="column">
-    <div class="pb-2 d-flex justify-content-sm-end justify-content-center align-items-center">
-    <button type="submit" class="btn" id="customerbtn" 
-        style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: auto;">
-        <i class="fas fa-users"></i>&nbsp; Add Employee
-    </button>
-</div>
+        
+    </div>
 
-</div>
 
-</div>
 <script>
   
 
@@ -724,119 +724,103 @@ countryDropdown.addEventListener("change", function() {
     }
 });
 </script>
-                    
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                        <p class="m-0" style="font-size: 16px;color:rgb(23, 25, 28);font-style: normal;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    color: rgb(23, 25, 28);
-    font-size: 16px;
-    font-weight: 500;"><b>Employee Details</b> 
-        <span class="header-counter">3</span>  <!-- Counter next to heading -->
-</p>
-                        </div>
-                        <div class="card-body" style="padding: 20px;">
-                            <div class="table-responsive ">
-                            <table class="table text-center" style="font-size:14px;" id="dataTable" width="100%">
-                            <colgroup>
-        <col style="width: 5%;">  <!-- S.no -->
-        <col style="width: 8%;">  <!-- Name -->
-        <col style="width: 12%;">  <!-- Company -->
-        <col style="width: 12%;">  <!-- Title -->
-        <col style="width: 12%;">  <!-- Total Days (Adjusted) -->
-        <col style="width:5%;">  <!-- Description -->
-        <col style="width: 5%;">  <!-- Total Hrs (Adjusted) -->
-        <col style="width: 5%;">  <!-- Actual Hrs (Adjusted) -->
-        <col style="width: 10%;">  <!-- Status -->
-    </colgroup>
-                            <thead>
-              <tr>
-              <th>S.no</th>
-                                            <th>Name</th>
-                                            <th>Designation</th>
-                                            <th>Ph No</th>
-                                            <th>Address</th>
-                                            <th>Photo</th>
-                                            <th>Aadhar</th>
-                                            <th>Pan</th>
-                                            <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-              <td>1</td>
-                                            <td>JayaVarshini</td>
-                                            <td>App Developer</td>
-                                            <td>1234567890</td>
-                                            <td>No.123, Nehru Nagar, Karur-639006, Tamil Nadu, India</td>
-                <td>
-                                                <i class="fas fa-camera-retro photo-icon" title="Photo" style="color: rgb(222, 141, 197);"></i>
-                                            </td>
-                                            <td>
-                                                <i class="fas fa-id-card aadhar-icon" title="Aadhar Card" style="color: rgb(140, 221, 130);"></i>
-                                            </td>
-                                            <td>
-                                                <i class="fas fa-id-badge pan-icon" title="Pan Card" style="color: rgb(246, 185, 114);"></i>
-                                            </td>
-                                            <td class="action-buttons">
-                                                <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                                                <button class="btn-action btn-delete" ><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
-                                            </td>
-              </tr>
-              <tr>
-              <td>2</td>
-                                            <td>Suriya</td>
-                                            <td>Full Stack Developer</td>
-                                            <td>9876543210</td>
-                                            <td>No.143, Vijaya Street, Chennai-5, Tamil Nadu, India</td>
-                <td>
-                                                <i class="fas fa-camera-retro photo-icon" title="Photo" style="color: rgb(222, 141, 197);"></i>
-                                            </td>
-                                            <td>
-                                                <i class="fas fa-id-card aadhar-icon" title="Aadhar Card" style="color: rgb(140, 221, 130);"></i>
-                                            </td>
-                                            <td>
-                                                <i class="fas fa-id-badge pan-icon" title="Pan Card" style="color: rgb(246, 185, 114);"></i>
-                                            </td>
-                                            <td class="action-buttons">
-                                                <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                                                <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
-                                            </td>
-              </tr>
-              <tr>
-                                            <td>3</td>
-                                            <td>Mohan</td>
-                                            <td>UI / UX Designer</td>
-                                            <td>4567891234</td>
-                                            <td>No.11/A, Sengunthar Nagar, Karur-639006, Tamil Nadu, India</td>
-                                            <td>
-                                                <i class="fas fa-camera-retro photo-icon" title="Photo" style="color: rgb(222, 141, 197);"></i>
-                                            </td>
-                                            <td>
-                                                <i class="fas fa-id-card aadhar-icon" title="Aadhar Card" style="color: rgb(140, 221, 130);"></i>
-                                            </td>
-                                            <td>
-                                                <i class="fas fa-id-badge pan-icon" title="Pan Card" style="color: rgb(246, 185, 114);"></i>
-                                            </td>
-                                            <td class="action-buttons">
-                                                <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                                                <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
-                                            </td>
-                                        </tr>
-            </tbody>
-</table>
-                            </div>
-                        </div>
-                    </div>
+
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <p class="m-0" style="font-size: 16px; color:rgb(23, 25, 28); font-weight: 500;">
+            <b>Employee Details</b> 
+            <span class="header-counter"><?php echo $result->num_rows; ?></span> <!-- Dynamic Counter -->
+        </p>
+    </div>
+    <div class="card-body" style="padding: 20px;">
+        <div class="table-responsive">
+            <table class="table text-center" style="font-size:14px;" id="dataTable" width="100%">
+                <thead>
+                    <tr>
+                        <th>S.no</th>
+                        <th>Name</th>
+                        <th>Designation</th>
+                        <th>Ph No</th>
+                        <th>Address</th>
+                        <th>Photo</th>
+                        <th>Aadhar</th>
+                        <th>Pan</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+    <?php
+    if ($result->num_rows > 0) {
+        $sno = 1;
+        while ($row = $result->fetch_assoc()) {
+            echo "<tr>";
+            echo "<td>" . $sno++ . "</td>";
+            echo "<td>" . htmlspecialchars($row['Name']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['Designation']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['empPhNo']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['empAdd']) . "</td>";
+
+            // Display image with a click event to open in a modal
+            echo "<td><i class='fas fa-camera-retro photo-icon' title='Photo' style='color: rgb(222, 141, 197);' onclick='openImageModal(\"" . $row['empPic'] . "\")'></i></td>";
+            echo "<td><i class='fas fa-id-card aadhar-icon' title='Aadhar Card' style='color: rgb(140, 221, 130);' onclick='openImageModal(\"" . $row['empAadhar'] . "\")'></i></td>";
+            echo "<td><i class='fas fa-id-badge pan-icon' title='Pan Card' style='color: rgb(246, 185, 114);' onclick='openImageModal(\"" . $row['empPan'] . "\")'></i></td>";
+
+            echo "<td class='action-buttons'>
+                    <button class='btn-action btn-edit'><i class='fas fa-edit'></i></button>
+                    <button class='btn-action btn-delete delete-btn' data-id='" . $row['ID'] . "'>
+                        <i class='fas fa-trash-alt' style='color: rgb(238, 153, 129);'></i>
+                    </button>
+                </td>
+                ";
+    
+            echo "</tr>";
+        }
+    } else {
+        echo "<tr><td colspan='9'>No employees found</td></tr>";
+    }
+    ?>
+</tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
                 </div>
-                <!-- /.container-fluid -->
+<?php
+$conn->close();
+?>
 
+
+
+<!-- Image Preview Modal -->
+<div id="imageModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Preview</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
+            <div class="modal-body text-center">
+                <img id="previewImage" src="" class="img-fluid" alt="Preview">
+            </div>
+        </div>
+    </div>
+</div>
 
+<script>
+    function openImageModal(imagePath) {
+    if (imagePath) {
+        document.getElementById("previewImage").src = imagePath;
+        $('#imageModal').modal('show'); // Bootstrap 4 modal show function
+    } else {
+        alert("Image not available!");
+    }
+}
 
-
+</script>
 
             <!-- End of Main Content -->
 
@@ -882,6 +866,8 @@ countryDropdown.addEventListener("change", function() {
     </div>
 
     <!-- Bootstrap core JavaScript-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
@@ -897,6 +883,64 @@ countryDropdown.addEventListener("change", function() {
     <!-- Bootstrap JavaScript -->
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#customerForm").submit(function (e) {
+            e.preventDefault(); // Prevent page reload
+            
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: "addEmployeeBackend.php",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    alert(response); // Show success message
+                    $("#customerForm")[0].reset(); // Reset the form after submission
+                },
+                error: function () {
+                    alert("Error submitting the form.");
+                }
+            });
+        });
+    });
+
+
+$(document).ready(function () {
+    $(".delete-btn").click(function () {
+        var id = $(this).data("id");
+        var row = $(this).closest("tr");
+
+        if (confirm("Are you sure you want to delete this employee?")) {
+            $.ajax({
+                url: "addEmployeeBackend.php",
+                type: "POST",
+                data: { id: id },
+                success: function (response) {
+                    console.log("Response from server:", response); // Debugging line
+                    if (response.trim() === "success") {
+                        row.fadeOut(500, function () { $(this).remove(); });
+                    } else {
+                        alert("Error deleting employee: " + response); // Show exact error
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("AJAX Error:", error);
+                    alert("AJAX error: " + error);
+                }
+            });
+        }
+    });
+});
+
+
+</script>
+
+
+
+
 <!-- Bootstrap 4.6.0 JavaScript -->
 <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script> -->

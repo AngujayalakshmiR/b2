@@ -1,3 +1,6 @@
+<?php
+include 'dbconn.php'; // Ensure you have a database connection
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,7 +13,8 @@
     <meta name="author" content="">
 
     <title>Task Manager</title>
-
+<!-- Load jQuery first -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Custom fonts for this template -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
@@ -585,51 +589,38 @@
        
         <!-- Right Section (80% width for form fields) -->
         <div class="col-md-12">
-            <form id="customerForm" class="row g-3 mt-3">
-                <!-- Column 1: Name & Company Name -->
-                <div class="col-md-4 pb-1">
-                    <input type="text" class="form-control mb-2" id="customername" placeholder="Enter Customer Name">
-                    <input type="text" class="form-control mb-2" id="companyname" placeholder="Enter Company Name">
-                    <input type="text" class="form-control mb-2" id="customerno" placeholder="Enter Phone Number">
-                </div>
+    <form id="customerForm" class="row g-3 mt-3">
+        <div class="col-md-4 pb-1">
+            <input type="text" class="form-control mb-2" id="customername" placeholder="Enter Customer Name" required>
+            <input type="text" class="form-control mb-2" id="companyname" placeholder="Enter Company Name" required>
+            <input type="text" class="form-control mb-2" id="customerno" placeholder="Enter Phone Number" required>
+        </div>
 
-                <!-- Column 2: Address & District -->
-                <div class="col-md-4 pb-1">
-                    <textarea class="form-control mb-2" id="customeraddress" placeholder="Enter Company Address" rows="2" style="height: 85px;"></textarea>
-                    <!-- Country -->
-                    <select class="form-control mb-2" id="country">
+        <div class="col-md-4 pb-1">
+            <textarea class="form-control mb-2" id="customeraddress" placeholder="Enter Company Address" rows="3" required></textarea>
+           
+            <select class="form-control mb-2" id="country">
                         <option value="">Select Country</option>
                     </select>
-                </div>
-
-                <!-- Column 3: State & Country -->
-                <div class="col-md-4 pb-1">
-                    <!-- State (Dropdown for India, Manual for other countries) -->
-                    <select class="form-control mb-2 d-none" id="stateDropdown">
-                        <option value="">Select State</option>
-                    </select>
-
-                    <input type="text" class="form-control mb-2" id="stateInput" placeholder="Enter State">
-                    <!-- District (Dropdown for India, Manual for other countries) -->
-                    <select class="form-control mb-2 d-none" id="districtDropdown">
-                        <option value="">Select District</option>
-                    </select>
-                    <input type="text" class="form-control mb-2" id="districtInput" placeholder="Enter District">
-                    <input type="text" class="form-control mb-2" id="pincode" placeholder="Enter Pincode">
-                </div>
-            </form>
         </div>
+
+        <div class="col-md-4 pb-1">
+            <input type="text" class="form-control mb-2" id="stateInput" placeholder="Enter State" required>
+            <input type="text" class="form-control mb-2" id="districtInput" placeholder="Enter District" required>
+            <input type="text" class="form-control mb-2" id="pincode" placeholder="Enter Pincode" required>
+        </div>
+    </form>
+</div>
     </div></div>
-    <div class="column"><div class="pb-2 d-flex justify-content-sm-end justify-content-center align-items-center">
-    <button type="submit" class="btn" id="customerbtn" 
-        style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: auto;">
-        <i class="fas fa-user"></i>&nbsp; Add Customer
-    </button>
+<div class="column">
+    <div class="pb-2 d-flex justify-content-sm-end justify-content-center align-items-center">
+        <button type="submit" class="btn" id="customerbtn"
+            style="background: rgb(0, 148, 255); border-radius: 25px; color: white;">
+            <i class="fas fa-user"></i>&nbsp; Add Customer
+        </button>
 </div>
 
-
-</div>
-</div>
+</div></div>
 
 
 <script>
@@ -760,61 +751,47 @@ countryDropdown.addEventListener("change", function() {
     color: rgb(23, 25, 28);
     font-size: 16px;
     font-weight: 500;"><b>Customer Details</b> 
-        <span class="header-counter">3</span>  <!-- Counter next to heading -->
+        <span class="header-counter">0</span>  <!-- Counter next to heading -->
 </p>
        
     </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered text-center" style="font-size:14px;"id="dataTable" width="100%" cellspacing="0">
-                        <thead>
-                            <tr class="thead">
-                                <th>S.no</th>
-                                <th>Name</th>
-                                <th>Company Name</th>
-                                <th>Contact</th>
-                                <th>Address</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>JayaVarshini</td>
-                                <td>ABC Company</td>
-                                <td>1234567890</td>
-                                <td>No.123, Nehru Nagar, Karur-639006, Tamil Nadu, India</td>
-                                <td class="action-buttons">
-                                    <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                                    <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Suriya</td>
-                                <td>XYZ Company</td>
-                                <td>9876543210</td>
-                                <td>No.143, Vijaya Street, Chennai-5, Tamil Nadu, India</td>
-                                <td class="action-buttons">
-                                    <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                                    <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Mohan</td>
-                                <td>MNO Company</td>
-                                <td>4567891234</td>
-                                <td>No.11/A, Sengunthar Nagar, Karur-639006, Tamil Nadu, India</td>
-                                <td class="action-buttons">
-                                    <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                                    <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <div class="card-body">
+    <div class="table-responsive">
+        <table class="table table-bordered text-center" style="font-size:14px;" id="dataTable" width="100%">
+            <thead>
+                <tr class="thead">
+                    <th>S.no</th>
+                    <th>Name</th>
+                    <th>Company Name</th>
+                    <th>Contact</th>
+                    <th>Address</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="customerTableBody">
+                <?php
+                $query = "SELECT * FROM customer ORDER BY ID DESC";
+                $result = mysqli_query($conn, $query);
+                $sno = 1;
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo "<tr>
+                            <td>{$sno}</td>
+                            <td>{$row['customerName']}</td>
+                            <td>{$row['companyName']}</td>
+                            <td>{$row['phoneno']}</td>
+                            <td>{$row['companyAddress']}, {$row['district']}, {$row['state']}, {$row['country']} - {$row['pincode']}</td>
+                            <td class='action-buttons'>
+                                <button class='btn-action btn-edit' data-id='{$row['ID']}'><i class='fas fa-edit'></i></button>
+                                <button class='btn-action btn-delete' data-id='{$row['ID']}'><i class='fas fa-trash-alt' style='color: rgb(238, 153, 129);'></i></button>
+                            </td>
+                        </tr>";
+                    $sno++;
+                }
+                ?>
+            </tbody>
+        </table>
+    </div>
+</div>
         </div>
 
     </div>
@@ -870,28 +847,146 @@ countryDropdown.addEventListener("change", function() {
         </div>
     </div>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+   <!-- jQuery (Must be loaded first) -->
+   <script src="vendor/jquery/jquery.min.js"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+<!-- Core plugin JavaScript -->
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <!-- Page level plugins -->
-    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-    <!-- Bootstrap JavaScript -->
-    <!-- Page level custom scripts -->
-    <script src="js/demo/datatables-demo.js"></script>
-<!-- Bootstrap JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Custom scripts for all pages -->
+<script src="js/sb-admin-2.min.js"></script>
 
-<!-- Bootstrap 4.6.0 JavaScript -->
-<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script> -->
+<!-- DataTables Plugin (Ensure it's loaded after jQuery) -->
+<script src="vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+<!-- Initialize DataTable AFTER all dependencies are loaded -->
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable();
+    });
+</script>
+<script>
+$(document).ready(function () {
+    $("#customerbtn").click(function (e) {
+        e.preventDefault();
+        var customerData = {
+            customername: $("#customername").val(),
+            companyname: $("#companyname").val(),
+            customerno: $("#customerno").val(),
+            customeraddress: $("#customeraddress").val(),
+            country: $("#country").val(),
+            state: $("#stateInput").val(),
+            district: $("#districtInput").val(),
+            pincode: $("#pincode").val(),
+        };
+
+        $.ajax({
+            url: "customerBackend.php",
+            type: "POST",
+            data: customerData,
+            success: function (response) {
+                $("#customerForm")[0].reset();
+                loadCustomers();
+            }
+        });
+    });
+
+    function loadCustomers() { 
+    $.ajax({
+        url: "customerBackend.php",
+        type: "GET",
+        dataType: "json", // Ensure we expect JSON
+        success: function (data) {
+            if (data) {
+                $("#customerTableBody").html(data.tableData); // Load table data
+                $(".header-counter").text(data.count); // Update count in header
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching customers:", error);
+        }
+    });
+}
+
+
+    $(document).on("click", ".btn-delete", function () {
+        var customerId = $(this).data("id");
+        $.ajax({
+            url: "customerBackend.php",
+            type: "POST",
+            data: { delete: true, id: customerId },
+            success: function () {
+                loadCustomers();
+            }
+        });
+    });
+    // Edit button functionality
+// Edit button functionality
+$(document).on("click", ".btn-edit", function () {
+    var customerId = $(this).data("id");
+
+    $.ajax({
+        url: "customerBackend.php",
+        type: "POST",
+        data: { edit: true, id: customerId },
+        dataType: "json",
+        success: function (customer) {
+            $("#customername").val(customer.customerName);
+            $("#companyname").val(customer.companyName);
+            $("#customerno").val(customer.phoneno);
+            $("#customeraddress").val(customer.companyAddress);
+            $("#country").val(customer.country);
+            $("#stateInput").val(customer.state);
+            $("#districtInput").val(customer.district);
+            $("#pincode").val(customer.pincode);
+
+            // Reset and unbind previous click events before adding a new one
+            $("#customerbtn").off("click").text("Update Customer").attr("data-update", customerId);
+        }
+    });
+});
+
+
+    // Update Customer
+// Update Customer - Ensure it does not trigger add event
+$(document).on("click", "#customerbtn[data-update]", function (e) {
+    e.preventDefault();
+    var customerId = $(this).attr("data-update");
+    
+    var updatedData = {
+        update: true,
+        id: customerId,
+        customername: $("#customername").val(),
+        companyname: $("#companyname").val(),
+        customerno: $("#customerno").val(),
+        customeraddress: $("#customeraddress").val(),
+        country: $("#country").val(),
+        state: $("#stateInput").val(),
+        district: $("#districtInput").val(),
+        pincode: $("#pincode").val(),
+    };
+    $.ajax({
+    url: "customerBackend.php",
+    type: "POST",
+    data: updatedData,
+    success: function () {
+        $("#customerForm")[0].reset();
+        location.reload(); // Reload the page after update
+        loadCustomers();
+    }
+});
+
+
+});
+
+
+
+});
+</script>
 
 </body>
 

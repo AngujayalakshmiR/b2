@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                             <td>{$sno}</td>
                             <td>{$row['Des_name']}</td>
                             <td class='action-buttons'>
-                                <button class='btn-action btn-edit'><i class='fas fa-edit'></i></button>
+                                <button class='btn-action btn-edit' data-id='{$row['ID']}'><i class='fas fa-edit'></i></button>
                                 <button class='btn-action btn-delete' data-id='{$row['ID']}'><i class='fas fa-trash-alt' style='color: rgb(238, 153, 129);'></i></button>
                             </td>
                         </tr>";
@@ -29,13 +29,14 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     exit;
 }
 
-// Add Designation
-if (isset($_POST['designationtype'])) {
+
+// Add New Designation
+if (isset($_POST['designationtype']) && !isset($_POST['edit_id'])) {
     $designation = $_POST['designationtype'];
 
     $stmt = $conn->prepare("INSERT INTO designation (Des_name) VALUES (?)");
     $stmt->bind_param("s", $designation);
-
+    
     if ($stmt->execute()) {
         echo json_encode(["status" => "success", "message" => "Designation added successfully"]);
     } else {
@@ -63,5 +64,22 @@ if (isset($_POST['delete_id'])) { // Changed key to 'delete_id' to avoid conflic
     exit;
 }
 
+// Update Existing Designation
+if (isset($_POST['edit_id']) && isset($_POST['designationtype'])) {
+    $id = intval($_POST['edit_id']);  // Ensure it's an integer
+    $designation = $_POST['designationtype'];
+
+    $stmt = $conn->prepare("UPDATE designation SET Des_name = ? WHERE ID = ?");
+    $stmt->bind_param("si", $designation, $id);
+
+    if ($stmt->execute()) {
+        echo json_encode(["status" => "success", "message" => "Designation updated successfully"]);
+    } else {
+        echo json_encode(["status" => "error", "message" => "Error updating designation"]);
+    }
+
+    $stmt->close();
+    exit;
+}
 $conn->close();
 ?>

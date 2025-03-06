@@ -509,9 +509,10 @@
                 <input type="text" class="form-control mb-2" id="designationtype" name="designationtype" placeholder="Enter Designation" required>
             </div>
             <div class="col-md-4 pt-2 pb-2 d-flex justify-content-center align-items-center">
-                <button type="submit" class="btn" style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: 190px;">
+                <button type="submit" id="designationBtn" class="btn" style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: 190px;">
                     <i class="fas fa-briefcase"></i>&nbsp; Add Designation
                 </button>
+
             </div>
         </form>
 
@@ -664,29 +665,38 @@ $(document).ready(function() {
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
     <script>
-        $(document).ready(function(){
+   $(document).ready(function () {
+    let editId = null;
+
     // Fetch designations on page load
     fetchDesignations();
 
-    // Add Designation
-    $("#designationForm").submit(function(e){
+    // Add or Update Designation
+    $("#designationForm").submit(function (e) {
         e.preventDefault();
         var designation = $("#designationtype").val().trim();
         if (designation === "") {
             alert("Please enter a designation!");
             return;
         }
+        
+        let requestData = editId ? { edit_id: editId, designationtype: designation } : { designationtype: designation };
+
+        console.log("Sending Data:", requestData); // Debugging - Check data sent
+
         $.ajax({
             url: "designationBackend.php",
             type: "POST",
-            data: { designationtype: designation },
+            data: requestData,
             dataType: "json",
-            success: function(response) {
+            success: function (response) {
                 alert(response.message);
                 $("#designationtype").val("");
+                $("#designationBtn").html('<i class="fas fa-briefcase"></i>&nbsp; Add Designation'); // Reset button text
+                editId = null; // Reset edit ID after update
                 fetchDesignations(); // Reload table
             },
-            error: function() {
+            error: function () {
                 alert("Something went wrong!");
             }
         });
@@ -697,35 +707,43 @@ $(document).ready(function() {
         $.ajax({
             url: "designationBackend.php",
             type: "GET",
-            success: function(data) {
+            success: function (data) {
                 $("#designation_table").html(data);
             }
         });
     }
 
     // Delete Designation
-    $(document).off("click").on("click", ".btn-delete", function() {
+    $(document).off("click").on("click", ".btn-delete", function () {
         var id = $(this).data("id");
         if (confirm("Are you sure you want to delete this designation?")) {
             $.ajax({
                 url: "designationBackend.php",
                 type: "POST",
-                data: { delete_id: id }, // Change 'id' to 'delete_id' to avoid conflict with add operation
+                data: { delete_id: id },
                 dataType: "json",
-                success: function(response) {
+                success: function (response) {
                     alert(response.message);
                     fetchDesignations(); // Reload table
                 },
-                error: function() {
+                error: function () {
                     alert("Something went wrong!");
                 }
             });
         }
     });
+
+    // Edit Designation
+    $(document).on("click", ".btn-edit", function () {
+        editId = $(this).data("id"); // Capture ID for update
+        var currentName = $(this).closest("tr").find("td:nth-child(2)").text();
+        $("#designationtype").val(currentName);
+        $("#designationBtn").html('<i class="fas fa-edit"></i>&nbsp; Update'); // Change button text
+    });
 });
 
-    </script>
 
+    </script>
 </body>
 
 </html>

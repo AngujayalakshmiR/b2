@@ -567,7 +567,7 @@ $result = $conn->query($sql);
                                     <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" required>
                                 </div>
                             </div>
-                        </div>
+                        </div></div> </div>
                         <!-- Submit Button -->
         <div class="column">
             <div class="pb-2 d-flex justify-content-sm-end justify-content-center align-items-center">
@@ -577,9 +577,10 @@ $result = $conn->query($sql);
                 </button>
             </div>
         </div>
+
                     </form>
-                </div>
-            </div>
+                
+           
         </div>
 
         
@@ -725,12 +726,11 @@ countryDropdown.addEventListener("change", function() {
 });
 </script>
 
-
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <p class="m-0" style="font-size: 16px; color:rgb(23, 25, 28); font-weight: 500;">
             <b>Employee Details</b> 
-            <span class="header-counter"><?php echo $result->num_rows; ?></span> <!-- Dynamic Counter -->
+            <span class="header-counter"><?php echo $result->num_rows; ?></span>
         </p>
     </div>
     <div class="card-body" style="padding: 20px;">
@@ -760,28 +760,25 @@ countryDropdown.addEventListener("change", function() {
             echo "<td>" . htmlspecialchars($row['Designation']) . "</td>";
             echo "<td>" . htmlspecialchars($row['empPhNo']) . "</td>";
             echo "<td>" . htmlspecialchars($row['empAdd']) . "</td>";
-
-            // Display image with a click event to open in a modal
-            echo "<td><i class='fas fa-camera-retro photo-icon' title='Photo' style='color: rgb(222, 141, 197);' onclick='openImageModal(\"" . $row['empPic'] . "\")'></i></td>";
-            echo "<td><i class='fas fa-id-card aadhar-icon' title='Aadhar Card' style='color: rgb(140, 221, 130);' onclick='openImageModal(\"" . $row['empAadhar'] . "\")'></i></td>";
-            echo "<td><i class='fas fa-id-badge pan-icon' title='Pan Card' style='color: rgb(246, 185, 114);' onclick='openImageModal(\"" . $row['empPan'] . "\")'></i></td>";
-
+            echo "<td><i class='fas fa-camera-retro photo-icon' onclick='openImageModal(\"" . htmlspecialchars($row['empPic']) . "\")'></i></td>";
+            echo "<td><i class='fas fa-id-card aadhar-icon' onclick='openImageModal(\"" . htmlspecialchars($row['empAadhar']) . "\")'></i></td>";
+            echo "<td><i class='fas fa-id-badge pan-icon' onclick='openImageModal(\"" . htmlspecialchars($row['empPan']) . "\")'></i></td>";
+        
             echo "<td class='action-buttons'>
-                    <button class='btn-action btn-edit'><i class='fas fa-edit'></i></button>
-                    <button class='btn-action btn-delete delete-btn' data-id='" . $row['ID'] . "'>
-                        <i class='fas fa-trash-alt' style='color: rgb(238, 153, 129);'></i>
-                    </button>
-                </td>
-                ";
-    
+                <button class='btn-action btn-edit' data-id='" . $row['ID'] . "'><i class='fas fa-edit'></i></button>
+                <button class='btn-action btn-delete delete-btn' data-id='" . $row['ID'] . "'>
+                    <i class='fas fa-trash-alt' style='color: rgb(238, 153, 129);'></i>
+                </button>
+            </td>";
+        
             echo "</tr>";
-        }
+        }        
+        
     } else {
         echo "<tr><td colspan='9'>No employees found</td></tr>";
     }
     ?>
-</tbody>
-
+                </tbody>
             </table>
         </div>
     </div>
@@ -883,6 +880,105 @@ $conn->close();
     <!-- Bootstrap JavaScript -->
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
+  <script>
+    $(document).on("click", ".btn-edit", function () {
+    var employeeId = $(this).data("id");
+
+    $.ajax({
+        url: "addEmployeeBackend.php",
+        type: "POST",
+        data: { edit: true, id: employeeId },
+        dataType: "json",
+        success: function (employee) {
+            console.log("Raw empAdd Data:", employee.empAdd);
+
+            // Parse the address properly
+            let cleanedAddress = employee.empAdd.replace(/\r\n|\n/g, "").trim();
+            let addressParts = cleanedAddress.split(",").map(part => part.trim());
+
+            console.log("Parsed Address Parts:", addressParts);
+
+            let address = addressParts[0] ? addressParts[0] + ", " + addressParts[1] : "";
+            let district = addressParts[2] || "";
+            let state = addressParts[3] || "";
+            let countryPincode = addressParts[4] || "";
+
+            let country = "";
+            let pincode = "";
+
+            if (countryPincode.includes("-")) {
+                let countryPincodeParts = countryPincode.split(" - ");
+                country = countryPincodeParts[0].trim();
+                pincode = countryPincodeParts[1] ? countryPincodeParts[1].trim() : "";
+            } else {
+                country = countryPincode.trim();
+            }
+
+            // Populate form fields
+            $("#employeename").val(employee.Name);
+            $("#designation").val(employee.Designation);
+            $("#employeephnno").val(employee.empPhNo);
+            $("#employeeaddress").val(address);
+            $("#district").val(district);
+            $("#state").val(state);
+            $("#country").val(country);
+            $("#pincode").val(pincode);
+
+            // Update button text and store employee ID
+            $("#employeeBtn").text("Update Employee").attr("data-update", employee.ID);
+        },
+        error: function (xhr, status, error) {
+            console.log("AJAX Error:", xhr.responseText);
+        }
+    });
+});
+
+// ✅ Update Employee with SweetAlert Confirmation
+$(document).on("click", "#employeeBtn[data-update]", function (e) {
+    e.preventDefault();
+    var employeeId = $(this).attr("data-update");
+
+    var updatedData = {
+        update: true,
+        id: employeeId,
+        employeename: $("#employeename").val(),
+        designation: $("#designation").val(),
+        employeeno: $("#employeephnno").val(),
+        employeeaddress: $("#employeeaddress").val(),
+        district: $("#district").val(),
+        state: $("#state").val(),
+        country: $("#country").val(),
+        pincode: $("#pincode").val(),
+    };
+
+    $.ajax({
+        url: "addEmployeeBackend.php",
+        type: "POST",
+        data: updatedData,
+        dataType: "json",
+        success: function (response) {
+            if (response.error) {
+                Swal.fire("Error", response.error, "error");
+                return;
+            }
+
+            Swal.fire({
+                title: "Updated!",
+                text: "Employee details have been successfully updated.",
+                icon: "success",
+                confirmButtonColor: "rgb(0, 148, 255)",
+                confirmButtonText: "OK"
+            }).then(() => {
+                location.reload();
+            });
+
+            $("#customerForm")[0].reset();
+            $("#employeeBtn").text("Add Employee").removeAttr("data-update");
+        }
+    });
+});
+
+  </script>
 <script>
     $(document).ready(function () {
         $("#customerForm").submit(function (e) {
@@ -906,35 +1002,25 @@ $conn->close();
             });
         });
     });
-
-
-$(document).ready(function () {
-    $(".delete-btn").click(function () {
-        var id = $(this).data("id");
-        var row = $(this).closest("tr");
-
-        if (confirm("Are you sure you want to delete this employee?")) {
-            $.ajax({
-                url: "addEmployeeBackend.php",
-                type: "POST",
-                data: { id: id },
-                success: function (response) {
-                    console.log("Response from server:", response); // Debugging line
-                    if (response.trim() === "success") {
-                        row.fadeOut(500, function () { $(this).remove(); });
-                    } else {
-                        alert("Error deleting employee: " + response); // Show exact error
+    $(document).ready(function () {
+        $(".delete-btn").click(function () {
+            var employeeId = $(this).data("id");
+            if (confirm("Are you sure you want to delete this employee?")) {
+                $.ajax({
+                    url: "deleteEmployee.php",
+                    type: "POST",
+                    data: { delete_id: employeeId },
+                    success: function (response) {
+                        alert(response);
+                        location.reload();
+                    },
+                    error: function () {
+                        alert("Error deleting the employee.");
                     }
-                },
-                error: function (xhr, status, error) {
-                    console.log("AJAX Error:", error);
-                    alert("AJAX error: " + error);
-                }
-            });
-        }
+                });
+            }
+        });
     });
-});
-
 
 </script>
 

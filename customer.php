@@ -11,6 +11,7 @@ include 'dbconn.php'; // Ensure you have a database connection
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
     <title>Task Manager</title>
 <!-- Load jQuery first -->
@@ -599,7 +600,7 @@ include 'dbconn.php'; // Ensure you have a database connection
         <div class="col-md-4 pb-1">
             <textarea class="form-control mb-2" id="customeraddress" placeholder="Enter Company Address" rows="3" required></textarea>
            
-            <select class="form-control mb-2" id="country">
+            <select class="form-control mb-2" id="country" required>
                         <option value="">Select Country</option>
                     </select>
         </div>
@@ -855,7 +856,7 @@ countryDropdown.addEventListener("change", function() {
 
 <!-- Core plugin JavaScript -->
 <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Custom scripts for all pages -->
 <script src="js/sb-admin-2.min.js"></script>
 
@@ -871,40 +872,71 @@ countryDropdown.addEventListener("change", function() {
 </script>
 <script>
 $(document).ready(function () {
-    $("#customerbtn").click(function (e) {
-        e.preventDefault();
-        var customerData = {
-            customername: $("#customername").val(),
-            companyname: $("#companyname").val(),
-            customerno: $("#customerno").val(),
-            customeraddress: $("#customeraddress").val(),
-            country: $("#country").val(),
-            state: $("#stateInput").val(),
-            district: $("#districtInput").val(),
-            pincode: $("#pincode").val(),
-        };
+    loadCustomers(); // Fetch data when the page loads
 
-        $.ajax({
-            url: "customerBackend.php",
-            type: "POST",
-            data: customerData,
-            success: function (response) {
-                $("#customerForm")[0].reset();
-                loadCustomers();
-            }
-        });
+
+    $("#customerbtn").click(function (e) { 
+    e.preventDefault();
+      // Check if form is valid before sending AJAX
+  if (!$("#customerForm")[0].checkValidity()) {
+        $("#customerForm")[0].reportValidity(); // Shows default validation messages
+        return; // Stop function execution
+    }
+    var customerData = {
+        customername: $("#customername").val(),
+        companyname: $("#companyname").val(),
+        customerno: $("#customerno").val(),
+        customeraddress: $("#customeraddress").val(),
+        country: $("#country").val(),
+        state: $("#stateInput").val(),
+        district: $("#districtInput").val(),
+        pincode: $("#pincode").val(),
+    };
+
+    $.ajax({
+        url: "customerBackend.php",
+        type: "POST",
+        data: customerData,
+        success: function (response) {
+            Swal.fire({
+                title: "Success!",
+                text: "Customer details have been added successfully.",
+                icon: "success",
+                confirmButtonColor: "rgb(0, 148, 255)", // Updated OK button color
+                confirmButtonText: "OK"
+            }).then(() => {
+                location.reload(); // ✅ Reload the page after clicking OK
+            });
+
+            $("#customerForm")[0].reset();
+        }
     });
+});
 
     function loadCustomers() { 
     $.ajax({
         url: "customerBackend.php",
         type: "GET",
-        dataType: "json", // Ensure we expect JSON
+        dataType: "json",
         success: function (data) {
-            if (data) {
-                $("#customerTableBody").html(data.tableData); // Load table data
-                $(".header-counter").text(data.count); // Update count in header
+            if ($.fn.DataTable.isDataTable("#dataTable")) {
+                $("#dataTable").DataTable().destroy(); // Destroy existing DataTable
             }
+
+            // ✅ Check if there's any data; otherwise, show a message
+            if (data.count > 0) {
+                $("#customerTableBody").html(data.tableData);
+            } else {
+                $("#customerTableBody").html(`
+                    <tr>
+                        <td colspan="8" class="text-center">No customers found</td>
+                    </tr>
+                `);
+            }
+
+            // ✅ Ensure DataTable initializes even when empty
+            $("#dataTable").DataTable(); 
+            $(".header-counter").text(data.count);
         },
         error: function (xhr, status, error) {
             console.error("Error fetching customers:", error);
@@ -913,50 +945,70 @@ $(document).ready(function () {
 }
 
 
-    $(document).on("click", ".btn-delete", function () {
-        var customerId = $(this).data("id");
-        $.ajax({
-            url: "customerBackend.php",
-            type: "POST",
-            data: { delete: true, id: customerId },
-            success: function () {
-                loadCustomers();
-            }
-        });
-    });
-    // Edit button functionality
-// Edit button functionality
-$(document).on("click", ".btn-edit", function () {
+$(document).on("click", ".btn-delete", function () {
     var customerId = $(this).data("id");
 
-    $.ajax({
-        url: "customerBackend.php",
-        type: "POST",
-        data: { edit: true, id: customerId },
-        dataType: "json",
-        success: function (customer) {
-            $("#customername").val(customer.customerName);
-            $("#companyname").val(customer.companyName);
-            $("#customerno").val(customer.phoneno);
-            $("#customeraddress").val(customer.companyAddress);
-            $("#country").val(customer.country);
-            $("#stateInput").val(customer.state);
-            $("#districtInput").val(customer.district);
-            $("#pincode").val(customer.pincode);
-
-            // Reset and unbind previous click events before adding a new one
-            $("#customerbtn").off("click").text("Update Customer").attr("data-update", customerId);
+    Swal.fire({
+        title: "Are you sure?",
+        text: "This action cannot be undone!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "rgb(0, 148, 255)", // Updated Yes button color
+        cancelButtonColor: "#d33", // Updated No button color
+        confirmButtonText: "Yes, I want to delete",
+        cancelButtonText: "No, Don’t delete"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "customerBackend.php",
+                type: "POST",
+                data: { delete: true, id: customerId },
+                success: function () {
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "The customer has been removed.",
+                        icon: "success",
+                        confirmButtonColor: "rgb(0, 148, 255)", // Updated OK button color
+                        confirmButtonText: "OK"
+                    }).then(() => {
+                        location.reload(); // ✅ Reload the page after clicking OK
+                    });
+                }
+            });
         }
     });
 });
 
 
-    // Update Customer
-// Update Customer - Ensure it does not trigger add event
+    // ✅ Edit button functionality
+    $(document).on("click", ".btn-edit", function () {
+        var customerId = $(this).data("id");
+
+        $.ajax({
+            url: "customerBackend.php",
+            type: "POST",
+            data: { edit: true, id: customerId },
+            dataType: "json",
+            success: function (customer) {
+                $("#customername").val(customer.customerName);
+                $("#companyname").val(customer.companyName);
+                $("#customerno").val(customer.phoneno);
+                $("#customeraddress").val(customer.companyAddress);
+                $("#country").val(customer.country);
+                $("#stateInput").val(customer.state);
+                $("#districtInput").val(customer.district);
+                $("#pincode").val(customer.pincode);
+
+                $("#customerbtn").off("click").text("Update Customer").attr("data-update", customerId);
+            }
+        });
+    });
+
+   // ✅ Update Customer with SweetAlert Confirmation
 $(document).on("click", "#customerbtn[data-update]", function (e) {
     e.preventDefault();
     var customerId = $(this).attr("data-update");
-    
+
     var updatedData = {
         update: true,
         id: customerId,
@@ -969,23 +1021,31 @@ $(document).on("click", "#customerbtn[data-update]", function (e) {
         district: $("#districtInput").val(),
         pincode: $("#pincode").val(),
     };
+
     $.ajax({
-    url: "customerBackend.php",
-    type: "POST",
-    data: updatedData,
-    success: function () {
-        $("#customerForm")[0].reset();
-        location.reload(); // Reload the page after update
-        loadCustomers();
-    }
+        url: "customerBackend.php",
+        type: "POST",
+        data: updatedData,
+        success: function () {
+            Swal.fire({
+                title: "Updated!",
+                text: "Customer details have been successfully updated.",
+                icon: "success",
+                confirmButtonColor: "rgb(0, 148, 255)", // Updated OK button color
+                confirmButtonText: "OK"
+            }).then(() => {
+                location.reload(); // ✅ Reload the page after clicking OK
+            });
+
+            $("#customerForm")[0].reset();
+        }
+    });
 });
 
 
 });
 
 
-
-});
 </script>
 
 </body>

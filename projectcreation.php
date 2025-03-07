@@ -343,6 +343,58 @@ thead{
     color:rgb(58, 166, 174);
 }
 
+  /* Modal Responsiveness */
+  .modal-dialog {
+    max-width: 35%;
+  }
+
+  @media (max-width: 992px) { /* Tablets */
+    .modal-dialog {
+      max-width: 60%;
+    }
+  }
+
+  @media (max-width: 768px) { /* Mobile */
+    .modal-dialog {
+        max-width: 70%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: auto; /* Ensures it's centered */
+    }
+    .custom-radio {
+        font-size: 12px;
+        width:100%;
+    }
+    .submit-btn {
+        font-size: 10px;
+        padding: 4px 8px;
+        margin-top: 5px;
+    }
+}
+
+
+  /* Styling */
+  .modal-content {
+    border-radius: 15px;
+  }
+
+  .custom-radio {
+    font-size: 14px;
+    margin-right: 10px;
+  }
+
+  .submit-btn {
+    background-color: rgb(15,29,64);
+    color: white;
+    border-radius: 10px;
+    font-size: 14px;
+    padding: 4px 8px;
+  }
+
+  .d-flex.flex-wrap {
+    gap: 10px;
+  }
 </style>
 
 </head>
@@ -448,34 +500,45 @@ thead{
         style="color: rgb(15,29,64); margin-top: 5px;">
         Project Creation
     </h4>
-     <!-- Enhanced Access Button (Responsive) -->
-     <button type="button" class="btn" id="addAccessBtn" >
-        <i class="fas fa-user-shield" style="margin-right: 8px;"></i> Access
-    </button>
+    
 
 
 </div>
 
 
-<!-- Enhanced Dropdown Container -->
-<div id="accessDropdownContainer" class="mt-2 p-3 rounded shadow" 
-    style="
-        display: none; 
-        border: 1px solid #ccc; 
-        background: white; 
-        position: absolute; 
-        width: 8%; 
-        min-width: 260px; 
-        z-index: 100; 
-        top: 100%; 
-        left: 90px;
-        border-radius: 8px; 
-        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1); 
-        padding: 15px;
-        transition: all 0.3s ease-in-out;
-    ">
-    <div id="accessDropdown" class="row"></div>
+
+<!-- Employee Selection Modal -->
+<div class="modal fade" id="employeeModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body p-3" >
+        <div class="row no-gutters">
+          <!-- Form Section -->
+          <div class="col-12 p-3">
+            <form id="employeeSelectionForm" style="padding-left: 30px;">
+              
+              <!-- Employee Selection -->
+              <div class="form-group">
+                
+                <div id="employeeDropdown" class="row"></div> <!-- Employee List -->
+              </div>
+
+              <!-- Submit Button -->
+              <div class="text-center">
+                <button type="submit" class="btn submit-btn" style="color: white;">Update</button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+
+
+
 
 
 <style>
@@ -641,74 +704,73 @@ thead{
 .text-muted {
     color: white !important;
 }
+
+.modal-header {
+    background-color: black !important;
+    color: white !important;
+}
+
+.btn-close {
+    filter: invert(1); /* Makes the close button white */
+}
+.modal-content {
+    color: black !important;
+}
+
 </style>
 
 <script>
-  // List of employees who will have access
-let accessEmployees = ["Pavitra", "Jayavarshini", "Suriya", "Mohan", "Naveen", "Anbumani", "Sivakumar", "Venkatesh"];
-accessEmployees.sort(); // Sort employees alphabetically
-let selectedAccessEmployees = new Set();
+document.addEventListener("DOMContentLoaded", function () {
+    let accessEmployees = ["Pavitra", "Jayavarshini", "Suriya", "Mohan", "Naveen", "Anbumani", "Sivakumar", "Venkatesh"];
+    accessEmployees.sort(); // Sort employees alphabetically
+    let selectedAccessEmployees = new Set();
 
-const addAccessBtn = document.getElementById('addAccessBtn');
-const accessDropdownContainer = document.getElementById('accessDropdownContainer');
-const accessDropdownList = document.getElementById('accessDropdown');
+    const addAccessBtn = document.getElementById('addAccessBtn');
+    const accessDropdownList = document.getElementById('accessDropdown');
 
-// Show dropdown when clicking the "Access" button
-addAccessBtn.addEventListener('click', function () {
-    accessDropdownContainer.style.display = 'block'; // Show dropdown
-    accessDropdownList.innerHTML = ''; // Clear previous list
+    addAccessBtn.addEventListener('click', function () {
+        accessDropdownList.innerHTML = ''; // Clear previous list
 
-    accessEmployees.forEach(emp => {
-        let wrapper = document.createElement('div');
-        wrapper.classList.add('col-6', 'd-flex', 'align-items-center', 'mb-1');
+        accessEmployees.forEach(emp => {
+            let wrapper = document.createElement('div');
+            wrapper.classList.add('col-6', 'd-flex', 'align-items-center', 'mb-2');
 
-        let checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.value = emp;
-        checkbox.checked = selectedAccessEmployees.has(emp);
-        checkbox.classList.add('employee-checkbox');
+            let checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.value = emp;
+            checkbox.checked = selectedAccessEmployees.has(emp);
+            checkbox.classList.add('form-check-input', 'mr-3');
 
-        let label = document.createElement('label');
-        label.textContent = emp;
-        label.classList.add('mr-auto', 'text-wrap', 'employee-label');
-        label.style.wordBreak = 'break-word';
-        label.style.flex = '1';
-        label.style.marginBottom = "0";
-        label.style.whiteSpace = 'normal';
-        label.style.cursor = 'pointer'; // Add pointer cursor for better UX
+            let label = document.createElement('label');
+            label.textContent = emp;
+            label.classList.add('form-check-label', 'flex-grow-1');
 
-        // Function to toggle selection
-        function toggleSelection() {
-            if (checkbox.checked) {
-                selectedAccessEmployees.add(emp);
-            } else {
-                selectedAccessEmployees.delete(emp);
+            function toggleSelection() {
+                if (checkbox.checked) {
+                    selectedAccessEmployees.add(emp);
+                } else {
+                    selectedAccessEmployees.delete(emp);
+                }
             }
-        }
 
-        // Click on label should toggle checkbox
-        label.addEventListener('click', function () {
-            checkbox.checked = !checkbox.checked;
-            toggleSelection();
+            label.addEventListener('click', function () {
+                checkbox.checked = !checkbox.checked;
+                toggleSelection();
+            });
+
+            checkbox.addEventListener('change', toggleSelection);
+
+            wrapper.appendChild(checkbox);
+            wrapper.appendChild(label);
+            accessDropdownList.appendChild(wrapper);
         });
 
-        // Checkbox should work independently as well
-        checkbox.addEventListener('change', toggleSelection);
-
-        wrapper.appendChild(checkbox);
-        wrapper.appendChild(label);
-        accessDropdownList.appendChild(wrapper);
+        // Show the modal
+        $('#accessModal').modal('show');
     });
 });
-
-// Hide dropdown when clicking outside
-document.addEventListener('click', function (event) {
-    if (!accessDropdownContainer.contains(event.target) && event.target !== addAccessBtn) {
-        accessDropdownContainer.style.display = 'none';
-    }
-});
-
 </script>
+
 <!-- Topbar Navbar -->
 <ul class="navbar-nav ml-auto">
 
@@ -819,10 +881,11 @@ document.addEventListener('click', function (event) {
         <!-- Employees (9 columns) -->
         <div class="col-md-9 d-flex align-items-center">
             <!-- Add Employee Button -->
-            <button type="button" class="btn mt-2 d-flex align-items-center" id="addEmployeeBtn" 
-                style="background: rgb(238, 153, 129); color: white; font-size: 14px; align-self: flex-start; white-space: nowrap;">
-                <i class="fas fa-user-plus"></i>&nbsp; Employee
-            </button>
+            <button type="button" class="btn mt-2 d-flex align-items-center" id="addAccessBtn"
+    style="background: rgb(238, 153, 129); color: white; font-size: 14px; align-self: flex-start; white-space: nowrap;">
+    <i class="fas fa-user-plus"></i>&nbsp; Employee
+</button>
+
 
             <span onclick="window.location.href='employee.php'" >
             <i class="fas fa-plus-circle text-primary ml-2" style="cursor: pointer;"></i></span>
@@ -852,83 +915,75 @@ document.addEventListener('click', function (event) {
 
 
 <script>
-// Employee Dropdown Logic
-let employees = ["Pavitra", "Jayavarshini", "Suriya", "Mohan", "Naveen", "Anbumani", "Sivakumar", "Venkatesh"];
-employees.sort(); // Sort employees alphabetically
-let selectedEmployees = new Set();
+document.addEventListener("DOMContentLoaded", function () { 
+    let accessEmployees = ["Pavitra", "Jayavarshini", "Suriya", "Mohan", "Naveen", "Anbumani", "Sivakumar", "Venkatesh"];
+    accessEmployees.sort(); // Sort employees alphabetically
+    let selectedAccessEmployees = new Set();
 
-const addEmployeeBtn = document.getElementById('addEmployeeBtn');
-const dropdownContainer = document.getElementById('dropdownContainer');
-const dropdownList = document.getElementById('employeeDropdown');
-const selectedEmployeesDisplay = document.getElementById('selectedEmployeesContainer');
+    const addAccessBtn = document.getElementById('addAccessBtn');  // Corrected Button ID
+    const accessDropdownList = document.getElementById('employeeDropdown'); // Corrected List ID
 
-// Show dropdown when clicking the button
-addEmployeeBtn.addEventListener('click', function () {
-    dropdownContainer.style.display = 'block'; // Show dropdown
-    dropdownList.innerHTML = ''; // Clear previous list
-
-    employees.forEach(emp => {
-        let wrapper = document.createElement('div');
-        wrapper.classList.add('col-6', 'd-flex', 'align-items-center', 'mb-1');
-
-        let checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.value = emp;
-        checkbox.checked = selectedEmployees.has(emp);
-        checkbox.classList.add('employee-checkbox');
-
-        let label = document.createElement('label');
-        label.textContent = emp;
-        label.classList.add('mr-auto', 'text-wrap', 'employee-label');
-        label.style.wordBreak = 'break-word';
-        label.style.flex = '1';
-        label.style.marginBottom = "0";
-        label.style.whiteSpace = 'normal';
-        label.style.cursor = 'pointer'; // Add pointer cursor for better UX
-
-        // Function to toggle selection
-        function toggleSelection() {
-            if (checkbox.checked) {
-                selectedEmployees.add(emp);
+    function updateColumnSize() {
+        let screenWidth = window.innerWidth;
+        let items = document.querySelectorAll("#employeeDropdown .employee-item");
+        
+        items.forEach(item => {
+            if (screenWidth < 400) {
+                item.classList.remove("col-6");
+                item.classList.add("col-12");
             } else {
-                selectedEmployees.delete(emp);
+                item.classList.remove("col-12");
+                item.classList.add("col-6");
             }
-            updateSelectedEmployees();
-        }
+        });
+    }
 
-        // Click on label should toggle checkbox
-        label.addEventListener('click', function () {
-            checkbox.checked = !checkbox.checked;
-            toggleSelection();
+    addAccessBtn.addEventListener('click', function () {
+        accessDropdownList.innerHTML = ''; // Clear previous list
+
+        accessEmployees.forEach(emp => {
+            let wrapper = document.createElement('div');
+            wrapper.classList.add('col-6', 'd-flex', 'align-items-center', 'mb-2', 'employee-item'); 
+
+            let checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.value = emp;
+            checkbox.checked = selectedAccessEmployees.has(emp);
+            checkbox.classList.add('form-check-input', 'me-2'); 
+
+            let label = document.createElement('label');
+            label.textContent = emp;
+            label.classList.add('form-check-label', 'flex-grow-1');
+
+            function toggleSelection() {
+                if (checkbox.checked) {
+                    selectedAccessEmployees.add(emp);
+                } else {
+                    selectedAccessEmployees.delete(emp);
+                }
+            }
+
+            label.addEventListener('click', function () {
+                checkbox.checked = !checkbox.checked;
+                toggleSelection();
+            });
+
+            checkbox.addEventListener('change', toggleSelection);
+
+            wrapper.appendChild(checkbox);
+            wrapper.appendChild(label);
+            accessDropdownList.appendChild(wrapper);
         });
 
-        // Checkbox should work independently as well
-        checkbox.addEventListener('change', toggleSelection);
+        // Apply column size based on screen width
+        updateColumnSize();
 
-        wrapper.appendChild(checkbox);
-        wrapper.appendChild(label);
-        dropdownList.appendChild(wrapper);
+        // Show the correct modal
+        $('#employeeModal').modal('show'); // ✅ FIXED: Using correct modal ID
     });
+
+    window.addEventListener("resize", updateColumnSize);
 });
-
-// Function to update selected employees display
-function updateSelectedEmployees() {
-    if (selectedEmployees.size > 0) {
-        selectedEmployeesDisplay.innerHTML = [...selectedEmployees]
-            .map(employee => `<span class="employee-name"><i class="fas fa-check-circle" style="color: green;"></i> ${employee}</span>`)
-            .join(', '); // Display employees inline separated by commas
-    } else {
-        selectedEmployeesDisplay.innerHTML = `<span style="white-space: nowrap;">Nil</span>`; // Keep "Nil" in a single line
-    }
-}
-
-// Hide dropdown when clicking outside
-document.addEventListener('click', function (event) {
-    if (!dropdownContainer.contains(event.target) && event.target !== addEmployeeBtn) {
-        dropdownContainer.style.display = 'none';
-    }
-});
-
 
 </script>
 
@@ -1013,46 +1068,6 @@ document.addEventListener('click', function (event) {
                         <!-- /.container-fluid -->
         
                     </div></div>
-        
-<!-- Add Customer Modal -->
-<!-- <div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content" style="border-radius: 25px; overflow: hidden;">
-            <div class="modal-header" style="border-top-left-radius: 25px; border-top-right-radius: 25px;" >
-                <h5 class="modal-title" id="addCustomerModalLabel">Add Customer</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label for="customerName">Name:</label>
-                        <input type="text" class="form-control" id="customerName" placeholder="Enter name">
-                    </div>
-                    <div class="form-group">
-                        <label for="companyName">Company Name:</label>
-                        <input type="text" class="form-control" id="companyName" placeholder="Enter company name">
-                    </div>
-                    <div class="form-group">
-                        <label for="phoneNumber">Phone Number:</label>
-                        <input type="text" class="form-control" id="phoneNumber" placeholder="Enter phone number">
-                    </div>
-                    <div class="form-group">
-                        <label for="customerAddress">Address:</label>
-                        <textarea class="form-control" id="customerAddress" rows="3" placeholder="Enter address"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">Add Customer</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div> -->
-
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-           
             <!-- End of Footer -->
 
         </div>

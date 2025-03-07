@@ -21,6 +21,8 @@
         rel="stylesheet">
         <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <!-- Custom styles for this template-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <style>
 thead{
@@ -626,7 +628,7 @@ thead{
 <!-- DataTables Plugin (Ensure it's loaded after jQuery) -->
 <script src="vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Initialize DataTable AFTER all dependencies are loaded -->
 <script>
     $(document).ready(function() {
@@ -638,40 +640,39 @@ thead{
 <script src="js/demo/datatables-demo.js"></script>
 
     <script>
-$(document).ready(function(){
+$(document).ready(function () {
     let editId = null;
     let dataTable = $("#dataTable").DataTable(); // Initialize DataTable
 
     function fetchProjectTypes() {
-    $.ajax({
-        url: "projecttypeBackend.php",
-        type: "GET",
-        dataType: "json",
-        success: function (data) {
-            // Destroy DataTable ONLY if it exists AND the table has data
-            if ($.fn.DataTable.isDataTable("#dataTable") && data.count > 0) {
-                dataTable.destroy();
+        $.ajax({
+            url: "projecttypeBackend.php",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                // Destroy DataTable ONLY if it exists AND the table has data
+                if ($.fn.DataTable.isDataTable("#dataTable") && data.count > 0) {
+                    dataTable.destroy();
+                }
+
+                if (data.count === 0) {
+                    $("#projecttype_table").html("<tr><td colspan='3'>No project types found</td></tr>");
+                } else {
+                    $("#projecttype_table").html(data.tableData); // Insert new rows
+                }
+
+                $(".header-counter").text(data.count);
+
+                // Reinitialize DataTable only when there are rows
+                if (data.count > 0) {
+                    dataTable = $("#dataTable").DataTable();
+                }
+            },
+            error: function () {
+                console.error("Error fetching data.");
             }
-
-            if (data.count === 0) {
-                $("#projecttype_table").html("<tr><td colspan='3'>No project types found</td></tr>");
-            } else {
-                $("#projecttype_table").html(data.tableData); // Insert new rows
-            }
-
-            $(".header-counter").text(data.count);
-
-            // Reinitialize DataTable only when there are rows
-            if (data.count > 0) {
-                dataTable = $("#dataTable").DataTable();
-            }
-        },
-        error: function () {
-            console.error("Error fetching data.");
-        }
-    });
-}
-
+        });
+    }
 
     fetchProjectTypes(); // Fetch data on page load
 
@@ -679,11 +680,18 @@ $(document).ready(function(){
         e.preventDefault();
         var projecttype = $("#projecttypeName").val().trim();
         if (projecttype === "") {
-            alert("Please enter a project type!");
+            Swal.fire({
+                title: "Error!",
+                text: "Please enter a project type!",
+                icon: "error",
+                confirmButtonColor: "rgb(0, 148, 255)"
+            });
             return;
         }
 
-        let requestData = editId ? { edit_id: editId, projecttypeName: projecttype } : { projecttypeName: projecttype };
+        let requestData = editId
+            ? { edit_id: editId, projecttypeName: projecttype }
+            : { projecttypeName: projecttype };
 
         $.ajax({
             url: "projecttypeBackend.php",
@@ -691,35 +699,70 @@ $(document).ready(function(){
             data: requestData,
             dataType: "json",
             success: function (response) {
-                alert(response.message);
-                $("#projecttypeName").val("");
-                $("#projecttypeBtn").html('<i class="fas fa-project-diagram"></i>&nbsp; Add Project Type');
-                editId = null;
-                fetchProjectTypes();
+                Swal.fire({
+                    title: editId ? "Updated!" : "Success!",
+                    text: editId
+                        ? "Project Type Successfully Edited"
+                        : "Project Type Added Successfully",
+                    icon: "success",
+                    confirmButtonColor: "rgb(0, 148, 255)"
+                }).then(() => {
+                    $("#projecttypeName").val("");
+                    $("#projecttypeBtn").html('<i class="fas fa-project-diagram"></i>&nbsp; Add Project Type');
+                    editId = null;
+                    fetchProjectTypes();
+                });
             },
             error: function () {
-                alert("Something went wrong!");
+                Swal.fire({
+                    title: "Error!",
+                    text: "Something went wrong!",
+                    icon: "error",
+                    confirmButtonColor: "rgb(0, 148, 255)"
+                });
             }
         });
     });
 
     $(document).on("click", ".btn-delete", function () {
         var id = $(this).data("id");
-        if (confirm("Are you sure you want to delete this project type?")) {
-            $.ajax({
-                url: "projecttypeBackend.php",
-                type: "POST",
-                data: { delete_id: id },
-                dataType: "json",
-                success: function (response) {
-                    alert(response.message);
-                    fetchProjectTypes();
-                },
-                error: function () {
-                    alert("Something went wrong!");
-                }
-            });
-        }
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to delete this project type?",
+            icon: "warning",
+            showCancelButton: true,
+            cancelButtonText: "No, Don't Delete",
+            confirmButtonText: "Yes, Delete it",
+            confirmButtonColor: "rgb(0, 148, 255)",
+            cancelButtonColor: "#d33"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "projecttypeBackend.php",
+                    type: "POST",
+                    data: { delete_id: id },
+                    dataType: "json",
+                    success: function (response) {
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "The entry has been deleted.",
+                            icon: "success",
+                            confirmButtonColor: "rgb(0, 148, 255)"
+                        });
+                        fetchProjectTypes();
+                    },
+                    error: function () {
+                        Swal.fire({
+                            title: "Error!",
+                            text: "Something went wrong!",
+                            icon: "error",
+                            confirmButtonColor: "rgb(0, 148, 255)"
+                        });
+                    }
+                });
+            }
+        });
     });
 
     $(document).on("click", ".btn-edit", function () {

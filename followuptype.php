@@ -12,6 +12,7 @@
     <link rel="icon" type="image/png" href="img/ktglogo.jpg">
 
     <title>Task Manager</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -623,7 +624,7 @@ thead{
 <!-- DataTables Plugin (Ensure it's loaded after jQuery) -->
 <script src="vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Initialize DataTable AFTER all dependencies are loaded -->
 <script>
     $(document).ready(function() {
@@ -635,40 +636,39 @@ thead{
 <script src="js/demo/datatables-demo.js"></script>
 
     <script>
-$(document).ready(function(){
+$(document).ready(function () {
     let editId = null;
     let dataTable = $("#dataTable").DataTable(); // Initialize DataTable
 
     function fetchfollowupTypes() {
-    $.ajax({
-        url: "followuptypeBackend.php",
-        type: "GET",
-        dataType: "json",
-        success: function (data) {
-            // Destroy DataTable ONLY if it exists AND the table has data
-            if ($.fn.DataTable.isDataTable("#dataTable") && data.count > 0) {
-                dataTable.destroy();
+        $.ajax({
+            url: "followuptypeBackend.php",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                // Destroy DataTable ONLY if it exists AND the table has data
+                if ($.fn.DataTable.isDataTable("#dataTable") && data.count > 0) {
+                    dataTable.destroy();
+                }
+
+                if (data.count === 0) {
+                    $("#followuptype_table").html("<tr><td colspan='3'>No FollowUp types found</td></tr>");
+                } else {
+                    $("#followuptype_table").html(data.tableData); // Insert new rows
+                }
+
+                $(".header-counter").text(data.count);
+
+                // Reinitialize DataTable only when there are rows
+                if (data.count > 0) {
+                    dataTable = $("#dataTable").DataTable();
+                }
+            },
+            error: function () {
+                console.error("Error fetching data.");
             }
-
-            if (data.count === 0) {
-                $("#followuptype_table").html("<tr><td colspan='3'>No FollowUp types found</td></tr>");
-            } else {
-                $("#followuptype_table").html(data.tableData); // Insert new rows
-            }
-
-            $(".header-counter").text(data.count);
-
-            // Reinitialize DataTable only when there are rows
-            if (data.count > 0) {
-                dataTable = $("#dataTable").DataTable();
-            }
-        },
-        error: function () {
-            console.error("Error fetching data.");
-        }
-    });
-}
-
+        });
+    }
 
     fetchfollowupTypes(); // Fetch data on page load
 
@@ -676,7 +676,11 @@ $(document).ready(function(){
         e.preventDefault();
         var followuptype = $("#followuptypeName").val().trim();
         if (followuptype === "") {
-            alert("Please enter a FollowUp type!");
+            Swal.fire({
+                icon: "warning",
+                title: "Oops!",
+                text: "Please enter a FollowUp type!",
+            });
             return;
         }
 
@@ -688,35 +692,67 @@ $(document).ready(function(){
             data: requestData,
             dataType: "json",
             success: function (response) {
-                alert(response.message);
-                $("#followuptypeName").val("");
-                $("#followuptypeBtn").html('<i class="fas fa-fw fa-comment-dots"></i>&nbsp; Add FollowUp');
-                editId = null;
-                fetchfollowupTypes();
+                Swal.fire({
+                    icon: "success",
+                    title: editId ? "FollowUp Type Updated!" : "FollowUp Type Added!",
+                    text: editId ? "Successfully edited the FollowUp type." : "Successfully added a new FollowUp type.",
+                    confirmButtonColor: "rgb(0, 148, 255)",
+                }).then(() => {
+                    $("#followuptypeName").val("");
+                    $("#followuptypeBtn").html('<i class="fas fa-fw fa-comment-dots"></i>&nbsp; Add FollowUp');
+                    editId = null;
+                    fetchfollowupTypes();
+                });
             },
             error: function () {
-                alert("Something went wrong!");
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: "Something went wrong!",
+                });
             }
         });
     });
 
     $(document).on("click", ".btn-delete", function () {
         var id = $(this).data("id");
-        if (confirm("Are you sure you want to delete this FollowUp type?")) {
-            $.ajax({
-                url: "followuptypeBackend.php",
-                type: "POST",
-                data: { delete_id: id },
-                dataType: "json",
-                success: function (response) {
-                    alert(response.message);
-                    fetchfollowupTypes();
-                },
-                error: function () {
-                    alert("Something went wrong!");
-                }
-            });
-        }
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to delete this FollowUp type?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, Delete it",
+            cancelButtonText: "No, Don't Delete",
+            confirmButtonColor: "rgb(0, 148, 255)", // Custom color
+            cancelButtonColor: "#d33",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "followuptypeBackend.php",
+                    type: "POST",
+                    data: { delete_id: id },
+                    dataType: "json",
+                    success: function (response) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Deleted!",
+                            text: "FollowUp type has been deleted successfully.",
+                            confirmButtonColor: "rgb(0, 148, 255)",
+                        }).then(() => {
+                            fetchfollowupTypes();
+                        });
+                    },
+                    error: function () {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error!",
+                            text: "Something went wrong!",
+                        });
+                    }
+                });
+            }
+        });
     });
 
     $(document).on("click", ".btn-edit", function () {

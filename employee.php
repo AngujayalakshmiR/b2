@@ -483,6 +483,8 @@ $result = $conn->query($sql);
                 <div class="col-md-12">
                     <form id="customerForm" class="row g-3 mt-3" action="addEmployeeBackend.php" method="POST" enctype="multipart/form-data">
                 <!-- Column 1: Name & Company Name -->
+                 <input type="hidden" id="employee_id" name="employee_id">
+
                         <div class="col-md-3 pb-1">
                             <input type="text" class="form-control mb-2" id="employeename" name="employeename" placeholder="Enter Employee Name" required>
                             <div class="d-flex align-items-center">
@@ -530,7 +532,9 @@ $result = $conn->query($sql);
                                             <i id="photoIcon" class="fas fa-camera-retro fa-lg" style="text-align: center; display: block; cursor: pointer;margin-bottom: 8px;color: rgb(222, 141, 197);"></i>
                                             <p class="mt-1" style="font-size: 14px; text-align:center;margin-bottom: 5px;">Upload Photo</p>
                                         </label>
-                                        <input type="file" class="form-control-file d-none" id="employeePhoto" name="employeePhoto" required onchange="updateIcon(this, 'photoIcon', 'photoFileName')">
+                                        <input type="file" class="form-control-file" id="employeePhoto" name="employeePhoto" required onchange="updateIcon(this, 'photoIcon', 'photoFileName')"
+    style="opacity: 0; position: absolute; width: 1px; height: 1px;">
+
                                         <p class="file-name text-muted" id="photoFileName" style="font-size: 14px; text-align:center;">No file chosen</p>
                                     </div>
                                 </div>
@@ -541,7 +545,8 @@ $result = $conn->query($sql);
                                             <i id="aadharIcon" class="fas fa-id-card fa-lg " style="text-align: center; display: block; cursor: pointer;margin-bottom: 8px;color: rgb(140, 221, 130);"></i>
                                             <p class="mt-1" style="font-size: 14px; text-align:center;margin-bottom: 5px;">Upload Aadhar</p>
                                         </label>
-                                        <input type="file" class="form-control-file d-none" id="aadharCard" name="aadharCard" required onchange="updateIcon(this, 'aadharIcon', 'aadharFileName')">
+                                        <input type="file" class="form-control-file" id="aadharCard" name="aadharCard" required onchange="updateIcon(this, 'aadharIcon', 'aadharFileName')"
+    style="opacity: 0; position: absolute; width: 1px; height: 1px;">
                                         <p class="file-name text-muted" id="aadharFileName" style="font-size: 14px; text-align:center;">No file chosen</p>
                                     </div>
                                 </div>
@@ -552,7 +557,7 @@ $result = $conn->query($sql);
                                             <i id="panIcon" class="fas fa-id-badge fa-lg " style="text-align: center; display: block; cursor: pointer;margin-bottom: 8px;color: rgb(246, 185, 114);"></i>
                                             <p class="mt-1" style="font-size: 14px; text-align:center; margin-bottom: 5px;">Upload Pan</p>
                                         </label>
-                                        <input type="file" class="form-control-file d-none" id="panCard" name="panCard" required onchange="updateIcon(this, 'panIcon', 'panFileName')">
+                                <input type="file" class="form-control-file " id="panCard" name="panCard" required onchange="updateIcon(this, 'panIcon', 'panFileName')" style="opacity: 0; position: absolute; width: 1px; height: 1px;">
                                         <p class="file-name text-muted" id="panFileName" style="font-size: 14px; text-align:center;">No file chosen</p>
                                     </div>
                                 </div>
@@ -585,7 +590,23 @@ $result = $conn->query($sql);
 
         
     </div>
+<script>
+    document.getElementById('customerForm').addEventListener('submit', function (event) {
+    let files = ['employeePhoto', 'aadharCard', 'panCard'];
+    let valid = true;
 
+    files.forEach(id => {
+        let input = document.getElementById(id);
+        if (!input.files.length) {
+            alert(`Please upload a file for ${id}`);
+            valid = false;
+        }
+    });
+
+    if (!valid) event.preventDefault();
+});
+
+</script>
 
 <script>
   
@@ -750,40 +771,43 @@ countryDropdown.addEventListener("change", function() {
                     </tr>
                 </thead>
                 <tbody>
-    <?php
-    if ($result->num_rows > 0) {
-        $sno = 1;
-        while ($row = $result->fetch_assoc()) {
-            echo "<tr>";
-            echo "<td>" . $sno++ . "</td>";
-            echo "<td>" . htmlspecialchars($row['Name']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['Designation']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['empPhNo']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['empAdd']) . "</td>";
-            echo "<td><i class='fas fa-camera-retro photo-icon' onclick='openImageModal(\"" . htmlspecialchars($row['empPic']) . "\")'></i></td>";
-            echo "<td><i class='fas fa-id-card aadhar-icon' onclick='openImageModal(\"" . htmlspecialchars($row['empAadhar']) . "\")'></i></td>";
-            echo "<td><i class='fas fa-id-badge pan-icon' onclick='openImageModal(\"" . htmlspecialchars($row['empPan']) . "\")'></i></td>";
-        
-            echo "<td class='action-buttons'>
-                <button class='btn-action btn-edit' data-id='" . $row['ID'] . "'><i class='fas fa-edit'></i></button>
-                <button class='btn-action btn-delete delete-btn' data-id='" . $row['ID'] . "'>
-                    <i class='fas fa-trash-alt' style='color: rgb(238, 153, 129);'></i>
-                </button>
-            </td>";
-        
-            echo "</tr>";
-        }        
-        
-    } else {
-        echo "<tr><td colspan='9'>No employees found</td></tr>";
-    }
-    ?>
-                </tbody>
+<?php
+if ($result->num_rows > 0) {
+    $sno = 1;
+    while ($row = $result->fetch_assoc()) {
+        $fullAddress = $row['empAdd'] . ", " . $row['empDistrict'] . ", " . $row['empState'] . ", " . $row['empCountry'] . " - " . $row['empPincode'];
+
+        echo "<tr>";
+        echo "<td>" . $sno++ . "</td>";
+        echo "<td>" . htmlspecialchars($row['Name']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['Designation']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['empPhNo']) . "</td>";
+        echo "<td>" . htmlspecialchars($fullAddress) . "</td>";
+        echo "<td><i class='fas fa-camera-retro photo-icon' onclick='openImageModal(\"" . htmlspecialchars($row['empPic']) . "\")'></i></td>";
+        echo "<td><i class='fas fa-id-card aadhar-icon' onclick='openImageModal(\"" . htmlspecialchars($row['empAadhar']) . "\")'></i></td>";
+        echo "<td><i class='fas fa-id-badge pan-icon' onclick='openImageModal(\"" . htmlspecialchars($row['empPan']) . "\")'></i></td>";
+    
+        echo "<td class='action-buttons'>
+            <button class='btn-action btn-edit' data-id='" . $row['ID'] . "'><i class='fas fa-edit'></i></button>
+            <button class='btn-action btn-delete delete-btn' data-id='" . $row['ID'] . "'>
+                <i class='fas fa-trash-alt' style='color: rgb(238, 153, 129);'></i>
+            </button>
+        </td>";
+    
+        echo "</tr>";
+    }        
+} else {
+    echo "<tr><td colspan='9'>No employees found</td></tr>";
+}
+?>
+</tbody>
+
             </table>
         </div>
     </div>
 </div>
-                </div>
+                
+</div></div>
 <?php
 $conn->close();
 ?>
@@ -880,105 +904,7 @@ $conn->close();
     <!-- Bootstrap JavaScript -->
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
-  <script>
-    $(document).on("click", ".btn-edit", function () {
-    var employeeId = $(this).data("id");
-
-    $.ajax({
-        url: "addEmployeeBackend.php",
-        type: "POST",
-        data: { edit: true, id: employeeId },
-        dataType: "json",
-        success: function (employee) {
-            console.log("Raw empAdd Data:", employee.empAdd);
-
-            // Parse the address properly
-            let cleanedAddress = employee.empAdd.replace(/\r\n|\n/g, "").trim();
-            let addressParts = cleanedAddress.split(",").map(part => part.trim());
-
-            console.log("Parsed Address Parts:", addressParts);
-
-            let address = addressParts[0] ? addressParts[0] + ", " + addressParts[1] : "";
-            let district = addressParts[2] || "";
-            let state = addressParts[3] || "";
-            let countryPincode = addressParts[4] || "";
-
-            let country = "";
-            let pincode = "";
-
-            if (countryPincode.includes("-")) {
-                let countryPincodeParts = countryPincode.split(" - ");
-                country = countryPincodeParts[0].trim();
-                pincode = countryPincodeParts[1] ? countryPincodeParts[1].trim() : "";
-            } else {
-                country = countryPincode.trim();
-            }
-
-            // Populate form fields
-            $("#employeename").val(employee.Name);
-            $("#designation").val(employee.Designation);
-            $("#employeephnno").val(employee.empPhNo);
-            $("#employeeaddress").val(address);
-            $("#district").val(district);
-            $("#state").val(state);
-            $("#country").val(country);
-            $("#pincode").val(pincode);
-
-            // Update button text and store employee ID
-            $("#employeeBtn").text("Update Employee").attr("data-update", employee.ID);
-        },
-        error: function (xhr, status, error) {
-            console.log("AJAX Error:", xhr.responseText);
-        }
-    });
-});
-
-// ✅ Update Employee with SweetAlert Confirmation
-$(document).on("click", "#employeeBtn[data-update]", function (e) {
-    e.preventDefault();
-    var employeeId = $(this).attr("data-update");
-
-    var updatedData = {
-        update: true,
-        id: employeeId,
-        employeename: $("#employeename").val(),
-        designation: $("#designation").val(),
-        employeeno: $("#employeephnno").val(),
-        employeeaddress: $("#employeeaddress").val(),
-        district: $("#district").val(),
-        state: $("#state").val(),
-        country: $("#country").val(),
-        pincode: $("#pincode").val(),
-    };
-
-    $.ajax({
-        url: "addEmployeeBackend.php",
-        type: "POST",
-        data: updatedData,
-        dataType: "json",
-        success: function (response) {
-            if (response.error) {
-                Swal.fire("Error", response.error, "error");
-                return;
-            }
-
-            Swal.fire({
-                title: "Updated!",
-                text: "Employee details have been successfully updated.",
-                icon: "success",
-                confirmButtonColor: "rgb(0, 148, 255)",
-                confirmButtonText: "OK"
-            }).then(() => {
-                location.reload();
-            });
-
-            $("#customerForm")[0].reset();
-            $("#employeeBtn").text("Add Employee").removeAttr("data-update");
-        }
-    });
-});
-
-  </script>
+ 
 <script>
     $(document).ready(function () {
         $("#customerForm").submit(function (e) {
@@ -1021,6 +947,42 @@ $(document).on("click", "#employeeBtn[data-update]", function (e) {
             }
         });
     });
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".btn-edit").forEach(button => {
+        button.addEventListener("click", function () {
+            let employeeId = this.getAttribute("data-id");
+
+            fetch(`addEmployeeBackend.php?id=${employeeId}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("employeename").value = data.Name;
+                    document.getElementById("designation").value = data.Designation;
+                    document.getElementById("employeephnno").value = data.empPhNo;
+                    document.getElementById("customeraddress").value = data.empAdd;
+                    document.getElementById("stateInput").value = data.empState;
+                    document.getElementById("districtInput").value = data.empDistrict;
+                    document.getElementById("pincode").value = data.empPincode;
+                    document.getElementById("country").value = data.empCountry;
+
+                    // Show existing file names and allow changing
+                    document.getElementById("photoFileName").innerText = data.empPic ? data.empPic : "No file chosen";
+                    document.getElementById("aadharFileName").innerText = data.empAadhar ? data.empAadhar : "No file chosen";
+                    document.getElementById("panFileName").innerText = data.empPan ? data.empPan : "No file chosen";
+
+                    document.getElementById("employeePhoto").setAttribute("data-old", data.empPic);
+                    document.getElementById("aadharCard").setAttribute("data-old", data.empAadhar);
+                    document.getElementById("panCard").setAttribute("data-old", data.empPan);
+
+                    // Change form action to update
+                    document.getElementById("customerForm").action = "addEmployeeBackend.php";
+                    document.getElementById("customerForm").setAttribute("data-id", employeeId);
+                })
+                .catch(error => console.error("Error fetching employee details:", error));
+        });
+    });
+});
 
 </script>
 

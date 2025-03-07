@@ -715,45 +715,46 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".btn-delete", function () {
-        var id = $(this).data("id");
+    var id = $(this).data("id");
 
-        Swal.fire({
-            title: "Are you sure?",
-            text: "Do you want to delete this FollowUp type?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes, Delete it",
-            cancelButtonText: "No, Don't Delete",
-            confirmButtonColor: "rgb(0, 148, 255)", // Custom color
-            cancelButtonColor: "#d33",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: "followuptypeBackend.php",
-                    type: "POST",
-                    data: { delete_id: id },
-                    dataType: "json",
-                    success: function (response) {
-                        Swal.fire({
-                            icon: "success",
-                            title: "Deleted!",
-                            text: "FollowUp type has been deleted successfully.",
-                            confirmButtonColor: "rgb(0, 148, 255)",
-                        }).then(() => {
-                            fetchfollowupTypes();
-                        });
-                    },
-                    error: function () {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Error!",
-                            text: "Something went wrong!",
-                        });
-                    }
-                });
-            }
-        });
+    Swal.fire({
+        title: "Are you sure?",
+        text: "Do you want to delete this followup type?",
+        icon: "warning",
+        showCancelButton: true,
+        cancelButtonText: "No, Don't Delete",
+        confirmButtonText: "Yes, Delete it",
+        confirmButtonColor: "rgb(0, 148, 255)",
+        cancelButtonColor: "#d33"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "followuptypeBackend.php",
+                type: "POST",
+                data: { delete_id: id },
+                dataType: "json",
+                success: function (response) {
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "The entry has been deleted.",
+                        icon: "success",
+                        confirmButtonColor: "rgb(0, 148, 255)"
+                    }).then(() => {
+                        location.reload();  // ✅ Reload the page after confirmation
+                    });
+                },
+                error: function () {
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Something went wrong!",
+                        icon: "error",
+                        confirmButtonColor: "rgb(0, 148, 255)"
+                    });
+                }
+            });
+        }
     });
+});
 
     $(document).on("click", ".btn-edit", function () {
         editId = $(this).data("id");

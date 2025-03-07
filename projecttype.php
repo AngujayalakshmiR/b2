@@ -725,45 +725,47 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".btn-delete", function () {
-        var id = $(this).data("id");
+    var id = $(this).data("id");
 
-        Swal.fire({
-            title: "Are you sure?",
-            text: "Do you want to delete this project type?",
-            icon: "warning",
-            showCancelButton: true,
-            cancelButtonText: "No, Don't Delete",
-            confirmButtonText: "Yes, Delete it",
-            confirmButtonColor: "rgb(0, 148, 255)",
-            cancelButtonColor: "#d33"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: "projecttypeBackend.php",
-                    type: "POST",
-                    data: { delete_id: id },
-                    dataType: "json",
-                    success: function (response) {
-                        Swal.fire({
-                            title: "Deleted!",
-                            text: "The entry has been deleted.",
-                            icon: "success",
-                            confirmButtonColor: "rgb(0, 148, 255)"
-                        });
-                        fetchProjectTypes();
-                    },
-                    error: function () {
-                        Swal.fire({
-                            title: "Error!",
-                            text: "Something went wrong!",
-                            icon: "error",
-                            confirmButtonColor: "rgb(0, 148, 255)"
-                        });
-                    }
-                });
-            }
-        });
+    Swal.fire({
+        title: "Are you sure?",
+        text: "Do you want to delete this project type?",
+        icon: "warning",
+        showCancelButton: true,
+        cancelButtonText: "No, Don't Delete",
+        confirmButtonText: "Yes, Delete it",
+        confirmButtonColor: "rgb(0, 148, 255)",
+        cancelButtonColor: "#d33"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "projecttypeBackend.php",
+                type: "POST",
+                data: { delete_id: id },
+                dataType: "json",
+                success: function (response) {
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "The entry has been deleted.",
+                        icon: "success",
+                        confirmButtonColor: "rgb(0, 148, 255)"
+                    }).then(() => {
+                        location.reload();  // ✅ Reload the page after confirmation
+                    });
+                },
+                error: function () {
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Something went wrong!",
+                        icon: "error",
+                        confirmButtonColor: "rgb(0, 148, 255)"
+                    });
+                }
+            });
+        }
     });
+});
+
 
     $(document).on("click", ".btn-edit", function () {
         editId = $(this).data("id");

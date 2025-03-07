@@ -5,7 +5,7 @@ $password = ""; // Change as per your DB credentials
 $dbname = "ktg"; // Your database name
 
 // Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli($servername, $username, $password, $dbname,3307);
 
 // Check connection
 if ($conn->connect_error) {

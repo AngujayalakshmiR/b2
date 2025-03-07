@@ -598,17 +598,22 @@ include 'dbconn.php'; // Ensure you have a database connection
         </div>
 
         <div class="col-md-4 pb-1">
-            <textarea class="form-control mb-2" id="customeraddress" placeholder="Enter Company Address" rows="3" required></textarea>
-           
-            <select class="form-control mb-2" id="country" required>
-                        <option value="">Select Country</option>
-                    </select>
+        <textarea class="form-control mb-2" id="customeraddress" name="customeraddress" placeholder="Enter Customer Address" rows="2" style="height: 85px;" required></textarea>
+                            <select class="form-control mb-2" id="country" name="country" required>
+                                <option value="">Select Country</option>
+                            </select>
         </div>
 
         <div class="col-md-4 pb-1">
-            <input type="text" class="form-control mb-2" id="stateInput" placeholder="Enter State" required>
-            <input type="text" class="form-control mb-2" id="districtInput" placeholder="Enter District" required>
-            <input type="text" class="form-control mb-2" id="pincode" placeholder="Enter Pincode" required>
+        <select class="form-control mb-2 d-none" id="stateDropdown" name="stateDropdown">
+                                <option value="">Select State</option>
+                            </select>
+                            <input type="text" class="form-control mb-2" id="stateInput" name="state" placeholder="Enter State" required>
+                            <select class="form-control mb-2 d-none" id="districtDropdown" name="districtDropdown">
+                                <option value="">Select District</option>
+                            </select>
+                            <input type="text" class="form-control mb-2" id="districtInput" name="district" placeholder="Enter District" >
+                            <input type="text" class="form-control mb-2" id="pincode" name="pincode" placeholder="Enter Pincode" required>
         </div>
     </form>
 </div>
@@ -739,6 +744,7 @@ countryDropdown.addEventListener("change", function() {
         districtInput.classList.remove("d-none");
     }
 });
+
 </script>
 
 
@@ -872,6 +878,19 @@ countryDropdown.addEventListener("change", function() {
 </script>
 <script>
 $(document).ready(function () {
+    $("#stateDropdown").change(function () {
+        if ($(this).val() !== "") {
+            $("#stateInput").hide().prop("required", false);
+            $(this).prop("required", true);
+        } else {
+            $("#stateInput").show().prop("required", true);
+            $(this).prop("required", false);
+        }
+    });
+});
+
+
+$(document).ready(function () {
     loadCustomers(); // Fetch data when the page loads
 
 
@@ -883,15 +902,16 @@ $(document).ready(function () {
         return; // Stop function execution
     }
     var customerData = {
-        customername: $("#customername").val(),
-        companyname: $("#companyname").val(),
-        customerno: $("#customerno").val(),
-        customeraddress: $("#customeraddress").val(),
-        country: $("#country").val(),
-        state: $("#stateInput").val(),
-        district: $("#districtInput").val(),
-        pincode: $("#pincode").val(),
-    };
+    customername: $("#customername").val(),
+    companyname: $("#companyname").val(),
+    customerno: $("#customerno").val(),
+    customeraddress: $("#customeraddress").val(),
+    country: $("#country").val(),
+    state: ($("#country").val() === "India") ? $("#stateDropdown").val() : $("#stateInput").val(),
+    district: ($("#country").val() === "India") ? $("#districtDropdown").val() : $("#districtInput").val(),
+    pincode: $("#pincode").val(),
+};
+
 
     $.ajax({
         url: "customerBackend.php",

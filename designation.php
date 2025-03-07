@@ -504,17 +504,16 @@
                 <div class="container custom-container mb-4 mt-4" style="background: white; border-radius: 25px; border: 2px solid rgb(0, 148, 255);">
                     <div class="row">
                         <div class="col-12">
-                            <form class="row g-10" id="designationForm">
-                                <div class="col-md-8 pt-2 d-flex align-items-center">
-                                    <input type="text" class="form-control mb-2" id="designationtype" name="designationtype" placeholder="Enter Designation" required>
-                                </div>
-                                <div class="col-md-4 pt-2 pb-2 d-flex justify-content-center align-items-center">
-                                    <button type="submit" id="designationBtn" class="btn" style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: 190px;">
-                                        <i class="fas fa-briefcase"></i>&nbsp; Add Designation
-                                    </button>
-
-                                </div>
-                            </form>
+                        <form class="row g-10" id="designationForm">
+    <div class="col-md-8 pt-2 d-flex align-items-center">
+        <input type="text" class="form-control mb-2" id="designationName" name="designationName" placeholder="Enter Designation" required>
+    </div>
+    <div class="col-md-4 pt-2 pb-2 d-flex justify-content-center align-items-center">
+        <button type="submit" id="designationBtn" class="btn" style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: 190px;">
+            <i class="fas fa-briefcase"></i>&nbsp; Add Designation
+        </button>
+    </div>
+</form>
 
                         
                         </div>
@@ -538,18 +537,18 @@
                         </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-bordered text-center" style="font-size:14px;" id="dataTable" width="100%" cellspacing="0">
-                                        <thead>
-                                            <tr class="thead">
-                                                <th>S.no</th>
-                                                <th>Designation Type</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="designation_table">
-                                                <!-- Designations will be loaded here dynamically -->
-                                        </tbody>
-                                    </table>
+                                <table class="table table-bordered text-center" style="font-size:14px;" id="dataTable" width="100%" cellspacing="0"> 
+    <thead>
+        <tr class="thead">
+            <th>S.no</th>
+            <th>Designation</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="designation_table">
+        <!-- Designation Types will be loaded here dynamically -->
+    </tbody>
+</table>
                                 </div>
                             </div>
                     </div>
@@ -582,63 +581,84 @@
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+   <!-- jQuery (Must be loaded first) -->
+   <script src="vendor/jquery/jquery.min.js"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+<!-- Core plugin JavaScript -->
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
+<!-- Custom scripts for all pages -->
+<script src="js/sb-admin-2.min.js"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
-    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-    <!-- Bootstrap JavaScript -->
-    <!-- Page level custom scripts -->
-    <script src="js/demo/datatables-demo.js"></script>
+<!-- DataTables Plugin (Ensure it's loaded after jQuery) -->
+<script src="vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable();
+    });
+</script>
+
+<!-- Page level custom scripts -->
+<script src="js/demo/datatables-demo.js"></script>
+
     <script>
-        $(document).ready(function () {
-    $('#dataTable').DataTable();
-});
-
-   $(document).ready(function () {
+$(document).ready(function () {
     let editId = null;
+    let dataTable = $("#dataTable").DataTable(); // Initialize DataTable
 
-    // Fetch designations on page load
-    fetchDesignations();
-// Fetch Designations
-function fetchDesignations() {
+    function fetchdesignation() {
         $.ajax({
             url: "designationBackend.php",
             type: "GET",
+            dataType: "json",
             success: function (data) {
-                $("#designation_table").html(data);
-                $('#dataTable').DataTable().destroy(); // Destroy the previous instance
-                $("#designation_table").html(data);
-                $('#dataTable').DataTable(); // Reinitialize DataTable
+                // Destroy DataTable ONLY if it exists AND the table has data
+                if ($.fn.DataTable.isDataTable("#dataTable") && data.count > 0) {
+                    dataTable.destroy();
+                }
 
+                if (data.count === 0) {
+                    $("#designation_table").html("<tr><td colspan='3'>No Designation found</td></tr>");
+                } else {
+                    $("#designation_table").html(data.tableData); // Insert new rows
+                }
+
+                $(".header-counter").text(data.count);
+
+                // Reinitialize DataTable only when there are rows
+                if (data.count > 0) {
+                    dataTable = $("#dataTable").DataTable();
+                }
+            },
+            error: function () {
+                console.error("Error fetching data.");
             }
         });
     }
-    // Add or Update Designation
+
+    fetchdesignation(); // Fetch data on page load
+
     $("#designationForm").submit(function (e) {
         e.preventDefault();
-        var designation = $("#designationtype").val().trim();
+        var designation = $("#designationName").val().trim();
         if (designation === "") {
-            alert("Please enter a designation!");
+            Swal.fire({
+                title: "Error!",
+                text: "Please enter a designation!",
+                icon: "error",
+                confirmButtonColor: "rgb(0, 148, 255)"
+            });
             return;
         }
-        
-        let requestData = editId ? { edit_id: editId, designationtype: designation } : { designationtype: designation };
 
-        console.log("Sending Data:", requestData); // Debugging - Check data sent
+        let requestData = editId
+            ? { edit_id: editId, designationName: designation }
+            : { designationName: designation };
 
         $.ajax({
             url: "designationBackend.php",
@@ -646,51 +666,82 @@ function fetchDesignations() {
             data: requestData,
             dataType: "json",
             success: function (response) {
-                alert(response.message);
-                $("#designationtype").val("");
-                $("#designationBtn").html('<i class="fas fa-briefcase"></i>&nbsp; Add Designation'); // Reset button text
-                editId = null; // Reset edit ID after update
-                fetchDesignations(); // Reload table
+                Swal.fire({
+                    title: editId ? "Updated!" : "Success!",
+                    text: editId
+                        ? "Designation Successfully Edited"
+                        : "Designation Added Successfully",
+                    icon: "success",
+                    confirmButtonColor: "rgb(0, 148, 255)"
+                }).then(() => {
+                    $("#designationName").val("");
+                    $("#designationBtn").html('<i class="fas fa-briefcase"></i>&nbsp; Add Designation');
+                    editId = null;
+                    fetchdesignation();
+                });
             },
             error: function () {
-                alert("Something went wrong!");
+                Swal.fire({
+                    title: "Error!",
+                    text: "Something went wrong!",
+                    icon: "error",
+                    confirmButtonColor: "rgb(0, 148, 255)"
+                });
             }
         });
     });
 
-    
-
-    
-
-    // Edit Designation
-    $(document).on("click", ".btn-edit", function () {
-        editId = $(this).data("id"); // Capture ID for update
-        var currentName = $(this).closest("tr").find("td:nth-child(2)").text();
-        $("#designationtype").val(currentName);
-        $("#designationBtn").html('<i class="fas fa-edit"></i>&nbsp; Update'); // Change button text
-    });
-    // Delete Designation
     $(document).on("click", ".btn-delete", function () {
-        var id = $(this).data("id");
-        if (confirm("Are you sure you want to delete this designation?")) {
+    var id = $(this).data("id");
+
+    Swal.fire({
+        title: "Are you sure?",
+        text: "Do you want to delete this designation?",
+        icon: "warning",
+        showCancelButton: true,
+        cancelButtonText: "No, Don't Delete",
+        confirmButtonText: "Yes, Delete it",
+        confirmButtonColor: "rgb(0, 148, 255)",
+        cancelButtonColor: "#d33"
+    }).then((result) => {
+        if (result.isConfirmed) {
             $.ajax({
                 url: "designationBackend.php",
                 type: "POST",
                 data: { delete_id: id },
                 dataType: "json",
                 success: function (response) {
-                    alert(response.message);
-                    fetchDesignations(); // Reload table
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "The entry has been deleted.",
+                        icon: "success",
+                        confirmButtonColor: "rgb(0, 148, 255)"
+                    }).then(() => {
+                        location.reload();  // ✅ Reload the page after confirmation
+                    });
                 },
                 error: function () {
-                    alert("Something went wrong!");
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Something went wrong!",
+                        icon: "error",
+                        confirmButtonColor: "rgb(0, 148, 255)"
+                    });
                 }
             });
         }
     });
 });
 
-    </script>
+    $(document).on("click", ".btn-edit", function () {
+        editId = $(this).data("id");
+        var currentName = $(this).closest("tr").find("td:nth-child(2)").text();
+        $("#designationName").val(currentName);
+        $("#designationBtn").html('<i class="fas fa-edit"></i>&nbsp; Update');
+    });
+});
+
+</script>
 </body>
 
 </html>

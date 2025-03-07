@@ -830,7 +830,16 @@ $conn->close();
         </div>
     </div>
 </div>
+<footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                       <h6> <b>Copyright &copy; Knock the Globe Technologies 2025</b></h6>
+                    </div>
+                </div>
+            </footer>
 
+
+            
 <script>
     function openImageModal(imagePath) {
     if (imagePath) {
@@ -846,19 +855,14 @@ $conn->close();
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                       <h6> <b>Copyright &copy; Knock the Globe Technologies 2025</b></h6>
-                    </div>
-                </div>
-            </footer>
+           
             <!-- End of Footer -->
 
         </div>
         <!-- End of Content Wrapper -->
-
+        
     </div>
+    
     <!-- End of Page Wrapper -->
 
     <!-- Scroll to Top Button-->

@@ -1,218 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+<meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>KTG TaskFlow</title>
+    <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon" />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <!-- Google Fonts Roboto -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
+    />
+    <!-- MDB -->
+    <link rel="stylesheet" href="package/css/mdb.min.css" />
     <style>
-        body {
-            background: linear-gradient(to right, #4568dc, #b06ab3);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            position: relative;
-        }
-        .container {
-    position: relative;
-    z-index: 1; /* Ensures it's not affected by the SweetAlert overlay */
+:root, [data-mdb-theme=light] {
+    --mdb-input-focus-border-color: rgb(15,29,64);
+    --mdb-input-focus-label-color: rgb(15,29,64);
+    --mdb-picker-header-bg: rgb(15,29,64);
 }
 
-        .login-container {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 40px;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            animation: fadeIn 1s ease-in-out;
-            width: 100%;
-            max-width: 450px; /* Adjust maximum width */
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .form-control {
-            border-radius: 5px;
-            padding: 12px;
-            font-size: 18px;
-            width: 100%;
-        }
-        .btn-custom {
-            background:rgba(255, 255, 255, 0.23);
-            color: white;
-            border-radius: 25px;
-            transition: all 0.3s ease-in-out;
-            font-size: 20px;
-            padding: 8px;
-        }
-        .btn-custom:hover {
-            transform: scale(1.05);
-            color: #4568dc;
-            background-color: white;
-        }
-        .password-container {
-            position: relative;
-        }
-        .eye-icon {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-        }
-        .heading {
-            font-size: 3rem;
-            font-weight: bold;
-            text-align: center;
-            color: white;
-            margin-bottom: 50px;
-        }
-        .bubbles {
-            position: absolute;
-            width: 100%;
-            height: 100vh;
-            overflow: hidden;
-            top: 0;
-            left: 0;
-        }
-        .bubble {
-            position: absolute;
-            bottom: -10vh;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            animation: floatUp linear infinite;
-        }
-        @keyframes floatUp {
-            from { transform: translateY(0); opacity: 1; }
-            to { transform: translateY(-110vh); opacity: 0; }
-        }
-        .btn-custom {
-    background: linear-gradient(45deg,rgb(255, 255, 255),rgb(216, 207, 206));
-    color: #4568dc;
-    border-radius: 25px;
-    font-size: 20px;
-    padding: 8px;
+.divider:after,
+.divider:before {
+content: "";
+flex: 1;
+height: 1px;
+background: #eee;
+}
+.h-custom {
+height: calc(100% - 73px);
+}
+@media (max-width: 450px) {
+.h-custom {
+height: 100%;
+}
+}
+.sign-in-text {
+    font-size: 2.5rem; /* Adjust size */
     font-weight: bold;
-    transition: all 0.3s ease-in-out;
-    position: relative;
-    overflow: hidden;
-    border: none;
-    box-shadow: 0px 4px 10px rgba(252, 251, 251, 0.5);
+    font-family: var(--mdb-font-sans-serif);
+    text-align: center;
+    width: 100%; /* Ensures it takes full width */
 }
-
-.btn-custom:hover {
-    transform: scale(1.08);
-    box-shadow: 0px 6px 15px rgba(223, 220, 219, 0.7);
+.bg-primary{
+    color: rgb(15,29,64) ;
+    background: rgb(15,29,64) ;
 }
-
-.btn-custom:active {
-    transform: scale(0.98);
-}
-
-.btn-custom .spinner {
-    display: none;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-}
-
     </style>
 </head>
 <body>
-    <div class="bubbles"></div>
-    <div class="container">
-        <h1 class="heading">KTG Task Manager</h1>
-        <div class="row justify-content-center">
-            <div class="col-md-6 col-lg-5">
-                <div class="login-container">
-                    <h2 class="text-white mb-4"><b>Login</b></h2>
-                    <form id="loginForm">
-                        <div class="form-group">
-                            <input type="text" id="username" class="form-control" placeholder="Username">
-                        </div>
-                        <div class="form-group password-container">
-                            <input type="password" id="password" class="form-control" placeholder="Password">
-                            <span class="eye-icon" onclick="togglePassword()">
-                                <i class="fa fa-eye-slash" id="toggleEye"></i>
-                            </span>
-                        </div>
-                        <button type="submit" class="btn btn-custom btn-block">Login</button>
-                    </form>
-                </div>
+    
+<section class="vh-100">
+  <div class="container-fluid h-custom">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-md-9 col-lg-6 col-xl-5">
+        <img src="img/Login.jpg"
+          class="img-fluid" alt="Sample image">
+      </div>
+      <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+        <form>
+        <div class=" d-flex align-items-center my-4">
+            <h2 class="text-center fw-bold mx-3 mb-0 sign-in-text" style="color: rgb(15,29,64);">KTG TaskFlow</h2>
+          </div>
+
+          <div class="divider d-flex align-items-center my-4">
+            <p class="text-center fw-bold mx-3 mb-0" style="color: rgb(15,29,64);">Login</p>
+          </div>
+
+          <!-- Email input -->
+          <div data-mdb-input-init class="form-outline mb-4">
+            <input type="text" id="form3Example3" class="form-control form-control-lg"
+              placeholder="Enter valid username" />
+            <label class="form-label" for="form3Example3">Username</label>
+          </div>
+
+          <!-- Password input -->
+          <div data-mdb-input-init class="form-outline mb-3">
+            <input type="password" id="form3Example4" class="form-control form-control-lg"
+              placeholder="Enter valid password" />
+            <label class="form-label" for="form3Example4">Password</label>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center">
+            <!-- Checkbox -->
+            <div class="form-check mb-0">
             </div>
-        </div>
+          </div>
+
+          <div class="text-center text-lg-start mt-4 pt-2">
+            <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-lg"
+              style="padding-left: 2.5rem; padding-right: 2.5rem;background: rgb(15,29,64) ;color:white;" >Login</button>
+            <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="#!"
+                class="link-danger">Contact Admin</a></p>
+          </div>
+
+        </form>
+      </div>
     </div>
-    <script>
-        function togglePassword() {
-            let passwordField = document.getElementById("password");
-            let eyeIcon = document.getElementById("toggleEye");
-            if (passwordField.type === "password") {
-                passwordField.type = "text";
-                eyeIcon.classList.remove("fa-eye-slash");
-                eyeIcon.classList.add("fa-eye");
-            } else {
-                passwordField.type = "password";
-                eyeIcon.classList.remove("fa-eye");
-                eyeIcon.classList.add("fa-eye-slash");
-            }
-        }
-        document.addEventListener("DOMContentLoaded", function () {
-            const bubbleContainer = document.querySelector(".bubbles");
-            for (let i = 0; i < 30; i++) {
-                let bubble = document.createElement("div");
-                let size = Math.random() * 60 + 10;
-                bubble.classList.add("bubble");
-                bubble.style.width = `${size}px`;
-                bubble.style.height = `${size}px`;
-                bubble.style.left = `${Math.random() * 100}vw`;
-                bubble.style.animationDuration = `${Math.random() * 5 + 3}s`;
-                bubble.style.animationDelay = `${Math.random() * 2}s`;
-                bubbleContainer.appendChild(bubble);
-            }
-        });
-        
-    </script>
-   <script>
-$(document).ready(function() {
-    $("#loginForm").submit(function(event) {
-        event.preventDefault(); // Prevent default form submission
-        let username = $("#username").val();
-        let password = $("#password").val();
-        let loginButton = $(".btn-custom");
+  </div>
+  <div
+    class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 " style="background: rgb(15,29,64) ;">
+    <!-- Copyright -->
+    <div class="text-white mb-3 mb-md-0">
+      Copyright © 2025. All rights reserved.
+    </div>
+    <!-- Copyright -->
 
-        loginButton.html('<span class="spinner-border spinner-border-sm"></span> Logging in...');
-        loginButton.prop("disabled", true);
+    <!-- Right -->
+    <div>
+      <a href="#!" class="text-white me-4">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+      <a href="#!" class="text-white me-4">
+        <i class="fab fa-twitter"></i>
+      </a>
+      <a href="#!" class="text-white me-4">
+        <i class="fab fa-google"></i>
+      </a>
+      <a href="#!" class="text-white">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+    </div>
+    <!-- Right -->
+  </div>
+</section>
 
-        setTimeout(function() {
-            if (username === "ktgadmin" && password === "ktg2025") {
-                window.location.href = "index.php";
-            }
-            else if (username === "employee" && password === "ktg2025") {
-                window.location.href = "employeedash.php";
-            }
-            else {
-                alert("Login Failed! Invalid username or password.");
-                loginButton.html('Login');
-                loginButton.prop("disabled", false);
-            }
-        }, 2000);
-    });
-});
-
-
-</script>
-
-
-
+   <!-- MDB -->
+   <script type="text/javascript" src="package/js/mdb.umd.min.js"></script>
+    <!-- Custom scripts -->
+    <script type="text/javascript"></script>
 </body>
 </html>
+

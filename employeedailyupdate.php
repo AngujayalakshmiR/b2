@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['empUserName'])) {
+    header("Location: login.php");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -81,21 +90,9 @@ thead{
             transform: scale(1.1);
         }
 
-         /* Modal Header Gradient Background */
-    .modal-header {
-        background: linear-gradient(to right, #4568dc, #b06ab3);
-        color: white;
-    }
 
-    /* Adjust close button color */
-    .modal-header .close {
-        color: white;
-        opacity: 1;
-    }
 
-    .modal-header .close:hover {
-        color: #f8f9fa;
-    }
+
 
 
     .upload-icon {
@@ -480,10 +477,6 @@ tbody{
 }
 
 
-  /* Styling */
-  .modal-content {
-    border-radius: 15px;
-  }
 
   .custom-radio {
     font-size: 14px;
@@ -732,28 +725,24 @@ tbody{
         <i class="fas fa-angle-up"></i>
     </a>
 <!-- Project Description Modal -->
-<div class="modal fade" id="projectDescModal" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-
-
-      <!-- Modal Body -->
-      <div class="modal-body">
-        <div class="form-group mt-3">
-          <label for="projectDescription"><b>Project Description:</b></label>
-          <textarea class="form-control" id="projectDescription" rows="3" placeholder="Enter project description"></textarea>
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="logout.php">Logout</a>
+                </div>
+            </div>
         </div>
-        <div class="text-center">
-                <button type="submit" class="btn submit-btn" style="color: white;">Update</button>
-              </div>
-      </div>
-
-      <!-- Modal Footer with Buttons -->
-    
-
     </div>
-  </div>
-</div>
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">

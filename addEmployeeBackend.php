@@ -3,7 +3,6 @@ include("dbconn.php");
 
 header('Content-Type: application/json');
 
-
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (!isset($_GET['id'])) {
         echo json_encode(["error" => "No ID provided"]);
@@ -24,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     $employee = $result->fetch_assoc();
 
-    // Extract only file names from the path
+    // Only return the filename
     $employee['empPic'] = basename($employee['empPic']);
     $employee['empAadhar'] = basename($employee['empAadhar']);
     $employee['empPan'] = basename($employee['empPan']);
@@ -53,19 +52,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             mkdir($targetDir, 0777, true);
         }
 
-        $photo = isset($_POST["old_employeePhoto"]) && empty($_FILES["employeePhoto"]["name"]) ? $_POST["old_employeePhoto"] : $targetDir . basename($_FILES["employeePhoto"]["name"]);
-        if (!empty($_FILES["employeePhoto"]["name"])) {
+        $photo = $_POST["old_employeePhoto"]; // Retain old file by default
+        if (!empty($_FILES["employeePhoto"]["name"])) { 
+            $photo = $targetDir . basename($_FILES["employeePhoto"]["name"]);
             move_uploaded_file($_FILES["employeePhoto"]["tmp_name"], $photo);
+        } else {
+            $photo = $targetDir . $photo; // Ensure stored path has "uploads/"
         }
 
-        $aadhar = isset($_POST["old_aadharCard"]) && empty($_FILES["aadharCard"]["name"]) ? $_POST["old_aadharCard"] : $targetDir . basename($_FILES["aadharCard"]["name"]);
+        $aadhar = $_POST["old_aadharCard"];
         if (!empty($_FILES["aadharCard"]["name"])) {
+            $aadhar = $targetDir . basename($_FILES["aadharCard"]["name"]);
             move_uploaded_file($_FILES["aadharCard"]["tmp_name"], $aadhar);
+        } else {
+            $aadhar = $targetDir . $aadhar;
         }
 
-        $pan = isset($_POST["old_panCard"]) && empty($_FILES["panCard"]["name"]) ? $_POST["old_panCard"] : $targetDir . basename($_FILES["panCard"]["name"]);
+        $pan = $_POST["old_panCard"];
         if (!empty($_FILES["panCard"]["name"])) {
+            $pan = $targetDir . basename($_FILES["panCard"]["name"]);
             move_uploaded_file($_FILES["panCard"]["tmp_name"], $pan);
+        } else {
+            $pan = $targetDir . $pan;
         }
 
         // Update query

@@ -506,12 +506,11 @@ thead{
 </div>
 
 
-
-<!-- Employee Selection Modal -->
+<!-- Employee Selection Modal --> 
 <div class="modal fade" id="employeeModal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-body p-3" >
+      <div class="modal-body p-3">
         <div class="row no-gutters">
           <!-- Form Section -->
           <div class="col-12 p-3">
@@ -519,8 +518,20 @@ thead{
               
               <!-- Employee Selection -->
               <div class="form-group">
-                
-                <div id="employeeDropdown" class="row"></div> <!-- Employee List -->
+                <div id="employeeList" class="row">
+                  <?php
+                    include 'dbconn.php'; // Ensure you have a DB connection file
+                    $query = "SELECT ID, Name FROM employeedetails"; // Fetch employee names
+                    $result = mysqli_query($conn, $query);
+
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        echo "<div class='col-6 d-flex align-items-center mb-2'>";
+                        echo "<input type='checkbox' name='employees[]' value='" . $row['ID'] . "' class='form-check-input mr-2'>";
+                        echo "<label class='form-check-label'>" . $row['Name'] . "</label>";
+                        echo "</div>";
+                    }
+                  ?>
+                </div>
               </div>
 
               <!-- Submit Button -->
@@ -537,8 +548,32 @@ thead{
 </div>
 
 
+<script>
+document.addEventListener("DOMContentLoaded", function () { 
+    const employeeSelectionForm = document.getElementById("employeeSelectionForm");
+    const selectedEmployeesContainer = document.getElementById("selectedEmployees");
 
+    employeeSelectionForm.addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent page reload
 
+        // Get all checked employee checkboxes
+        let selectedEmployees = [];
+        document.querySelectorAll("input[name='employees[]']:checked").forEach((checkbox) => {
+            selectedEmployees.push(checkbox.nextElementSibling.innerText); // Get label text (employee name)
+        });
+
+        // Update the displayed names in the main form
+        if (selectedEmployees.length > 0) {
+            selectedEmployeesContainer.textContent = selectedEmployees.join(", "); // Display selected names
+        } else {
+            selectedEmployeesContainer.textContent = "--Nil--"; // Default if no selection
+        }
+
+        // Close the modal
+        $("#employeeModal").modal("hide"); 
+    });
+});
+</script>
 
 
 <style>
@@ -721,55 +756,34 @@ thead{
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-    let accessEmployees = ["Pavitra", "Jayavarshini", "Suriya", "Mohan", "Naveen", "Anbumani", "Sivakumar", "Venkatesh"];
-    accessEmployees.sort(); // Sort employees alphabetically
-    let selectedAccessEmployees = new Set();
+    fetch("projectCreationBackend.php")
+        .then(response => response.json())
+        .then(data => {
+            let employeeDropdown = document.getElementById("employeeDropdown");
+            employeeDropdown.innerHTML = ""; // Clear previous list
+            
+            data.forEach(emp => {
+                let wrapper = document.createElement("div");
+                wrapper.classList.add("col-6", "d-flex", "align-items-center", "mb-2");
 
-    const addAccessBtn = document.getElementById('addAccessBtn');
-    const accessDropdownList = document.getElementById('accessDropdown');
+                let checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.value = emp;
+                checkbox.classList.add("form-check-input", "mr-3");
 
-    addAccessBtn.addEventListener('click', function () {
-        accessDropdownList.innerHTML = ''; // Clear previous list
+                let label = document.createElement("label");
+                label.textContent = emp;
+                label.classList.add("form-check-label", "flex-grow-1");
 
-        accessEmployees.forEach(emp => {
-            let wrapper = document.createElement('div');
-            wrapper.classList.add('col-6', 'd-flex', 'align-items-center', 'mb-2');
-
-            let checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.value = emp;
-            checkbox.checked = selectedAccessEmployees.has(emp);
-            checkbox.classList.add('form-check-input', 'mr-3');
-
-            let label = document.createElement('label');
-            label.textContent = emp;
-            label.classList.add('form-check-label', 'flex-grow-1');
-
-            function toggleSelection() {
-                if (checkbox.checked) {
-                    selectedAccessEmployees.add(emp);
-                } else {
-                    selectedAccessEmployees.delete(emp);
-                }
-            }
-
-            label.addEventListener('click', function () {
-                checkbox.checked = !checkbox.checked;
-                toggleSelection();
+                wrapper.appendChild(checkbox);
+                wrapper.appendChild(label);
+                employeeDropdown.appendChild(wrapper);
             });
-
-            checkbox.addEventListener('change', toggleSelection);
-
-            wrapper.appendChild(checkbox);
-            wrapper.appendChild(label);
-            accessDropdownList.appendChild(wrapper);
-        });
-
-        // Show the modal
-        $('#accessModal').modal('show');
-    });
+        })
+        .catch(error => console.error("Error fetching employees:", error));
 });
 </script>
+
 
 <!-- Topbar Navbar -->
 <ul class="navbar-nav ml-auto">
@@ -811,107 +825,131 @@ document.addEventListener("DOMContentLoaded", function () {
         
                         <!-- Begin Page Content -->
                         <div class="container-fluid">
-                        <div class="container mb-4 mt-4" style="background: white; border-radius: 25px; border: 2px solid rgb(0, 148, 255);">
-    <div class="row">
-        <div class="col-md-12">
-            <form id="customerForm" style="font-size:14px;" class="row g-3 mt-3">
+    <div class="container mb-4 mt-4" style="background: white; border-radius: 25px; border: 2px solid rgb(0, 148, 255);">
+        <div class="row">
+            <div class="col-md-12">
+                <form id="customerForm" style="font-size:14px;" class="row g-3 mt-3">
 
-                <!-- Column 1: Company, Project Type & No. of Days -->
-                <div class="col-md-4 pb-1">
-                    <div class="d-flex align-items-center mb-2">
-                        <select class="form-control" id="companySelect">
+                    <!-- Column 1: Company, Project Type & No. of Days -->
+                    <div class="col-md-4 pb-1">
+                        <div class="d-flex align-items-center mb-2">
+                            <!-- <select class="form-control" id="companySelect">
+                                <option value="">Select Company</option>
+                                <option value="web_developer">Kurinji Cement</option>
+                                <option value="ui_ux_designer">Gowin</option>
+                                <option value="mobile_app_designer">RIT</option>
+                            </select> -->
+                            <select class="form-control" id="companySelect">
                             <option value="">Select Company</option>
-                            <option value="web_developer">Kurinji Cement</option>
-                            <option value="ui_ux_designer">Gowin</option>
-                            <option value="mobile_app_designer">RIT</option>
-                        </select>
-                        <span onclick="window.location.href='customer.php'" >
-                        <i class="fas fa-plus-circle text-primary ml-2" style="cursor: pointer;"></i></span>
-                    </div>
+                            <?php
+                                include 'dbconn.php'; // Ensure you have a DB connection file
+                                $query = "SELECT ID, companyName FROM customer"; // Adjust column names as per your table
+                                $result = mysqli_query($conn, $query);
 
-                    <div class="d-flex align-items-center mb-2">
-                        <select class="form-control" id="projectTypeSelect">
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    echo "<option value='" . $row['ID'] . "'>" . $row['companyName'] . "</option>";
+                                }
+                            ?>
+                        </select>
+                            <span onclick="window.location.href='customer.php'">
+                                <i class="fas fa-plus-circle text-primary ml-2" style="cursor: pointer;"></i>
+                            </span>
+                        </div>
+
+                        <div class="d-flex align-items-center mb-2">
+                            <!-- <select class="form-control" id="projectTypeSelect">
+                                <option value="">Select Project Type</option>
+                                <option value="web_developer">Web Development</option>
+                                <option value="ui_ux_designer">Mobile App Development</option>
+                                <option value="mobile_app_designer">UI/UX Development</option>
+                            </select> -->
+                            <select class="form-control" id="projectTypeSelect">
                             <option value="">Select Project Type</option>
-                            <option value="web_developer">Web Development</option>
-                            <option value="ui_ux_designer">Mobile App Development</option>
-                            <option value="mobile_app_designer">UI/UX Development</option>
+                            <?php
+                                include 'dbconn.php'; // Ensure you have a DB connection file
+                                $query = "SELECT ID, ProjecttypeName FROM projecttype"; // Adjust column names as per your table
+                                $result = mysqli_query($conn, $query);
+
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    echo "<option value='" . $row['ID'] . "'>" . $row['ProjecttypeName'] . "</option>";
+                                }
+                            ?>
                         </select>
-                        <span onclick="window.location.href='projecttype.php'" >
-                        <i class="fas fa-plus-circle text-primary ml-2" style="cursor: pointer;"></i>
-                        </span>
+                            <span onclick="window.location.href='projecttype.php'">
+                                <i class="fas fa-plus-circle text-primary ml-2" style="cursor: pointer;"></i>
+                            </span>
+                        </div>
+
+                        <input type="number" class="form-control mb-2" id="employeephnno" placeholder="Enter No. of Days">
                     </div>
 
-                    <input type="number" class="form-control mb-2" id="employeephnno" placeholder="Enter No. of Days">
-                </div>
+                    <!-- Column 2: Project Title & Description -->
+                    <div class="col-md-4 pb-1">
+                        <input type="text" class="form-control mb-2" id="projecttitle" placeholder="Enter Project title">
+                        <textarea class="form-control mb-2" id="projectdescription" placeholder="Enter Project Description" rows="2" style="height: 85px;"></textarea>
+                    </div>
 
-                <!-- Column 2: Project Title & Description -->
-                <div class="col-md-4 pb-1">
-                    <input type="text" class="form-control mb-2" id="projecttitle" placeholder="Enter Project title">
-                    <textarea class="form-control mb-2" id="projectdescription" placeholder="Enter Project Description" rows="2" style="height: 85px;"></textarea>
-                </div>
-
-                <!-- Column 3: File Upload -->
-                <div class="col-md-4 pb-1">
-                    <div class="container d-flex justify-content-center align-items-center" 
-                        style="border: 3px solid rgb(252, 217, 104); background: rgb(252, 217, 104); border-radius: 25px; min-height: 120px;">
-                        <div class="form-group" style="margin-top: 8px; margin-bottom: 8px;">
-                            <label for="requirementfile" class="upload-label d-block font-weight-bold" style="margin-bottom: 0px;">
-                                <i id="requirement" class="fas fa-folder file-icon fa-lg upload-icon" 
-                                    style="text-align: center; display: block; cursor: pointer; margin-bottom: 12px; color: white;">
-                                </i> 
-                                <p class="mt-1 justify-content-center" style="font-size: 14px; text-align: center; margin-bottom: 10px; color: white;">
-                                    Upload Requirement 
-                                </p>
-                            </label>
-                            <input type="file" class="form-control-file d-none" id="requirementfile" 
-                                onchange="updateIcon(this, 'requirement', 'requirementfile-name')">
-                            <p class="file-name text-muted" id="requirementfile-name" 
-                                style="font-size: 14px; text-align: center; color: black;">No file chosen</p>
+                    <!-- Column 3: File Upload -->
+                    <div class="col-md-4 pb-1">
+                        <div class="container d-flex justify-content-center align-items-center" 
+                            style="border: 3px solid rgb(252, 217, 104); background: rgb(252, 217, 104); border-radius: 25px; min-height: 120px;">
+                            <div class="form-group" style="margin-top: 8px; margin-bottom: 8px;">
+                                <label for="requirementfile" class="upload-label d-block font-weight-bold" style="margin-bottom: 0px;">
+                                    <i id="requirement" class="fas fa-folder file-icon fa-lg upload-icon" 
+                                        style="text-align: center; display: block; cursor: pointer; margin-bottom: 12px; color: white;">
+                                    </i> 
+                                    <p class="mt-1 justify-content-center" style="font-size: 14px; text-align: center; margin-bottom: 10px; color: white;">
+                                        Upload Requirement 
+                                    </p>
+                                </label>
+                                <input type="file" class="form-control-file d-none" id="requirementfile" 
+                                    onchange="updateIcon(this, 'requirement', 'requirementfile-name')">
+                                <p class="file-name text-muted" id="requirementfile-name" 
+                                    style="font-size: 14px; text-align: center; color: black;">No file chosen</p>
+                            </div>
                         </div>
                     </div>
-                </div>
 
+                    <!-- Employee Selection and Project Submission Row -->
+                    <div class="row align-items-center mb-3 w-100">
+                        <!-- Employees (9 columns) -->
+                        <div class="col-md-9 d-flex align-items-center">
+                            <!-- Add Employee Button -->
+                            <button type="button" class="btn mt-2 d-flex align-items-center" id="addAccessBtn"
+                                style="background: rgb(238, 153, 129); color: white; font-size: 14px; align-self: flex-start; white-space: nowrap;">
+                                <i class="fas fa-user-plus"></i>&nbsp; Employee
+                            </button>
+                            <span onclick="window.location.href='employee.php'">
+                                <i class="fas fa-plus-circle text-primary ml-2" style="cursor: pointer;"></i>
+                            </span>
 
-            </form>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <div id="selectedEmployeesContainer" class="mt-2">
+                                <span id="selectedEmployees">--Nil--</span>
+                            </div>
+
+                            <!-- Dropdown Container -->
+                            <div id="dropdownContainer" class="mt-2 p-3 rounded shadow" 
+                                style="display: none; border: 1px solid #ccc; background: white; position: absolute; width: 10%; min-width: 280px; z-index: 100;">
+                                <div id="employeeDropdown" class="row"></div>
+                            </div>
+                        </div>
+
+                        <!-- Add Project Button (3 columns) -->
+                        <div class="col-md-3 d-flex justify-content-md-end justify-content-center">
+                            <button type="submit" class="btn" id="customerbtn" 
+                                style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: auto;">
+                                <i class="fas fa-file-alt"></i>&nbsp; Add Project
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
         </div>
     </div>
 
-    <!-- Employee Selection and Project Submission Row -->
-    <div class="row align-items-center  mb-3">
-        <!-- Employees (9 columns) -->
-        <div class="col-md-9 d-flex align-items-center">
-            <!-- Add Employee Button -->
-            <button type="button" class="btn mt-2 d-flex align-items-center" id="addAccessBtn"
-    style="background: rgb(238, 153, 129); color: white; font-size: 14px; align-self: flex-start; white-space: nowrap;">
-    <i class="fas fa-user-plus"></i>&nbsp; Employee
-</button>
 
-
-            <span onclick="window.location.href='employee.php'" >
-            <i class="fas fa-plus-circle text-primary ml-2" style="cursor: pointer;"></i></span>
-
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <div id="selectedEmployeesContainer" class="mt-2">
-                <span id="selectedEmployees">--Nil--</span>
-            </div>
-
-            <!-- Dropdown Container -->
-            <div id="dropdownContainer" class="mt-2 p-3 rounded shadow" 
-                style="display: none; border: 1px solid #ccc; background: white; position: absolute; width: 10%; min-width: 280px; z-index: 100;">
-                <div id="employeeDropdown" class="row"></div>
-            </div>
-        </div>
-
-        <!-- Add Project Button (3 columns) -->
-        <div class="col-md-3 d-flex justify-content-md-end justify-content-center">
-            <button type="submit" class="btn" id="customerbtn" 
-                style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: auto;">
-               
-                <i class="fas fa-file-alt"></i>&nbsp; Add Project
-            </button>
-        </div>
-    </div>
-</div>
 
 
 <script>

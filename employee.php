@@ -1,9 +1,3 @@
-<?php
-include ("dbconn.php");
-// Fetch data from database
-$sql = "SELECT * FROM employeedetails";
-$result = $conn->query($sql);
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -491,12 +485,29 @@ $result = $conn->query($sql);
                         <div class="col-md-3 pb-1">
                             <input type="text" class="form-control mb-2" id="employeename" name="employeename" placeholder="Enter Employee Name" required>
                             <div class="d-flex align-items-center">
-                                <select class="form-control mb-2 w-100" id="designation" name="designation" required>
-                                    <option value="">Select Designation</option>
-                                    <option value="web_developer">Web Developer</option>
-                                    <option value="ui_ux_designer">UI/UX Designer</option>
-                                    <option value="mobile_app_designer">Mobile App Designer</option>
-                                </select>
+                            <select class="form-control mb-2 w-100" id="designation" name="designation" required>
+    <option value="">Select Designation</option>
+    <?php
+   include ("dbconn.php");
+
+    // Fetch designations
+    $sql = "SELECT ID, DesignationName FROM designation";
+    $result = $conn->query($sql);
+
+    // Populate dropdown
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            echo '<option value="' . $row['DesignationName'] . '">' . $row['DesignationName'] . '</option>';
+        }
+    } else {
+        echo '<option value="">No Designations Found</option>';
+    }
+
+    // Close connection
+    ?>
+</select>
+
+                               
                                 <span onclick="window.location.href='designation.php'" style="cursor: pointer; margin-left: 8px; align-items:center;">
                                     <i class="fas fa-plus-circle text-primary" style="vertical-align: middle;"></i>
                                 </span>
@@ -751,11 +762,25 @@ countryDropdown.addEventListener("change", function() {
 });
 </script>
 
+<?php
+include ("dbconn.php");
+// Assuming you have a valid database connection ($conn)
+$query = "SELECT * FROM employeedetails";  // Replace 'employees' with your actual table name
+$result = $conn->query($query);
+
+// Debugging - Check if query executed successfully
+if (!$result) {
+    die("Query failed: " . $conn->error);
+}
+
+$employeeCount = $result->num_rows; // Get the count
+?>
+
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <p class="m-0" style="font-size: 16px; color:rgb(23, 25, 28); font-weight: 500;">
             <b>Employee Details</b> 
-            <span class="header-counter"><?php echo $result->num_rows; ?></span>
+            <span class="header-counter"><?php echo $employeeCount; ?></span> <!-- Use stored count -->
         </p>
     </div>
     <div class="card-body" style="padding: 20px;">
@@ -775,41 +800,41 @@ countryDropdown.addEventListener("change", function() {
                     </tr>
                 </thead>
                 <tbody id="employeeTableBody">
-<?php
-if ($result->num_rows > 0) {
-    $sno = 1;
-    while ($row = $result->fetch_assoc()) {
-        $fullAddress = $row['empAdd'] . ", " . $row['empDistrict'] . ", " . $row['empState'] . ", " . $row['empCountry'] . " - " . $row['empPincode'];
+                    <?php
+                    if ($employeeCount > 0) {
+                        $sno = 1;
+                        while ($row = $result->fetch_assoc()) {
+                            $fullAddress = $row['empAdd'] . ", " . $row['empDistrict'] . ", " . $row['empState'] . ", " . $row['empCountry'] . " - " . $row['empPincode'];
 
-        echo "<tr>";
-        echo "<td>" . $sno++ . "</td>";
-        echo "<td>" . htmlspecialchars($row['Name']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['Designation']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['empPhNo']) . "</td>";
-        echo "<td>" . htmlspecialchars($fullAddress) . "</td>";
-        echo "<td><i class='fas fa-camera-retro photo-icon' onclick='openImageModal(\"" . htmlspecialchars($row['empPic']) . "\")'></i></td>";
-        echo "<td><i class='fas fa-id-card aadhar-icon' onclick='openImageModal(\"" . htmlspecialchars($row['empAadhar']) . "\")'></i></td>";
-        echo "<td><i class='fas fa-id-badge pan-icon' onclick='openImageModal(\"" . htmlspecialchars($row['empPan']) . "\")'></i></td>";
-    
-        echo "<td class='action-buttons'>
-            <button class='btn-action btn-edit' data-id='" . $row['ID'] . "'><i class='fas fa-edit'></i></button>
-            <button class='btn-action btn-delete delete-btn' data-id='" . $row['ID'] . "'>
-                <i class='fas fa-trash-alt' style='color: rgb(238, 153, 129);'></i>
-            </button>
-        </td>";
-    
-        echo "</tr>";
-    }        
-} else {
-    echo "<tr><td colspan='9'>No employees found</td></tr>";
-}
-?>
-</tbody>
+                            echo "<tr>";
+                            echo "<td>" . $sno++ . "</td>";
+                            echo "<td>" . htmlspecialchars($row['Name']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['Designation']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['empPhNo']) . "</td>";
+                            echo "<td>" . htmlspecialchars($fullAddress) . "</td>";
+                            echo "<td><i class='fas fa-camera-retro photo-icon' onclick='openImageModal(\"" . htmlspecialchars($row['empPic']) . "\")'></i></td>";
+                            echo "<td><i class='fas fa-id-card aadhar-icon' onclick='openImageModal(\"" . htmlspecialchars($row['empAadhar']) . "\")'></i></td>";
+                            echo "<td><i class='fas fa-id-badge pan-icon' onclick='openImageModal(\"" . htmlspecialchars($row['empPan']) . "\")'></i></td>";
 
+                            echo "<td class='action-buttons'>
+                                <button class='btn-action btn-edit' data-id='" . $row['ID'] . "'><i class='fas fa-edit'></i></button>
+                                <button class='btn-action btn-delete delete-btn' data-id='" . $row['ID'] . "'>
+                                    <i class='fas fa-trash-alt' style='color: rgb(238, 153, 129);'></i>
+                                </button>
+                            </td>";
+
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='9'>No employees found</td></tr>";
+                    }
+                    ?>
+                </tbody>
             </table>
         </div>
     </div>
 </div>
+
                 
 </div></div>
 <?php
@@ -913,6 +938,11 @@ $conn->close();
     <!-- Bootstrap JavaScript -->
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
+    <script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable();
+    });
+</script>
  <script>
     $(document).ready(function () {
     $("#stateDropdown").change(function () {

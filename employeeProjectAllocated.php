@@ -5,8 +5,26 @@ if (!isset($_SESSION['empUserName'])) {
     header("Location: login.php");
     exit();
 }
-?>
 
+include 'dbconn.php'; // Ensure you have a connection file
+
+$empUserName = $_SESSION['empUserName']; // Logged-in user name
+$Name = $_SESSION['Name'];
+
+// Fetch project details
+$sql = "SELECT ID, date, companyName, projectType, totalDays, projectTitle, employees 
+        FROM projectcreation 
+        WHERE employees LIKE ? ORDER BY date DESC"; 
+
+$stmt = $conn->prepare($sql);
+$searchTerm = "%" . $Name . "%"; // Using LIKE to match name inside the employees column
+$stmt->bind_param("s", $searchTerm);
+$stmt->execute();
+$result = $stmt->get_result();
+
+// Count the number of entries
+$totalEntries = $result->num_rows;
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -501,66 +519,55 @@ tbody{
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                        <p class="m-0" style="font-size: 16px;color:rgb(23, 25, 28);font-style: normal;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    color: rgb(23, 25, 28);
-    font-size: 16px;
-    font-weight: 500;"><b>Project Details</b> 
-        <span class="header-counter">2</span>  <!-- Counter next to heading -->
-</p>
-         
+                <div class="card shadow mb-4"> 
+    <div class="card-header py-3">
+        <p class="m-0" style="font-size: 16px; color: rgb(23, 25, 28); font-style: normal;
+            overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+            font-weight: 500;"><b>Project Details</b> 
+            <span class="header-counter"><?php echo $totalEntries; ?></span>  <!-- Dynamic Counter -->
+        </p>
+    </div>
 
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive ">
-                            <table class="table text-center" style="font-size:14px;" id="dataTable" width="100%">
-    <thead>
-        <tr>
-        <th>S.no</th>
-            <th>Date</th>
-            <th>Company</th>
-            <th>Title</th>
-            <th>Project Type</th>
-            <th>Total Days</th>
-            <th>Working Days</th>
-            <th>Teammates</th>
-        </tr>
-    </thead>
-    <tbody>
-    <tr>
-            <td>1</td>
-            <td>10-02-2025</td>
-            <td>ABC Corp</td>
-            <td>The project requires inbuilt updations and notifications.</td>
-            <td>Web Development</td>
-            <td>10</td>
-            <td>8</td>
-            <td>Surya, Jayavarshini</td> <!-- Module Status -->
-           
-        </tr>
-        <tr>
-        <td>2</td>
-            <td>11-02-2025</td>
-            <td>ABC Corp</td>
-            <td>The project requires inbuilt updations and notifications.</td>
-            <td>Web Development</td>
-            <td>10</td>
-            <td>7</td>
-            <td>Surya, Jayavarshini</td> <!-- Module Status -->
-          
-        </tr>
-        <!-- Add more rows as needed -->
-    </tbody>
-</table>
-                            </div>
-                        </div>
-                        
-                    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table text-center" style="font-size:14px;" id="dataTable" width="100%"> 
+                <thead>
+                    <tr>
+                        <th>S.no</th>
+                        <th>Date</th>
+                        <th>Company</th>
+                        <th>Title</th>
+                        <th>Project Type</th>
+                        <th>Total Days</th>
+                        <th>Working Days</th>
+                        <th>Teammates</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $sno = 1;
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>" . $sno++ . "</td>";
+                        echo "<td>" . htmlspecialchars($row['date']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['companyName']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['projectTitle']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['projectType']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['totalDays']) . "</td>";
+                        echo "<td>-</td>"; // Fixed dash as per your request
+                        echo "<td>" . htmlspecialchars($row['employees']) . "</td>";
+                        echo "</tr>";
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<?php
+$stmt->close();
+$conn->close();
+?>
 
                 </div>
                 <!-- /.container-fluid -->

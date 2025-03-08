@@ -893,6 +893,7 @@ $conn->close();
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
 
     <!-- Bootstrap core JavaScript-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -946,11 +947,17 @@ $(document).ready(function () {
 
 
 
+
+</script>
+
+
+<script>
 $(document).ready(function () {
     $("#customerForm").submit(function (e) {
         e.preventDefault(); // Prevent page reload
 
-        var formData = new FormData(this);
+        let formData = new FormData(this);
+        let isUpdate = $("#employee_id").val() !== ""; // Check if update or add
 
         $.ajax({
             url: "addEmployeeBackend.php",
@@ -959,34 +966,77 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function (response) {
-                alert("Employee added/updated successfully!"); 
-                $("#customerForm")[0].reset();
-                fetchEmployeeTable(); // Refresh table after operation
+                Swal.fire({
+                    icon: "success",
+                    title: isUpdate ? "Employee Updated!" : "Employee Added!",
+                    text: isUpdate ? "Employee updated successfully!" : "Employee added successfully.",
+                    confirmButtonText: "OK"
+                }).then(() => {
+                    location.reload(); // Reload the page after clicking OK
+                });
             },
             error: function () {
-                alert("Error submitting the form.");
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: isUpdate ? "Error updating employee." : "Error adding employee.",
+                    confirmButtonText: "Try Again"
+                });
             }
         });
     });
 });
-$(document).on("click", ".delete-btn", function () {
+
+$(document).on("click", ".delete-btn", function () { 
     var employeeId = $(this).data("id");
 
-    if (confirm("Are you sure you want to delete this employee?")) {
-        $.ajax({
-            url: "deleteEmployee.php",
-            type: "POST",
-            data: { delete_id: employeeId },
-            success: function (response) {
-                alert("Employee deleted successfully!");
-                fetchEmployeeTable(); // Refresh table after deletion
-            },
-            error: function () {
-                alert("Error deleting the employee.");
-            }
-        });
-    }
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "deleteEmployee.php",
+                type: "POST",
+                data: { delete_id: employeeId },
+                success: function (response) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Deleted!",
+                        text: "Employee deleted successfully!",
+                        confirmButtonText: "OK"
+                    });
+
+                    // Remove the deleted row from the table
+                    $("button[data-id='" + employeeId + "']").closest("tr").remove();
+                    
+                    // Update the employee count dynamically
+                    updateEmployeeCount();
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: "Error deleting the employee.",
+                        confirmButtonText: "OK"
+                    });
+                }
+            });
+        }
+    });
 });
+
+// Function to update employee count dynamically
+function updateEmployeeCount() {
+    var newCount = $("#employeeTableBody tr").length;
+    $(".header-counter").text(newCount);
+}
+
 
 $(document).on("click", ".btn-edit", function () {
     let employeeId = $(this).data("id");
@@ -998,7 +1048,12 @@ $(document).on("click", ".btn-edit", function () {
         dataType: "json",
         success: function (data) {
             if (data.error) {
-                alert("Error fetching employee details: " + data.error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: "Error fetching employee details: " + data.error,
+                    confirmButtonText: "OK"
+                });
                 return;
             }
 
@@ -1022,42 +1077,19 @@ $(document).on("click", ".btn-edit", function () {
             $("#old_aadharCard").val(data.empAadhar);
             $("#old_panCard").val(data.empPan);
 
-            $("#buttonText").text("Update Employee");
-
-            // Ensure form submission stays AJAX-based
-            $("#customerForm").off("submit").on("submit", function (e) {
-                e.preventDefault();
-                let formData = new FormData(this);
-                $.ajax({
-                    url: "addEmployeeBackend.php",
-                    type: "POST",
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
-                        alert("Employee updated successfully!");
-                        $("#customerForm")[0].reset();
-                        fetchEmployeeTable(); 
-                        $("#customerbtn").trigger("click");// Refresh table
-                    },
-                    error: function () {
-                        alert("Error updating employee.");
-                    }
-                });
-            });
+            $("#buttonText").text("Update Employee"); // Change button text for update mode
         },
         error: function () {
-            alert("Failed to fetch employee data.");
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: "Failed to fetch employee data.",
+                confirmButtonText: "OK"
+            });
         }
     });
 });
-
-
-
-
 </script>
-
-
 
 
 <!-- Bootstrap 4.6.0 JavaScript -->

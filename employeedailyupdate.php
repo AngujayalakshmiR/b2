@@ -843,11 +843,8 @@ function filterByDate() {
   </script> -->
 
 
-
-
-
 <script>
-$(document).ready(function () {
+    $(document).ready(function () {
     function fetchTasks() {
         $.ajax({
             url: 'fetch_tasks.php',
@@ -910,6 +907,13 @@ $(document).ready(function () {
 
                 $("#dataTable").DataTable(); // Reinitialize DataTable
                 $(".header-counter").text(taskCount); // Update task count dynamically
+
+                // Disable add button if actual hours reach 8
+                if (actualHrsSum >= 8) {
+                    $("button[type='submit']").prop("disabled", true).text("Limit Reached");
+                } else {
+                    $("button[type='submit']").prop("disabled", false).text("Add");
+                }
             },
             error: function () {
                 console.error("Error fetching task data.");
@@ -917,40 +921,36 @@ $(document).ready(function () {
         });
     }
 
-
-
     fetchTasks(); // Load tasks on page load
 
     $("#taskForm").submit(function (e) {
-    e.preventDefault();
+        e.preventDefault();
 
-    $.ajax({
-        url: 'insert_daily_update.php',
-        type: 'POST',
-        data: $(this).serialize(),
-        success: function (response) {
-            if (response.trim() === "success") {
-                Swal.fire("Success!", "Task added successfully!", "success").then(() => {
-                    $("#taskForm").trigger("reset");
-                    location.reload();  // Reset form
-                    fetchTasks(); // Refresh table after successful addition
-                });
-            } else {
-                Swal.fire("Error!", response, "error");
+        $.ajax({
+            url: 'insert_daily_update.php',
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function (response) {
+                if (response.trim() === "success") {
+                    Swal.fire("Success!", "Task added successfully!", "success").then(() => {
+                        $("#taskForm").trigger("reset");
+                        location.reload();
+                        fetchTasks(); // Refresh tasks
+                    });
+                } else {
+                    Swal.fire("Error!", response, "error");
+                }
+            },
+            error: function () {
+                Swal.fire("Error!", "Failed to add task.", "error");
             }
-        },
-        error: function () {
-            Swal.fire("Error!", "Failed to add task.", "error");
-        }
+        });
     });
-});
-
-
 });
 
 </script>
 <script>
-function enableEdit(button, taskId) {
+   function enableEdit(button, taskId, employeeName, taskDate) {
     let row = $(button).closest("tr");
     let taskDetailsCell = row.find("td:nth-child(3)");
     let actualHrsCell = row.find("td:nth-child(5)");
@@ -964,53 +964,70 @@ function enableEdit(button, taskId) {
         });
         taskDetailsCell.html(taskInput);
 
+        let existingActualHrs = parseFloat(actualHrsCell.text().trim()) || 0;
+
         let actualInput = $("<input>").attr({
             type: "number",
             class: "form-control",
-            min: "0",
-            max: "8",
-            value: actualHrsCell.text().trim() === "-" ? "" : actualHrsCell.text().trim()
+            value: existingActualHrs || "",
+            min: 0
         });
         actualHrsCell.html(actualInput);
 
         updateButton.text("Save").removeClass("btn-primary").addClass("btn-success");
     } else {
         let newTaskDetails = taskDetailsCell.find("input").val();
-        let newActualHrs = parseFloat(actualHrsCell.find("input").val());
-
-        // Validation: Ensure actualHrs does not exceed 8
-        if (newActualHrs > 8) {
-            Swal.fire("Error!", "Actual hours cannot exceed 8 per day!", "error");
-            return;
-        }
+        let newActualHrs = parseFloat(actualHrsCell.find("input").val()) || 0;
+        let existingActualHrs = parseFloat(actualHrsCell.text().trim()) || 0;
 
         $.ajax({
-            url: 'update_task.php',
+            url: 'fetch_total_hours.php',
             type: 'POST',
             data: {
-                taskId: taskId,
-                taskDetails: newTaskDetails,
-                actualHrs: newActualHrs
+                name: employeeName,
+                date: taskDate
             },
             success: function (response) {
-                if (response.trim() === "success") {
-                    Swal.fire("Success!", "Task updated successfully!", "success").then(() => {
-                        location.reload();  
-                    });
+                let totalActualHrs = parseFloat(response) || 0;
+                
+                // Adjust the total hours considering the updated task
+                let adjustedTotalHrs = totalActualHrs - existingActualHrs + newActualHrs;
 
-                    taskDetailsCell.text(newTaskDetails || "-");
-                    actualHrsCell.text(newActualHrs || "-");
-
-                    updateButton.text("Saved").removeClass("btn-success").addClass("btn-secondary").prop("disabled", true);
-
-                    updateTotalHours();
-                } else {
-                    Swal.fire("Error!", response, "error");
+                if (adjustedTotalHrs > 8) {
+                    Swal.fire("Error!", "Total working hours cannot exceed 8 hours in a day.", "error");
+                    return;
                 }
+
+                $.ajax({
+                    url: 'update_task.php',
+                    type: 'POST',
+                    data: {
+                        taskId: taskId,
+                        taskDetails: newTaskDetails,
+                        actualHrs: newActualHrs
+                    },
+                    success: function (updateResponse) {
+                        if (updateResponse.trim() === "success") {
+                            Swal.fire("Success!", "Task updated successfully!", "success").then(() => {
+                                location.reload();
+                            });
+                            taskDetailsCell.text(newTaskDetails || "-");
+                            actualHrsCell.text(newActualHrs || "-");
+                            updateButton.text("Saved").removeClass("btn-success").addClass("btn-secondary").prop("disabled", true);
+                        } else {
+                            Swal.fire("Error!", updateResponse, "error");
+                        }
+                    }
+                });
             }
         });
     }
 }
+
+
+
+
+
 function updateTotalHours() {
     let totalHrs = 0, actualHrs = 0;
 

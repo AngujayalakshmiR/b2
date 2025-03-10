@@ -22,6 +22,19 @@ $stmt1->execute();
 $result1 = $stmt1->get_result();
 $totalEntries1 = $result1->num_rows;
 
+
+// Fetch daily updates details (Table 2)
+$sql2 = "SELECT ID, date, name, companyName, projectTitle, projectType, totalDays, taskDetails, totalHrs, actualHrs 
+         FROM dailyupdates 
+         WHERE name = ? 
+         ORDER BY date DESC";
+
+$stmt2 = $conn->prepare($sql2);
+$stmt2->bind_param("s", $Name);
+$stmt2->execute();
+$result2 = $stmt2->get_result();
+$totalEntries2 = $result2->num_rows;
+
 ?>
 
 <!DOCTYPE html>
@@ -49,26 +62,26 @@ $totalEntries1 = $result1->num_rows;
     thead{
         color:black;
     }
-    #dataTable1 th:nth-child(1), #dataTable td:nth-child(1) { width: 3%; }  /* S.no */
-    #dataTable1 th:nth-child(2), #dataTable td:nth-child(2) { width: 10%; } /* Date */
-    #dataTable1 th:nth-child(3), #dataTable td:nth-child(3) { width: 10%; } /* Company */
-    #dataTable1 th:nth-child(4), #dataTable td:nth-child(4) { width: 18%; } /* Project Title */
-    #dataTable1 th:nth-child(5), #dataTable td:nth-child(5) { width: 10%; }  /* Project Type */
-    #dataTable1 th:nth-child(6), #dataTable td:nth-child(6) { width: 10%; } /* Description */
-    #dataTable1 th:nth-child(7), #dataTable td:nth-child(7) { width: 11%; } /* Total days */
-    #dataTable1 th:nth-child(7), #dataTable td:nth-child(7) { width: 11%; } /* Working days */
-    #dataTable1 th:nth-child(8), #dataTable td:nth-child(8) { width: 15%; } /* Teammates */
+    #dataTable1 th:nth-child(1), #dataTable1 td:nth-child(1) { width: 3%; }  /* S.no */
+    #dataTable1 th:nth-child(2), #dataTable1 td:nth-child(2) { width: 10%; } /* Date */
+    #dataTable1 th:nth-child(3), #dataTable1 td:nth-child(3) { width: 10%; } /* Company */
+    #dataTable1 th:nth-child(4), #dataTable1 td:nth-child(4) { width: 18%; } /* Project Title */
+    #dataTable1 th:nth-child(5), #dataTable1 td:nth-child(5) { width: 10%; }  /* Project Type */
+    #dataTable1 th:nth-child(6), #dataTable1 td:nth-child(6) { width: 10%; } /* Description */
+    #dataTable1 th:nth-child(7), #dataTable1 td:nth-child(7) { width: 11%; } /* Total days */
+    #dataTable1 th:nth-child(7), #dataTable1 td:nth-child(7) { width: 11%; } /* Working days */
+    #dataTable1 th:nth-child(8), #dataTable1 td:nth-child(8) { width: 15%; } /* Teammates */
 
 
-    #dataTable2 th:nth-child(1), #dataTable td:nth-child(1) { width: 2%; }  /* S.no */
-#dataTable2 th:nth-child(2), #dataTable td:nth-child(2) { width: 12%; } /* Name */
-#dataTable2 th:nth-child(3), #dataTable td:nth-child(3) { width: 12%; } /* Date */
-#dataTable2 th:nth-child(4), #dataTable td:nth-child(4) { width: 15%; } /* Company */
-#dataTable2 th:nth-child(5), #dataTable td:nth-child(5) { width: 10%; } /* Project Title */
-#dataTable2 th:nth-child(6), #dataTable td:nth-child(6) { width: 16%; } /* Total Days */
-#dataTable2 th:nth-child(7), #dataTable td:nth-child(7) { width: 12%; } /* Description */
-#dataTable2 th:nth-child(8), #dataTable td:nth-child(8) { width: 12%; } /* Total Time */
-#dataTable2 th:nth-child(9), #dataTable td:nth-child(9) { width: 14%; } /* Actual Time */
+    #dataTable2 th:nth-child(1), #dataTable2 td:nth-child(1) { width: 2%; }  /* S.no */
+#dataTable2 th:nth-child(2), #dataTable2 td:nth-child(2) { width: 10%; } /* Name */
+#dataTable2 th:nth-child(3), #dataTable2 td:nth-child(3) { width: 16%; } /* Date */
+#dataTable2 th:nth-child(4), #dataTable2 td:nth-child(4) { width: 10%; } /* Company */
+#dataTable2 th:nth-child(5), #dataTable2 td:nth-child(5) { width: 10%; } /* Project Title */
+#dataTable2 th:nth-child(6), #dataTable2 td:nth-child(6) { width: 22%; } /* Total Days */
+#dataTable2 th:nth-child(7), #dataTable2 td:nth-child(7) { width: 11%; } /* Description */
+#dataTable2 th:nth-child(8), #dataTable2 td:nth-child(8) { width: 11%; } /* Total Time */
+#dataTable2 th:nth-child(9), #dataTable2 td:nth-child(9) { width: 8%; } /* Actual Time */
 #dataTable1 {
         font-size: 14px; /* Adjust size as needed */
     }
@@ -433,8 +446,20 @@ $totalEntries1 = $result1->num_rows;
     font-weight: 500;
     color: white;
     border-radius: 100px;
+}.header-counter1 {
+    margin-left: 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(0, 148, 255);
+    padding: 2px 5px;
+    font-size: 13px;
+    min-width: 20px;
+    min-height: 20px;
+    font-weight: 500;
+    color: white;
+    border-radius: 100px;
 }
-
 /* Styling for the card header */
 .card-header {
     display: flex;
@@ -707,21 +732,6 @@ tbody{
 #dataTable tbody td i {
     color: rgb(0, 148, 255);
 }
-/* Counter styling similar to .bpKSTa .header-counter */
-.header-counter {
-    margin-left: 2px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: rgb(0, 148, 255);
-    padding: 2px 5px;
-    font-size: 13px;
-    min-width: 20px;
-    min-height: 20px;
-    font-weight: 500;
-    color: white;
-    border-radius: 100px;
-}
 .card {
     margin-bottom: 20px; /* Adjust as needed */
 }
@@ -815,6 +825,12 @@ tbody{
     </div>
 </div>
 <br>
+<style>
+    #dataTable2 th:nth-child(2), 
+    #dataTable2 td:nth-child(2) {
+    display: none;
+}
+</style>
 <div class="container-fluid">
 <div class="card shadow mb-4">
                         <div class="card-header py-3">
@@ -863,58 +879,63 @@ tbody{
 
 <br>
 <div class="card shadow mb-4">
-<div class="card-header py-3 d-flex align-items-center justify-content-start flex-wrap">
-    <p class="m-0" style="font-size: 16px; color: rgb(23, 25, 28); font-weight: 500; white-space: nowrap;">
-        <b>Daily Updates</b> <span class="header-counter">2</span>
-    </p> &nbsp;&nbsp;&nbsp;&nbsp;
-    <input type="date" id="dateFilter" class="form-control ms-3 mt-0 mt-sm-0 mt-2" style="width: auto;">
+    <div class="card-header py-3">
+        <p class="m-0 font-weight-bold text-dark">
+            Daily Updates <span class="header-counter1"><?php echo $totalEntries2; ?></span>
+        </p>
+        <div> 
+            <input type="date" id="dateFilter" class="form-control d-inline" style="width: auto;">
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table text-center" id="dataTable2" width="100%">
+                <thead>
+                    <tr>
+                        <th>S.no</th>
+                        <th>Date</th>
+                        <th>Company - Title</th>
+                        <th>Project Type</th>
+                        <th>Total Days</th>
+                        <th>Task Details</th>
+                        <th>Total Hours</th>
+                        <th>Actual Hours</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <?php
+                   $c = 1;
+                    if ($totalEntries2 > 0) {
+                        while ($row = $result2->fetch_assoc()) {
+                            $actualHrs = trim($row['actualHrs']);
+        $status = ($actualHrs === '-' || empty($actualHrs)) 
+            ? '<td><i class="fas fa-hourglass-half status-icon in-progress" style="font-size:12px;color:rgb(0, 148, 255);"></i>&nbsp;&nbsp;Inprogress</td>' 
+            : '<td><i class="fas fa-check-circle status-icon completed" style="font-size:12px;color:rgb(0, 148, 255);"></i>&nbsp;&nbsp;Completed</td>';
+
+            $formattedDate = date("d-m-Y", strtotime($row['date']));
+                            echo "<tr data-date='$formattedDate'>";
+                            echo "<td class='sno'>" . $c . "</td>";
+                            echo "<td class='date'>" . $formattedDate . "</td>";
+                            echo "<td>" . htmlspecialchars($row['companyName'] . ' - ' . $row['projectTitle']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['projectType']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['totalDays']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['taskDetails']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['totalHrs']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['actualHrs']) . "</td>";
+                            echo  $status ;
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='9'>No daily updates found</td></tr>";
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
-                        <div class="card-body">
-                            <div class="table-responsive ">
-                            <table class="table text-center" style="font-size:14px;" id="dataTable2" width="100%">
-    <thead>
-        <tr>
-            <th>S.no</th>
-            <th>Date</th>
-            <th>Company</th>
-            <th>Title</th>
-            <th>Days</th>
-            <th>Description</th>
-            <th>Total Hrs</th>
-            <th>Actual Hrs</th>
-            <th>Status</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr  data-company="ABC Corp">
-            <td>1</td>
-            <td>05-03-2025</td>
-            <td class="company-column">ABc</td>
-            <td>xyz</td>
-            <td>5</td>
-            <td>I completed half backend work</td>
-            <td>4.5</td>
-            <td>2</td>
-            <td><i class="fas fa-check-circle status-icon completed"></i>&nbsp;&nbsp;Completed</td>
-        </tr>
-        <tr  data-company="ABC Corp">
-            <td>2</td>
-            <td>05-03-2025</td>
-            <td class="company-column">ABC</td>
-            <td>kmn</td>
-            <td>5</td>
-            <td>I completed half backend work</td>
-            <td>4.5</td>
-            <td>2</td>
-            <td><i class="fas fa-check-circle status-icon completed"></i>&nbsp;&nbsp;Completed</td>
-        </tr>
-        <!-- Add more rows as needed -->
-    </tbody>
-</table>
-                            </div>
-                        </div>
-                        
-                    </div>
+
                     <?php
 if (isset($stmt1)) {
     $stmt1->close();
@@ -977,32 +998,7 @@ $conn->close();
 <!-- DataTables JavaScript -->
 <script src="vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll("#dataTable1 tbody tr").forEach(row => {
-            row.addEventListener("click", function () {
-                // Assuming the first column contains a unique ID
-                let employeeId = this.cells[0].innerText.trim(); 
-                if (employeeId) {
-                    window.location.href = `employeedailyupdate.php?id=${employeeId}`;
-                }
-            });
-        });
-    });
-</script>
-<!-- Initialize DataTable -->
-
-
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
-
-
-
-    <script>
     $(document).ready(function() {
             $('#dataTable1').DataTable({
                 "paging": true,
@@ -1018,119 +1014,21 @@ $conn->close();
                 "lengthMenu": [5, 10, 25, 50]
             });
         });
-</script>
-            <!-- End of Main Content -->
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-    // Initialize DataTable
-    var table = $('#dataTable').DataTable();
 
-    // Handle row click event
-    document.querySelector('#dataTable tbody').addEventListener('click', function (event) {
-        const clickedCell = event.target.closest('td'); // Get clicked <td>
-        if (!clickedCell) return;
+        $(document).ready(function() {
+    $('#dataTable2').DataTable();
 
-        const row = clickedCell.closest('tr'); // Get parent row
-        const columnIndex = clickedCell.cellIndex; // Get column index
-
-        // Define column indices based on your table structure
-        const companyColumnIndex = 2; // Company column
-        const titleColumnIndex = 3; // Title column
-
-        // Search box inside DataTable
-        const searchBox = document.querySelector('input[type="search"]');
-
-        if (columnIndex === companyColumnIndex || columnIndex === titleColumnIndex) {
-            const clickedText = clickedCell.textContent.trim();
-            window.location.href = `employeeWorkReports.php?search=${encodeURIComponent(clickedText)}`;
-        } else {
-            window.location.href = "requirement.php";
-        }
+    // Refresh DataTable on date filter apply
+    $('#applyFilter').click(function() {
+        $('#dataTable2').DataTable().destroy();
+        $('#dataTable2').DataTable();
     });
-
-    // Check if there's a search query in the URL and apply it to DataTable
-    const urlParams = new URLSearchParams(window.location.search);
-    const searchValue = urlParams.get("search");
-
-    if (searchValue) {
-        $('#dataTable_filter input').val(searchValue); // Set search box value
-        table.search(searchValue).draw(); // Apply search filter
-    }
 });
 
-</script>
-    <script>
- document.addEventListener("DOMContentLoaded", function () {
-    let today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
-    let dateInput = document.getElementById("dateFilter");
-
-    dateInput.value = today; // Set default to today
-    filterByDate(); // Automatically filter on page load
-
-    // Apply filter immediately when date is changed
-    dateInput.addEventListener("change", filterByDate);
-});
-
-function filterByDate() {
-    let selectedDate = document.getElementById("dateFilter").value;
-    if (!selectedDate) return;
-
-    let formattedSelectedDate = selectedDate.split("-").reverse().join("-"); // Convert to DD-MM-YYYY
-    let table = document.getElementById("dataTable");
-    let rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
-
-    for (let i = 0; i < rows.length; i++) {
-        let dateCell = rows[i].getElementsByTagName("td")[1];
-        if (dateCell) {
-            let rowDate = dateCell.textContent.trim();
-            rows[i].style.display = (rowDate === formattedSelectedDate) ? "" : "none";
-        }
-    }
-}
-</script>
-<script>
-setTimeout(function () {
-    document.querySelectorAll("tbody tr").forEach(row => {
-        console.log(`Row has ${row.cells.length} cells`);
-        
-        if (row.cells.length < 13) {
-            console.warn("Skipping row: Some cells are missing.");
-            return;
-        }
-        
-        let taskTypeCell = row.cells[7];
-        let moduleStatusCell = row.cells[11];
-        let projectStatusCell = row.cells[12];
-        
-        let taskType = taskTypeCell.innerText.trim();
-        let moduleStatus = moduleStatusCell.innerText.trim();
-        
-        console.log(`Task Type: ${taskType}, Module Status: ${moduleStatus}`);
-        
-        if (moduleStatus.includes("Completed")&&taskType.includes("Testing") ) {
-            projectStatusCell.innerHTML = `
-                <button class="btn btn-success btn-sm" onclick="markCompleted(this)">Mark as Completed</button>
-            `;
-        } else {
-            projectStatusCell.innerHTML = `
-                <button class="btn btn-warning btn-sm">Ongoing</button>
-            `;
-        }
-    });
-}, 2000);
-
-function markCompleted(button) {
-    let row = button.closest("tr");
-    let projectStatusCell = row.cells[12]; // Adjusted to match correct index
-    
-    projectStatusCell.innerHTML = `
-        <span class="text-success"><i class="fas fa-check-circle"></i> Completed</span>
-    `;
-}
 </script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll("#dataTable tbody tr").forEach(row => {
+        document.querySelectorAll("#dataTable2 tbody tr").forEach(row => {
             row.addEventListener("click", function () {
                 // Assuming the first column contains a unique ID
                 let employeeId = this.cells[0].innerText.trim(); 
@@ -1140,7 +1038,105 @@ function markCompleted(button) {
             });
         });
     });
+
+document.getElementById('dateFilter').addEventListener('change', function () {
+    let filterDate = this.value;
+    let tableRows = document.querySelectorAll("#dataTable2 tbody tr");
+
+    tableRows.forEach(row => {
+        let dateCell = row.cells[1].textContent.trim(); // Date column
+        if (filterDate === "" || dateCell === filterDate) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+    });
+});
+
 </script>
+<!-- Initialize DataTable -->
+
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+
+
+
+            <!-- End of Main Content -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const dateFilter = document.getElementById("dateFilter");
+    const tableBody = document.getElementById("table-body");
+    const headerCounter = document.querySelector(".header-counter1");
+
+    function filterTableByDate(selectedDate) {
+        let rows = tableBody.querySelectorAll("tr:not(#no-records)");
+        let count = 0;
+        let noRecordRow = document.getElementById("no-records");
+
+        // Remove existing "No records found" row if present
+        if (noRecordRow) {
+            noRecordRow.remove();
+        }
+
+        rows.forEach((row) => {
+            let rowDate = row.querySelector(".date").textContent.trim();
+            let formattedRowDate = formatDate(rowDate); // Convert to YYYY-MM-DD
+
+            if (formattedRowDate === selectedDate) {
+                row.style.display = "";
+                count++;
+                row.querySelector(".sno").textContent = count; // Update serial number
+            } else {
+                row.style.display = "none";
+            }
+        });
+
+        // Update header counter
+        headerCounter.textContent = count;
+
+        // If no records found, display a message
+        if (count === 0) {
+            let noRecordHTML = `<tr id="no-records"><td colspan="9" style="text-align:center;">No records found</td></tr>`;
+            tableBody.insertAdjacentHTML("beforeend", noRecordHTML);
+        }
+    }
+
+    function getTodayDate() {
+        let today = new Date();
+        let day = String(today.getDate()).padStart(2, "0");
+        let month = String(today.getMonth() + 1).padStart(2, "0");
+        let year = today.getFullYear();
+        return `${year}-${month}-${day}`;
+    }
+
+    function formatDate(dateString) {
+        let parts = dateString.split("-");
+        return `${parts[2]}-${parts[1]}-${parts[0]}`; // Convert DD-MM-YYYY to YYYY-MM-DD
+    }
+
+    // Set default date filter to today & apply filtering
+    let todayDate = getTodayDate();
+    dateFilter.value = todayDate;
+    filterTableByDate(todayDate);
+
+    // Update table when a new date is selected
+    dateFilter.addEventListener("change", function () {
+        filterTableByDate(this.value);
+    });
+});
+
+
+
+
+
+</script>
+
+
 </body>
 
 </html>

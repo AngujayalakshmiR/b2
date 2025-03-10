@@ -1,141 +1,443 @@
+<?php
+session_start();
+if (!isset($_SESSION['empUserName'])) {
+    header("Location: login.php");
+    exit();
+}
 
+include 'dbconn.php'; // Ensure database connection
+
+$empUserName = $_SESSION['empUserName'];
+$Name = $_SESSION['Name'];
+
+// Fetch project details (Table 1)
+$sql1 = "SELECT ID, date, companyName, projectType, totalDays, projectTitle, employees 
+         FROM projectcreation 
+         WHERE employees LIKE ? ORDER BY date DESC"; 
+
+$stmt1 = $conn->prepare($sql1);
+$searchTerm = "%" . $Name . "%";
+$stmt1->bind_param("s", $searchTerm);
+$stmt1->execute();
+$result1 = $stmt1->get_result();
+$totalEntries1 = $result1->num_rows;
+
+
+// Fetch daily updates details (Table 2)
+$sql2 = "SELECT ID, date, name, companyName, projectTitle, projectType, totalDays, taskDetails, totalHrs, actualHrs 
+         FROM dailyupdates 
+         WHERE name = ? 
+         ORDER BY date DESC";
+
+$stmt2 = $conn->prepare($sql2);
+$stmt2->bind_param("s", $Name);
+$stmt2->execute();
+$result2 = $stmt2->get_result();
+$totalEntries2 = $result2->num_rows;
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <title>KTG TaskFlow</title>
-    <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon" />
-    <!-- Font Awesome -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    />
-    <!-- Google Fonts Roboto -->
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
-    />
-    <!-- MDB -->
-    <link rel="stylesheet" href="package/css/mdb.min.css" />
-    <style>
-:root, [data-mdb-theme=light] {
-    --mdb-input-focus-border-color: rgb(15,29,64);
-    --mdb-input-focus-label-color: rgb(15,29,64);
-    --mdb-picker-header-bg: rgb(15,29,64);
-}
 
-.divider:after,
-.divider:before {
-content: "";
-flex: 1;
-height: 1px;
-background: #eee;
-}
-.h-custom {
-height: calc(100% - 73px);
-}
-@media (max-width: 450px) {
-.h-custom {
-height: 100%;
-}
-}
-.sign-in-text {
-    font-size: 2.5rem; /* Adjust size */
-    font-weight: bold;
-    font-family: var(--mdb-font-sans-serif);
-    text-align: center;
-    width: 100%; /* Ensures it takes full width */
-}
-.bg-primary{
-    color: rgb(15,29,64) ;
-    background: rgb(15,29,64) ;
-}
-    </style>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" type="image/png" href="img/ktglogo.jpg">
+    <title>Task Manager</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+        <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
 </head>
-<body>
-    
-<section class="vh-100">
-  <div class="container-fluid h-custom">
-    <div class="row d-flex justify-content-center align-items-center h-100">
-      <div class="col-md-9 col-lg-6 col-xl-5">
-        <img src="img/Login.jpg"
-          class="img-fluid" alt="Sample image">
-      </div>
-      <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-        <form>
-        <div class=" d-flex align-items-center my-4">
-            <h2 class="text-center fw-bold mx-3 mb-0 sign-in-text" style="color: rgb(15,29,64);">KTG TaskFlow</h2>
-          </div>
 
-          <div class="divider d-flex align-items-center my-4">
-            <p class="text-center fw-bold mx-3 mb-0" style="color: rgb(15,29,64);">Login</p>
-          </div>
+<body id="page-top">
 
-          <!-- Email input -->
-          <div data-mdb-input-init class="form-outline mb-4">
-            <input type="text" id="form3Example3" class="form-control form-control-lg"
-              placeholder="Enter valid username" />
-            <label class="form-label" for="form3Example3">Username</label>
-          </div>
+    <!-- Page Wrapper -->
+    <div id="wrapper">
 
-          <!-- Password input -->
-          <div data-mdb-input-init class="form-outline mb-3">
-            <input type="password" id="form3Example4" class="form-control form-control-lg"
-              placeholder="Enter valid password" />
-            <label class="form-label" for="form3Example4">Password</label>
-          </div>
+    <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background: white;">
+<!-- Sidebar - Brand -->
+<a class="sidebar-brand d-flex align-items-center justify-content-center" href="employeedash.php">
+    <div class="sidebar-brand-icon" style='font-size:19px'>KTG</div>
+    <div class="sidebar-brand-text mx-2" style='font-size:19px'>DASHBOARD</div>
+</a>
+<hr class="sidebar-divider my-0">
 
-          <div class="d-flex justify-content-between align-items-center">
-            <!-- Checkbox -->
-            <div class="form-check mb-0">
+<!-- Divider -->
+<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
+<!-- Nav Item - Dashboard -->
+<li class="nav-item l active">
+    <a class="nav-link k" href="employeedash.php" style="color: white;">
+        <i class="fas fa-fw fa-tachometer-alt" style="font-size:16px"></i>
+        <span>Dashboard</span>
+    </a>
+</li>
+<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
+
+
+<!-- Divider -->
+<!-- Nav Item - Project Creation -->
+<li class="nav-item l">
+    <a class="nav-link k" href="employeeProjectAllocated.php" style="color: black;">
+        <i class="fas fa-fw fa-folder" style="font-size:16px"></i>
+        <span>Project Allocation</span>
+    </a>
+</li>
+
+<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
+<!-- Nav Item - Work Reports -->
+<li class="nav-item l">
+    <a class="nav-link k" href="employeeWorkReports.php" style="color: black;">
+        <i class="fas fa-fw fa-chart-area" style="font-size:16px"></i>
+        <span>Work Reports</span>
+    </a>
+</li><br>
+<!-- Divider -->
+<div class="sidebar-divider d-none d-md-block"></div>
+<!-- Sidebar Toggler -->
+<div class="text-center d-none d-md-inline">
+    <button class="rounded-circle side border-0" id="sidebarToggle"></button>
+</div>
+</ul>
+
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style=" background:white;">
+                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                <div class="mr-auto d-flex align-items-center pl-3 py-2">
+
+    <h4 class="text-dark font-weight-bold mr-4" style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
+        Dashboard
+    </h4></div>
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+                        <h4 class="text-dark font-weight-bold mr-1 d-flex align-items-center pl-3 py-2 " style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
+                        <?php echo htmlspecialchars($_SESSION['Name']); ?>
+    </h4>
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img class="img-profile rounded-circle"
+                                    src="img/p.png" style="width: 2rem;height: 2rem;">
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                
+                                
+                                <a class="dropdown-item" data-toggle="modal" data-target="#logoutModal" >
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+<div class="container-fluid">
+<div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <p class="m-0 font-weight-bold text-dark">Project Details <span class="header-counter"><?php echo $totalEntries1; ?></span></p>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table text-center" id="dataTable1" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>S.no</th>
+                                            <th>Date</th>
+                                            <th>Company</th>
+                                            <th>Title</th>
+                                            <th>Project Type</th>
+                                            <th>Total Days</th>
+                                            <th>Working Days</th>
+                                            <th>Teammates</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php
+                                        $sno = 1;
+                                        if ($totalEntries1 > 0) {
+                                            while ($row = $result1->fetch_assoc()) {
+                                                echo "<tr>";
+                                                echo "<td>" . $sno++ . "</td>";
+                                                echo "<td>" . htmlspecialchars($row['date']) . "</td>";
+                                                echo "<td>" . htmlspecialchars($row['companyName']) . "</td>";
+                                                echo "<td>" . htmlspecialchars($row['projectTitle']) . "</td>";
+                                                echo "<td>" . htmlspecialchars($row['projectType']) . "</td>";
+                                                echo "<td>" . htmlspecialchars($row['totalDays']) . "</td>";
+                                                echo "<td>-</td>"; 
+                                                echo "<td>" . htmlspecialchars($row['employees']) . "</td>";
+                                                echo "</tr>";
+                                            }
+                                        } else {
+                                            echo "<tr><td colspan='7'>No project details found</td></tr>";
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+<br>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <p class="m-0" style="font-size: 16px; color:rgb(23, 25, 28); font-weight: 500;">
+            <b>Daily Updates</b> 
+            <span class="header-counter">0</span>  <!-- Counter will be updated dynamically -->
+        </p>
+        <div> 
+            <input type="date" id="dateFilter" class="form-control d-inline" style="width: auto;">
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table text-center" id="dataTable2" width="100%">
+                <thead>
+                    <tr>
+                        <th>S.no</th>
+                        <th>Name</th>
+                        <th>Date</th>
+                        <th>Company-Title</th>
+                        <th>Type</th>
+                        <th>Total Days</th>
+                        <th>Description</th>
+                        <th>Total Hrs</th>
+                        <th>Actual Hrs</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php
+                    if ($totalEntries2 > 0) {
+                        while ($row = $result2->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td>" . htmlspecialchars($row['ID']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['date']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['name']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['companyName']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['projectTitle']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['projectType']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['totalDays']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['taskDetails']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['totalHrs']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['actualHrs']) . "</td>";
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='10'>No daily updates found</td></tr>";
+                    }
+                ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+                    <?php
+if (isset($stmt1)) {
+    $stmt1->close();
+}
+if (isset($stmt2)) {
+    $stmt2->close();
+}
+$conn->close();
+?>
+
+                </div>
             </div>
-          </div>
 
-          <div class="text-center text-lg-start mt-4 pt-2">
-            <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-lg"
-              style="padding-left: 2.5rem; padding-right: 2.5rem;background: rgb(15,29,64) ;color:white;" >Login</button>
-            <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="#!"
-                class="link-danger">Contact Admin</a></p>
-          </div>
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                       <h6> <b>Copyright &copy; Knock the Globe Technologies 2025</b></h6>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
 
-        </form>
-      </div>
+        </div>
+        <!-- End of Content Wrapper -->
+
     </div>
-  </div>
-  <div
-    class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 " style="background: rgb(15,29,64) ;">
-    <!-- Copyright -->
-    <div class="text-white mb-3 mb-md-0">
-      Copyright © 2025. All rights reserved.
-    </div>
-    <!-- Copyright -->
+    <!-- End of Page Wrapper -->
 
-    <!-- Right -->
-    <div>
-      <a href="#!" class="text-white me-4">
-        <i class="fab fa-facebook-f"></i>
-      </a>
-      <a href="#!" class="text-white me-4">
-        <i class="fab fa-twitter"></i>
-      </a>
-      <a href="#!" class="text-white me-4">
-        <i class="fab fa-google"></i>
-      </a>
-      <a href="#!" class="text-white">
-        <i class="fab fa-linkedin-in"></i>
-      </a>
-    </div>
-    <!-- Right -->
-  </div>
-</section>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
 
-   <!-- MDB -->
-   <script type="text/javascript" src="package/js/mdb.umd.min.js"></script>
-    <!-- Custom scripts -->
-    <script type="text/javascript"></script>
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="logout.php">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- jQuery (Required for DataTables) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap JavaScript -->
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- DataTables JavaScript -->
+<script src="vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<script>
+    $(document).ready(function() {
+            $('#dataTable1').DataTable({
+                "paging": true,
+                "ordering": true,
+                "info": true,
+                "lengthMenu": [5, 10, 25, 50]
+            });
+
+            $('#dataTable2').DataTable({
+                "paging": true,
+                "ordering": true,
+                "info": true,
+                "lengthMenu": [5, 10, 25, 50]
+            });
+        });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll("#dataTable2 tbody tr").forEach(row => {
+            row.addEventListener("click", function () {
+                // Assuming the first column contains a unique ID
+                let employeeId = this.cells[0].innerText.trim(); 
+                if (employeeId) {
+                    window.location.href = `employeedailyupdate.php?id=${employeeId}`;
+                }
+            });
+        });
+    });
+</script>
+<!-- Initialize DataTable -->
+
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+
+
+
+            <!-- End of Main Content -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const dateFilter = document.getElementById("dateFilter");
+    const tableBody = document.getElementById("table-body");
+    const headerCounter = document.querySelector(".header-counter");
+
+    function filterTableByDate(selectedDate) {
+        let rows = tableBody.querySelectorAll("tr:not(#no-records)");
+        let count = 0;
+        let noRecordRow = document.getElementById("no-records");
+
+        // Remove existing "No records found" row if present
+        if (noRecordRow) {
+            noRecordRow.remove();
+        }
+
+        rows.forEach((row) => {
+            let rowDate = row.querySelector(".date").textContent.trim();
+            let formattedRowDate = formatDate(rowDate); // Convert to YYYY-MM-DD
+
+            if (formattedRowDate === selectedDate) {
+                row.style.display = "";
+                count++;
+                row.querySelector(".sno").textContent = count; // Update serial number
+            } else {
+                row.style.display = "none";
+            }
+        });
+
+        // Update header counter
+        headerCounter.textContent = count;
+
+        // If no records found, display a message
+        if (count === 0) {
+            let noRecordHTML = `<tr id="no-records"><td colspan="10" style="text-align:center;">No records found</td></tr>`;
+            tableBody.insertAdjacentHTML("beforeend", noRecordHTML);
+        }
+    }
+
+    function getTodayDate() {
+        let today = new Date();
+        let day = String(today.getDate()).padStart(2, "0");
+        let month = String(today.getMonth() + 1).padStart(2, "0");
+        let year = today.getFullYear();
+        return `${year}-${month}-${day}`;
+    }
+
+    function formatDate(dateString) {
+        let parts = dateString.split("-");
+        return `${parts[2]}-${parts[1]}-${parts[0]}`; // Convert DD-MM-YYYY to YYYY-MM-DD
+    }
+
+    // Set default date filter to today & apply filtering
+    let todayDate = getTodayDate();
+    dateFilter.value = todayDate;
+    filterTableByDate(todayDate);
+
+    // Update table when a new date is selected
+    dateFilter.addEventListener("change", function () {
+        filterTableByDate(this.value);
+    });
+});
+
+
+
+
+
+</script>
+
+
 </body>
-</html>
 
+</html>

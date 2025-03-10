@@ -1,26 +1,32 @@
 <?php
-include("dbconn.php");
+include 'dbconn.php';
+header('Content-Type: application/json');
+ob_clean(); // Clears any unwanted output
 
-$sql = "SELECT * FROM employeedetails";
-$result = $conn->query($sql);
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
+    $id = $_POST['id'];
 
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        echo "<tr>
-                <td>{$row['ID']}</td>
-                <td>{$row['Name']}</td>
-                <td>{$row['Designation']}</td>
-                <td>{$row['empPhNo']}</td>
-                <td>{$row['empAdd']}</td>
-                <td>
-                    <button class='btn-edit' data-id='{$row['ID']}'>Edit</button>
-                    <button class='delete-btn' data-id='{$row['ID']}'>Delete</button>
-                </td>
-              </tr>";
+    $query = "SELECT ID, companyName, projectType, totalDays, projectTitle, description, employees, reqfile FROM projectcreation WHERE ID = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($row = $result->fetch_assoc()) {
+        echo json_encode([
+            "companyName" => $row["companyName"],
+            "projectType" => $row["projectType"],
+            "totalDays" => $row["totalDays"],
+            "projectTitle" => $row["projectTitle"],
+            "description" => $row["description"],
+            "employees" => $row["employees"],  // Ensure employees are included
+            "reqfile" => $row["reqfile"]  // Ensure file name is included
+        ]);
+    } else {
+        echo json_encode(["error" => "No project found"]);
     }
-} else {
-    echo "<tr><td colspan='6'>No employees found</td></tr>";
-}
 
-$conn->close();
+    $stmt->close();
+    exit; // Prevent any extra output
+}
 ?>

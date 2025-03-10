@@ -526,7 +526,7 @@ thead{
 
                     while ($row = mysqli_fetch_assoc($result)) {
                         echo "<div class='col-6 d-flex align-items-center mb-2'>";
-                        echo "<input type='checkbox' name='employees[]' value='" . $row['ID'] . "' class='form-check-input mr-2'>";
+                        echo "<input type='checkbox' name='employees[]' value='" . $row['Name'] . "' class='form-check-input mr-2'>";
                         echo "<label class='form-check-label'>" . $row['Name'] . "</label>";
                         echo "</div>";
                     }
@@ -538,7 +538,6 @@ thead{
               <div class="text-center">
                 <button type="submit" class="btn submit-btn" style="color: white;">Update</button>
               </div>
-
             </form>
           </div>
         </div>
@@ -547,34 +546,59 @@ thead{
   </div>
 </div>
 
-
 <script>
 document.addEventListener("DOMContentLoaded", function () { 
     const employeeSelectionForm = document.getElementById("employeeSelectionForm");
     const selectedEmployeesContainer = document.getElementById("selectedEmployees");
+    const selectedEmployeesInput = document.getElementById("selectedEmployeesInput");
+    const addAccessBtn = document.getElementById("addAccessBtn");
+
+    // Function to check selected employees when modal opens
+    function checkSelectedEmployees() {
+        let selectedNames = selectedEmployeesInput.value.split(","); // Get selected employee names
+
+        document.querySelectorAll("input[name='employees[]']").forEach((checkbox) => {
+            checkbox.checked = selectedNames.includes(checkbox.value);
+        });
+    }
+
+    // Open modal and check selected employees
+    addAccessBtn.addEventListener("click", function () {
+        checkSelectedEmployees();
+        $("#employeeModal").modal("show");
+    });
 
     employeeSelectionForm.addEventListener("submit", function (event) {
         event.preventDefault(); // Prevent page reload
 
-        // Get all checked employee checkboxes
         let selectedEmployees = [];
+        let selectedEmployeeIDs = [];
+
         document.querySelectorAll("input[name='employees[]']:checked").forEach((checkbox) => {
-            selectedEmployees.push(checkbox.nextElementSibling.innerText); // Get label text (employee name)
+            selectedEmployees.push(checkbox.nextElementSibling.innerText); // Store employee names
+            selectedEmployeeIDs.push(checkbox.value); // Store employee IDs
         });
 
-        // Update the displayed names in the main form
-        if (selectedEmployees.length > 0) {
-            selectedEmployeesContainer.textContent = selectedEmployees.join(", "); // Display selected names
-        } else {
-            selectedEmployeesContainer.textContent = "--Nil--"; // Default if no selection
-        }
+        // Update displayed names in the UI
+        selectedEmployeesContainer.textContent = selectedEmployees.length > 0 ? selectedEmployees.join(", ") : "--Nil--";
+
+        // Update the hidden input field in the main form
+        selectedEmployeesInput.value = selectedEmployeeIDs.join(",");
 
         // Close the modal
         $("#employeeModal").modal("hide"); 
     });
-});
-</script>
 
+    // Ensure clicking labels toggles checkboxes
+    document.querySelectorAll("#employeeList label").forEach(label => {
+        label.addEventListener("click", function () {
+            let checkbox = this.previousElementSibling;
+            checkbox.checked = !checkbox.checked;
+        });
+    });
+});
+
+</script>
 
 <style>
 
@@ -754,36 +778,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 </style>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    fetch("projectCreationBackend.php")
-        .then(response => response.json())
-        .then(data => {
-            let employeeDropdown = document.getElementById("employeeDropdown");
-            employeeDropdown.innerHTML = ""; // Clear previous list
-            
-            data.forEach(emp => {
-                let wrapper = document.createElement("div");
-                wrapper.classList.add("col-6", "d-flex", "align-items-center", "mb-2");
-
-                let checkbox = document.createElement("input");
-                checkbox.type = "checkbox";
-                checkbox.value = emp;
-                checkbox.classList.add("form-check-input", "mr-3");
-
-                let label = document.createElement("label");
-                label.textContent = emp;
-                label.classList.add("form-check-label", "flex-grow-1");
-
-                wrapper.appendChild(checkbox);
-                wrapper.appendChild(label);
-                employeeDropdown.appendChild(wrapper);
-            });
-        })
-        .catch(error => console.error("Error fetching employees:", error));
-});
-</script>
-
 
 <!-- Topbar Navbar -->
 <ul class="navbar-nav ml-auto">
@@ -825,282 +819,184 @@ document.addEventListener("DOMContentLoaded", function () {
         
                         <!-- Begin Page Content -->
                         <div class="container-fluid">
-    <div class="container mb-4 mt-4" style="background: white; border-radius: 25px; border: 2px solid rgb(0, 148, 255);">
-        <div class="row">
-            <div class="col-md-12">
-                <form id="customerForm" style="font-size:14px;" class="row g-3 mt-3">
+                        <div class="container mb-4 mt-4" style="background: white; border-radius: 25px; border: 2px solid rgb(0, 148, 255);">
+    <div class="row">
+        <div class="col-md-12">
+            <form action="projectCreationBackend.php" method="post" id="customerForm" style="font-size:14px;" class="row g-3 mt-3" enctype="multipart/form-data">
+                <input type="hidden" id="selectedEmployeesInput" name="employees">
 
-                    <!-- Column 1: Company, Project Type & No. of Days -->
-                    <div class="col-md-4 pb-1">
-                        <div class="d-flex align-items-center mb-2">
-                            <!-- <select class="form-control" id="companySelect">
-                                <option value="">Select Company</option>
-                                <option value="web_developer">Kurinji Cement</option>
-                                <option value="ui_ux_designer">Gowin</option>
-                                <option value="mobile_app_designer">RIT</option>
-                            </select> -->
-                            <select class="form-control" id="companySelect">
+                <!-- Column 1: Company, Project Type & No. of Days -->
+                <div class="col-md-4 pb-1">
+                    <div class="d-flex align-items-center mb-2">
+                        <select class="form-control" id="companySelect" name="companyName">
                             <option value="">Select Company</option>
                             <?php
-                                include 'dbconn.php'; // Ensure you have a DB connection file
-                                $query = "SELECT ID, companyName FROM customer"; // Adjust column names as per your table
+                                include 'dbconn.php';
+                                $query = "SELECT ID, companyName FROM customer";
                                 $result = mysqli_query($conn, $query);
 
                                 while ($row = mysqli_fetch_assoc($result)) {
-                                    echo "<option value='" . $row['ID'] . "'>" . $row['companyName'] . "</option>";
+                                    echo "<option value='" . $row['companyName'] . "'>" . $row['companyName'] . "</option>";
                                 }
                             ?>
                         </select>
-                            <span onclick="window.location.href='customer.php'">
-                                <i class="fas fa-plus-circle text-primary ml-2" style="cursor: pointer;"></i>
-                            </span>
-                        </div>
+                        <span onclick="window.location.href='customer.php'">
+                            <i class="fas fa-plus-circle text-primary ml-2" style="cursor: pointer;"></i>
+                        </span>
+                    </div>
 
-                        <div class="d-flex align-items-center mb-2">
-                            <!-- <select class="form-control" id="projectTypeSelect">
-                                <option value="">Select Project Type</option>
-                                <option value="web_developer">Web Development</option>
-                                <option value="ui_ux_designer">Mobile App Development</option>
-                                <option value="mobile_app_designer">UI/UX Development</option>
-                            </select> -->
-                            <select class="form-control" id="projectTypeSelect">
+                    <div class="d-flex align-items-center mb-2">
+                        <select class="form-control" id="projectTypeSelect" name="projectType">
                             <option value="">Select Project Type</option>
                             <?php
-                                include 'dbconn.php'; // Ensure you have a DB connection file
-                                $query = "SELECT ID, ProjecttypeName FROM projecttype"; // Adjust column names as per your table
+                                include 'dbconn.php';
+                                $query = "SELECT ID, ProjecttypeName FROM projecttype";
                                 $result = mysqli_query($conn, $query);
 
                                 while ($row = mysqli_fetch_assoc($result)) {
-                                    echo "<option value='" . $row['ID'] . "'>" . $row['ProjecttypeName'] . "</option>";
+                                    echo "<option value='" .  $row['ProjecttypeName']. "'>" . $row['ProjecttypeName'] . "</option>";
                                 }
                             ?>
                         </select>
-                            <span onclick="window.location.href='projecttype.php'">
-                                <i class="fas fa-plus-circle text-primary ml-2" style="cursor: pointer;"></i>
-                            </span>
-                        </div>
-
-                        <input type="number" class="form-control mb-2" id="employeephnno" placeholder="Enter No. of Days">
+                        <span onclick="window.location.href='projecttype.php'">
+                            <i class="fas fa-plus-circle text-primary ml-2" style="cursor: pointer;"></i>
+                        </span>
                     </div>
 
-                    <!-- Column 2: Project Title & Description -->
-                    <div class="col-md-4 pb-1">
-                        <input type="text" class="form-control mb-2" id="projecttitle" placeholder="Enter Project title">
-                        <textarea class="form-control mb-2" id="projectdescription" placeholder="Enter Project Description" rows="2" style="height: 85px;"></textarea>
-                    </div>
+                    <input type="number" class="form-control mb-2" id="employeephnno" name="totalDays" placeholder="Enter No. of Days">
+                </div>
 
-                    <!-- Column 3: File Upload -->
-                    <div class="col-md-4 pb-1">
-                        <div class="container d-flex justify-content-center align-items-center" 
-                            style="border: 3px solid rgb(252, 217, 104); background: rgb(252, 217, 104); border-radius: 25px; min-height: 120px;">
-                            <div class="form-group" style="margin-top: 8px; margin-bottom: 8px;">
-                                <label for="requirementfile" class="upload-label d-block font-weight-bold" style="margin-bottom: 0px;">
-                                    <i id="requirement" class="fas fa-folder file-icon fa-lg upload-icon" 
-                                        style="text-align: center; display: block; cursor: pointer; margin-bottom: 12px; color: white;">
-                                    </i> 
-                                    <p class="mt-1 justify-content-center" style="font-size: 14px; text-align: center; margin-bottom: 10px; color: white;">
-                                        Upload Requirement 
-                                    </p>
-                                </label>
-                                <input type="file" class="form-control-file d-none" id="requirementfile" 
-                                    onchange="updateIcon(this, 'requirement', 'requirementfile-name')">
-                                <p class="file-name text-muted" id="requirementfile-name" 
-                                    style="font-size: 14px; text-align: center; color: black;">No file chosen</p>
-                            </div>
+                <!-- Column 2: Project Title & Description -->
+                <div class="col-md-4 pb-1">
+                    <input type="text" class="form-control mb-2" id="projecttitle" name="projectTitle" placeholder="Enter Project title">
+                    <textarea class="form-control mb-2" id="projectdescription" name="description" placeholder="Enter Project Description" rows="2" style="height: 85px;"></textarea>
+                </div>
+
+                <!-- Column 3: File Upload -->
+                <div class="col-md-4 pb-1">
+                    <div class="container d-flex justify-content-center align-items-center" 
+                        style="border: 3px solid rgb(252, 217, 104); background: rgb(252, 217, 104); border-radius: 25px; min-height: 120px;">
+                        <div class="form-group" style="margin-top: 8px; margin-bottom: 8px;">
+                            <label for="requirementfile" class="upload-label d-block font-weight-bold" style="margin-bottom: 0px;">
+                                <i id="requirement" class="fas fa-folder file-icon fa-lg upload-icon" 
+                                    style="text-align: center; display: block; cursor: pointer; margin-bottom: 12px; color: white;">
+                                </i> 
+                                <p class="mt-1 justify-content-center" style="font-size: 14px; text-align: center; margin-bottom: 10px; color: white;">
+                                    Upload Requirement 
+                                </p>
+                            </label>
+                            <input type="file" class="form-control-file d-none" id="requirementfile" name="reqfile"
+                                onchange="updateIcon(this, 'requirement', 'requirementfile-name')">
+                                <p class="file-name text-muted" id="requirementfile-name">
+                                    <?php echo isset($fileName) ? $fileName : "No file chosen"; ?>
+                                </p>
+
                         </div>
                     </div>
+                </div>
 
-                    <!-- Employee Selection and Project Submission Row -->
-                    <div class="row align-items-center mb-3 w-100">
-                        <!-- Employees (9 columns) -->
-                        <div class="col-md-9 d-flex align-items-center">
-                            <!-- Add Employee Button -->
-                            <button type="button" class="btn mt-2 d-flex align-items-center" id="addAccessBtn"
-                                style="background: rgb(238, 153, 129); color: white; font-size: 14px; align-self: flex-start; white-space: nowrap;">
-                                <i class="fas fa-user-plus"></i>&nbsp; Employee
-                            </button>
-                            <span onclick="window.location.href='employee.php'">
-                                <i class="fas fa-plus-circle text-primary ml-2" style="cursor: pointer;"></i>
-                            </span>
+                <!-- Employee Selection and Project Submission Row -->
+                <div class="row align-items-center mb-3 w-100">
+                    <!-- Employees (9 columns) -->
+                    <div class="col-md-9 d-flex align-items-center">
+                        <!-- Add Employee Button -->
+                        <button type="button" class="btn mt-2 d-flex align-items-center" id="addAccessBtn"
+                            style="background: rgb(238, 153, 129); color: white; font-size: 14px; align-self: flex-start; white-space: nowrap;">
+                            <i class="fas fa-user-plus"></i>&nbsp; Employee
+                        </button>
+                        <span onclick="window.location.href='employee.php'">
+                            <i class="fas fa-plus-circle text-primary ml-2" style="cursor: pointer;"></i>
+                        </span>
 
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            <div id="selectedEmployeesContainer" class="mt-2">
-                                <span id="selectedEmployees">--Nil--</span>
-                            </div>
-
-                            <!-- Dropdown Container -->
-                            <div id="dropdownContainer" class="mt-2 p-3 rounded shadow" 
-                                style="display: none; border: 1px solid #ccc; background: white; position: absolute; width: 10%; min-width: 280px; z-index: 100;">
-                                <div id="employeeDropdown" class="row"></div>
-                            </div>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <div id="selectedEmployeesContainer" class="mt-2">
+                            <span id="selectedEmployees" employees>--Nil--</span>
                         </div>
 
-                        <!-- Add Project Button (3 columns) -->
-                        <div class="col-md-3 d-flex justify-content-md-end justify-content-center">
-                            <button type="submit" class="btn" id="customerbtn" 
-                                style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: auto;">
-                                <i class="fas fa-file-alt"></i>&nbsp; Add Project
-                            </button>
+                        <!-- Dropdown Container -->
+                        <div id="dropdownContainer" class="mt-2 p-3 rounded shadow" 
+                            style="display: none; border: 1px solid #ccc; background: white; position: absolute; width: 10%; min-width: 280px; z-index: 100;">
+                            <div id="employeeDropdown" class="row"></div>
                         </div>
                     </div>
 
-                </form>
-            </div>
+                    <!-- Add Project Button (3 columns) -->
+                    <div class="col-md-3 d-flex justify-content-md-end justify-content-center">
+                        <button type="submit" class="btn" id="customerbtn" 
+                            style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: auto;">
+                            <i class="fas fa-file-alt"></i>&nbsp; Add Project
+                        </button>
+                    </div>
+                </div>
+
+            </form>
         </div>
     </div>
+</div>
 
 
 
 
-<script>
-document.addEventListener("DOMContentLoaded", function () { 
-    let accessEmployees = ["Pavitra", "Jayavarshini", "Suriya", "Mohan", "Naveen", "Anbumani", "Sivakumar", "Venkatesh"];
-    accessEmployees.sort(); // Sort employees alphabetically
-    let selectedAccessEmployees = new Set();
+<?php
+include 'dbconn.php'; // Include your DB connection file
 
-    const addAccessBtn = document.getElementById('addAccessBtn');  // Corrected Button ID
-    const accessDropdownList = document.getElementById('employeeDropdown'); // Corrected List ID
+$query = "SELECT pc.ID,pc.date, pc.companyName, c.customerName, pc.projectType, pc.totalDays, pc.projectTitle, pc.employees
+          FROM projectcreation pc
+          LEFT JOIN customer c ON pc.companyName = c.companyName";
 
-    function updateColumnSize() {
-        let screenWidth = window.innerWidth;
-        let items = document.querySelectorAll("#employeeDropdown .employee-item");
-        
-        items.forEach(item => {
-            if (screenWidth < 400) {
-                item.classList.remove("col-6");
-                item.classList.add("col-12");
-            } else {
-                item.classList.remove("col-12");
-                item.classList.add("col-6");
-            }
-        });
-    }
+$result = mysqli_query($conn, $query);
+?>
 
-    addAccessBtn.addEventListener('click', function () {
-        accessDropdownList.innerHTML = ''; // Clear previous list
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <p class="m-0" style="font-size: 16px; color:rgb(23, 25, 28); font-style: normal;
+            overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+            font-size: 16px; font-weight: 500;"><b>Project Creation</b>
+            <span class="header-counter"><?php echo mysqli_num_rows($result); ?></span>
+        </p>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered text-center" id="dataTable" width="100%" style="font-size:14px;" cellspacing="0">
+                <thead>
+                    <tr class="thead">
+                        <th>S.no</th>
+                        <th>Date</th>
+                        <th>Customer</th>
+                        <th>Company</th>
+                        <th>Project Type</th>
+                        <th>Project Title</th>
+                        <th>Days</th>
+                        <th>Employees</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php 
+                    $sno = 1;
+                    while($row = mysqli_fetch_assoc($result)) { ?>
+                        <tr id="row_<?php echo $row['ID']; ?>">
+                            <td><?php echo $sno++; ?></td>
+                            <td><?php echo $row['date']; ?></td>
+                            <td><?php echo $row['customerName'] ?? 'N/A'; ?></td>
+                            <td><?php echo $row['companyName']; ?></td>
+                            <td><?php echo $row['projectType']; ?></td>
+                            <td><?php echo $row['projectTitle']; ?></td>
+                            <td><?php echo $row['totalDays']; ?></td>
+                            <td><?php echo $row['employees']; ?></td>
+                            <td class="action-buttons">
+                                <button class="btn-action btn-edit" data-id="<?php echo $row['ID']; ?>"><i class="fas fa-edit"></i></button>
 
-        accessEmployees.forEach(emp => {
-            let wrapper = document.createElement('div');
-            wrapper.classList.add('col-6', 'd-flex', 'align-items-center', 'mb-2', 'employee-item'); 
+                                <button class="btn-action btn-delete" onclick="deleteProject(<?php echo $row['ID']; ?>)"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-            let checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.value = emp;
-            checkbox.checked = selectedAccessEmployees.has(emp);
-            checkbox.classList.add('form-check-input', 'me-2'); 
-
-            let label = document.createElement('label');
-            label.textContent = emp;
-            label.classList.add('form-check-label', 'flex-grow-1');
-
-            function toggleSelection() {
-                if (checkbox.checked) {
-                    selectedAccessEmployees.add(emp);
-                } else {
-                    selectedAccessEmployees.delete(emp);
-                }
-            }
-
-            label.addEventListener('click', function () {
-                checkbox.checked = !checkbox.checked;
-                toggleSelection();
-            });
-
-            checkbox.addEventListener('change', toggleSelection);
-
-            wrapper.appendChild(checkbox);
-            wrapper.appendChild(label);
-            accessDropdownList.appendChild(wrapper);
-        });
-
-        // Apply column size based on screen width
-        updateColumnSize();
-
-        // Show the correct modal
-        $('#employeeModal').modal('show'); // ✅ FIXED: Using correct modal ID
-    });
-
-    window.addEventListener("resize", updateColumnSize);
-});
-
-</script>
-
-
-
-                            <!-- DataTales Example -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                <p class="m-0" style="font-size: 16px;color:rgb(23, 25, 28);font-style: normal;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    color: rgb(23, 25, 28);
-    font-size: 16px;
-    font-weight: 500;"><b>Project Creation</b> 
-        <span class="header-counter">3</span>  <!-- Counter next to heading -->
-</p>
-                                </div>
-                                <div class="card-body">
-                                    <div class="table-responsive">
-          <!-- Note: Each row has a data-pdf attribute with the PDF URL -->
-          <table class="table table-bordered text-center" id="dataTable" width="100%" style="font-size:14px;" cellspacing="0">
-            <thead>
-              <tr class="thead">
-                <th>S.no</th>
-                <th>Customer</th>
-                <th>Company</th>
-                <th>Project Type</th>
-                <th>Project Title</th>
-                <th>Days</th>
-                <th>Employees</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>ABC</td>
-                <td>Kurinji</td>
-                <td>Web application</td>
-                <td>abc</td>
-                <td>5</td>
-                <td>JayaVarshini, Surya</td>
-                <td class="action-buttons">
-                  <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                  <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
-                </td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>ABC</td>
-                <td>Govin</td>
-                <td>Mobile application</td>
-                <td>kmn</td>
-                <td>5</td>
-                <td>JayaVarshini, Surya</td>
-                <td class="action-buttons">
-                  <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                  <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
-                </td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>ABC</td>
-                <td>xxx</td>
-                <td>Mobile application</td>
-                <td>xyz</td>
-                <td>5</td>
-                <td>JayaVarshini, Surya</td>
-                <td class="action-buttons">
-                  <button class="btn-action btn-edit"><i class="fas fa-edit"></i></button>
-                  <button class="btn-action btn-delete"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-                                    </div>
-                                </div>
-                            </div>
         
                         </div>
                         <!-- /.container-fluid -->
@@ -1145,6 +1041,7 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Include SweetAlert2 -->
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -1185,7 +1082,6 @@ document.addEventListener("DOMContentLoaded", function () {
   <script>
     function updateFileName(input, fileNameId) {
         const fileInput = input.files[0];
-        
         // Ensure the input has a file
         const fileNameElement = document.getElementById(fileNameId);
         
@@ -1208,8 +1104,6 @@ document.addEventListener("DOMContentLoaded", function () {
             icon.classList.remove("bounce");
         }, 500);
     }
-
-    
     function updateIcon(input, iconId, fileNameId) {
     var fileName = input.files.length > 0 ? input.files[0].name : "No file chosen";
     document.getElementById(fileNameId).textContent = fileName;
@@ -1263,6 +1157,153 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 </script>
+
+
+<script>
+  $(document).ready(function () {
+    let editMode = false;
+    let editId = null;
+
+    // Edit Button Click Handler
+    $(".btn-edit").click(function () {
+        let projectId = $(this).data("id");
+
+        $.ajax({
+            url: "fetchEmployees.php",
+            type: "POST",
+            data: { id: projectId },
+            dataType: "json",
+            success: function (data) {
+                if (data.error) {
+                    Swal.fire("Error!", data.error, "error");
+                    return;
+                }
+                if (data.employees) {
+                    $("#selectedEmployees").text(data.employees);
+                    $("#selectedEmployeesInput").val(data.employees);
+                } else {
+                    $("#selectedEmployees").text("--Nil--");
+                }
+
+
+                // Populate the form with project data
+                $("#companySelect").val(data.companyName);
+                $("#projectTypeSelect").val(data.projectType);
+                $("#employeephnno").val(data.totalDays);
+                $("#projecttitle").val(data.projectTitle);
+                $("#projectdescription").val(data.description);
+
+                if (data.reqfile) {
+                    $("#requirementfile-name").text(data.reqfile);
+                    $("#filePreview").html(`<a href="uploads/${data.reqfile}" target="_blank">${data.reqfile}</a>`);
+                } else {
+                    $("#filePreview").html("No file uploaded.");
+                }
+
+
+
+                // Change button text & mode
+                $("#customerbtn").html('<i class="fas fa-sync-alt"></i>&nbsp; Update Project')
+                                 .css("background", "rgb(255, 165, 0)"); // Change color
+                editMode = true;
+                editId = projectId;
+            },
+            error: function (xhr, status, error) {
+                console.log("Error:", error);
+            }
+        });
+    });
+
+    // Form Submit Handler
+    $("#customerForm").submit(function (event) {
+        event.preventDefault();
+
+        let formData = new FormData(this);
+        if (editMode) {
+            formData.append("id", editId);
+        }
+
+        $.ajax({
+            url: "projectCreationBackend.php",
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                Swal.fire({
+                    icon: 'success',
+                    title: editMode ? 'Project Updated!' : 'Project Created!',
+                    text: editMode ? 'Project details updated successfully.' : 'New project created successfully.',
+                }).then(() => {
+                    location.reload(); // Refresh page after action
+                });
+
+                // Reset form
+                $("#customerForm")[0].reset();
+                $("#customerbtn").html('<i class="fas fa-file-alt"></i>&nbsp; Add Project')
+                                 .css("background", "rgb(0, 148, 255)"); // Revert button
+                editMode = false;
+                editId = null;
+            }
+        });
+    });
+});
+
+
+    function deleteProject(projectId) {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "This action cannot be undone!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch('delete_project.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'projectID=' + projectId
+            })
+            .then(response => response.text())
+            .then(data => {
+                if (data.trim() === 'success') {
+                    // Remove the deleted row
+                    document.getElementById("row_" + projectId).remove();
+
+                    // Update the project count
+                    let counterElement = document.querySelector(".header-counter");
+                    let currentCount = parseInt(counterElement.textContent);
+                    if (currentCount > 0) {
+                        counterElement.textContent = currentCount - 1;
+                    }
+
+                    // Show success alert
+                    Swal.fire({
+                        icon: "success",
+                        title: "Deleted!",
+                        text: "Project has been deleted successfully.",
+                        confirmButtonColor: "#3085d6"
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: "Error deleting project: " + data,
+                        confirmButtonColor: "#d33"
+                    });
+                }
+            });
+        }
+    });
+}
+
+
+
+</script>
+
+
 
 </body>
 

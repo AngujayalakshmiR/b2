@@ -625,8 +625,9 @@ tbody{
             <div style="margin-top: 10px;"><?php echo $totalDays; ?></div>
         </div>
         <div class="custom-card"><b>Working Days</b>
-            <div style="margin-top: 10px;">10</div> <!-- Static Value -->
+            <div style="margin-top: 10px;" id="workingDays">0</div> <!-- Dynamic Value -->
         </div>
+
         <div class="custom-card"><b>Members Allocated</b>
             <div style="margin-top: 10px;"><?php echo $teammates; ?></div>
         </div>
@@ -848,69 +849,73 @@ function filterByDate() {
 <script>
 $(document).ready(function () {
     function fetchTasks() {
-    $.ajax({
-        url: 'fetch_tasks.php',
-        type: 'POST',
-        data: {
-            companyName: $("input[name='companyName']").val(),
-            projectTitle: $("input[name='projectTitle']").val()
-        },
-        dataType: 'json',
-        success: function (response) {
-            let tableBody = $("#dataTable tbody");
-            
-            if ($.fn.DataTable.isDataTable("#dataTable")) {
-                $("#dataTable").DataTable().clear().destroy(); // Properly destroy the DataTable instance
+        $.ajax({
+            url: 'fetch_tasks.php',
+            type: 'POST',
+            data: {
+                companyName: $("input[name='companyName']").val(),
+                projectTitle: $("input[name='projectTitle']").val()
+            },
+            dataType: 'json',
+            success: function (response) {
+                let tableBody = $("#dataTable tbody");
+
+                if ($.fn.DataTable.isDataTable("#dataTable")) {
+                    $("#dataTable").DataTable().clear().destroy(); // Destroy existing DataTable
+                }
+
+                tableBody.empty(); // Clear previous data
+
+                let totalHrsSum = 0;
+                let actualHrsSum = 0;
+                let taskCount = response.length;
+
+                if (taskCount > 0) {
+                    $.each(response, function (index, task) {
+                        let isEditable = (task.actualHrs === "-");
+                        let buttonState = isEditable ? "Update" : "Saved";
+                        let buttonClass = isEditable ? "btn-primary" : "btn-secondary";
+                        let disabledAttr = isEditable ? "" : "disabled";
+
+                        let totalHrs = parseFloat(task.totalHrs) || 0;
+                        let actualHrs = (task.actualHrs !== "-") ? parseFloat(task.actualHrs) || 0 : 0;
+
+                        totalHrsSum += totalHrs;
+                        actualHrsSum += actualHrs;
+
+                        let row = `<tr>
+                            <td>${index + 1}</td>
+                            <td>${task.date}</td>
+                            <td>${task.taskDetails}</td>
+                            <td>${task.totalHrs}</td>
+                            <td>${task.actualHrs || '-'}</td>
+                            <td>
+                                <button type="button" class="btn ${buttonClass} py-1" onclick="enableEdit(this, ${task.ID})" ${disabledAttr}>${buttonState}</button>
+                            </td>
+                        </tr>`;
+                        tableBody.append(row);
+                    });
+
+                    let workingDays = (actualHrsSum / 8).toFixed(2); // Calculate working days, rounded to 2 decimal places
+
+                    $("#totalHrsHeader").text(`Total Hrs (${totalHrsSum})`);
+                    $("#actualHrsHeader").text(`Actual Hrs (${actualHrsSum})`);
+                    $("#workingDays").text(workingDays); // Update working days in UI
+                } else {
+                    tableBody.append("<tr><td colspan='6'>No task updates found.</td></tr>");
+                    $("#totalHrsHeader").text("Total Hrs (0)");
+                    $("#actualHrsHeader").text("Actual Hrs (0)");
+                    $("#workingDays").text("0"); // Default to 0 if no records
+                }
+
+                $("#dataTable").DataTable(); // Reinitialize DataTable
+                $(".header-counter").text(taskCount); // Update task count dynamically
+            },
+            error: function () {
+                console.error("Error fetching task data.");
             }
-
-            tableBody.empty(); // Clear previous data
-
-            let totalHrsSum = 0;
-            let actualHrsSum = 0;
-            let taskCount = response.length;
-
-            if (taskCount > 0) {
-                $.each(response, function (index, task) {
-                    let isEditable = (task.actualHrs === "-");
-                    let buttonState = isEditable ? "Update" : "Saved";
-                    let buttonClass = isEditable ? "btn-primary" : "btn-secondary";
-                    let disabledAttr = isEditable ? "" : "disabled";
-
-                    let totalHrs = parseFloat(task.totalHrs) || 0;
-                    let actualHrs = (task.actualHrs !== "-") ? parseFloat(task.actualHrs) || 0 : 0;
-
-                    totalHrsSum += totalHrs;
-                    actualHrsSum += actualHrs;
-
-                    let row = `<tr>
-                        <td>${index + 1}</td>
-                        <td>${task.date}</td>
-                        <td>${task.taskDetails}</td>
-                        <td>${task.totalHrs}</td>
-                        <td>${task.actualHrs || '-'}</td>
-                        <td>
-                            <button type="button" class="btn ${buttonClass} py-1" onclick="enableEdit(this, ${task.ID})" ${disabledAttr}>${buttonState}</button>
-                        </td>
-                    </tr>`;
-                    tableBody.append(row);
-                });
-
-                $("#totalHrsHeader").text(`Total Hrs (${totalHrsSum})`);
-                $("#actualHrsHeader").text(`Actual Hrs (${actualHrsSum})`);
-            } else {
-                tableBody.append("<tr><td colspan='6'>No task updates found.</td></tr>");
-                $("#totalHrsHeader").text("Total Hrs (0)");
-                $("#actualHrsHeader").text("Actual Hrs (0)");
-            }
-
-            $("#dataTable").DataTable(); // Reinitialize DataTable
-            $(".header-counter").text(taskCount); // Update task count dynamically
-        },
-        error: function () {
-            console.error("Error fetching task data.");
-        }
-    });
-}
+        });
+    }
 
 
 
@@ -945,7 +950,6 @@ $(document).ready(function () {
 
 </script>
 <script>
-   
 function enableEdit(button, taskId) {
     let row = $(button).closest("tr");
     let taskDetailsCell = row.find("td:nth-child(3)");
@@ -963,6 +967,8 @@ function enableEdit(button, taskId) {
         let actualInput = $("<input>").attr({
             type: "number",
             class: "form-control",
+            min: "0",
+            max: "8",
             value: actualHrsCell.text().trim() === "-" ? "" : actualHrsCell.text().trim()
         });
         actualHrsCell.html(actualInput);
@@ -970,7 +976,13 @@ function enableEdit(button, taskId) {
         updateButton.text("Save").removeClass("btn-primary").addClass("btn-success");
     } else {
         let newTaskDetails = taskDetailsCell.find("input").val();
-        let newActualHrs = actualHrsCell.find("input").val();
+        let newActualHrs = parseFloat(actualHrsCell.find("input").val());
+
+        // Validation: Ensure actualHrs does not exceed 8
+        if (newActualHrs > 8) {
+            Swal.fire("Error!", "Actual hours cannot exceed 8 per day!", "error");
+            return;
+        }
 
         $.ajax({
             url: 'update_task.php',
@@ -982,7 +994,9 @@ function enableEdit(button, taskId) {
             },
             success: function (response) {
                 if (response.trim() === "success") {
-                    Swal.fire("Updated!", "Task updated successfully!", "success");
+                    Swal.fire("Success!", "Task updated successfully!", "success").then(() => {
+                        location.reload();  
+                    });
 
                     taskDetailsCell.text(newTaskDetails || "-");
                     actualHrsCell.text(newActualHrs || "-");
@@ -997,7 +1011,6 @@ function enableEdit(button, taskId) {
         });
     }
 }
-
 function updateTotalHours() {
     let totalHrs = 0, actualHrs = 0;
 

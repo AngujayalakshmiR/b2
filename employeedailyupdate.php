@@ -650,7 +650,7 @@ tbody{
         <!-- Task Details -->
         <div class="col-md-2 col-12">
             <p class="m-0 fw-bold text-truncate" style="font-size: 16px; color: rgb(23, 25, 28);">
-                Task Details <span class="header-counter">2</span>
+                Task Details <span class="header-counter">0</span>
             </p>
         </div>
 
@@ -925,9 +925,11 @@ $(document).ready(function () {
         data: $(this).serialize(),
         success: function (response) {
             if (response.trim() === "success") {
-                Swal.fire("Success!", "Task added successfully!", "success");
-                $("#taskForm").trigger("reset"); // Reset form
-                fetchTasks(); // Refresh table & update task count
+                Swal.fire("Success!", "Task added successfully!", "success").then(() => {
+                    $("#taskForm").trigger("reset");
+                    location.reload();  // Reset form
+                    fetchTasks(); // Refresh table after successful addition
+                });
             } else {
                 Swal.fire("Error!", response, "error");
             }
@@ -937,6 +939,7 @@ $(document).ready(function () {
         }
     });
 });
+
 
 });
 

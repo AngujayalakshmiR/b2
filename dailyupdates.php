@@ -28,8 +28,8 @@
 #dataTable th:nth-child(1), #dataTable td:nth-child(1) { width: 3%; }  /* S.no */
     #dataTable th:nth-child(2), #dataTable td:nth-child(2) { width: 8%; } /* Name */
     #dataTable th:nth-child(3), #dataTable td:nth-child(3) { width: 0%; } /* Date */
-    #dataTable th:nth-child(4), #dataTable td:nth-child(4) { width: 10%; } /* Company */
-    #dataTable th:nth-child(5), #dataTable td:nth-child(5) { width: 15%; } /* Project Title */
+    #dataTable th:nth-child(4), #dataTable td:nth-child(4) { width: 15%; } /* Company */
+    #dataTable th:nth-child(5), #dataTable td:nth-child(5) { width: 10%; } /* Project Title */
     #dataTable th:nth-child(6), #dataTable td:nth-child(6) { width: 14%; }  /* Total Days */
     #dataTable th:nth-child(7), #dataTable td:nth-child(7) { width: 20%; } /* Description */
     #dataTable th:nth-child(8), #dataTable td:nth-child(8) { width: 15%; } /* Total Time */
@@ -543,81 +543,154 @@ tbody{
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                                                <p class="m-0" style="font-size: 16px;color:rgb(23, 25, 28);font-style: normal;
-                            overflow: hidden;
-                            white-space: nowrap;
-                            text-overflow: ellipsis;
-                            color: rgb(23, 25, 28);
-                            font-size: 16px;
-                            font-weight: 500;"><b>Daily Updates</b> 
-                                <span class="header-counter">2</span>  <!-- Counter next to heading -->
-                        </p>
-                                                    <div> 
-                            <input type="date" id="dateFilter" class="form-control d-inline" style="width: auto;">
-                        </div>
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <p class="m-0" style="font-size: 16px; color:rgb(23, 25, 28); font-weight: 500;">
+            <b>Daily Updates</b> 
+            <span class="header-counter">0</span>  <!-- Counter will be updated dynamically -->
+        </p>
+        <div> 
+            <input type="date" id="dateFilter" class="form-control d-inline" style="width: auto;">
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table text-center" id="dataTable" width="100%">
+                <thead>
+                    <tr>
+                        <th>S.no</th>
+                        <th>Name</th>
+                        <th>Date</th>
+                        <th>Company-Title</th>
+                        <th>Type</th>
+                        <th>Total Days</th>
+                        <th>Description</th>
+                        <th>Total Hrs</th>
+                        <th>Actual Hrs</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                <?php
+$c = 1;
+$sql = "SELECT * FROM dailyupdates ORDER BY date DESC";
+$result = $conn->query($sql);
 
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive ">
-                                                    <table class="table text-center" id="dataTable" width="100%">
-                            <thead>
-                                <tr>
-                                    <th>S.no</th>
-                                    <th>Name</th>
-                                    <th>Date</th>
-                                    <th>Company-Title</th>
-                                    <th>Type</th>
-                                    <th>Total Days</th>
-                                    <th>Description</th>
-                                    <th>Total Hrs</th>
-                                    <th>Actual Hrs</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            <?php
-            $sql = "SELECT * FROM dailyupdates ORDER BY date DESC";
-            $result = $conn->query($sql);
-            
-            if (!$result) {
-                die("Query failed: " . $conn->error);
-            }
-            
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    echo "<tr>
-                            <td>{$row['ID']}</td>
-                            <td>{$row['name']}</td>
-                            <td>{$row['date']}</td>
-                            <td>{$row['companyName']}</td>
-                            <td>{$row['projectTitle']}</td>
-                            <td>{$row['totalDays']}</td>
-                            <td>{$row['taskDetails']}</td>
-                            <td>{$row['totalHrs']}</td>
-                            <td>{$row['actualHrs']}</td>
-                            <td>{$row['status']}</td>
-                          </tr>";
-                }
-            } else {
-                echo "<tr><td colspan='9'>No records found</td></tr>";
-            }
-            
-            ?>
-                            </tbody>
-                        </table>
-                                                    </div>
-                        </div>
-                        
-                    </div>
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $actualHrs = trim($row['actualHrs']);
+        $status = ($actualHrs === '-' || empty($actualHrs)) 
+            ? '<td><i class="fas fa-hourglass-half status-icon in-progress" style="font-size:12px;color:rgb(0, 148, 255);"></i>&nbsp;&nbsp;Inprogress</td>' 
+            : '<td><i class="fas fa-check-circle status-icon completed" style="font-size:12px;color:rgb(0, 148, 255);"></i>&nbsp;&nbsp;Completed</td>';
+
+        // Convert date format to match input field
+        $formattedDate = date("d-m-Y", strtotime($row['date']));
+
+        echo "<tr data-date='$formattedDate'>
+            <td class='sno'>{$c}</td> 
+            <td class='name'>{$row['name']}</td>
+            <td class='date'>$formattedDate</td>
+            <td>{$row['companyName']} - {$row['projectTitle']}</td>
+            <td>{$row['projectType']}</td>
+            <td>{$row['totalDays']}</td>
+            <td>{$row['taskDetails']}</td>
+            <td>{$row['totalHrs']}</td>
+            <td>{$row['actualHrs']}</td>
+            $status
+        </tr>";
+
+        $c++;
+    }
+} else {
+    echo "<tr><td colspan='10'>No records found</td></tr>";
+}
+?>
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+
 
                 </div>
                 <!-- /.container-fluid -->
 
             </div>
     <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const dateFilter = document.getElementById("dateFilter");
+    const tableBody = document.getElementById("table-body");
+    const headerCounter = document.querySelector(".header-counter");
+
+    function filterTableByDate(selectedDate) {
+        let rows = tableBody.querySelectorAll("tr:not(#no-records)");
+        let count = 0;
+        let noRecordRow = document.getElementById("no-records");
+
+        // Remove existing "No records found" row if present
+        if (noRecordRow) {
+            noRecordRow.remove();
+        }
+
+        rows.forEach((row) => {
+            let rowDate = row.querySelector(".date").textContent.trim();
+            let formattedRowDate = formatDate(rowDate); // Convert to YYYY-MM-DD
+
+            if (formattedRowDate === selectedDate) {
+                row.style.display = "";
+                count++;
+                row.querySelector(".sno").textContent = count; // Update serial number
+            } else {
+                row.style.display = "none";
+            }
+        });
+
+        // Update header counter
+        headerCounter.textContent = count;
+
+        // If no records found, display a message
+        if (count === 0) {
+            let noRecordHTML = `<tr id="no-records"><td colspan="10" style="text-align:center;">No records found</td></tr>`;
+            tableBody.insertAdjacentHTML("beforeend", noRecordHTML);
+        }
+    }
+
+    function getTodayDate() {
+        let today = new Date();
+        let day = String(today.getDate()).padStart(2, "0");
+        let month = String(today.getMonth() + 1).padStart(2, "0");
+        let year = today.getFullYear();
+        return `${year}-${month}-${day}`;
+    }
+
+    function formatDate(dateString) {
+        let parts = dateString.split("-");
+        return `${parts[2]}-${parts[1]}-${parts[0]}`; // Convert DD-MM-YYYY to YYYY-MM-DD
+    }
+
+    // Set default date filter to today & apply filtering
+    let todayDate = getTodayDate();
+    dateFilter.value = todayDate;
+    filterTableByDate(todayDate);
+
+    // Update table when a new date is selected
+    dateFilter.addEventListener("change", function () {
+        filterTableByDate(this.value);
+    });
+});
+
+
+
+
+
+
         document.addEventListener('DOMContentLoaded', function () {
     // Initialize DataTable
     var table = $('#dataTable').DataTable();
@@ -805,6 +878,7 @@ function markCompleted(button) {
             });
         });
     </script>
+
 </body>
 
 </html>

@@ -1,11 +1,27 @@
-
 <?php
 session_start();
-
 if (!isset($_SESSION['empUserName'])) {
     header("Location: login.php");
     exit();
 }
+
+include 'dbconn.php'; // Ensure database connection
+
+$empUserName = $_SESSION['empUserName'];
+$Name = $_SESSION['Name'];
+
+// Fetch project details (Table 1)
+$sql1 = "SELECT ID, date, companyName, projectType, totalDays, projectTitle, employees 
+         FROM projectcreation 
+         WHERE employees LIKE ? ORDER BY date DESC"; 
+
+$stmt1 = $conn->prepare($sql1);
+$searchTerm = "%" . $Name . "%";
+$stmt1->bind_param("s", $searchTerm);
+$stmt1->execute();
+$result1 = $stmt1->get_result();
+$totalEntries1 = $result1->num_rows;
+
 ?>
 
 <!DOCTYPE html>
@@ -33,16 +49,32 @@ if (!isset($_SESSION['empUserName'])) {
     thead{
         color:black;
     }
-    #dataTable th:nth-child(1), #dataTable td:nth-child(1) { width: 2%; }  /* S.no */
-#dataTable th:nth-child(2), #dataTable td:nth-child(2) { width: 12%; } /* Name */
-#dataTable th:nth-child(3), #dataTable td:nth-child(3) { width: 12%; } /* Date */
-#dataTable th:nth-child(4), #dataTable td:nth-child(4) { width: 15%; } /* Company */
-#dataTable th:nth-child(5), #dataTable td:nth-child(5) { width: 10%; } /* Project Title */
-#dataTable th:nth-child(6), #dataTable td:nth-child(6) { width: 16%; } /* Total Days */
-#dataTable th:nth-child(7), #dataTable td:nth-child(7) { width: 12%; } /* Description */
-#dataTable th:nth-child(8), #dataTable td:nth-child(8) { width: 12%; } /* Total Time */
-#dataTable th:nth-child(9), #dataTable td:nth-child(9) { width: 14%; } /* Actual Time */
+    #dataTable1 th:nth-child(1), #dataTable td:nth-child(1) { width: 3%; }  /* S.no */
+    #dataTable1 th:nth-child(2), #dataTable td:nth-child(2) { width: 10%; } /* Date */
+    #dataTable1 th:nth-child(3), #dataTable td:nth-child(3) { width: 10%; } /* Company */
+    #dataTable1 th:nth-child(4), #dataTable td:nth-child(4) { width: 18%; } /* Project Title */
+    #dataTable1 th:nth-child(5), #dataTable td:nth-child(5) { width: 10%; }  /* Project Type */
+    #dataTable1 th:nth-child(6), #dataTable td:nth-child(6) { width: 10%; } /* Description */
+    #dataTable1 th:nth-child(7), #dataTable td:nth-child(7) { width: 11%; } /* Total days */
+    #dataTable1 th:nth-child(7), #dataTable td:nth-child(7) { width: 11%; } /* Working days */
+    #dataTable1 th:nth-child(8), #dataTable td:nth-child(8) { width: 15%; } /* Teammates */
 
+
+    #dataTable2 th:nth-child(1), #dataTable td:nth-child(1) { width: 2%; }  /* S.no */
+#dataTable2 th:nth-child(2), #dataTable td:nth-child(2) { width: 12%; } /* Name */
+#dataTable2 th:nth-child(3), #dataTable td:nth-child(3) { width: 12%; } /* Date */
+#dataTable2 th:nth-child(4), #dataTable td:nth-child(4) { width: 15%; } /* Company */
+#dataTable2 th:nth-child(5), #dataTable td:nth-child(5) { width: 10%; } /* Project Title */
+#dataTable2 th:nth-child(6), #dataTable td:nth-child(6) { width: 16%; } /* Total Days */
+#dataTable2 th:nth-child(7), #dataTable td:nth-child(7) { width: 12%; } /* Description */
+#dataTable2 th:nth-child(8), #dataTable td:nth-child(8) { width: 12%; } /* Total Time */
+#dataTable2 th:nth-child(9), #dataTable td:nth-child(9) { width: 14%; } /* Actual Time */
+#dataTable1 {
+        font-size: 14px; /* Adjust size as needed */
+    }
+    #dataTable2 {
+        font-size: 14px; /* Adjust size as needed */
+    }
     .stats-box {
   color: #ffffff;
   text-align: center;
@@ -262,7 +294,10 @@ if (!isset($_SESSION['empUserName'])) {
 }
 
 
-
+.container-fluid{
+    padding-left: .8rem;
+    padding-right: .8rem;
+}
 
 
 
@@ -461,83 +496,6 @@ if (!isset($_SESSION['empUserName'])) {
     <button class="rounded-circle side border-0" id="sidebarToggle"></button>
 </div>
 </ul>
-<!-- <style>
-    .sidebar-brand-icon, .sidebar-brand-text {
-        font-size: large;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
-        -webkit-background-clip: text; /* Clip background to text */
-        -webkit-text-fill-color: transparent; /* Make text color transparent to show gradient */
-        font-weight: bold; /* Optional: Makes text more prominent */
-    }
-    /* Sidebar background */
-    .sidebar {
-        background-color: white !important;
-        width: 250px; /* Adjust according to sidebar width */
-    }
-
-    /* Sidebar link styles */
-    .nav-item a.nav-link {
-        color: #333 !important; /* Dark text */
-        border-radius: 8px; /* Rounded corners */
-        transition: all 0.3s ease-in-out;
-        padding: 12px 15px;
-        font-size: 16px; /* Increased font size */
-        display: flex;
-        align-items: center;
-        gap: 10px; /* Space between icon and text */
-        width: 85%; /* Ensure links don’t take full width */
-        margin: 0 auto; /* Center align */
-    }
-
-    /* Ensure icons are black */
-    .nav-item a.nav-link i {
-        color: black !important;
-        font-size: 18px; /* Slightly larger icons */
-        transition: color 0.3s ease-in-out;
-    }
-
-    /* Hover effect (only for non-active items) */
-    .nav-item:not(.active) a.nav-link:hover {
-        background-color: #f0f0f0 !important; /* Light grey */
-        color: #000 !important; /* Dark text */
-        border-radius: 8px;
-        width: 90%; /* Keep it smaller than the sidebar */
-        margin: 0 auto; /* Center align */
-    }
-
-    /* Keep icons black on hover for non-active items */
-    .nav-item:not(.active) a.nav-link:hover i {
-        color: black !important;
-    }
-
-    /* Active item style */
-    .nav-item.active {
-        width: 90%;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
-        border-radius: 8px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-        transform: scale(1.02); /* Slight lift effect */
-        margin: 0 auto; /* Center align */
-    }
-
-    /* Active item text & icon color */
-    .nav-item.active a.nav-link {
-        color: white !important;
-        pointer-events: none; /* Prevent hover effect */
-    }
-
-    /* Ensure icons turn white inside active links */
-    .nav-item.active a.nav-link i {
-        color: white !important;
-    }
-    footer{
-        background:linear-gradient(to right, #4568dc, #b06ab3);
-        color:white;
-        padding:15px;
-    }
-</style> -->
-
-
 <style>
    
 
@@ -857,65 +815,52 @@ tbody{
     </div>
 </div>
 <br>
+<div class="container-fluid">
 <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                        <p class="m-0" style="font-size: 16px;color:rgb(23, 25, 28);font-style: normal;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    color: rgb(23, 25, 28);
-    font-size: 16px;
-    font-weight: 500;"><b>Project Details</b> 
-        <span class="header-counter">2</span>  <!-- Counter next to heading -->
-</p>
-         
-
+                            <p class="m-0 font-weight-bold text-dark">Project Details <span class="header-counter"><?php echo $totalEntries1; ?></span></p>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive ">
-                            <table class="table text-center" style="font-size:14px;" id="dataTable1" width="100%">
-    <thead>
-        <tr>
-        <th>S.no</th>
-            <th>Date</th>
-            <th>Company</th>
-            <th>Title</th>
-            <th>Project Type</th>
-            <th>Total Days</th>
-            <th>Working Days</th>
-            <th>Teammates</th>
-        </tr>
-    </thead>
-    <tbody style="cursor: pointer;">
-    <tr>
-            <td>1</td>
-            <td>10-02-2025</td>
-            <td>ABC Corp</td>
-            <td>The project requires inbuilt updations and notifications.</td>
-            <td>Web Development</td>
-            <td>10</td>
-            <td>8</td>
-            <td>Surya, Jayavarshini</td> <!-- Module Status -->
-           
-        </tr>
-        <tr>
-        <td>2</td>
-            <td>11-02-2025</td>
-            <td>ABC Corp</td>
-            <td>The project requires inbuilt updations and notifications.</td>
-            <td>Web Development</td>
-            <td>10</td>
-            <td>7</td>
-            <td>Surya, Jayavarshini</td> <!-- Module Status -->
-          
-        </tr>
-        <!-- Add more rows as needed -->
-    </tbody>
-</table>
+                            <div class="table-responsive">
+                                <table class="table text-center" id="dataTable1" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>S.no</th>
+                                            <th>Date</th>
+                                            <th>Company</th>
+                                            <th>Title</th>
+                                            <th>Project Type</th>
+                                            <th>Total Days</th>
+                                            <th>Working Days</th>
+                                            <th>Teammates</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php
+                                        $sno = 1;
+                                        if ($totalEntries1 > 0) {
+                                            while ($row = $result1->fetch_assoc()) {
+                                                echo "<tr>";
+                                                echo "<td>" . $sno++ . "</td>";
+                                                echo "<td>" . htmlspecialchars($row['date']) . "</td>";
+                                                echo "<td>" . htmlspecialchars($row['companyName']) . "</td>";
+                                                echo "<td>" . htmlspecialchars($row['projectTitle']) . "</td>";
+                                                echo "<td>" . htmlspecialchars($row['projectType']) . "</td>";
+                                                echo "<td>" . htmlspecialchars($row['totalDays']) . "</td>";
+                                                echo "<td>-</td>"; 
+                                                echo "<td>" . htmlspecialchars($row['employees']) . "</td>";
+                                                echo "</tr>";
+                                            }
+                                        } else {
+                                            echo "<tr><td colspan='7'>No project details found</td></tr>";
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                        
                     </div>
+
 <br>
 <div class="card shadow mb-4">
 <div class="card-header py-3 d-flex align-items-center justify-content-start flex-wrap">
@@ -926,7 +871,7 @@ tbody{
 </div>
                         <div class="card-body">
                             <div class="table-responsive ">
-                            <table class="table text-center" style="font-size:14px;" id="dataTable" width="100%">
+                            <table class="table text-center" style="font-size:14px;" id="dataTable2" width="100%">
     <thead>
         <tr>
             <th>S.no</th>
@@ -970,49 +915,19 @@ tbody{
                         </div>
                         
                     </div>
+                    <?php
+if (isset($stmt1)) {
+    $stmt1->close();
+}
+if (isset($stmt2)) {
+    $stmt2->close();
+}
+$conn->close();
+?>
 
                 </div>
             </div>
-            <!-- End of Main Content -->
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-    // Initialize DataTable
-    var table = $('#dataTable').DataTable();
 
-    // Handle row click event
-    document.querySelector('#dataTable tbody').addEventListener('click', function (event) {
-        const clickedCell = event.target.closest('td'); // Get clicked <td>
-        if (!clickedCell) return;
-
-        const row = clickedCell.closest('tr'); // Get parent row
-        const columnIndex = clickedCell.cellIndex; // Get column index
-
-        // Define column indices based on your table structure
-        const companyColumnIndex = 2; // Company column
-        const titleColumnIndex = 3; // Title column
-
-        // Search box inside DataTable
-        const searchBox = document.querySelector('input[type="search"]');
-
-        if (columnIndex === companyColumnIndex || columnIndex === titleColumnIndex) {
-            const clickedText = clickedCell.textContent.trim();
-            window.location.href = `employeeWorkReports.php?search=${encodeURIComponent(clickedText)}`;
-        } else {
-            window.location.href = "requirement.php";
-        }
-    });
-
-    // Check if there's a search query in the URL and apply it to DataTable
-    const urlParams = new URLSearchParams(window.location.search);
-    const searchValue = urlParams.get("search");
-
-    if (searchValue) {
-        $('#dataTable_filter input').val(searchValue); // Set search box value
-        table.search(searchValue).draw(); // Apply search filter
-    }
-});
-
-</script>
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
@@ -1077,14 +992,7 @@ tbody{
     });
 </script>
 <!-- Initialize DataTable -->
-<script>
-    $(document).ready(function() {
-        $('#dataTable').DataTable();
-    });
-    $(document).ready(function() {
-        $('#dataTable1').DataTable();
-    });
-</script>
+
 
     <!-- Core plugin JavaScript-->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
@@ -1092,13 +1000,65 @@ tbody{
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
 
-    <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
 
+    <script>
+    $(document).ready(function() {
+            $('#dataTable1').DataTable({
+                "paging": true,
+                "ordering": true,
+                "info": true,
+                "lengthMenu": [5, 10, 25, 50]
+            });
+
+            $('#dataTable2').DataTable({
+                "paging": true,
+                "ordering": true,
+                "info": true,
+                "lengthMenu": [5, 10, 25, 50]
+            });
+        });
+</script>
+            <!-- End of Main Content -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    // Initialize DataTable
+    var table = $('#dataTable').DataTable();
+
+    // Handle row click event
+    document.querySelector('#dataTable tbody').addEventListener('click', function (event) {
+        const clickedCell = event.target.closest('td'); // Get clicked <td>
+        if (!clickedCell) return;
+
+        const row = clickedCell.closest('tr'); // Get parent row
+        const columnIndex = clickedCell.cellIndex; // Get column index
+
+        // Define column indices based on your table structure
+        const companyColumnIndex = 2; // Company column
+        const titleColumnIndex = 3; // Title column
+
+        // Search box inside DataTable
+        const searchBox = document.querySelector('input[type="search"]');
+
+        if (columnIndex === companyColumnIndex || columnIndex === titleColumnIndex) {
+            const clickedText = clickedCell.textContent.trim();
+            window.location.href = `employeeWorkReports.php?search=${encodeURIComponent(clickedText)}`;
+        } else {
+            window.location.href = "requirement.php";
+        }
+    });
+
+    // Check if there's a search query in the URL and apply it to DataTable
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchValue = urlParams.get("search");
+
+    if (searchValue) {
+        $('#dataTable_filter input').val(searchValue); // Set search box value
+        table.search(searchValue).draw(); // Apply search filter
+    }
+});
+
+</script>
     <script>
  document.addEventListener("DOMContentLoaded", function () {
     let today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
@@ -1167,6 +1127,19 @@ function markCompleted(button) {
         <span class="text-success"><i class="fas fa-check-circle"></i> Completed</span>
     `;
 }
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll("#dataTable tbody tr").forEach(row => {
+            row.addEventListener("click", function () {
+                // Assuming the first column contains a unique ID
+                let employeeId = this.cells[0].innerText.trim(); 
+                if (employeeId) {
+                    window.location.href = `employeedailyupdate.php?id=${employeeId}`;
+                }
+            });
+        });
+    });
 </script>
 </body>
 

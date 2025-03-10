@@ -1,3 +1,4 @@
+<?php include 'dbconn.php'; // Ensure this file has a valid DB connection ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -36,14 +37,18 @@
         #dataTable th:nth-child(1), #dataTable td:nth-child(1) { width: 2%; }  /* S.no */
 #dataTable th:nth-child(2), #dataTable td:nth-child(2) { width: 8%; } /* Name */
 #dataTable th:nth-child(3), #dataTable td:nth-child(3) { width: 13%; } /* Date */
-#dataTable th:nth-child(4), #dataTable td:nth-child(4) { width: 13%; } /* Company */
+#dataTable th:nth-child(4), #dataTable td:nth-child(4) { width: 14%; } /* Company */
 #dataTable th:nth-child(5), #dataTable td:nth-child(5) { width: 12%; } /* Project Title */
 #dataTable th:nth-child(6), #dataTable td:nth-child(6) { width: 12%; } /* Total Days */
-#dataTable th:nth-child(7), #dataTable td:nth-child(7) { width: 12%; } /* Description */
-#dataTable th:nth-child(8), #dataTable td:nth-child(8) { width: 14%; } /* Total Time */
-#dataTable th:nth-child(9), #dataTable td:nth-child(9) { width: 15%; }
+#dataTable th:nth-child(7), #dataTable td:nth-child(7) { width: 15%; } /* Description */
+#dataTable th:nth-child(8), #dataTable td:nth-child(8) { width: 12%; } /* Total Time */
+#dataTable th:nth-child(9), #dataTable td:nth-child(9) { width: 13%; }
 #dataTable th:nth-child(10), #dataTable td:nth-child(10) { width: 10%; }
 
+ /* Reduce table font size */
+ #dataTable {
+        font-size: 14px; /* Adjust size as needed */
+    }
       thead  {
             color: black;
         }
@@ -498,81 +503,6 @@
     <button class="rounded-circle side border-0" id="sidebarToggle"></button>
 </div>
 </ul>
-<!-- <style>
-    .sidebar-brand-icon, .sidebar-brand-text {
-        font-size: large;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
-        -webkit-background-clip: text; /* Clip background to text */
-        -webkit-text-fill-color: transparent; /* Make text color transparent to show gradient */
-        font-weight: bold; /* Optional: Makes text more prominent */
-    }
-    /* Sidebar background */
-    .sidebar {
-        background-color: white !important;
-        width: 250px; /* Adjust according to sidebar width */
-    }
-
-    /* Sidebar link styles */
-    .nav-item a.nav-link {
-        color: #333 !important; /* Dark text */
-        border-radius: 8px; /* Rounded corners */
-        transition: all 0.3s ease-in-out;
-        padding: 12px 15px;
-        font-size: 16px; /* Increased font size */
-        display: flex;
-        align-items: center;
-        gap: 10px; /* Space between icon and text */
-        width: 85%; /* Ensure links don’t take full width */
-        margin: 0 auto; /* Center align */
-    }
-
-    /* Ensure icons are black */
-    .nav-item a.nav-link i {
-        color: black !important;
-        font-size: 18px; /* Slightly larger icons */
-        transition: color 0.3s ease-in-out;
-    }
-
-    /* Hover effect (only for non-active items) */
-    .nav-item:not(.active) a.nav-link:hover {
-        background-color: #f0f0f0 !important; /* Light grey */
-        color: #000 !important; /* Dark text */
-        border-radius: 8px;
-        width: 90%; /* Keep it smaller than the sidebar */
-        margin: 0 auto; /* Center align */
-    }
-
-    /* Keep icons black on hover for non-active items */
-    .nav-item:not(.active) a.nav-link:hover i {
-        color: black !important;
-    }
-
-    /* Active item style */
-    .nav-item.active {
-        width: 90%;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
-        border-radius: 8px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-        transform: scale(1.02); /* Slight lift effect */
-        margin: 0 auto; /* Center align */
-    }
-
-    /* Active item text & icon color */
-    .nav-item.active a.nav-link {
-        color: white !important;
-        pointer-events: none; /* Prevent hover effect */
-    }
-
-    /* Ensure icons turn white inside active links */
-    .nav-item.active a.nav-link i {
-        color: white !important;
-    }
-    footer{
-        background:linear-gradient(to right, #4568dc, #b06ab3);
-        color:white;
-        padding:15px;
-    }
-</style> -->
 
 
 <style>
@@ -852,96 +782,124 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-<!-- Square box (visible below 460px) -->
-<div class="square-box">
+                <?php
+include 'dbconn.php'; // Include your DB connection file
+
+// Count total projects
+$totalProjectsQuery = "SELECT COUNT(*) AS total FROM projectcreation";
+$totalProjectsResult = $conn->query($totalProjectsQuery);
+$totalProjects = $totalProjectsResult->fetch_assoc()['total'];
+
+// Count ongoing projects (check if any company-projectTitle exists in dailyupdates)
+$ongoingProjectsQuery = "SELECT COUNT(DISTINCT CONCAT(companyName, '-', projectTitle)) AS ongoing FROM dailyupdates WHERE CONCAT(companyName, '-', projectTitle) IN (SELECT CONCAT(companyName, '-', projectTitle) FROM projectcreation)";
+$ongoingProjectsResult = $conn->query($ongoingProjectsQuery);
+$ongoingProjects = $ongoingProjectsResult->fetch_assoc()['ongoing'];
+
+// Calculate pending projects
+$pendingProjects = $totalProjects - $ongoingProjects;
+
+// Count total employees
+$totalEmployeesQuery = "SELECT COUNT(*) AS total FROM employeedetails";
+$totalEmployeesResult = $conn->query($totalEmployeesQuery);
+$totalEmployees = $totalEmployeesResult->fetch_assoc()['total'];
+?>
+
+<div class="square-box"> 
     <div class="stats-box">
         <i class="fas fa-file" style="font-size: 20px;"></i>
-        <h1 style="font-size: 20px;">100</h1>
+        <h1 style="font-size: 20px;"><?php echo $totalProjects; ?></h1>
         <small>Total Projects</small>
     </div>
     <div class="stats-box">
         <i class="fas fa-exclamation" style="font-size: 20px;"></i>
-        <h1 style="font-size: 20px;">20</h1>
+        <h1 style="font-size: 20px;"><?php echo $pendingProjects; ?></h1>
         <small>Pending Projects</small>
     </div>
     <div class="stats-box">
         <i class="fas fa-check" style="font-size: 20px;"></i>
-        <h1 style="font-size: 20px;">30</h1>
+        <h1 style="font-size: 20px;"><?php echo $ongoingProjects; ?></h1>
         <small>Ongoing Projects</small>
     </div>
     <div class="stats-box">
         <i class="fas fa-bell" style="font-size: 20px;"></i>
-        <h1 style="font-size: 20px;">30</h1>
-        <small>Payment FollowUps</small>
+        <h1 style="font-size: 20px;"><?php echo $totalEmployees; ?></h1>
+        <small>Employee Count</small>
     </div>
 </div>
 
-<br>
-<div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                                                <p class="m-0" style="font-size: 16px;color:rgb(23, 25, 28);font-style: normal;
-                            overflow: hidden;
-                            white-space: nowrap;
-                            text-overflow: ellipsis;
-                            color: rgb(23, 25, 28);
-                            font-size: 16px;
-                            font-weight: 500;"><b>Daily Updates</b> 
-                                <span class="header-counter">2</span>  <!-- Counter next to heading -->
-                        </p>
-                                                    <div> 
-                            <input type="date" id="dateFilter" class="form-control d-inline" style="width: auto; align-items:left;">
-                        </div>
 
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive ">
-                                                    <table class="table text-center" style="font-size:14px;"id="dataTable" width="100%">
-                            <thead>
-                                <tr>
-                                    <th>S.no</th>
-                                    <th>Name</th>
-                                    <th>Date</th>
-                                    <th>Company</th>
-                                    <th>Title</th>
-                                    <th>Total Days</th>
-                                    <th>Description</th>
-                                    <th>Total Hrs</th>
-                                    <th>Actual Hrs</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr data-name="Surya" data-company="ABC Corp">
-                                    <td>1</td>
-                                    <td class="name-column">Surya</td>
-                                    <td>05-03-2025</td>
-                                    <td class="company-column">Govin</td>
-                                    <td>abc</td>
-                                    <td>5</td>
-                                    <td>I completed half backend work</td>
-                                    <td>4.5</td>
-                                    <td>2</td>
-                                    <td><i class="fas fa-check-circle status-icon completed"></i>&nbsp;&nbsp;Completed</td>
-                                </tr>
-                                <tr data-name="Pavithra" data-company="ABC Corp">
-                                    <td>2</td>
-                                    <td class="name-column">Pavithra</td>
-                                    <td>05-03-2025</td>
-                                    <td class="company-column">Kurinji</td>
-                                    <td>xyz</td>
-                                    <td>5</td>
-                                    <td>I completed half backend work</td>
-                                    <td>4.5</td>
-                                    <td>2</td>
-                                    <td><i class="fas fa-check-circle status-icon completed"></i>&nbsp;&nbsp;Completed</td>
-                                </tr>
-                                <!-- Add more rows as needed -->
-                            </tbody>
-                        </table>
-                                                    </div>
-                        </div>
-                        
-                    </div>
+<br>
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <p class="m-0" style="font-size: 16px; color:rgb(23, 25, 28); font-weight: 500;">
+            <b>Daily Updates</b> 
+            <span class="header-counter">0</span>  <!-- Counter will be updated dynamically -->
+        </p>
+        <div> 
+            <input type="date" id="dateFilter" class="form-control d-inline" style="width: auto;">
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table text-center" id="dataTable" width="100%">
+                <thead>
+                    <tr>
+                        <th>S.no</th>
+                        <th>Name</th>
+                        <th>Date</th>
+                        <th>Company-Title</th>
+                        <th>Type</th>
+                        <th>Total Days</th>
+                        <th>Description</th>
+                        <th>Total Hrs</th>
+                        <th>Actual Hrs</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                <?php
+$c = 1;
+$sql = "SELECT * FROM dailyupdates ORDER BY date DESC";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $actualHrs = trim($row['actualHrs']);
+        $status = ($actualHrs === '-' || empty($actualHrs)) 
+            ? '<td><i class="fas fa-hourglass-half status-icon in-progress" style="font-size:12px;color:rgb(0, 148, 255);"></i>&nbsp;&nbsp;Inprogress</td>' 
+            : '<td><i class="fas fa-check-circle status-icon completed" style="font-size:12px;color:rgb(0, 148, 255);"></i>&nbsp;&nbsp;Completed</td>';
+
+        // Convert date format to match input field
+        $formattedDate = date("d-m-Y", strtotime($row['date']));
+
+        echo "<tr data-date='$formattedDate'>
+            <td class='sno'>{$c}</td> 
+            <td class='name'>{$row['name']}</td>
+            <td class='date'>$formattedDate</td>
+            <td>{$row['companyName']} - {$row['projectTitle']}</td>
+            <td>{$row['projectType']}</td>
+            <td>{$row['totalDays']}</td>
+            <td>{$row['taskDetails']}</td>
+            <td>{$row['totalHrs']}</td>
+            <td>{$row['actualHrs']}</td>
+            $status
+        </tr>";
+
+        $c++;
+    }
+} else {
+    echo "<tr><td colspan='10'>No records found</td></tr>";
+}
+?>
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
             </div>
             <!-- End of Main Content -->
 
@@ -986,6 +944,72 @@
         </div>
     </div>
     <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const dateFilter = document.getElementById("dateFilter");
+    const tableBody = document.getElementById("table-body");
+    const headerCounter = document.querySelector(".header-counter");
+
+    function filterTableByDate(selectedDate) {
+        let rows = tableBody.querySelectorAll("tr:not(#no-records)");
+        let count = 0;
+        let noRecordRow = document.getElementById("no-records");
+
+        // Remove existing "No records found" row if present
+        if (noRecordRow) {
+            noRecordRow.remove();
+        }
+
+        rows.forEach((row) => {
+            let rowDate = row.querySelector(".date").textContent.trim();
+            let formattedRowDate = formatDate(rowDate); // Convert to YYYY-MM-DD
+
+            if (formattedRowDate === selectedDate) {
+                row.style.display = "";
+                count++;
+                row.querySelector(".sno").textContent = count; // Update serial number
+            } else {
+                row.style.display = "none";
+            }
+        });
+
+        // Update header counter
+        headerCounter.textContent = count;
+
+        // If no records found, display a message
+        if (count === 0) {
+            let noRecordHTML = `<tr id="no-records"><td colspan="10" style="text-align:center;">No records found</td></tr>`;
+            tableBody.insertAdjacentHTML("beforeend", noRecordHTML);
+        }
+    }
+
+    function getTodayDate() {
+        let today = new Date();
+        let day = String(today.getDate()).padStart(2, "0");
+        let month = String(today.getMonth() + 1).padStart(2, "0");
+        let year = today.getFullYear();
+        return `${year}-${month}-${day}`;
+    }
+
+    function formatDate(dateString) {
+        let parts = dateString.split("-");
+        return `${parts[2]}-${parts[1]}-${parts[0]}`; // Convert DD-MM-YYYY to YYYY-MM-DD
+    }
+
+    // Set default date filter to today & apply filtering
+    let todayDate = getTodayDate();
+    dateFilter.value = todayDate;
+    filterTableByDate(todayDate);
+
+    // Update table when a new date is selected
+    dateFilter.addEventListener("change", function () {
+        filterTableByDate(this.value);
+    });
+});
+
+
+
+
+
         document.addEventListener('DOMContentLoaded', function () {
     // Initialize DataTable
     var table = $('#dataTable').DataTable();

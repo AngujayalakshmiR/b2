@@ -801,29 +801,57 @@ tbody{
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-<!-- Square box (visible below 460px) -->
+                <?php
+include 'dbconn.php'; // Include your database connection
+
+$Name = $_SESSION['Name'];
+
+// Total Projects: Count projects where the session user is listed in employees
+$totalProjectsQuery = "SELECT COUNT(*) AS totalProjects FROM projectcreation WHERE FIND_IN_SET('$Name', employees)";
+$totalProjectsResult = mysqli_query($conn, $totalProjectsQuery);
+$totalProjectsRow = mysqli_fetch_assoc($totalProjectsResult);
+$totalProjects = $totalProjectsRow['totalProjects'];
+
+// Ongoing Projects: Check dailyupdates table for unique companyName and projectTitle
+$ongoingProjectsQuery = "SELECT COUNT(DISTINCT companyName, projectTitle) AS ongoingProjects FROM dailyupdates WHERE name = '$Name'";
+$ongoingProjectsResult = mysqli_query($conn, $ongoingProjectsQuery);
+$ongoingProjectsRow = mysqli_fetch_assoc($ongoingProjectsResult);
+$ongoingProjects = $ongoingProjectsRow['ongoingProjects'];
+
+// Pending Projects: Total - Ongoing
+$pendingProjects = $totalProjects - $ongoingProjects;
+
+// Today's Updates: Count the number of updates for today
+$todayDate = date('Y-m-d');
+$todayUpdatesQuery = "SELECT COUNT(*) AS todayUpdates FROM dailyupdates WHERE name = '$Name' AND date = '$todayDate'";
+$todayUpdatesResult = mysqli_query($conn, $todayUpdatesQuery);
+$todayUpdatesRow = mysqli_fetch_assoc($todayUpdatesResult);
+$todayUpdates = $todayUpdatesRow['todayUpdates'];
+?>
+
 <div class="square-box">
     <div class="stats-box">
         <i class="fas fa-file" style="font-size: 20px;"></i>
-        <h1 style="font-size: 20px;">20</h1>
+        <h1 style="font-size: 20px;"><?php echo $totalProjects; ?></h1>
         <small>Total Projects</small>
     </div>
     <div class="stats-box">
         <i class="fas fa-exclamation" style="font-size: 20px;"></i>
-        <h1 style="font-size: 20px;">10</h1>
+        <h1 style="font-size: 20px;"><?php echo $pendingProjects; ?></h1>
         <small>Pending Projects</small>
     </div>
     <div class="stats-box">
         <i class="fas fa-check" style="font-size: 20px;"></i>
-        <h1 style="font-size: 20px;">10</h1>
+        <h1 style="font-size: 20px;"><?php echo $ongoingProjects; ?></h1>
         <small>Ongoing Projects</small>
     </div>
     <div class="stats-box">
         <i class="fas fa-bell" style="font-size: 20px;"></i>
-        <h1 style="font-size: 20px;">2</h1>
+        <h1 style="font-size: 20px;"><?php echo $todayUpdates; ?></h1>
         <small>Today Updates</small>
     </div>
 </div>
+
 <br>
 <style>
     #dataTable2 th:nth-child(2), 
@@ -917,8 +945,8 @@ tbody{
                             echo "<tr data-date='$formattedDate'>";
                             echo "<td class='sno'>" . $c . "</td>";
                             echo "<td class='date'>" . $formattedDate . "</td>";
-                            echo "<td>" . htmlspecialchars($row['companyName'] . ' - ' . $row['projectTitle']) . "</td>";
-                            echo "<td>" . htmlspecialchars($row['projectType']) . "</td>";
+                            echo "<td class='company-title'>" . htmlspecialchars($row['companyName'] . ' - ' . $row['projectTitle']) . "</td>";
+                            echo "<td class='project-type'>" . htmlspecialchars($row['projectType']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['totalDays']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['taskDetails']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['totalHrs']) . "</td>";
@@ -1027,17 +1055,7 @@ $conn->close();
 
 </script>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll("#dataTable2 tbody tr").forEach(row => {
-            row.addEventListener("click", function () {
-                // Assuming the first column contains a unique ID
-                let employeeId = this.cells[0].innerText.trim(); 
-                if (employeeId) {
-                    window.location.href = `employeedailyupdate.php?id=${employeeId}`;
-                }
-            });
-        });
-    });
+   
 
 document.getElementById('dateFilter').addEventListener('change', function () {
     let filterDate = this.value;
@@ -1053,9 +1071,48 @@ document.getElementById('dateFilter').addEventListener('change', function () {
     });
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+
+    document.querySelector('#dataTable2 tbody').addEventListener('click', function (event) {
+        const clickedCell = event.target.closest('td');
+        if (!clickedCell) return;
+
+        const row = clickedCell.closest('tr'); // Get the row
+        const companyTitleCell = row.querySelector('.company-title'); // Get "Company - Title" cell
+        const projectTypeCell = row.querySelector('.project-type'); // Get "Project Type" cell
+
+        if (clickedCell === companyTitleCell) {
+            const companyTitle = companyTitleCell.textContent.trim();
+            window.location.href = `employeeWorkReports.php?search=${encodeURIComponent(companyTitle)}`;
+        } else if (clickedCell === projectTypeCell) {
+            const projectType = projectTypeCell.textContent.trim();
+            window.location.href = `employeeWorkReports.php?search=${encodeURIComponent(projectType)}`;
+        } else {
+            window.location.href = "requirement.php";
+        }
+    });
+});
+
 </script>
 <!-- Initialize DataTable -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll("#dataTable1 tbody tr").forEach(row => {
+            row.addEventListener("click", function () {
+                let company = this.cells[2].innerText.trim();
+                let title = this.cells[3].innerText.trim();
+                let type = this.cells[4].innerText.trim();
+                let totalDays = this.cells[5].innerText.trim();
+                let teammates = this.cells[7].innerText.trim();
 
+                let url = `employeedailyupdate.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}&totalDays=${encodeURIComponent(totalDays)}&teammates=${encodeURIComponent(teammates)}`;
+                window.location.href = url;
+            });
+        });
+    });
+
+
+</script>
 
     <!-- Core plugin JavaScript-->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>

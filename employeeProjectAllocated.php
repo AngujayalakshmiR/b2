@@ -730,15 +730,19 @@ function markCompleted(button) {
     document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll("#dataTable tbody tr").forEach(row => {
             row.addEventListener("click", function () {
-                // Assuming the first column contains a unique ID
-                let employeeId = this.cells[0].innerText.trim(); 
-                if (employeeId) {
-                    window.location.href = `employeedailyupdate.php?id=${employeeId}`;
-                }
+                let company = this.cells[2].innerText.trim();
+                let title = this.cells[3].innerText.trim();
+                let type = this.cells[4].innerText.trim();
+                let totalDays = this.cells[5].innerText.trim();
+                let teammates = this.cells[7].innerText.trim();
+
+                let url = `employeedailyupdate.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}&totalDays=${encodeURIComponent(totalDays)}&teammates=${encodeURIComponent(teammates)}`;
+                window.location.href = url;
             });
         });
     });
 </script>
+
 </body>
 
 </html>

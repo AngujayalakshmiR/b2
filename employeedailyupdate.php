@@ -5,6 +5,13 @@ if (!isset($_SESSION['empUserName'])) {
     header("Location: login.php");
     exit();
 }
+
+// Check if data is passed via URL parameters
+$companyName = isset($_GET['company']) ? htmlspecialchars($_GET['company']) : '';
+$projectTitle = isset($_GET['title']) ? htmlspecialchars($_GET['title']) : '';
+$projectType = isset($_GET['type']) ? htmlspecialchars($_GET['type']) : '';
+$totalDays = isset($_GET['totalDays']) ? htmlspecialchars($_GET['totalDays']) : '';
+$teammates = isset($_GET['teammates']) ? htmlspecialchars($_GET['teammates']) : '';
 ?>
 
 <!DOCTYPE html>
@@ -603,30 +610,42 @@ tbody{
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                <div class="custom-container"> 
-    <div class="custom-card"><b>Company Name</b> 
-        <div style="margin-top: 10px;">Kurinji Cement</div>
-    </div>
-    <div class="custom-card"><b>Project Title</b>
-        <div style="margin-top: 10px;">Updation in the existing web page</div>
-    </div>
-    <div class="custom-card"><b>Project Type</b>
-        <div style="margin-top: 10px;">Web Development</div>
-    </div>
-    <div class="custom-card"><b>Total Days</b>
-        <div style="margin-top: 10px;">20</div>
-    </div>
-    <div class="custom-card"><b>Working Days</b>
-        <div style="margin-top: 10px;"> 10</div>
-    </div>
-    <div class="custom-card"><b>Members Allocated</b>
-        <div style="margin-top: 10px;">Jayavarshini, Suriya</div>
-    </div>
-</div><br>
+                <div class="custom-container">
+    <?php if (!empty($companyName) && !empty($projectTitle)) { ?>
+        <div class="custom-card"><b>Company Name</b>
+            <div style="margin-top: 10px;"><?php echo $companyName; ?></div>
+        </div>
+        <div class="custom-card"><b>Project Title</b>
+            <div style="margin-top: 10px;"><?php echo $projectTitle; ?></div>
+        </div>
+        <div class="custom-card"><b>Project Type</b>
+            <div style="margin-top: 10px;"><?php echo $projectType; ?></div>
+        </div>
+        <div class="custom-card"><b>Total Days</b>
+            <div style="margin-top: 10px;"><?php echo $totalDays; ?></div>
+        </div>
+        <div class="custom-card"><b>Working Days</b>
+            <div style="margin-top: 10px;">10</div> <!-- Static Value -->
+        </div>
+        <div class="custom-card"><b>Members Allocated</b>
+            <div style="margin-top: 10px;"><?php echo $teammates; ?></div>
+        </div>
+    <?php } else { ?>
+        <p>No project details selected. Click a row in the previous page to view details.</p>
+    <?php } ?>
+</div>
+<br>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                     <div class="card-header py-3">
                     <div class="container-fluid">
+<!-- Include SweetAlert Library -->
+
+<form id="taskForm" method="POST">
+        <input type="hidden" name="companyName" value="<?php echo $companyName; ?>">
+            <input type="hidden" name="projectTitle" value="<?php echo $projectTitle; ?>">
+            <input type="hidden" name="projectType" value="<?php echo $projectType; ?>">
+            <input type="hidden" name="totalDays" value="<?php echo $totalDays; ?>">
     <div class="row align-items-center">
         <!-- Task Details -->
         <div class="col-md-2 col-12">
@@ -639,10 +658,10 @@ tbody{
         <div class="col-md-9 col-12">
             <div class="row g-1">
                 <div class="col-md-7 col-12">
-                    <input type="text" class="form-control" id="taskInput1" placeholder="Enter Today Task">
+                    <input type="text" class="form-control" id="taskInput1" name="taskDetails" placeholder="Enter Today Task" required>
                 </div>
                 <div class="col-md-3 col-12">
-                    <input type="text" class="form-control" id="taskInput2" placeholder="Enter Total Hrs">
+                    <input type="text" class="form-control" id="taskInput2" name="totalHrs" placeholder="Enter Total Hrs" required>
                 </div>
                 <div class="col-md-2 col-12">
                     <button type="submit" class="btn w-100 py-1 text-white" style="background: rgb(0, 148, 255); font-size: 15px;">Add</button>
@@ -650,6 +669,9 @@ tbody{
             </div>
         </div>
     </div>
+</form>
+
+
 </div>
 
 </div>
@@ -669,22 +691,7 @@ tbody{
         </tr>
     </thead>
     <tbody>
-    <tr>
-                    <td>1</td>
-                    <td>10-02-2025</td>
-                    <td>The project requires inbuilt updates and notifications.</td>
-                    <td>10</td>
-                    <td>-</td>
-                    <td><button type="button" class="btn  w-80 py-1" style="background: rgb(0, 148, 255);color:white;font-size:15px;" onclick="enableEdit(event, this)">Update</button></td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>11-02-2025</td>
-                    <td>Fixing the UI issues in the dashboard.</td>
-                    <td>8</td>
-                    <td>-</td>
-                    <td><button type="button" class="btn  w-80 py-1" style="background: rgb(0, 148, 255);color:white;font-size:15px;" onclick="enableEdit(event, this)">Update</button></td>
-                </tr>
+   
         <!-- Add more rows as needed -->
     </tbody>
 </table>
@@ -762,6 +769,7 @@ tbody{
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -782,7 +790,13 @@ tbody{
 <!-- Bootstrap 4.6.0 JavaScript -->
 <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script> -->
+<script>
+    $(document).ready(function () {
+    $("#dataTable").DataTable();
+    fetchTasks(); // Load tasks dynamically
+});
 
+</script>
 
 <script>
  document.addEventListener("DOMContentLoaded", function () {
@@ -813,55 +827,6 @@ function filterByDate() {
     }
 }
 </script>
-<script>
-setTimeout(function () {
-    document.querySelectorAll("tbody tr").forEach(row => {
-        console.log(`Row has ${row.cells.length} cells`);
-        
-        if (row.cells.length < 13) {
-            console.warn("Skipping row: Some cells are missing.");
-            return;
-        }
-        
-        let taskTypeCell = row.cells[7];
-        let moduleStatusCell = row.cells[11];
-        let projectStatusCell = row.cells[12];
-        
-        let taskType = taskTypeCell.innerText.trim();
-        let moduleStatus = moduleStatusCell.innerText.trim();
-        
-        console.log(`Task Type: ${taskType}, Module Status: ${moduleStatus}`);
-        
-        if (moduleStatus.includes("Completed")&&taskType.includes("Testing") ) {
-            projectStatusCell.innerHTML = `
-                <button class="btn btn-success btn-sm" onclick="markCompleted(this)">Mark as Completed</button>
-            `;
-        } else {
-            projectStatusCell.innerHTML = `
-                <button class="btn btn-warning btn-sm">Ongoing</button>
-            `;
-        }
-    });
-}, 2000);
-
-function markCompleted(button) {
-    let row = button.closest("tr");
-    let projectStatusCell = row.cells[12]; // Adjusted to match correct index
-    
-    projectStatusCell.innerHTML = `
-        <span class="text-success"><i class="fas fa-check-circle"></i> Completed</span>
-    `;
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelector("[data-bs-target='#projectDescModal']").addEventListener("click", function (event) {
-        event.preventDefault(); // Prevent default anchor behavior
-        var myModal = new bootstrap.Modal(document.getElementById("projectDescModal"));
-        myModal.show();
-    });
-});
-
-</script>
 
   <!-- <script>
     $(document).ready(function() {
@@ -878,74 +843,175 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+
+
 <script>
-        function enableEdit(event, btn) {
-    event.preventDefault(); // Prevent page reload
+$(document).ready(function () {
+    function fetchTasks() {
+    $.ajax({
+        url: 'fetch_tasks.php',
+        type: 'POST',
+        data: {
+            companyName: $("input[name='companyName']").val(),
+            projectTitle: $("input[name='projectTitle']").val()
+        },
+        dataType: 'json',
+        success: function (response) {
+            let tableBody = $("#dataTable tbody");
+            
+            if ($.fn.DataTable.isDataTable("#dataTable")) {
+                $("#dataTable").DataTable().clear().destroy(); // Properly destroy the DataTable instance
+            }
 
-    let row = btn.closest("tr"); // Get the row
-    let taskField = row.cells[2]; // Task Details field
-    let actualHrsField = row.cells[4]; // Actual Hrs field
-    let button = row.cells[5].querySelector("button"); // Get the button
+            tableBody.empty(); // Clear previous data
 
-    if (button.innerText === "Update") {
-        // Replace Task Details text with an input field
-        let taskInput = document.createElement("input");
-        taskInput.type = "text";
-        taskInput.className = "form-control";
-        taskInput.value = taskField.innerText.trim();
-        taskField.innerHTML = "";
-        taskField.appendChild(taskInput);
-        taskInput.focus();
+            let totalHrsSum = 0;
+            let actualHrsSum = 0;
+            let taskCount = response.length;
 
-        // Replace Actual Hrs text with an input field
-        let actualInput = document.createElement("input");
-        actualInput.type = "number";
-        actualInput.className = "form-control";
-        actualInput.value = actualHrsField.innerText.trim() === "-" ? "" : actualHrsField.innerText;
-        actualHrsField.innerHTML = "";
-        actualHrsField.appendChild(actualInput);
+            if (taskCount > 0) {
+                $.each(response, function (index, task) {
+                    let isEditable = (task.actualHrs === "-");
+                    let buttonState = isEditable ? "Update" : "Saved";
+                    let buttonClass = isEditable ? "btn-primary" : "btn-secondary";
+                    let disabledAttr = isEditable ? "" : "disabled";
 
-        // Change button text to "Save"
-        button.innerText = "Save";
-        button.classList.replace("btn-info", "btn-success");
+                    let totalHrs = parseFloat(task.totalHrs) || 0;
+                    let actualHrs = (task.actualHrs !== "-") ? parseFloat(task.actualHrs) || 0 : 0;
+
+                    totalHrsSum += totalHrs;
+                    actualHrsSum += actualHrs;
+
+                    let row = `<tr>
+                        <td>${index + 1}</td>
+                        <td>${task.date}</td>
+                        <td>${task.taskDetails}</td>
+                        <td>${task.totalHrs}</td>
+                        <td>${task.actualHrs || '-'}</td>
+                        <td>
+                            <button type="button" class="btn ${buttonClass} py-1" onclick="enableEdit(this, ${task.ID})" ${disabledAttr}>${buttonState}</button>
+                        </td>
+                    </tr>`;
+                    tableBody.append(row);
+                });
+
+                $("#totalHrsHeader").text(`Total Hrs (${totalHrsSum})`);
+                $("#actualHrsHeader").text(`Actual Hrs (${actualHrsSum})`);
+            } else {
+                tableBody.append("<tr><td colspan='6'>No task updates found.</td></tr>");
+                $("#totalHrsHeader").text("Total Hrs (0)");
+                $("#actualHrsHeader").text("Actual Hrs (0)");
+            }
+
+            $("#dataTable").DataTable(); // Reinitialize DataTable
+            $(".header-counter").text(taskCount); // Update task count dynamically
+        },
+        error: function () {
+            console.error("Error fetching task data.");
+        }
+    });
+}
+
+
+
+    fetchTasks(); // Load tasks on page load
+
+    $("#taskForm").submit(function (e) {
+    e.preventDefault();
+
+    $.ajax({
+        url: 'insert_daily_update.php',
+        type: 'POST',
+        data: $(this).serialize(),
+        success: function (response) {
+            if (response.trim() === "success") {
+                Swal.fire("Success!", "Task added successfully!", "success");
+                $("#taskForm").trigger("reset"); // Reset form
+                fetchTasks(); // Refresh table & update task count
+            } else {
+                Swal.fire("Error!", response, "error");
+            }
+        },
+        error: function () {
+            Swal.fire("Error!", "Failed to add task.", "error");
+        }
+    });
+});
+
+});
+
+</script>
+<script>
+   
+function enableEdit(button, taskId) {
+    let row = $(button).closest("tr");
+    let taskDetailsCell = row.find("td:nth-child(3)");
+    let actualHrsCell = row.find("td:nth-child(5)");
+    let updateButton = $(button);
+
+    if (updateButton.text() === "Update") {
+        let taskInput = $("<input>").attr({
+            type: "text",
+            class: "form-control",
+            value: taskDetailsCell.text().trim()
+        });
+        taskDetailsCell.html(taskInput);
+
+        let actualInput = $("<input>").attr({
+            type: "number",
+            class: "form-control",
+            value: actualHrsCell.text().trim() === "-" ? "" : actualHrsCell.text().trim()
+        });
+        actualHrsCell.html(actualInput);
+
+        updateButton.text("Save").removeClass("btn-primary").addClass("btn-success");
     } else {
-        // Save the updated values
-        let newTaskDetails = taskField.querySelector("input").value;
-        let newActualHrs = actualHrsField.querySelector("input").value;
+        let newTaskDetails = taskDetailsCell.find("input").val();
+        let newActualHrs = actualHrsCell.find("input").val();
 
-        taskField.innerHTML = newTaskDetails || "-";
-        actualHrsField.innerHTML = newActualHrs || "-";
+        $.ajax({
+            url: 'update_task.php',
+            type: 'POST',
+            data: {
+                taskId: taskId,
+                taskDetails: newTaskDetails,
+                actualHrs: newActualHrs
+            },
+            success: function (response) {
+                if (response.trim() === "success") {
+                    Swal.fire("Updated!", "Task updated successfully!", "success");
 
-        // Disable the button after saving
-        button.innerText = "Saved";
-        button.classList.replace("btn-success", "btn-secondary");
-        button.disabled = true;
+                    taskDetailsCell.text(newTaskDetails || "-");
+                    actualHrsCell.text(newActualHrs || "-");
 
-        // Update the total hours dynamically
-        updateTotalHours();
+                    updateButton.text("Saved").removeClass("btn-success").addClass("btn-secondary").prop("disabled", true);
+
+                    updateTotalHours();
+                } else {
+                    Swal.fire("Error!", response, "error");
+                }
+            }
+        });
     }
 }
 
 function updateTotalHours() {
-    let totalHrs = 0;
-    let actualHrs = 0;
+    let totalHrs = 0, actualHrs = 0;
 
-    // Loop through the table rows
-    document.querySelectorAll("#dataTable tbody tr").forEach(row => {
-        totalHrs += parseFloat(row.cells[3].innerText) || 0;
-        let actualValue = parseFloat(row.cells[4].innerText);
+    $("#dataTable tbody tr").each(function () {
+        totalHrs += parseFloat($(this).find("td:nth-child(4)").text()) || 0;
+        let actualValue = parseFloat($(this).find("td:nth-child(5)").text());
         if (!isNaN(actualValue)) {
             actualHrs += actualValue;
         }
     });
 
-    // Update table headers dynamically
-    document.getElementById("totalHrsHeader").innerText = `Total Hrs (${totalHrs})`;
-    document.getElementById("actualHrsHeader").innerText = `Actual Hrs (${actualHrs})`;
+    $("#totalHrsHeader").text(`Total Hrs (${totalHrs})`);
+    $("#actualHrsHeader").text(`Actual Hrs (${actualHrs})`);
 }
+// Load tasks initially
+$(document).ready(fetchTasks);
 
-// Call function on page load to set initial values
-window.onload = updateTotalHours;
 
     </script>
 

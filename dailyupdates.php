@@ -1,3 +1,4 @@
+<?php include 'dbconn.php'; // Ensure this file has a valid DB connection ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -567,8 +568,8 @@ tbody{
                                     <th>S.no</th>
                                     <th>Name</th>
                                     <th>Date</th>
-                                    <th>Company</th>
-                                    <th>Title</th>
+                                    <th>Company-Title</th>
+                                    <th>Type</th>
                                     <th>Total Days</th>
                                     <th>Description</th>
                                     <th>Total Hrs</th>
@@ -577,31 +578,34 @@ tbody{
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr data-name="Surya" data-company="ABC Corp">
-                                    <td>1</td>
-                                    <td class="name-column">Surya</td>
-                                    <td>05-03-2025</td>
-                                    <td class="company-column">Govin</td>
-                                    <td>abc</td>
-                                    <td>5</td>
-                                    <td>I completed half backend work</td>
-                                    <td>4.5</td>
-                                    <td>2</td>
-                                    <td><i class="fas fa-check-circle status-icon completed"></i>&nbsp;&nbsp;Completed</td>
-                                </tr>
-                                <tr data-name="Pavithra" data-company="ABC Corp">
-                                    <td>2</td>
-                                    <td class="name-column">Pavithra</td>
-                                    <td>05-03-2025</td>
-                                    <td class="company-column">Kurinji</td>
-                                    <td>xyz</td>
-                                    <td>5</td>
-                                    <td>I completed half backend work</td>
-                                    <td>4.5</td>
-                                    <td>2</td>
-                                    <td><i class="fas fa-check-circle status-icon completed"></i>&nbsp;&nbsp;Completed</td>
-                                </tr>
-                                <!-- Add more rows as needed -->
+                            <?php
+            $sql = "SELECT * FROM dailyupdates ORDER BY date DESC";
+            $result = $conn->query($sql);
+            
+            if (!$result) {
+                die("Query failed: " . $conn->error);
+            }
+            
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    echo "<tr>
+                            <td>{$row['ID']}</td>
+                            <td>{$row['name']}</td>
+                            <td>{$row['date']}</td>
+                            <td>{$row['companyName']}</td>
+                            <td>{$row['projectTitle']}</td>
+                            <td>{$row['totalDays']}</td>
+                            <td>{$row['taskDetails']}</td>
+                            <td>{$row['totalHrs']}</td>
+                            <td>{$row['actualHrs']}</td>
+                            <td>{$row['status']}</td>
+                          </tr>";
+                }
+            } else {
+                echo "<tr><td colspan='9'>No records found</td></tr>";
+            }
+            
+            ?>
                             </tbody>
                         </table>
                                                     </div>
@@ -784,19 +788,23 @@ function markCompleted(button) {
     `;
 }
 </script>
-
-  <!-- <script>
-    $(document).ready(function() {
-      // When a row is clicked, get the employee name and redirect to the report page with the name as a query parameter.
-      $("#dataTable tbody tr").on("click", function() {
-        var employeeName = $(this).data("name");
-        if(employeeName) {
-          // Redirect to the Customer Details page with the selected name in the URL.
-          window.location.href = "reports.php?name=" + encodeURIComponent(employeeName);
-        }
-      });
-    });
-  </script> -->
+<script>
+        $(document).ready(function () {
+            $('#dateFilter').on('change', function () {
+                var selectedDate = $(this).val();
+                if (selectedDate) {
+                    $.ajax({
+                        url: "fetch_data.php",
+                        method: "POST",
+                        data: { date: selectedDate },
+                        success: function (response) {
+                            $('#dataTable').html(response);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

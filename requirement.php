@@ -1,3 +1,21 @@
+
+<?php
+session_start();
+
+if (!isset($_SESSION['empUserName'])) {
+    header("Location: login.php");
+    exit();
+}
+$companyName = isset($_GET['company']) ? htmlspecialchars($_GET['company']) : '';
+$projectTitle = isset($_GET['title']) ? htmlspecialchars($_GET['title']) : '';
+$projectType = isset($_GET['type']) ? htmlspecialchars($_GET['type']) : '';
+$totalDays = isset($_GET['totalDays']) ? htmlspecialchars($_GET['totalDays']) : '';
+$workingDays = isset($_GET['workingDays']) ? htmlspecialchars($_GET['workingDays']) : '';
+$teammates = isset($_GET['teammates']) ? htmlspecialchars($_GET['teammates']) : '';
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,6 +41,64 @@
     <!-- Custom styles for this page -->
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <style>
+         .custom-container {
+        background:rgb(81, 172, 246);
+        color: white;
+        border-radius: 25px;
+        padding: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .custom-card {
+        flex: 1;
+        padding: 20px;
+        min-width: 100px;
+        text-align: center;
+        border-right: 2px solid white;
+    }
+    .custom-card:last-child {
+        border-right: none;
+    }
+    .custom-card b {
+        font-size: medium;
+    }
+    .custom-card div {
+        font-size: 14px;
+    }
+ /* Responsive Design */
+ @media (max-width: 1024px) { /* Tablet View */
+        .custom-container {
+            justify-content: center;
+        }
+        .custom-card {
+            width: 30%;
+            border-right: none;
+            border-bottom: none;
+        }
+        .custom-card:nth-child(3n) {
+            border-right: none;
+        }
+        .custom-card:nth-child(4), .custom-card:nth-child(5), .custom-card:nth-child(6) {
+            border-bottom: none;
+        }
+    }
+    
+    @media (max-width: 768px) { /* Mobile View */
+        .custom-card {
+            width: 45%;
+            border-right: 2px solid none;
+            border-bottom: 2px solid none;
+        }
+        .custom-card:nth-child(2n) {
+            border-right: none;
+        }
+        
+        .custom-card b, .custom-card div {
+            font-size: medium;
+        }
+    }
+
 thead{
     color:black;
 }
@@ -83,22 +159,6 @@ thead{
             background: #0056b3;
             transform: scale(1.1);
         }
-
-         /* Modal Header Gradient Background */
-    .modal-header {
-        background: linear-gradient(to right, #4568dc, #b06ab3);
-        color: white;
-    }
-
-    /* Adjust close button color */
-    .modal-header .close {
-        color: white;
-        opacity: 1;
-    }
-
-    .modal-header .close:hover {
-        color: #f8f9fa;
-    }
 
 
     .upload-icon {
@@ -797,7 +857,32 @@ html, body {
 </ul>
 
 </nav>
-    <div class="container-fluid" >
+    <div class="container-fluid" ><br>
+    <div class="custom-container">
+    <?php if (!empty($companyName) && !empty($projectTitle)) { ?>
+        <div class="custom-card"><b>Company Name</b>
+            <div style="margin-top: 10px;"><?php echo $companyName; ?></div>
+        </div>
+        <div class="custom-card"><b>Project Title</b>
+            <div style="margin-top: 10px;"><?php echo $projectTitle; ?></div>
+        </div>
+        <div class="custom-card"><b>Project Type</b>
+            <div style="margin-top: 10px;"><?php echo $projectType; ?></div>
+        </div>
+        <div class="custom-card"><b>Total Days</b>
+            <div style="margin-top: 10px;"><?php echo $totalDays; ?></div>
+        </div>
+        <div class="custom-card"><b>Working Days</b>
+            <div style="margin-top: 10px;" id="workingDays"><?php echo $workingDays; ?></div> <!-- Dynamic Value -->
+        </div>
+
+        <div class="custom-card"><b>Members Allocated</b>
+            <div style="margin-top: 10px;"><?php echo $teammates; ?></div>
+        </div>
+    <?php } else { ?>
+        <p>No project details selected. Click a row in the previous page to view details.</p>
+    <?php } ?>
+</div><br><br>
     <div class="white-container">
     <h2 class="container-heading">Requirement</h2>
     <div class="file-container" style="padding-bottom: 10px;">

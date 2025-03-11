@@ -491,7 +491,7 @@ thead{
                     while ($row = mysqli_fetch_assoc($result)) {
                         echo "<div class='col-6 d-flex align-items-center mb-2'>";
                         echo "<input type='checkbox' name='employees[]' value='" . $row['Name'] . "' class='form-check-input mr-2'>";
-                        echo "<label class='form-check-label'>" . $row['Name'] . "</label>";
+                        echo "<label class='form-check-label' style='color:black'>" . $row['Name'] . "</label>";
                         echo "</div>";
                     }
                   ?>
@@ -1202,8 +1202,7 @@ $result = mysqli_query($conn, $query);
     });
 });
 
-
-    function deleteProject(projectId) {
+function deleteProject(projectId) {
     Swal.fire({
         title: "Are you sure?",
         text: "This action cannot be undone!",
@@ -1219,9 +1218,9 @@ $result = mysqli_query($conn, $query);
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: 'projectID=' + projectId
             })
-            .then(response => response.text())
+            .then(response => response.json())  // Parse response as JSON
             .then(data => {
-                if (data.trim() === 'success') {
+                if (data.success) {  // Check if success exists in JSON
                     // Remove the deleted row
                     document.getElementById("row_" + projectId).remove();
 
@@ -1238,19 +1237,30 @@ $result = mysqli_query($conn, $query);
                         title: "Deleted!",
                         text: "Project has been deleted successfully.",
                         confirmButtonColor: "#3085d6"
-                    });
+                    }).then(() => {
+                    location.reload(); // Refresh page after action
+                });
                 } else {
                     Swal.fire({
                         icon: "error",
                         title: "Error!",
-                        text: "Error deleting project: " + data,
+                        text: "Error deleting project: " + (data.error || "Unknown error"),
                         confirmButtonColor: "#d33"
                     });
                 }
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: "Network error or invalid response",
+                    confirmButtonColor: "#d33"
+                });
             });
         }
     });
 }
+
 
 
 

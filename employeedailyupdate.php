@@ -580,8 +580,11 @@ tbody{
 <!-- Topbar Navbar -->
 <ul class="navbar-nav ml-auto">
 <div class="d-flex justify-content-between align-items-center mb-2">
-        <a href="requirement.php" target="_blank" class="btn " style="background: rgb(255, 197, 50); font-size: 15px;color:white;">Requirement</a>
-    </div>
+   
+    <a href="javascript:void(0);" id="requirementBtn" class="btn" style="background: rgb(255, 197, 50); font-size: 15px;color:white;">Requirement</a>
+
+</div>
+
     <div class="topbar-divider d-none d-sm-block"></div>
 
     <!-- Nav Item - User Information -->
@@ -1057,7 +1060,28 @@ $(document).ready(fetchTasks);
 
 
     </script>
+<script>
+    $(document).ready(function () {
+    $("#requirementBtn").click(function () {
+        // Get values from PHP variables
+        let companyName = "<?php echo $companyName; ?>";
+        let projectTitle = "<?php echo $projectTitle; ?>";
+        let projectType = "<?php echo $projectType; ?>";
+        let totalDays = "<?php echo $totalDays; ?>";
+        let teammates = "<?php echo $teammates; ?>";
 
+        // Get dynamically calculated working days
+        let workingDays = $("#workingDays").text().trim(); // Fetch value from UI
+
+        // Construct the URL with parameters
+        let url = `requirement.php?company=${encodeURIComponent(companyName)}&title=${encodeURIComponent(projectTitle)}&type=${encodeURIComponent(projectType)}&totalDays=${encodeURIComponent(totalDays)}&teammates=${encodeURIComponent(teammates)}&workingDays=${encodeURIComponent(workingDays)}`;
+
+        // Redirect to the URL
+        window.location.href = url;
+    });
+});
+
+</script>
 </body>
 
 </html>

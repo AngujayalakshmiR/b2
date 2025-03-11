@@ -430,7 +430,8 @@ html, body {
             overflow-x: auto; /* Horizontal scrolling */
             overflow-y: hidden; /* No vertical scroll */
             white-space: nowrap;
-            padding: 15px;
+            padding-left: 5px;
+            padding-right: 5px;
             background: #f8f9fa;
             scrollbar-width: thin;
             scrollbar-color: rgba(144, 144, 144, 0.64) transparent;
@@ -452,7 +453,7 @@ html, body {
         /* Flexbox for boxes */
         .file-wrapper {
     display: flex;
-    gap: 15px;
+    gap: 10px;
     flex-wrap: wrap; /* Allows wrapping into new rows */
     justify-content: flex-start;
 }
@@ -528,24 +529,41 @@ html, body {
             background-size: contain;
             border-radius: 5px;
         }
+/* Delete Button Always Visible */
+.delete-btn {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background: white;
+    color: red;
+    font-size: 14px;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: block; /* Always visible */
+}
 
 
-    .delete-btn {
-        position: absolute;
-        top: 5px;
-        left: 5px;
-        background: white;
-        color: red;
-        font-size: 14px;
-        padding: 5px;
-        border-radius: 50%;
-        cursor: pointer;
-        display: none;
-    }
 
-    .file-box:hover .delete-btn {
-        display: block;
-    }
+
+.delete-btn {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background: white;
+    color: red;
+    font-size: 14px;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: block; /* Ensures visibility */
+}
+
+/* Ensure .file-box has relative positioning */
+.file-box {
+    position: relative;
+}
+
 
     .file-link {
         color: white;
@@ -565,7 +583,7 @@ html, body {
     height: 100%;             /* Adjust based on parent container */
     width: 100%;              /* Ensures it takes full width */
     color: white;             
-    font-size: 16px;          
+    font-size: 14px;          
     font-weight: bold;
 }
 
@@ -573,7 +591,19 @@ html, body {
 .modal-dialog {
     max-width: 35%;
   }
+  @media (max-width: 570px) {
 
+    
+    .container-fluid{
+    padding-left: 5px;padding-right:5px;
+}
+.file-row {
+    display: flex;
+    gap: 5px;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+  }
   @media (max-width: 992px) { /* Tablets */
     .modal-dialog {
       max-width: 60%;
@@ -716,6 +746,22 @@ html, body {
       display: none; /* Hide the text */
     }
   }
+.container-fluid{
+    padding-left: 15px;padding-right:15px;
+}
+  .white-container {
+    background-color: white;
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden; /* Ensures content stays within rounded corners */
+}
+.container-heading {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #5a5c69; /* Dark gray for better readability */
+}
 </style>
 
 <a href="#" id="addFileBtn" class="btn btn-custom" style="color: white;">
@@ -751,16 +797,30 @@ html, body {
 </ul>
 
 </nav>
-    <div class="container-fluid" style="padding-left: 5px;padding-right:15px;">
-    <div class="file-container" >
+    <div class="container-fluid" >
+    <div class="white-container">
+    <h2 class="container-heading">Requirement</h2>
+    <div class="file-container" style="padding-bottom: 10px;">
         <div class="file-wrapper" id="fileWrapper">
             <!-- Files will be dynamically added here -->
         </div>
     </div>
+</div>
+<br>
 
-    <div class=" row" id="entriesContainer">
-    <!-- Entries will be dynamically added here -->
-  </div>
+<div class="white-container">
+    <h2 class="container-heading">Description</h2>
+    <div class="row" id="entriesContainer">
+        <!-- Entries will be dynamically added here -->
+    </div>
+    <p id="noDescription" style="font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #5a5c69;text-align:center">-- No description found --</p>
+</div>
+
+
+
     </div></div>
 <div class="modal fade" id="descModal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
@@ -927,11 +987,13 @@ html, body {
 
 }
 
-</style>
 
+
+</style>
+<!-- // <button class="delete-btn" onclick="deleteEntry(${entryId})"><i class="fas fa-trash"></i></button> -->
 <script>
 let entryCount = 0;
-let editEntryId = null; // To track which entry is being edited
+let editEntryId = null; // Track which entry is being edited
 
 document.getElementById("descForm").addEventListener("submit", function (event) {
   event.preventDefault();
@@ -949,6 +1011,7 @@ document.getElementById("descForm").addEventListener("submit", function (event) 
   let entryId = entryCount++;
   let columnClass = "col-lg-4 col-md-6 col-sm-12"; // Responsive layout
 
+  // Corrected Template Literal
   let entryHTML = `
     <div class="${columnClass}" id="entry-${entryId}">
       <div class="entry-box p-2">
@@ -958,30 +1021,45 @@ document.getElementById("descForm").addEventListener("submit", function (event) 
           <div class="col-3 text-end">
             <button class="toggle-btn" onclick="openEditModal(${entryId})"><i class="fas fa-pen"></i></button>
             <button class="toggle-btn1" onclick="toggleDesc(${entryId})">+</button>
+          
           </div>
         </div>
-        <div class="desc-content mt-2" id="desc-${entryId}" style="display: none; color: #6c757d;">
-  ${desc}
-</div>
-
+        <div class="desc-content mt-2" id="desc-${entryId}" style="display: none; color: #6c757d;">${desc}</div>
       </div>
     </div>
   `;
 
   document.getElementById("entriesContainer").innerHTML += entryHTML;
 
+  // Hide "No description found" text when an entry is added
+  document.getElementById("noDescription").style.display = "none";
+
   // Reset form & close modal
   document.getElementById("descForm").reset();
   $('#descModal').modal('hide');
 });
 
+// Function to delete an entry
+function deleteEntry(id) {
+  let entry = document.getElementById(`entry-${id}`);
+  if (entry) {
+    entry.remove();
+  }
+
+  // Check if there are remaining entries
+  if (document.getElementById("entriesContainer").children.length === 0) {
+    document.getElementById("noDescription").style.display = "block";
+  }
+}
+
 // Open Edit Modal with Existing Data
 function openEditModal(id) {
   editEntryId = id;
+
   document.getElementById("editDateInput").value = document.getElementById(`date-${id}`).innerText;
   document.getElementById("editTitleInput").value = document.getElementById(`title-${id}`).innerText;
   document.getElementById("editDescInput").value = document.getElementById(`desc-${id}`).innerText;
-  
+
   $('#editModal').modal('show');
 }
 
@@ -993,7 +1071,7 @@ document.getElementById("editForm").addEventListener("submit", function (event) 
     document.getElementById(`title-${editEntryId}`).innerText = document.getElementById("editTitleInput").value;
     document.getElementById(`date-${editEntryId}`).innerText = document.getElementById("editDateInput").value;
     document.getElementById(`desc-${editEntryId}`).innerHTML = document.getElementById("editDescInput").value.replace(/\n/g, "<br>");
-    
+
     editEntryId = null; // Reset after update
     $('#editModal').modal('hide'); // Close modal
   }
@@ -1007,7 +1085,6 @@ function toggleDesc(id) {
 
 
 </script>
-
 
 <script>
     const fileWrapper = document.getElementById("fileWrapper");
@@ -1067,12 +1144,14 @@ function toggleDesc(id) {
             window.open(`b2/${fileName}`, "_blank");
         };
 
+        // Ensure delete button is always visible
         fileBox.appendChild(deleteBtn);
         fileBox.appendChild(textContainer);
 
         currentRow.appendChild(fileBox); // Append fileBox to the current row
     });
 }
+
 
 
 

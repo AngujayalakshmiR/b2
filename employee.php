@@ -987,7 +987,17 @@ $(document).ready(function () {
         e.preventDefault(); // Prevent page reload
 
         let formData = new FormData(this);
-        let isUpdate = $("#employee_id").val() !== ""; // Check if update or add
+        let isUpdate = $("#employee_id").val().trim() !== ""; // Check if update or add
+
+        // Show loading state
+        Swal.fire({
+            title: isUpdate ? "Updating Employee..." : "Adding Employee...",
+            text: "Please wait...",
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
 
         $.ajax({
             url: "addEmployeeBackend.php",
@@ -995,27 +1005,44 @@ $(document).ready(function () {
             data: formData,
             contentType: false,
             processData: false,
+            dataType: "json",
             success: function (response) {
-                Swal.fire({
-                    icon: "success",
-                    title: isUpdate ? "Employee Updated!" : "Employee Added!",
-                    text: isUpdate ? "Employee updated successfully!" : "Employee added successfully.",
-                    confirmButtonText: "OK"
-                }).then(() => {
-                    location.reload(); // Reload the page after clicking OK
-                });
+                Swal.close(); // Close loading popup
+
+                if (response.status === "error") {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: response.message,
+                        confirmButtonText: "OK"
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "success",
+                        title: isUpdate ? "Employee Updated!" : "Employee Added!",
+                        text: response.message,
+                        confirmButtonText: "OK"
+                    }).then(() => {
+                        location.reload(); // Reload after success
+                    });
+                }
             },
-            error: function () {
+            error: function (xhr, status, error) {
+                Swal.close(); // Close loading popup
+
+                let errorMessage = xhr.responseJSON?.message || "Something went wrong. Please try again.";
+
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
-                    text: isUpdate ? "Error updating employee." : "Error adding employee.",
+                    text: isUpdate ? `Error updating employee: ${errorMessage}` : `Error adding employee: ${errorMessage}`,
                     confirmButtonText: "Try Again"
                 });
             }
         });
     });
 });
+
 
 $(document).on("click", ".delete-btn", function () { 
     var employeeId = $(this).data("id");
@@ -1040,6 +1067,8 @@ $(document).on("click", ".delete-btn", function () {
                         title: "Deleted!",
                         text: "Employee deleted successfully!",
                         confirmButtonText: "OK"
+                    }).then(() => {
+                        location.reload(); // Reload after success
                     });
 
                     // Remove the deleted row from the table
@@ -1047,6 +1076,7 @@ $(document).on("click", ".delete-btn", function () {
                     
                     // Update the employee count dynamically
                     updateEmployeeCount();
+                    
                 },
                 error: function () {
                     Swal.fire({

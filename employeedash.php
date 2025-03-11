@@ -912,7 +912,7 @@ $todayUpdates = $todayUpdatesRow['todayUpdates'];
                                                 echo "</tr>";
                                             }
                                         } else {
-                                            echo "<tr><td colspan='7'>No project details found</td></tr>";
+                                            echo "<tr><td colspan='9'>No project details found</td></tr>";
                                         }
                                         ?>
                                     </tbody>

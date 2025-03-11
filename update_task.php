@@ -6,6 +6,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $taskDetails = $_POST['taskDetails'];
     $newActualHrs = floatval($_POST['actualHrs']);
 
+    if ($newActualHrs <= 0) {
+        echo "Error: Actual hours must be greater than zero.";
+        exit;
+    }
+
     // Fetch the existing task
     $query = "SELECT name, date, actualHrs FROM dailyupdates WHERE id = ?";
     $stmt = $conn->prepare($query);

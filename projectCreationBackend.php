@@ -84,9 +84,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt1->execute();
 
             // INSERT into descriptiontable
-            $query2 = "INSERT INTO descriptiontable (companyName, projectTitle, description, ID) VALUES (?, ?, ?, ?)";
+            $query2 = "INSERT INTO descriptiontable (date, companyName, projectTitle, description, ID) VALUES (?, ?, ?, ?, ?)";
             $stmt2 = $conn->prepare($query2);
-            $stmt2->bind_param("sssi", $companyName, $projectTitle, $description, $last_id);
+            $stmt2->bind_param("ssssi", $currentDate, $companyName, $projectTitle, $description, $last_id);
+            
             $stmt2->execute();
         }
 

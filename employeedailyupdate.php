@@ -842,9 +842,8 @@ function filterByDate() {
     });
   </script> -->
 
-
 <script>
-    $(document).ready(function () {
+   $(document).ready(function () {
     function fetchTasks() {
         $.ajax({
             url: 'fetch_tasks.php',
@@ -926,6 +925,14 @@ function filterByDate() {
     $("#taskForm").submit(function (e) {
         e.preventDefault();
 
+        let totalHrsInput = $("#taskInput2").val().trim();
+        let totalHrs = parseFloat(totalHrsInput);
+
+        if (isNaN(totalHrs) || totalHrs <= 0 || totalHrs > 8) {
+            Swal.fire("Error!", "Total hours must be a number between 1 and 8.", "error");
+            return false;
+        }
+
         $.ajax({
             url: 'insert_daily_update.php',
             type: 'POST',
@@ -948,9 +955,11 @@ function filterByDate() {
     });
 });
 
+
 </script>
+
 <script>
-   function enableEdit(button, taskId, employeeName, taskDate) {
+function enableEdit(button, taskId, employeeName, taskDate) { 
     let row = $(button).closest("tr");
     let taskDetailsCell = row.find("td:nth-child(3)");
     let actualHrsCell = row.find("td:nth-child(5)");
@@ -970,7 +979,7 @@ function filterByDate() {
             type: "number",
             class: "form-control",
             value: existingActualHrs || "",
-            min: 0
+            min: 0.1  // Ensure it's greater than zero
         });
         actualHrsCell.html(actualInput);
 
@@ -979,6 +988,11 @@ function filterByDate() {
         let newTaskDetails = taskDetailsCell.find("input").val();
         let newActualHrs = parseFloat(actualHrsCell.find("input").val()) || 0;
         let existingActualHrs = parseFloat(actualHrsCell.text().trim()) || 0;
+
+        if (newActualHrs <= 0) {
+            Swal.fire("Error!", "Actual hours must be greater than zero.", "error");
+            return;
+        }
 
         $.ajax({
             url: 'fetch_total_hours.php',
@@ -1023,10 +1037,6 @@ function filterByDate() {
         });
     }
 }
-
-
-
-
 
 function updateTotalHours() {
     let totalHrs = 0, actualHrs = 0;

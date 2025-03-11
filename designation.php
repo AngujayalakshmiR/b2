@@ -514,8 +514,7 @@
         </button>
     </div>
 </form>
-
-                        
+           
                         </div>
                     </div>
 
@@ -597,6 +596,7 @@
 <script src="vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
     $(document).ready(function() {
         $('#dataTable').DataTable();
@@ -606,8 +606,8 @@
 <!-- Page level custom scripts -->
 <script src="js/demo/datatables-demo.js"></script>
 
-    <script>
-$(document).ready(function () {
+  <script>
+    $(document).ready(function () {
     let editId = null;
     let dataTable = $("#dataTable").DataTable(); // Initialize DataTable
 
@@ -617,7 +617,6 @@ $(document).ready(function () {
             type: "GET",
             dataType: "json",
             success: function (data) {
-                // Destroy DataTable ONLY if it exists AND the table has data
                 if ($.fn.DataTable.isDataTable("#dataTable") && data.count > 0) {
                     dataTable.destroy();
                 }
@@ -630,7 +629,6 @@ $(document).ready(function () {
 
                 $(".header-counter").text(data.count);
 
-                // Reinitialize DataTable only when there are rows
                 if (data.count > 0) {
                     dataTable = $("#dataTable").DataTable();
                 }
@@ -643,9 +641,15 @@ $(document).ready(function () {
 
     fetchdesignation(); // Fetch data on page load
 
+    // Restrict numbers in the Designation field
+    $("#designationName").on("input", function () {
+        $(this).val($(this).val().replace(/\d/g, '')); // Remove numbers dynamically
+    });
+
     $("#designationForm").submit(function (e) {
         e.preventDefault();
         var designation = $("#designationName").val().trim();
+
         if (designation === "") {
             Swal.fire({
                 title: "Error!",
@@ -692,46 +696,46 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".btn-delete", function () {
-    var id = $(this).data("id");
+        var id = $(this).data("id");
 
-    Swal.fire({
-        title: "Are you sure?",
-        text: "Do you want to delete this designation?",
-        icon: "warning",
-        showCancelButton: true,
-        cancelButtonText: "No, Don't Delete",
-        confirmButtonText: "Yes, Delete it",
-        confirmButtonColor: "rgb(0, 148, 255)",
-        cancelButtonColor: "#d33"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: "designationBackend.php",
-                type: "POST",
-                data: { delete_id: id },
-                dataType: "json",
-                success: function (response) {
-                    Swal.fire({
-                        title: "Deleted!",
-                        text: "The entry has been deleted.",
-                        icon: "success",
-                        confirmButtonColor: "rgb(0, 148, 255)"
-                    }).then(() => {
-                        location.reload();  // ✅ Reload the page after confirmation
-                    });
-                },
-                error: function () {
-                    Swal.fire({
-                        title: "Error!",
-                        text: "Something went wrong!",
-                        icon: "error",
-                        confirmButtonColor: "rgb(0, 148, 255)"
-                    });
-                }
-            });
-        }
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to delete this designation?",
+            icon: "warning",
+            showCancelButton: true,
+            cancelButtonText: "No, Don't Delete",
+            confirmButtonText: "Yes, Delete it",
+            confirmButtonColor: "rgb(0, 148, 255)",
+            cancelButtonColor: "#d33"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "designationBackend.php",
+                    type: "POST",
+                    data: { delete_id: id },
+                    dataType: "json",
+                    success: function (response) {
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "The entry has been deleted.",
+                            icon: "success",
+                            confirmButtonColor: "rgb(0, 148, 255)"
+                        }).then(() => {
+                            location.reload();  // ✅ Reload the page after confirmation
+                        });
+                    },
+                    error: function () {
+                        Swal.fire({
+                            title: "Error!",
+                            text: "Something went wrong!",
+                            icon: "error",
+                            confirmButtonColor: "rgb(0, 148, 255)"
+                        });
+                    }
+                });
+            }
+        });
     });
-});
 
     $(document).on("click", ".btn-edit", function () {
         editId = $(this).data("id");
@@ -741,7 +745,7 @@ $(document).ready(function () {
     });
 });
 
-</script>
+  </script>
 </body>
 
 </html>

@@ -627,7 +627,45 @@ include 'dbconn.php'; // Ensure you have a database connection
 </div>
 
 </div></div>
+<script>
+    $(document).ready(function () {
+    // Restrict numbers in text fields
+    $("#customername, #companyname, #stateInput, #districtInput").on("input", function () {
+        $(this).val($(this).val().replace(/\d/g, '')); // Remove numbers
+    });
 
+    // Allow only numbers in phone number and pincode fields
+    $("#customerno, #pincode").on("input", function () {
+        $(this).val($(this).val().replace(/\D/g, '')); // Remove non-numeric characters
+    });
+
+    // Validate form on submit
+    $("#customerForm").submit(function (e) {
+        e.preventDefault(); // Prevent form submission if validation fails
+
+        let isValid = true;
+        let phoneNumber = $("#customerno").val();
+        let pincode = $("#pincode").val();
+        
+        // Phone number validation (10 digits)
+        if (!/^\d{10}$/.test(phoneNumber)) {
+            alert("Please enter a valid 10-digit phone number.");
+            isValid = false;
+        }
+
+        // Pincode validation (6 digits)
+        if (!/^\d{6}$/.test(pincode)) {
+            alert("Please enter a valid 6-digit pincode.");
+            isValid = false;
+        }
+
+        if (isValid) {
+            this.submit(); // Submit the form if all validations pass
+        }
+    });
+});
+
+</script>
 
 <script>
 // List of states and districts for India

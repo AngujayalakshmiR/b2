@@ -451,10 +451,12 @@ html, body {
 
         /* Flexbox for boxes */
         .file-wrapper {
-            display: flex;
-            gap: 15px; /* Space between boxes */
-            flex-wrap: nowrap; /* No wrapping */
-        }
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap; /* Allows wrapping into new rows */
+    justify-content: flex-start;
+}
+
 
         /* Styling for each requirement file box */
         .file-box {
@@ -496,10 +498,10 @@ html, body {
         }
 
         /* Colors for the first four unique boxes */
-        .file-box:nth-child(4n+1) { background:rgb(254, 115, 84); } /* Red */
-        .file-box:nth-child(4n+2) { background:rgb(86, 192, 111); } /* Green */
-        .file-box:nth-child(4n+3) { background:rgb(62, 222, 201); } /* Blue */
-        .file-box:nth-child(4n+4) { background:rgb(255, 207, 63); } /* Yellow */
+        .file-box:nth-child(4n+1) { background:rgb(81, 172, 246); } /* Red */
+        .file-box:nth-child(4n+2) { background:rgb(28, 64, 155); } /* Green */
+        .file-box:nth-child(4n+3) { background:rgb(81, 172, 246); } /* Blue */
+        .file-box:nth-child(4n+4) { background:rgb(28, 64, 155); } /* Yellow */
 
         /* Graphic design image */
         .file-box:nth-child(4n+1) .file-img  {
@@ -549,7 +551,13 @@ html, body {
         color: white;
         text-decoration: none;
     }
- 
+    .file-row {
+    display: flex;
+    gap: 15px;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
     .no-file-message {
     display: flex;
     justify-content: center;  /* Centers horizontally */
@@ -590,9 +598,6 @@ html, body {
         margin-top: 5px;
     }
 }
-
-
-  /* Styling */
   .modal-content {
     border-radius: 15px;
   }
@@ -613,9 +618,6 @@ html, body {
   .d-flex.flex-wrap {
     gap: 10px;
   }
-    </style>
-
-<style>
  /* Entry Box Styling */
  .entry-box {
     background-color: rgb(81, 172, 246);
@@ -661,25 +663,13 @@ html, body {
     cursor: pointer;
     border-radius: 5px;
   }
-
   .toggle-btn1:hover {
     background: lightgray;
   }
-
-
 </style>
 </head>
-
-
-
 <body id="page-top">
-
-    <!-- Page Wrapper -->
     <div id="wrapper">
-   
-        <!-- End of Sidebar -->
-
-        <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
 
             <!-- Main Content -->
@@ -691,7 +681,7 @@ html, body {
 
 <div class="mr-auto d-flex align-items-center pl-3 py-2">
     <h4 class="text-dark font-weight-bold mr-4" style="color: rgb(15,29,64); margin-top: 5px;">
-        Project Requirements
+        Project Specification
     </h4>
 </div>
 
@@ -736,9 +726,6 @@ html, body {
     <i class="fas fa-pen"></i> <span>&nbsp; Add Desc</span>
 </a>
 
-
-
-
     </div>
     <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -764,10 +751,6 @@ html, body {
 </ul>
 
 </nav>
-
-
-                <!-- Begin Page Content -->
-                
     <div class="container-fluid" style="padding-left: 5px;padding-right:15px;">
     <div class="file-container" >
         <div class="file-wrapper" id="fileWrapper">
@@ -778,12 +761,7 @@ html, body {
     <div class=" row" id="entriesContainer">
     <!-- Entries will be dynamically added here -->
   </div>
-    </div>
-                <!-- /.container-fluid -->
-
-            </div>
-         
-   <!-- Modal -->
+    </div></div>
 <div class="modal fade" id="descModal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -816,8 +794,6 @@ html, body {
     </div>
   </div>
 </div>
-        
-
 <!-- Edit Description Modal -->
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
@@ -846,11 +822,6 @@ html, body {
     </div>
   </div>
 </div>
-
-
-
-            <!-- End of Main Content -->
-
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
@@ -1055,7 +1026,17 @@ function toggleDesc(id) {
         fileWrapper.appendChild(noFileMessage);
         return;
     }
+
+    let currentRow; // To hold the current row container
+
     storedFiles.forEach((fileName, index) => {
+        if (index % 6 === 0) {
+            // Create a new row after every 6 files
+            currentRow = document.createElement("div");
+            currentRow.classList.add("file-row");
+            fileWrapper.appendChild(currentRow);
+        }
+
         let fileBox = document.createElement("div");
         fileBox.classList.add("file-box");
 
@@ -1074,16 +1055,14 @@ function toggleDesc(id) {
         textContainer.appendChild(requirementText);
         textContainer.appendChild(fileNameText);
 
-
-         let deleteBtn = document.createElement("div");
+        let deleteBtn = document.createElement("div");
         deleteBtn.classList.add("delete-btn");
-        deleteBtn.textContent = "❌";
+        deleteBtn.textContent = "✖";
         deleteBtn.onclick = (event) => {
-            event.stopPropagation(); // Prevent file opening
-            deleteFile(index); // Pass the specific index of the clicked file
+            event.stopPropagation();
+            deleteFile(index);
         };
 
-        // Make the entire fileBox clickable
         fileBox.onclick = () => {
             window.open(`b2/${fileName}`, "_blank");
         };
@@ -1091,9 +1070,10 @@ function toggleDesc(id) {
         fileBox.appendChild(deleteBtn);
         fileBox.appendChild(textContainer);
 
-        fileWrapper.appendChild(fileBox);
+        currentRow.appendChild(fileBox); // Append fileBox to the current row
     });
 }
+
 
 
     addFileBtn.addEventListener("click", () => fileInput.click());
@@ -1142,8 +1122,6 @@ function toggleDesc(id) {
     })
     .catch(error => console.error("Error:", error));
 }
-
-
 
     renderFiles(); // Initial render
 </script>

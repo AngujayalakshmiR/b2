@@ -884,6 +884,22 @@ $todayUpdates = $todayUpdatesRow['todayUpdates'];
                                         $sno = 1;
                                         if ($totalEntries1 > 0) {
                                             while ($row = $result1->fetch_assoc()) {
+
+                                                $company = $row['companyName'];
+                                                $projectTitle = $row['projectTitle'];
+                                    
+                                                // Query to get total actual hours
+                                                $sql_hours = "SELECT SUM(actualHrs) AS total_actual_hrs FROM dailyupdates 
+                                                              WHERE name = ? AND companyName = ? AND projectTitle = ?";
+                                                $stmt_hours = $conn->prepare($sql_hours);
+                                                $stmt_hours->bind_param("sss", $Name, $company, $projectTitle);
+                                                $stmt_hours->execute();
+                                                $result_hours = $stmt_hours->get_result();
+                                                $row_hours = $result_hours->fetch_assoc();
+                                    
+                                                $totalActualHrs = $row_hours['total_actual_hrs'] ?? 0; // If no record, default to 0
+                                                $workingDays = round($totalActualHrs / 8, 2); // Divide by 8 to get working days
+
                                                 echo "<tr>";
                                                 echo "<td>" . $sno++ . "</td>";
                                                 echo "<td>" . htmlspecialchars($row['date']) . "</td>";
@@ -891,7 +907,7 @@ $todayUpdates = $todayUpdatesRow['todayUpdates'];
                                                 echo "<td>" . htmlspecialchars($row['projectTitle']) . "</td>";
                                                 echo "<td>" . htmlspecialchars($row['projectType']) . "</td>";
                                                 echo "<td>" . htmlspecialchars($row['totalDays']) . "</td>";
-                                                echo "<td>-</td>"; 
+                                                echo "<td>" . $workingDays . "</td>"; 
                                                 echo "<td>" . htmlspecialchars($row['employees']) . "</td>";
                                                 echo "</tr>";
                                             }
@@ -936,6 +952,8 @@ $todayUpdates = $todayUpdatesRow['todayUpdates'];
                    $c = 1;
                     if ($totalEntries2 > 0) {
                         while ($row = $result2->fetch_assoc()) {
+
+                            
                             $actualHrs = trim($row['actualHrs']);
         $status = ($actualHrs === '-' || empty($actualHrs)) 
             ? '<td><i class="fas fa-hourglass-half status-icon in-progress" style="font-size:12px;color:rgb(0, 148, 255);"></i>&nbsp;&nbsp;Inprogress</td>' 

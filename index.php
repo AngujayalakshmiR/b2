@@ -1,4 +1,11 @@
-<?php include 'dbconn.php'; // Ensure this file has a valid DB connection ?>
+<?php
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+}
+include 'dbconn.php'; // Ensure this file has a valid DB connection ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -938,7 +945,7 @@ if ($result->num_rows > 0) {
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.php">Logout</a>
+                    <a class="btn btn-primary" href="logout.php">Logout</a>
                 </div>
             </div>
         </div>
@@ -1100,46 +1107,6 @@ function filterByDate() {
             rows[i].style.display = (rowDate === formattedSelectedDate) ? "" : "none";
         }
     }
-}
-</script>
-<script>
-setTimeout(function () {
-    document.querySelectorAll("tbody tr").forEach(row => {
-        console.log(`Row has ${row.cells.length} cells`);
-        
-        if (row.cells.length < 13) {
-            console.warn("Skipping row: Some cells are missing.");
-            return;
-        }
-        
-        let taskTypeCell = row.cells[7];
-        let moduleStatusCell = row.cells[11];
-        let projectStatusCell = row.cells[12];
-        
-        let taskType = taskTypeCell.innerText.trim();
-        let moduleStatus = moduleStatusCell.innerText.trim();
-        
-        console.log(`Task Type: ${taskType}, Module Status: ${moduleStatus}`);
-        
-        if (moduleStatus.includes("Completed")&&taskType.includes("Testing") ) {
-            projectStatusCell.innerHTML = `
-                <button class="btn btn-success btn-sm" onclick="markCompleted(this)">Mark as Completed</button>
-            `;
-        } else {
-            projectStatusCell.innerHTML = `
-                <button class="btn btn-warning btn-sm">Ongoing</button>
-            `;
-        }
-    });
-}, 2000);
-
-function markCompleted(button) {
-    let row = button.closest("tr");
-    let projectStatusCell = row.cells[12]; // Adjusted to match correct index
-    
-    projectStatusCell.innerHTML = `
-        <span class="text-success"><i class="fas fa-check-circle"></i> Completed</span>
-    `;
 }
 </script>
 

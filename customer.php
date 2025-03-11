@@ -1,6 +1,13 @@
 <?php
 include 'dbconn.php'; // Ensure you have a database connection
 ?>
+<?php session_start();
+
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -78,22 +85,6 @@ include 'dbconn.php'; // Ensure you have a database connection
             background: #0056b3;
             transform: scale(1.1);
         }
-
-         /* Modal Header Gradient Background */
-    .modal-header {
-        background: linear-gradient(to right, #4568dc, #b06ab3);
-        color: white;
-    }
-
-    /* Adjust close button color */
-    .modal-header .close {
-        color: white;
-        opacity: 1;
-    }
-
-    .modal-header .close:hover {
-        color: #f8f9fa;
-    }
 
 
     .upload-icon {
@@ -380,32 +371,6 @@ include 'dbconn.php'; // Ensure you have a database connection
 .card-body{
   color:black;
 }
-
-/* Style for the table header (thead) */
-/* #dataTable thead {
-    color: rgb(140, 147, 159);
-    font-weight: 1; 
-    font-style: normal;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-} */
-
-/* Style for table data (td) */
-/* #dataTable tbody td {
-    font-style: normal;
-    overflow: hidden;
-    line-height: 1rem;
-    text-overflow: ellipsis;
-    color: rgb(23, 25, 28);
-    font-size: 14px;
-    font-weight: 400;
-    padding: 10px;} */
-
-/* Style for icons in the status column */
-/* #dataTable tbody td i {
-    color: rgb(0, 148, 255);
-} */
-/* Counter styling similar to .bpKSTa .header-counter */
 .header-counter {
     margin-left: 2px;
     display: inline-flex;
@@ -840,7 +805,16 @@ countryDropdown.addEventListener("change", function() {
         </div>
 
     </div>
+    <script src="vendor/jquery/jquery.min.js"></script>
 
+<!-- Bootstrap core JavaScript -->
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript -->
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages -->
+<script src="js/sb-admin-2.min.js"></script>
 
 
 
@@ -886,7 +860,7 @@ countryDropdown.addEventListener("change", function() {
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.php">Logout</a>
+                    <a class="btn btn-primary" href="logout.php">Logout</a>
                 </div>
             </div>
         </div>

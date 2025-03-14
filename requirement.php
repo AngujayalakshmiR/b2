@@ -929,6 +929,7 @@ html, body {
                             </div>
                             <div class="col-3 text-end">
                                 <button class="toggle-btn1" onclick="toggleDesc(this)">+</button>
+                               
                             </div>
                         </div>
                         <div class="desc-content mt-2" style="display: none; color: #6c757d;">
@@ -945,12 +946,7 @@ html, body {
     </div>
 </div>
 
-<script>
-function toggleDesc(button) {
-    let descBox = button.closest('.entry-box').querySelector('.desc-content');
-    descBox.style.display = (descBox.style.display === "none") ? "block" : "none";
-}
-</script>
+
 
 
     </div></div>
@@ -1123,100 +1119,7 @@ function toggleDesc(button) {
 
 </style>
 <!-- // <button class="delete-btn" onclick="deleteEntry(${entryId})"><i class="fas fa-trash"></i></button> -->
-<script>
-let entryCount = 0;
-let editEntryId = null; // Track which entry is being edited
 
-document.getElementById("descForm").addEventListener("submit", function (event) {
-  event.preventDefault();
-
-  // Get input values
-  let date = document.getElementById("dateInput").value;
-  let title = document.getElementById("titleInput").value;
-  let desc = document.getElementById("descInput").value.replace(/\n/g, "<br>");
-
-  if (!date || !title || !desc) {
-    alert("All fields are required!");
-    return;
-  }
-
-  let entryId = entryCount++;
-  let columnClass = "col-lg-4 col-md-6 col-sm-12"; // Responsive layout
-
-  // Corrected Template Literal
-  let entryHTML = `
-    <div class="${columnClass}" id="entry-${entryId}">
-      <div class="entry-box p-2">
-        <div class="row align-items-center">
-          <div class="col-6"><span id="title-${entryId}" class="entry-title">${title}</span></div>
-          <div class="col-3 text-end"><span id="date-${entryId}" class="entry-date">${date}</span></div>
-          <div class="col-3 text-end">
-            <button class="toggle-btn" onclick="openEditModal(${entryId})"><i class="fas fa-pen"></i></button>
-            <button class="toggle-btn1" onclick="toggleDesc(${entryId})">+</button>
-          
-          </div>
-        </div>
-        <div class="desc-content mt-2" id="desc-${entryId}" style="display: none; color: #6c757d;">${desc}</div>
-      </div>
-    </div>
-  `;
-
-  document.getElementById("entriesContainer").innerHTML += entryHTML;
-
-  // Hide "No description found" text when an entry is added
-  document.getElementById("noDescription").style.display = "none";
-
-  // Reset form & close modal
-  document.getElementById("descForm").reset();
-  $('#descModal').modal('hide');
-});
-
-// Function to delete an entry
-function deleteEntry(id) {
-  let entry = document.getElementById(`entry-${id}`);
-  if (entry) {
-    entry.remove();
-  }
-
-  // Check if there are remaining entries
-  if (document.getElementById("entriesContainer").children.length === 0) {
-    document.getElementById("noDescription").style.display = "block";
-  }
-}
-
-// Open Edit Modal with Existing Data
-function openEditModal(id) {
-  editEntryId = id;
-
-  document.getElementById("editDateInput").value = document.getElementById(`date-${id}`).innerText;
-  document.getElementById("editTitleInput").value = document.getElementById(`title-${id}`).innerText;
-  document.getElementById("editDescInput").value = document.getElementById(`desc-${id}`).innerText;
-
-  $('#editModal').modal('show');
-}
-
-// Handle Update Functionality
-document.getElementById("editForm").addEventListener("submit", function (event) {
-  event.preventDefault();
-
-  if (editEntryId !== null) {
-    document.getElementById(`title-${editEntryId}`).innerText = document.getElementById("editTitleInput").value;
-    document.getElementById(`date-${editEntryId}`).innerText = document.getElementById("editDateInput").value;
-    document.getElementById(`desc-${editEntryId}`).innerHTML = document.getElementById("editDescInput").value.replace(/\n/g, "<br>");
-
-    editEntryId = null; // Reset after update
-    $('#editModal').modal('hide'); // Close modal
-  }
-});
-
-// Toggle Description Visibility
-function toggleDesc(id) {
-  let descBox = document.getElementById(`desc-${id}`);
-  descBox.style.display = (descBox.style.display === "none") ? "block" : "none";
-}
-
-
-</script>
 
 <script>
  document.addEventListener("DOMContentLoaded", () => {
@@ -1374,7 +1277,12 @@ function deleteFile(fileIndex) {
 
 
 </script>
-
+<script>
+function toggleDesc(button) {
+    let descBox = button.closest('.entry-box').querySelector('.desc-content');
+    descBox.style.display = (descBox.style.display === "none") ? "block" : "none";
+}
+</script>
 </body>
 
 </html>

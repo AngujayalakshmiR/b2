@@ -849,6 +849,10 @@ $totalEmployees = $totalEmployeesResult->fetch_assoc()['total'];
         </div>
     </div>
     <div class="card-body">
+    <div class="d-flex justify-content-end mb-2">
+    <input type="text" id="tableSearch" class="form-control" placeholder="Search..." style="width: 250px;">
+</div>
+
         <div class="table-responsive">
             <table class="table text-center" id="dataTable" width="100%">
                 <thead>
@@ -900,8 +904,6 @@ if ($result->num_rows > 0) {
     echo "<tr><td colspan='10'>No records found</td></tr>";
 }
 ?>
-
-
                 </tbody>
             </table>
         </div>
@@ -951,21 +953,28 @@ if ($result->num_rows > 0) {
         </div>
     </div>
     <script>
+document.getElementById("tableSearch").addEventListener("keyup", function() {
+    let filter = this.value.toLowerCase();
+    let rows = document.querySelectorAll("#table-body tr");
+
+    rows.forEach(row => {
+        let text = row.textContent.toLowerCase();
+        row.style.display = text.includes(filter) ? "" : "none";
+    });
+});
+</script>
+    <script>
 document.addEventListener("DOMContentLoaded", function () {
     const dateFilter = document.getElementById("dateFilter");
     const tableBody = document.getElementById("table-body");
     const headerCounter = document.querySelector(".header-counter");
-
     function filterTableByDate(selectedDate) {
         let rows = tableBody.querySelectorAll("tr:not(#no-records)");
         let count = 0;
         let noRecordRow = document.getElementById("no-records");
-
-        // Remove existing "No records found" row if present
         if (noRecordRow) {
             noRecordRow.remove();
         }
-
         rows.forEach((row) => {
             let rowDate = row.querySelector(".date").textContent.trim();
             let formattedRowDate = formatDate(rowDate); // Convert to YYYY-MM-DD
@@ -978,17 +987,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 row.style.display = "none";
             }
         });
-
-        // Update header counter
         headerCounter.textContent = count;
-
-        // If no records found, display a message
         if (count === 0) {
             let noRecordHTML = `<tr id="no-records"><td colspan="10" style="text-align:center;">No records found</td></tr>`;
             tableBody.insertAdjacentHTML("beforeend", noRecordHTML);
         }
     }
-
     function getTodayDate() {
         let today = new Date();
         let day = String(today.getDate()).padStart(2, "0");
@@ -996,13 +1000,10 @@ document.addEventListener("DOMContentLoaded", function () {
         let year = today.getFullYear();
         return `${year}-${month}-${day}`;
     }
-
     function formatDate(dateString) {
         let parts = dateString.split("-");
         return `${parts[2]}-${parts[1]}-${parts[0]}`; // Convert DD-MM-YYYY to YYYY-MM-DD
     }
-
-    // Set default date filter to today & apply filtering
     let todayDate = getTodayDate();
     dateFilter.value = todayDate;
     filterTableByDate(todayDate);
@@ -1012,25 +1013,15 @@ document.addEventListener("DOMContentLoaded", function () {
         filterTableByDate(this.value);
     });
 });
-
-
-
-
-
         document.addEventListener('DOMContentLoaded', function () {
-    // Initialize DataTable
     var table = $('#dataTable').DataTable();
-
     document.querySelector('#dataTable tbody').addEventListener('click', function (event) {
         const clickedCell = event.target.closest('td'); // Get clicked <td>
         if (!clickedCell) return;
-
         const nameColumn = clickedCell.closest('.name-column');
         const companyColumn = clickedCell.closest('.company-column');
         const titleColumn = clickedCell.cellIndex === 4; // Title column index (zero-based)
-
         const searchBox = document.querySelector('input[type="search"]'); // Search box in DataTable
-
         if (nameColumn) {
             const name = nameColumn.textContent.trim();
             window.location.href = `reports.php?name=${encodeURIComponent(name)}`;
@@ -1046,7 +1037,58 @@ document.addEventListener("DOMContentLoaded", function () {
             window.location.href = "requirement.php";        }
     });
 });
+    </script>
+    <script>
+$(document).ready(function () {
+    let table = $('#dataTable').DataTable({
+        "pageLength": 10, // Show 10 entries per page
+        "ordering": false, // Disable sorting for better filtering
+        "destroy": true // Allows re-initialization without issues
+    });
+    function filterByDate() {
+        let selectedDate = $('#dateFilter').val();
+        if (!selectedDate) return;
 
+        let formattedSelectedDate = selectedDate.split("-").reverse().join("-"); 
+        table.column(2).search(formattedSelectedDate).draw();
+        let visibleRows = table.rows({ filter: 'applied' }).count();
+        $('.header-counter').text(visibleRows);
+        if (visibleRows === 0) {
+            if (!$("#no-records").length) {
+                $("#dataTable tbody").append(`<tr id="no-records"><td colspan="10" class="text-center">No records found</td></tr>`);
+            }
+        } else {
+            $("#no-records").remove();
+        }
+    }
+    let today = new Date().toISOString().split('T')[0];
+    $('#dateFilter').val(today);
+    filterByDate();
+    $('#dateFilter').on('change', function () {
+        filterByDate();
+    });
+});
+$(document).ready(function () {
+
+    $("#dateFilter").on("change", function () {
+        let selectedDate = $(this).val();
+        if (!selectedDate) return;
+
+        let formattedSelectedDate = selectedDate.split("-").reverse().join("-");
+        dataTable.destroy();
+
+        // Show/hide rows based on selected date
+        $("#dataTable tbody tr").each(function () {
+            let rowDate = $(this).find("td:eq(2)").text().trim();
+            $(this).toggle(rowDate === formattedSelectedDate);
+        });
+
+        // Reinitialize DataTable after filtering
+        dataTable = $("#dataTable").DataTable({
+            pageLength: 10 // Ensures proper pagination
+        });
+    });
+});
     </script>
 
 <!-- jQuery (Required for DataTables) -->
@@ -1079,36 +1121,6 @@ document.addEventListener("DOMContentLoaded", function () {
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
     
-
-    <script>
- document.addEventListener("DOMContentLoaded", function () {
-    let today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
-    let dateInput = document.getElementById("dateFilter");
-
-    dateInput.value = today; // Set default to today
-    filterByDate(); // Automatically filter on page load
-
-    // Apply filter immediately when date is changed
-    dateInput.addEventListener("change", filterByDate);
-});
-
-function filterByDate() {
-    let selectedDate = document.getElementById("dateFilter").value;
-    if (!selectedDate) return;
-
-    let formattedSelectedDate = selectedDate.split("-").reverse().join("-"); // Convert to DD-MM-YYYY
-    let table = document.getElementById("dataTable");
-    let rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
-
-    for (let i = 0; i < rows.length; i++) {
-        let dateCell = rows[i].getElementsByTagName("td")[2];
-        if (dateCell) {
-            let rowDate = dateCell.textContent.trim();
-            rows[i].style.display = (rowDate === formattedSelectedDate) ? "" : "none";
-        }
-    }
-}
-</script>
 
 </body>
 

@@ -45,7 +45,6 @@ if (!isset($_SESSION['username'])) {
 thead{
     color:black;
 }
-        /* Center align action buttons */
         .action-buttons {
             display: flex;
             justify-content: center;
@@ -72,7 +71,6 @@ thead{
             color: #dc3545;
         }
 
-        /* Add Customer Button */
         .add-employee-btn {
             float: right;
             background: #007bff;
@@ -92,8 +90,6 @@ thead{
             background: #0056b3;
             transform: scale(1.1);
         }
-
-
     .upload-icon {
     transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
 }
@@ -111,8 +107,6 @@ thead{
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-5px); }
 }
-
-/* Icon Styling */
 .photo-icon{
     color: #5796d8;
 }
@@ -126,14 +120,10 @@ thead{
     font-size: 24px;
     transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
 }
-
-/* Hover Animation */
 .photo-icon:hover, .aadhar-icon:hover, .pan-icon:hover {
     transform: scale(1.3);
     color: #007bff;
 }
-
-/* Bounce Effect on File Icon */
 @keyframes bounce {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-5px); }
@@ -142,17 +132,12 @@ thead{
 .photo-icon:hover, .aadhar-icon:hover, .pan-icon:hover {
     animation: bounce 0.5s ease-in-out;
 }
-
- /* Reduce table font size */
  #dataTable {
         font-size: 14px; /* Adjust size as needed */
     }
 tbody{
     border-color: #f8f9fa;
 }
-    /* Reduce padding for table cells */
-    
-
     .status-icon {
             font-size: 1.2rem;
             transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
@@ -192,15 +177,9 @@ tbody{
     overflow: hidden;
     border: 1px solid #dee2e6; /* Ensures full border visibility */
 }
-
-
-/* Apply border to all cells */
 .table th, .table td {
     border: 1px solid #dee2e6;
 }
-    </style>
-
-<style>
      .sidebar-brand-icon, .sidebar-brand-text {
         font-size: large;
         background: white;
@@ -213,8 +192,6 @@ tbody{
         background-color: rgb(15,29,64) !important;
         width: 250px; /* Adjust according to sidebar width */
     }
-
-    /* Sidebar link styles */
     .l a.k{
         color: white !important; /* Dark text */
         border-radius: 8px; /* Rounded corners */
@@ -227,16 +204,11 @@ tbody{
         width: 85%; /* Ensure links don’t take full width */
         margin: 0 auto; /* Center align */
     }
-
-    /* Ensure icons are black */
     .l a.k i {
         color: white !important;
         font-size: 18px; /* Slightly larger icons */
         transition: color 0.3s ease-in-out;
     }
-
-
-    /* Hover effect (only for non-active items) */
     .l:not(.active)  a.k:hover {
         background-color: rgb(45, 64, 113) !important; /* Light grey */
         color: white !important; /* Dark text */
@@ -244,13 +216,9 @@ tbody{
         width: 90%; /* Keep it smaller than the sidebar */
         margin: 0 auto; /* Center align */
     }
-
-    /* Keep icons black on hover for non-active items */
     .l:not(.active) a.k:hover i {
         color: white !important;
     }
-
-    /* Active item style */
     .l.active {
         background-color: rgb(45, 64, 113) !important; /* Light grey */
         color: white !important; /* Dark text */
@@ -333,33 +301,6 @@ tbody{
         font-size: medium;
     }
 }
-
-/* Style for the table header (thead) */
-/* #dataTable thead {
-    color: rgb(140, 147, 159);
-    font-weight: 1; 
-    font-style: normal;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-} */
-
-/* Style for table data (td) */
-/* #dataTable tbody td {
-    font-style: normal;
-    overflow: hidden;
-    line-height: 1rem;
-    text-overflow: ellipsis;
-    color: rgb(23, 25, 28);
-    font-size: 14px;
-    font-weight: 400;
-    padding: 10px; 
-} */
-
-/* Style for icons in the status column */
-/* #dataTable tbody td i {
-    color: rgb(0, 148, 255);
-} */
-/* Counter styling similar to .bpKSTa .header-counter */
 .header-counter {
     margin-left: 2px;
     display: inline-flex;
@@ -508,23 +449,16 @@ tbody{
             <img class="img-profile rounded-circle"
                 src="img/p.png" style="width: 2rem;height: 2rem;">
         </a>
-        <!-- Dropdown - User Information -->
         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
             aria-labelledby="userDropdown">
-            
-            
             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                 Logout
             </a>
         </div>
     </li>
-
 </ul>
-
 </nav>
-
-                <!-- End of Topbar -->
 <style>
     #dataTable th:nth-child(3), 
     #dataTable td:nth-child(3) {
@@ -533,8 +467,6 @@ tbody{
 </style>
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
-<!-- DataTales Example -->
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <p class="m-0" style="font-size: 16px; color:rgb(23, 25, 28); font-weight: 500;">
@@ -546,6 +478,10 @@ tbody{
         </div>
     </div>
     <div class="card-body">
+    <div class="d-flex justify-content-end mb-2">
+    <input type="text" id="tableSearch" class="form-control" placeholder="Search..." style="width: 250px;">
+</div>
+
         <div class="table-responsive">
             <table class="table text-center" id="dataTable" width="100%">
                 <thead>
@@ -597,39 +533,36 @@ if ($result->num_rows > 0) {
     echo "<tr><td colspan='10'>No records found</td></tr>";
 }
 ?>
-
-
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-
-
-
-
-
-
                 </div>
-                <!-- /.container-fluid -->
-
             </div>
+            <script>
+document.getElementById("tableSearch").addEventListener("keyup", function() {
+    let filter = this.value.toLowerCase();
+    let rows = document.querySelectorAll("#table-body tr");
+
+    rows.forEach(row => {
+        let text = row.textContent.toLowerCase();
+        row.style.display = text.includes(filter) ? "" : "none";
+    });
+});
+</script>
     <script>
 document.addEventListener("DOMContentLoaded", function () {
     const dateFilter = document.getElementById("dateFilter");
     const tableBody = document.getElementById("table-body");
     const headerCounter = document.querySelector(".header-counter");
-
     function filterTableByDate(selectedDate) {
         let rows = tableBody.querySelectorAll("tr:not(#no-records)");
         let count = 0;
         let noRecordRow = document.getElementById("no-records");
-
-        // Remove existing "No records found" row if present
         if (noRecordRow) {
             noRecordRow.remove();
         }
-
         rows.forEach((row) => {
             let rowDate = row.querySelector(".date").textContent.trim();
             let formattedRowDate = formatDate(rowDate); // Convert to YYYY-MM-DD
@@ -642,17 +575,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 row.style.display = "none";
             }
         });
-
-        // Update header counter
         headerCounter.textContent = count;
-
-        // If no records found, display a message
         if (count === 0) {
             let noRecordHTML = `<tr id="no-records"><td colspan="10" style="text-align:center;">No records found</td></tr>`;
             tableBody.insertAdjacentHTML("beforeend", noRecordHTML);
         }
     }
-
     function getTodayDate() {
         let today = new Date();
         let day = String(today.getDate()).padStart(2, "0");
@@ -660,13 +588,10 @@ document.addEventListener("DOMContentLoaded", function () {
         let year = today.getFullYear();
         return `${year}-${month}-${day}`;
     }
-
     function formatDate(dateString) {
         let parts = dateString.split("-");
         return `${parts[2]}-${parts[1]}-${parts[0]}`; // Convert DD-MM-YYYY to YYYY-MM-DD
     }
-
-    // Set default date filter to today & apply filtering
     let todayDate = getTodayDate();
     dateFilter.value = todayDate;
     filterTableByDate(todayDate);
@@ -676,26 +601,15 @@ document.addEventListener("DOMContentLoaded", function () {
         filterTableByDate(this.value);
     });
 });
-
-
-
-
-
-
         document.addEventListener('DOMContentLoaded', function () {
-    // Initialize DataTable
     var table = $('#dataTable').DataTable();
-
     document.querySelector('#dataTable tbody').addEventListener('click', function (event) {
         const clickedCell = event.target.closest('td'); // Get clicked <td>
         if (!clickedCell) return;
-
         const nameColumn = clickedCell.closest('.name-column');
         const companyColumn = clickedCell.closest('.company-column');
         const titleColumn = clickedCell.cellIndex === 4; // Title column index (zero-based)
-
         const searchBox = document.querySelector('input[type="search"]'); // Search box in DataTable
-
         if (nameColumn) {
             const name = nameColumn.textContent.trim();
             window.location.href = `reports.php?name=${encodeURIComponent(name)}`;
@@ -711,17 +625,7 @@ document.addEventListener("DOMContentLoaded", function () {
             window.location.href = "requirement.php";        }
     });
 });
-
     </script>
-
-
-
-
-
-
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
@@ -729,20 +633,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     </div>
                 </div>
             </footer>
-            <!-- End of Footer -->
-
         </div>
-        <!-- End of Content Wrapper -->
-
     </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-
-    <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -761,115 +656,65 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
         </div>
     </div>
-
-    <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
-
-    <!-- Page level plugins -->
     <script src="vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-    <!-- Bootstrap JavaScript -->
-    <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
-<!-- Bootstrap 4.6.0 JavaScript -->
-<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script> -->
-
-
 <script>
- document.addEventListener("DOMContentLoaded", function () {
-    let today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
-    let dateInput = document.getElementById("dateFilter");
+$(document).ready(function () {
+    let table = $('#dataTable').DataTable({
+        "pageLength": 10, // Show 10 entries per page
+        "ordering": false, // Disable sorting for better filtering
+        "destroy": true // Allows re-initialization without issues
+    });
+    function filterByDate() {
+        let selectedDate = $('#dateFilter').val();
+        if (!selectedDate) return;
 
-    dateInput.value = today; // Set default to today
-    filterByDate(); // Automatically filter on page load
-
-    // Apply filter immediately when date is changed
-    dateInput.addEventListener("change", filterByDate);
-});
-
-function filterByDate() {
-    let selectedDate = document.getElementById("dateFilter").value;
-    if (!selectedDate) return;
-
-    let formattedSelectedDate = selectedDate.split("-").reverse().join("-"); // Convert to DD-MM-YYYY
-    let table = document.getElementById("dataTable");
-    let rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
-
-    for (let i = 0; i < rows.length; i++) {
-        let dateCell = rows[i].getElementsByTagName("td")[2];
-        if (dateCell) {
-            let rowDate = dateCell.textContent.trim();
-            rows[i].style.display = (rowDate === formattedSelectedDate) ? "" : "none";
+        let formattedSelectedDate = selectedDate.split("-").reverse().join("-"); 
+        table.column(2).search(formattedSelectedDate).draw();
+        let visibleRows = table.rows({ filter: 'applied' }).count();
+        $('.header-counter').text(visibleRows);
+        if (visibleRows === 0) {
+            if (!$("#no-records").length) {
+                $("#dataTable tbody").append(`<tr id="no-records"><td colspan="10" class="text-center">No records found</td></tr>`);
+            }
+        } else {
+            $("#no-records").remove();
         }
     }
-}
-</script>
-<script>
-setTimeout(function () {
-    document.querySelectorAll("tbody tr").forEach(row => {
-        console.log(`Row has ${row.cells.length} cells`);
-        
-        if (row.cells.length < 13) {
-            console.warn("Skipping row: Some cells are missing.");
-            return;
-        }
-        
-        let taskTypeCell = row.cells[7];
-        let moduleStatusCell = row.cells[11];
-        let projectStatusCell = row.cells[12];
-        
-        let taskType = taskTypeCell.innerText.trim();
-        let moduleStatus = moduleStatusCell.innerText.trim();
-        
-        console.log(`Task Type: ${taskType}, Module Status: ${moduleStatus}`);
-        
-        if (moduleStatus.includes("Completed")&&taskType.includes("Testing") ) {
-            projectStatusCell.innerHTML = `
-                <button class="btn btn-success btn-sm" onclick="markCompleted(this)">Mark as Completed</button>
-            `;
-        } else {
-            projectStatusCell.innerHTML = `
-                <button class="btn btn-warning btn-sm">Ongoing</button>
-            `;
-        }
+    let today = new Date().toISOString().split('T')[0];
+    $('#dateFilter').val(today);
+    filterByDate();
+    $('#dateFilter').on('change', function () {
+        filterByDate();
     });
-}, 2000);
+});
+$(document).ready(function () {
 
-function markCompleted(button) {
-    let row = button.closest("tr");
-    let projectStatusCell = row.cells[12]; // Adjusted to match correct index
-    
-    projectStatusCell.innerHTML = `
-        <span class="text-success"><i class="fas fa-check-circle"></i> Completed</span>
-    `;
-}
-</script>
-<script>
-        $(document).ready(function () {
-            $('#dateFilter').on('change', function () {
-                var selectedDate = $(this).val();
-                if (selectedDate) {
-                    $.ajax({
-                        url: "fetch_data.php",
-                        method: "POST",
-                        data: { date: selectedDate },
-                        success: function (response) {
-                            $('#dataTable').html(response);
-                        }
-                    });
-                }
-            });
+    $("#dateFilter").on("change", function () {
+        let selectedDate = $(this).val();
+        if (!selectedDate) return;
+
+        let formattedSelectedDate = selectedDate.split("-").reverse().join("-");
+        dataTable.destroy();
+
+        // Show/hide rows based on selected date
+        $("#dataTable tbody tr").each(function () {
+            let rowDate = $(this).find("td:eq(2)").text().trim();
+            $(this).toggle(rowDate === formattedSelectedDate);
         });
-    </script>
 
+        // Reinitialize DataTable after filtering
+        dataTable = $("#dataTable").DataTable({
+            pageLength: 10 // Ensures proper pagination
+        });
+    });
+});
+    </script>
 </body>
 
 </html>

@@ -73,19 +73,19 @@ $totalEntries2 = $result2->num_rows;
     #dataTable1 th:nth-child(8), #dataTable1 td:nth-child(8) { width: 15%; } /* Teammates */
 
 
-    #dataTable2 th:nth-child(1), #dataTable2 td:nth-child(1) { width: 2%; }  /* S.no */
-#dataTable2 th:nth-child(2), #dataTable2 td:nth-child(2) { width: 10%; } /* Name */
-#dataTable2 th:nth-child(3), #dataTable2 td:nth-child(3) { width: 16%; } /* Date */
-#dataTable2 th:nth-child(4), #dataTable2 td:nth-child(4) { width: 10%; } /* Company */
-#dataTable2 th:nth-child(5), #dataTable2 td:nth-child(5) { width: 10%; } /* Project Title */
-#dataTable2 th:nth-child(6), #dataTable2 td:nth-child(6) { width: 22%; } /* Total Days */
-#dataTable2 th:nth-child(7), #dataTable2 td:nth-child(7) { width: 11%; } /* Description */
-#dataTable2 th:nth-child(8), #dataTable2 td:nth-child(8) { width: 11%; } /* Total Time */
-#dataTable2 th:nth-child(9), #dataTable2 td:nth-child(9) { width: 8%; } /* Actual Time */
+    #dt2 th:nth-child(1), #dt2 td:nth-child(1) { width: 2%; }  /* S.no */
+#dt2 th:nth-child(2), #dt2 td:nth-child(2) { width: 10%; } /* Name */
+#dt2 th:nth-child(3), #dt2 td:nth-child(3) { width: 16%; } /* Date */
+#dt2 th:nth-child(4), #dt2 td:nth-child(4) { width: 10%; } /* Company */
+#dt2 th:nth-child(5), #dt2 td:nth-child(5) { width: 10%; } /* Project Title */
+#dt2 th:nth-child(6), #dt2 td:nth-child(6) { width: 22%; } /* Total Days */
+#dt2 th:nth-child(7), #dt2 td:nth-child(7) { width: 11%; } /* Description */
+#dt2 th:nth-child(8), #dt2 td:nth-child(8) { width: 11%; } /* Total Time */
+#dt2 th:nth-child(9), #dt2 td:nth-child(9) { width: 8%; } /* Actual Time */
 #dataTable1 {
         font-size: 14px; /* Adjust size as needed */
     }
-    #dataTable2 {
+    #dt2 {
         font-size: 14px; /* Adjust size as needed */
     }
     .stats-box {
@@ -707,28 +707,6 @@ tbody{
         width: calc(50% - 10px); /* 2 boxes per row */
     }
 }
-
-/* Style for the table header (thead) */
-/* #dataTable thead {
-    color: rgb(140, 147, 159);
-    font-weight: 1; 
-    font-style: normal;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-} */
-
-/* Style for table data (td) */
-/* #dataTable tbody td {
-    font-style: normal;
-    overflow: hidden;
-    line-height: 1rem;
-    text-overflow: ellipsis;
-    color: rgb(23, 25, 28);
-    font-size: 14px;
-    font-weight: 400;
-    padding: 10px; } */
-
-/* Style for icons in the status column */
 #dataTable tbody td i {
     color: rgb(0, 148, 255);
 }
@@ -742,16 +720,8 @@ tbody{
     background: rgb(0, 148, 255);
 }
 </style>
-
-        <!-- End of Sidebar -->
-
-        <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
-
-            <!-- Main Content -->
             <div id="content">
-
-                <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style=" background:white;">
                 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
@@ -761,12 +731,6 @@ tbody{
     <h4 class="text-dark font-weight-bold mr-4" style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
         Dashboard
     </h4></div>
-                    <!-- Sidebar Toggle (Topbar) -->
-                   
-
-                   
-
-                    <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
                         <h4 class="text-dark font-weight-bold mr-1 d-flex align-items-center pl-3 py-2 " style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
@@ -796,32 +760,20 @@ tbody{
                     </ul>
 
                 </nav>
-                <!-- End of Topbar -->
-
-                <!-- Begin Page Content -->
                 <div class="container-fluid">
 
                 <?php
 include 'dbconn.php'; // Include your database connection
-
 $Name = $_SESSION['Name'];
-
-// Total Projects: Count projects where the session user is listed in employees
 $totalProjectsQuery = "SELECT COUNT(*) AS totalProjects FROM projectcreation WHERE FIND_IN_SET('$Name', employees)";
 $totalProjectsResult = mysqli_query($conn, $totalProjectsQuery);
 $totalProjectsRow = mysqli_fetch_assoc($totalProjectsResult);
 $totalProjects = $totalProjectsRow['totalProjects'];
-
-// Ongoing Projects: Check dailyupdates table for unique companyName and projectTitle
 $ongoingProjectsQuery = "SELECT COUNT(DISTINCT companyName, projectTitle) AS ongoingProjects FROM dailyupdates WHERE name = '$Name'";
 $ongoingProjectsResult = mysqli_query($conn, $ongoingProjectsQuery);
 $ongoingProjectsRow = mysqli_fetch_assoc($ongoingProjectsResult);
 $ongoingProjects = $ongoingProjectsRow['ongoingProjects'];
-
-// Pending Projects: Total - Ongoing
 $pendingProjects = $totalProjects - $ongoingProjects;
-
-// Today's Updates: Count the number of updates for today
 $todayDate = date('Y-m-d');
 $todayUpdatesQuery = "SELECT COUNT(*) AS todayUpdates FROM dailyupdates WHERE name = '$Name' AND date = '$todayDate'";
 $todayUpdatesResult = mysqli_query($conn, $todayUpdatesQuery);
@@ -854,8 +806,8 @@ $todayUpdates = $todayUpdatesRow['todayUpdates'];
 
 <br>
 <style>
-    #dataTable2 th:nth-child(2), 
-    #dataTable2 td:nth-child(2) {
+    #dt2 th:nth-child(2), 
+    #dt2 td:nth-child(2) {
     display: none;
 }
 </style>
@@ -932,8 +884,11 @@ $todayUpdates = $todayUpdatesRow['todayUpdates'];
         </div>
     </div>
     <div class="card-body">
+    <div class="d-flex justify-content-end mb-2">
+    <input type="text" id="tableSearch" class="form-control" placeholder="Search..." style="width: 250px;">
+</div>
         <div class="table-responsive">
-            <table class="table text-center" id="dataTable2" width="100%">
+            <table class="table text-center" id="dt2" width="100%">
                 <thead>
                     <tr>
                         <th>S.no</th>
@@ -1035,6 +990,17 @@ $conn->close();
             </div>
         </div>
     </div>
+    <script>
+document.getElementById("tableSearch").addEventListener("keyup", function() {
+    let filter = this.value.toLowerCase();
+    let rows = document.querySelectorAll("#table-body tr");
+
+    rows.forEach(row => {
+        let text = row.textContent.toLowerCase();
+        row.style.display = text.includes(filter) ? "" : "none";
+    });
+});
+</script>
 <!-- jQuery (Required for DataTables) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 

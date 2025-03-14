@@ -13,8 +13,28 @@ $totalDays = isset($_GET['totalDays']) ? htmlspecialchars($_GET['totalDays']) : 
 $workingDays = isset($_GET['workingDays']) ? htmlspecialchars($_GET['workingDays']) : '';
 $teammates = isset($_GET['teammates']) ? htmlspecialchars($_GET['teammates']) : '';
 ?>
+<?php
 
+include ("dbconn.php");
 
+$companyName = isset($_GET['company']) ? htmlspecialchars($_GET['company']) : '';
+$projectTitle = isset($_GET['title']) ? htmlspecialchars($_GET['title']) : '';
+
+// Fetch description based on projectTitle
+$sql = "SELECT date, description FROM descriptiontable WHERE projectTitle = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $projectTitle);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$descriptions = [];
+while ($row = $result->fetch_assoc()) {
+    $descriptions[] = $row;
+}
+
+$stmt->close();
+$conn->close();
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -102,7 +122,7 @@ $teammates = isset($_GET['teammates']) ? htmlspecialchars($_GET['teammates']) : 
 thead{
     color:black;
 }
-#dataTable th:nth-child(1), #dataTable td:nth-child(1) { width: 3%; }  /* S.no */
+    #dataTable th:nth-child(1), #dataTable td:nth-child(1) { width: 3%; }  /* S.no */
     #dataTable th:nth-child(2), #dataTable td:nth-child(2) { width: 10%; } /* Date */
     #dataTable th:nth-child(3), #dataTable td:nth-child(3) { width: 10%; } /* Company */
     #dataTable th:nth-child(4), #dataTable td:nth-child(4) { width: 18%; } /* Project Title */
@@ -896,14 +916,41 @@ html, body {
 <div class="white-container">
     <h2 class="container-heading">Description</h2>
     <div class="row" id="entriesContainer">
-        <!-- Entries will be dynamically added here -->
+        <?php if (!empty($descriptions)) : ?>
+            <?php foreach ($descriptions as $entry) : ?>
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="entry-box p-2">
+                        <div class="row align-items-center">
+                            <div class="col-6">
+                                <span class="entry-title"><?php echo htmlspecialchars($projectTitle); ?></span>
+                            </div>
+                            <div class="col-3 text-end">
+                                <span class="entry-date"><?php echo htmlspecialchars($entry['date']); ?></span>
+                            </div>
+                            <div class="col-3 text-end">
+                                <button class="toggle-btn1" onclick="toggleDesc(this)">+</button>
+                            </div>
+                        </div>
+                        <div class="desc-content mt-2" style="display: none; color: #6c757d;">
+                            <?php echo nl2br(htmlspecialchars($entry['description'])); ?>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php else : ?>
+            <p id="noDescription" class="text-center" style="font-size: 14px; font-weight: bold; color: #5a5c69;">
+                -- No description found --
+            </p>
+        <?php endif; ?>
     </div>
-    <p id="noDescription" style="font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #5a5c69;text-align:center">-- No description found --</p>
 </div>
 
+<script>
+function toggleDesc(button) {
+    let descBox = button.closest('.entry-box').querySelector('.desc-content');
+    descBox.style.display = (descBox.style.display === "none") ? "block" : "none";
+}
+</script>
 
 
     </div></div>
@@ -1172,51 +1219,110 @@ function toggleDesc(id) {
 </script>
 
 <script>
+ document.addEventListener("DOMContentLoaded", () => {
     const fileWrapper = document.getElementById("fileWrapper");
     const fileInput = document.getElementById("fileInput");
     const addFileBtn = document.getElementById("addFileBtn");
 
-    // Load files from local storage (Only filenames, because actual files are stored in "b2" folder)
-    let storedFiles = JSON.parse(localStorage.getItem("uploadedFiles")) || [];
+    addFileBtn.addEventListener("click", () => fileInput.click());
 
-    function renderFiles() {
-    fileWrapper.innerHTML = ""; // Clear existing files
-    if (storedFiles.length === 0) {
-        let noFileMessage = document.createElement("div");
-        noFileMessage.classList.add("no-file-message");
-        noFileMessage.textContent = "-- No Requirement File Uploaded --";
-        fileWrapper.appendChild(noFileMessage);
+    fileInput.addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const companyName = urlParams.get("company");
+        const projectTitle = urlParams.get("title");
+
+        if (!companyName || !projectTitle) {
+            alert("Company Name and Project Title are required.");
+            return;
+        }
+
+        let formData = new FormData();
+        formData.append("file", file);
+        formData.append("companyName", companyName);
+        formData.append("projectTitle", projectTitle);
+
+        fetch("upload.php", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("File uploaded successfully!");
+                location.reload();
+            } else {
+                alert("File upload failed: " + data.error);
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    });
+
+    fetchRequirementFile();
+});
+
+function fetchRequirementFile() {
+    const fileWrapper = document.getElementById("fileWrapper");
+    const urlParams = new URLSearchParams(window.location.search);
+    const companyName = urlParams.get("company");
+    const projectTitle = urlParams.get("title");
+
+    if (!companyName || !projectTitle) {
+        fileWrapper.innerHTML = "<div class='no-file-message'>-- No Requirement File Uploaded --</div>";
         return;
     }
 
-    let currentRow; // To hold the current row container
+    fetch(`fetch_requirement.php?company=${encodeURIComponent(companyName)}&title=${encodeURIComponent(projectTitle)}`)
+        .then(response => response.json())
+        .then(data => {
+            fileWrapper.innerHTML = ""; // Clear previous content
+            
+            if (data.files && data.files.length > 0) {
+                data.files.forEach((fileName, index) => {
+                    let fileBox = createFileBox(fileName, index === 0 ? false : true, index);
+                    fileWrapper.appendChild(fileBox);
+                });
+            } else {
+                fileWrapper.innerHTML = "<div class='no-file-message'>-- No Requirement File Uploaded --</div>";
+            }
+        })
+        .catch(error => console.error("Error fetching requirement files:", error));
+}
 
-    storedFiles.forEach((fileName, index) => {
-        if (index % 6 === 0) {
-            // Create a new row after every 6 files
-            currentRow = document.createElement("div");
-            currentRow.classList.add("file-row");
-            fileWrapper.appendChild(currentRow);
-        }
+function createFileBox(fileName, isDeletable = true, index = null) {
+    let fileBox = document.createElement("div");
+    fileBox.classList.add("file-box");
 
-        let fileBox = document.createElement("div");
-        fileBox.classList.add("file-box");
+    // Apply red color to the first file
+    if (index === 0) {
+        fileBox.style.backgroundColor = "red";
+        fileBox.style.color = "white"; // Ensure text is readable
+    }
 
-        let textContainer = document.createElement("div");
-        textContainer.classList.add("text-container");
+    let textContainer = document.createElement("div");
+    textContainer.classList.add("text-container");
 
-        let requirementText = document.createElement("b");
-        requirementText.textContent = `Requirement ${index + 1}`;
+    let requirementText = document.createElement("b");
+    requirementText.textContent = isDeletable ? `Requirement ${index + 1}` : "Requirement File";
 
-        let fileNameText = document.createElement("div");
-        fileNameText.classList.add("file-name");
-        fileNameText.textContent = fileName;
-        fileNameText.style.fontSize = "14px";
-        fileNameText.style.marginTop = "5px";
+    let fileNameText = document.createElement("div");
+    fileNameText.classList.add("file-name");
 
-        textContainer.appendChild(requirementText);
-        textContainer.appendChild(fileNameText);
+    // Remove "reqfiles/" from the displayed filename
+    let displayFileName = fileName.replace(/^reqfiles\//, "");
 
+    fileNameText.textContent = displayFileName;
+    fileNameText.style.fontSize = "14px";
+    fileNameText.style.marginTop = "5px";
+
+    textContainer.appendChild(requirementText);
+    textContainer.appendChild(fileNameText);
+    fileBox.appendChild(textContainer);
+
+    // Only add delete button if the file is deletable (not the first one)
+    if (isDeletable) {
         let deleteBtn = document.createElement("div");
         deleteBtn.classList.add("delete-btn");
         deleteBtn.textContent = "✖";
@@ -1224,72 +1330,50 @@ function toggleDesc(id) {
             event.stopPropagation();
             deleteFile(index);
         };
-
-        fileBox.onclick = () => {
-            window.open(`b2/${fileName}`, "_blank");
-        };
-
-        // Ensure delete button is always visible
         fileBox.appendChild(deleteBtn);
-        fileBox.appendChild(textContainer);
+    }
 
-        currentRow.appendChild(fileBox); // Append fileBox to the current row
-    });
+    fileBox.onclick = () => window.open(fileName, "_blank");
+
+    return fileBox;
 }
 
 
+function deleteFile(fileIndex) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const companyName = urlParams.get("company");
+    const projectTitle = urlParams.get("title");
 
-
-    addFileBtn.addEventListener("click", () => fileInput.click());
-
-    fileInput.addEventListener("change", (event) => {
-        const file = event.target.files[0];
-
-        if (file) {
-            let formData = new FormData();
-            formData.append("file", file);
-
-            fetch("upload.php", {
-                method: "POST",
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    storedFiles.push(data.filename);
-                    localStorage.setItem("uploadedFiles", JSON.stringify(storedFiles));
-                    renderFiles();
-                } else {
-                    alert("File upload failed!");
-                }
-            })
-            .catch(error => console.error("Error:", error));
-        }
-    });
-
-    function deleteFile(fileIndex) { 
-    let fileName = storedFiles[fileIndex]; // Get the specific file name to delete
-    console.log("Attempting to delete:", fileName, "at index:", fileIndex); // Debugging
-    
-    fetch(`delete.php?file=${encodeURIComponent(fileName)}`, { method: "GET" })
+    fetch(`fetch_requirement.php?company=${encodeURIComponent(companyName)}&title=${encodeURIComponent(projectTitle)}`)
     .then(response => response.json())
     .then(data => {
-        console.log("Server Response:", data); // Debugging
-        if (data.success) {
-            // Remove only the clicked instance (specific index)
-            storedFiles.splice(fileIndex, 1);
-            localStorage.setItem("uploadedFiles", JSON.stringify(storedFiles));
-            renderFiles(); // Re-render list
-        } else {
-            alert("File deletion failed!");
+        if (!data.files || data.files.length <= fileIndex) {
+            console.error("Error: Invalid file index");
+            return;
         }
-    })
-    .catch(error => console.error("Error:", error));
+
+        const fileName = data.files[fileIndex]; // Correct file name from DB
+        
+        console.log("Attempting to delete file:", fileName);
+
+        fetch(`delete.php?file=${encodeURIComponent(fileName)}&company=${encodeURIComponent(companyName)}&title=${encodeURIComponent(projectTitle)}`, {
+            method: "GET"
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("File deleted successfully!");
+                fetchRequirementFile();
+            } else {
+                alert("File deletion failed: " + data.error);
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    });
 }
 
-    renderFiles(); // Initial render
-</script>
 
+</script>
 
 </body>
 

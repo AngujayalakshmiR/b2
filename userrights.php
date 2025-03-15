@@ -5,11 +5,40 @@ if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
 }
-include 'dbconn.php'; ?>
+include 'dbconn.php'; // Ensure this file has a valid DB connection ?>
+<?php
+
+$message = ""; // Variable to store alert messages
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $employeeName = $_POST['employee'];
+    
+    if (!empty($_POST['rights']) && !empty($employeeName)) {
+        foreach ($_POST['rights'] as $module => $selectedRights) {
+            $rightsStr = implode(",", $selectedRights); // Convert array to comma-separated string
+
+            // Insert into database
+            $stmt = $conn->prepare("INSERT INTO userrights (name, module, rights) VALUES (?, ?, ?)");
+            $stmt->bind_param("sss", $employeeName, $module, $rightsStr);
+            $stmt->execute();
+        }
+        
+        // Success message
+        $message = "User rights successfully stored!";
+        $alertType = "success";
+    } else {
+        // Error message
+        $message = "Please select at least one right and an employee.";
+        $alertType = "error";
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -41,19 +70,15 @@ include 'dbconn.php'; ?>
     thead{
         color:black;
     }
-        #dataTable th:nth-child(1), #dataTable td:nth-child(1) { width: 2%; }  /* S.no */
-#dataTable th:nth-child(2), #dataTable td:nth-child(2) { width: 8%; } /* Name */
-#dataTable th:nth-child(3), #dataTable td:nth-child(3) { width: 13%; } /* Date */
-#dataTable th:nth-child(4), #dataTable td:nth-child(4) { width: 14%; } /* Company */
-#dataTable th:nth-child(5), #dataTable td:nth-child(5) { width: 12%; } /* Project Title */
-#dataTable th:nth-child(6), #dataTable td:nth-child(6) { width: 12%; } /* Total Days */
-#dataTable th:nth-child(7), #dataTable td:nth-child(7) { width: 15%; } /* Description */
-#dataTable th:nth-child(8), #dataTable td:nth-child(8) { width: 12%; } /* Total Time */
-#dataTable th:nth-child(9), #dataTable td:nth-child(9) { width: 13%; }
-#dataTable th:nth-child(10), #dataTable td:nth-child(10) { width: 10%; }
+    #dataTable1 th:nth-child(1), #dataTable1 td:nth-child(1) { width: 12%; }  /* S.no */
+        #dataTable1 th:nth-child(2), #dataTable1 td:nth-child(2) { width: 40%; }  /* S.no */
+        #dataTable1 th:nth-child(3), #dataTable1 td:nth-child(3) { width: 12%; }
+#dataTable1 th:nth-child(3), #dataTable1 td:nth-child(3) { width: 12%; } /* Name */
+#dataTable1 th:nth-child(4), #dataTable1 td:nth-child(4) { width: 12%; } /* Date */
+#dataTable1 th:nth-child(5), #dataTable1 td:nth-child(5) { width: 12%; } 
 
  /* Reduce table font size */
- #dataTable {
+ #dataTable1 {
         font-size: 14px; /* Adjust size as needed */
     }
       thead  {
@@ -446,7 +471,7 @@ include 'dbconn.php'; ?>
 <!-- Divider -->
 <div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 <!-- Nav Item - Dashboard -->
-<li class="nav-item l active">
+<li class="nav-item l ">
     <a class="nav-link k" href="index.php" style="color: white;">
         <i class="fas fa-fw fa-tachometer-alt" style="font-size:16px"></i>
         <span>Dashboard</span>
@@ -505,7 +530,7 @@ include 'dbconn.php'; ?>
 </li>
 <div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 <!-- Nav Item - Work Reports -->
-<li class="nav-item l">
+<li class="nav-item l active">
     <a class="nav-link k" href="userrights.php" style="color: black;">
     <i class="fas fa-user-shield" style="font-size:16px"></i> <!-- User Shield icon -->
         <span>User Rights</span>
@@ -667,7 +692,7 @@ include 'dbconn.php'; ?>
       margin: 0 5px;
     }
     /* Optional: Change cursor for clickable rows */
-    #dataTable tbody tr {
+    #dataTable1 tbody tr {
       cursor: pointer;
     }
     .sidebar-dark .nav-item .nav-link[data-toggle="collapse"]:hover::after {
@@ -704,46 +729,42 @@ include 'dbconn.php'; ?>
         width: calc(50% - 10px); /* 2 boxes per row */
     }
 }
-
-
-/* Style for the table header (thead) */
-/* #dataTable thead {
-    color: rgb(140, 147, 159);
-    font-weight: 1; 
-    font-style: normal;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-} */
-
-/* Style for table data (td) */
-/* #dataTable tbody td {
-    font-style: normal;
-    overflow: hidden;
-    line-height: 1rem;
-    text-overflow: ellipsis;
-    color: rgb(23, 25, 28);
-    font-size: 14px;
-    font-weight: 400;
-    padding: 10px; 
-} */
-
-/* Style for icons in the status column */
-#dataTable tbody td i {
+#dataTable1 tbody td i {
     color: rgb(0, 148, 255);
 }
 .page-item.active .page-link {
     background: rgb(0, 148, 255);
 }
-</style>
-<style>
-    #dataTable th:nth-child(3), 
-    #dataTable td:nth-child(3) {
-    display: none;
-}
-</style>
-        <!-- End of Sidebar -->
 
-        <!-- Content Wrapper -->
+
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: rgb(0, 148, 255);
+        }
+
+    .submit-btn {
+        background-color: rgb(0, 148, 255);
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .submit-btn:hover {
+        background-color: rgb(0, 120, 220); /* Slightly darker blue */
+    }
+    .button-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        padding: 10px 0;
+    }
+    </style>
         <div id="content-wrapper" class="d-flex flex-column">
 
             <!-- Main Content -->
@@ -757,18 +778,9 @@ include 'dbconn.php'; ?>
                 <div class="mr-auto d-flex align-items-center pl-3 py-2">
 
     <h4 class="text-dark font-weight-bold mr-4" style="color: rgb(15,29,64); font-size: medium; margin-top: 5px;">
-        Dashboard
+        User Rights
     </h4></div>
-                    <!-- Sidebar Toggle (Topbar) -->
-                   
-
-                   
-
-                    <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
-
-                        
-
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
@@ -798,131 +810,169 @@ include 'dbconn.php'; ?>
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                <?php
-include 'dbconn.php'; // Include your DB connection file
-
-// Count total projects
-$totalProjectsQuery = "SELECT COUNT(*) AS total FROM projectcreation";
-$totalProjectsResult = $conn->query($totalProjectsQuery);
-$totalProjects = $totalProjectsResult->fetch_assoc()['total'];
-
-// Count ongoing projects (check if any company-projectTitle exists in dailyupdates)
-$ongoingProjectsQuery = "SELECT COUNT(DISTINCT CONCAT(companyName, '-', projectTitle)) AS ongoing FROM dailyupdates WHERE CONCAT(companyName, '-', projectTitle) IN (SELECT CONCAT(companyName, '-', projectTitle) FROM projectcreation)";
-$ongoingProjectsResult = $conn->query($ongoingProjectsQuery);
-$ongoingProjects = $ongoingProjectsResult->fetch_assoc()['ongoing'];
-
-// Calculate pending projects
-$pendingProjects = $totalProjects - $ongoingProjects;
-
-// Count total employees
-$totalEmployeesQuery = "SELECT COUNT(*) AS total FROM employeedetails";
-$totalEmployeesResult = $conn->query($totalEmployeesQuery);
-$totalEmployees = $totalEmployeesResult->fetch_assoc()['total'];
-?>
-
-<div class="square-box"> 
-    <div class="stats-box">
-        <i class="fas fa-file" style="font-size: 20px;"></i>
-        <h1 style="font-size: 20px;"><?php echo $totalProjects; ?></h1>
-        <small>Total Projects</small>
-    </div>
-    <div class="stats-box">
-        <i class="fas fa-exclamation" style="font-size: 20px;"></i>
-        <h1 style="font-size: 20px;"><?php echo $pendingProjects; ?></h1>
-        <small>Pending Projects</small>
-    </div>
-    <div class="stats-box">
-        <i class="fas fa-check" style="font-size: 20px;"></i>
-        <h1 style="font-size: 20px;"><?php echo $ongoingProjects; ?></h1>
-        <small>Ongoing Projects</small>
-    </div>
-    <div class="stats-box">
-        <i class="fas fa-bell" style="font-size: 20px;"></i>
-        <h1 style="font-size: 20px;"><?php echo $totalEmployees; ?></h1>
-        <small>Employee Count</small>
-    </div>
-</div>
-
-
-<br>
-
-<!-- DataTales Example -->
-<div class="card shadow mb-4">
-    <div class="card-header py-3">
+                <div class="card shadow mb-4">
+                <form id="rightsForm">
+    <div class="card-header py-2">
         <p class="m-0" style="font-size: 16px; color:rgb(23, 25, 28); font-weight: 500;">
-            <b>Daily Updates</b> 
-            <span class="header-counter">0</span>  <!-- Counter will be updated dynamically -->
+            <b>User Rights</b>   <!-- Counter will be updated dynamically -->
+            <span class="header-counter">10</span> 
         </p>
-        <div> 
-            <input type="date" id="dateFilter" class="form-control d-inline" style="width: auto;">
+        <div class="d-flex justify-content-between mt-1">
+        <div></div> <!-- Empty div to push the select to the right -->
+        <div class="text-end">
+            <select id="employeeSelect" class="form-control d-inline" style="width: 180px;" name="employee">
+                <option value="">Select Employee</option>
+                <?php
+                $sql = "SELECT Name FROM employeedetails";
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<option value='" . htmlspecialchars($row['Name']) . "'>" . htmlspecialchars($row['Name']) . "</option>";
+                    }
+                }
+                ?>
+            </select>
         </div>
     </div>
+    </div>
     <div class="card-body">
-    <div class="d-flex justify-content-end mb-2">
-    <input type="text" id="tableSearch" class="form-control" placeholder="Search..." style="width: 250px;">
-</div>
-
         <div class="table-responsive">
-            <table class="table text-center" id="dataTable" width="100%">
-                <thead>
-                    <tr>
-                        <th>S.no</th>
-                        <th>Name</th>
-                        <th>Date</th>
-                        <th>Company-Title</th>
-                        <th>Type</th>
-                        <th>Total Days</th>
-                        <th>Description</th>
-                        <th>Total Hrs</th>
-                        <th>Actual Hrs</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="table-body">
-                <?php
-$c = 1;
-$sql = "SELECT * FROM dailyupdates ORDER BY date DESC";
-$result = $conn->query($sql);
+        
+  
 
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $actualHrs = trim($row['actualHrs']);
-        $status = ($actualHrs === '-' || empty($actualHrs)) 
-            ? '<td><i class="fas fa-hourglass-half status-icon in-progress" style="font-size:12px;color:rgb(0, 148, 255);"></i>&nbsp;&nbsp;Inprogress</td>' 
-            : '<td><i class="fas fa-check-circle status-icon completed" style="font-size:12px;color:rgb(0, 148, 255);"></i>&nbsp;&nbsp;Completed</td>';
+    <table class="table text-center" id="dataTable1">
+        <thead>
+            <tr>
+                <th>All</th>
+                <th>Module</th>
+                <th>Add</th>
+                <th>Update</th>
+                <th>Delete</th>
+                <th>View</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $modules = [
+                "Dashboard" => ["View"], 
+                "FollowUps" => ["Add", "Update", "Delete"], 
+                "Customer" => ["Add", "Update", "Delete"], 
+                "Employee" => ["Add", "Update", "Delete"], 
+                "Designation" => ["Add", "Update", "Delete"], 
+                "Project Type" => ["Add", "Update", "Delete"], 
+                "FollowUp Type" => ["Add", "Update", "Delete"], 
+                "Project Creation" => ["Add", "Update", "Delete"], 
+                "Daily Update" => ["View"], 
+                "Work Reports" => ["View"]
+            ];
 
-        // Convert date format to match input field
-        $formattedDate = date("d-m-Y", strtotime($row['date']));
+            foreach ($modules as $module => $permissions) {
+                echo "<tr>
+                    <td><input type='checkbox' class='check-all'></td>
+                    <td>$module</td>";
 
-        echo "<tr data-date='$formattedDate'>
-            <td class='sno'>{$c}</td> 
-            <td class='name'>{$row['name']}</td>
-            <td class='date'>$formattedDate</td>
-            <td>{$row['companyName']} - {$row['projectTitle']}</td>
-            <td>{$row['projectType']}</td>
-            <td>{$row['totalDays']}</td>
-            <td>{$row['taskDetails']}</td>
-            <td>{$row['totalHrs']}</td>
-            <td>{$row['actualHrs']}</td>
-            $status
-        </tr>";
+                $actions = ["Add", "Update", "Delete", "View"];
+                foreach ($actions as $action) {
+                    if (in_array($action, $permissions)) {
+                        echo "<td><input type='checkbox' class='check-perm' name='rights[$module][]' value='$action'></td>";
+                    } else {
+                        echo "<td>-</td>";
+                    }
+                }
 
-        $c++;
-    }
-} else {
-    echo "<tr><td colspan='10'>No records found</td></tr>";
-}
-?>
-                </tbody>
-            </table>
+                echo "</tr>";
+            }
+            ?>
+        </tbody>
+    </table>
+
+    <div class="text-center mt-3">
+        <button type="submit" class="btn submit-btn" style="color: white;">Submit</button>
+    </div>
+</form>
+
+<script>
+$(document).ready(function () {
+    // Function to fetch existing rights when an employee is selected
+    $("#employeeSelect").on("change", function () {
+        let employeeName = $(this).val();
+
+        if (employeeName !== "") {
+            $.ajax({
+                type: "POST",
+                url: "fetch_rights.php", // Fetch rights from DB
+                data: { employee: employeeName },
+                dataType: "json",
+                success: function (response) {
+                    $("input[type='checkbox']").prop("checked", false); // Reset all checkboxes
+
+                    if (response.success) {
+                        $.each(response.data, function (module, rights) {
+                            $.each(rights, function (index, right) {
+                                $("input[name='rights[" + module + "][]'][value='" + right + "']").prop("checked", true);
+                            });
+                        });
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: "Failed to fetch rights. Please try again.",
+                    });
+                }
+            });
+        }
+    });
+
+    // Handle form submission with AJAX
+    $("#rightsForm").on("submit", function (e) {
+        e.preventDefault();
+
+        let employeeName = $("#employeeSelect").val();
+        let selectedRights = $("input[name^='rights']:checked").length;
+
+        if (employeeName === "") {
+            Swal.fire({ icon: "warning", title: "Oops...", text: "Please select an employee!" });
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "update_rights.php", // Update rights file
+            data: $(this).serialize(),
+            dataType: "json", // Expect JSON response
+            success: function (response) {
+                if (response.status === "success") {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Success!",
+                        text: response.message
+                    });
+                } else if (response.status === "error") {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: response.message
+                    });
+                }
+            },
+            error: function () {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: "Something went wrong. Try again!"
+                });
+            }
+        });
+    });
+});
+
+</script>
         </div>
     </div>
 </div>
             </div>
-            <!-- End of Main Content -->
-
-            
-            <!-- End of Footer -->
 
         </div>
         <!-- End of Content Wrapper -->
@@ -961,145 +1011,19 @@ if ($result->num_rows > 0) {
             </div>
         </div>
     </div>
-    <script>
-document.getElementById("tableSearch").addEventListener("keyup", function() {
-    let filter = this.value.toLowerCase();
-    let rows = document.querySelectorAll("#table-body tr");
 
-    rows.forEach(row => {
-        let text = row.textContent.toLowerCase();
-        row.style.display = text.includes(filter) ? "" : "none";
+    <script>
+    document.querySelectorAll(".check-all").forEach((checkbox) => {
+        checkbox.addEventListener("change", function() {
+            let row = this.closest("tr");
+            let permissions = row.querySelectorAll(".check-perm");
+            
+            permissions.forEach((perm) => {
+                perm.checked = this.checked;
+            });
+        });
     });
-});
 </script>
-    <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const dateFilter = document.getElementById("dateFilter");
-    const tableBody = document.getElementById("table-body");
-    const headerCounter = document.querySelector(".header-counter");
-    function filterTableByDate(selectedDate) {
-        let rows = tableBody.querySelectorAll("tr:not(#no-records)");
-        let count = 0;
-        let noRecordRow = document.getElementById("no-records");
-        if (noRecordRow) {
-            noRecordRow.remove();
-        }
-        rows.forEach((row) => {
-            let rowDate = row.querySelector(".date").textContent.trim();
-            let formattedRowDate = formatDate(rowDate); // Convert to YYYY-MM-DD
-
-            if (formattedRowDate === selectedDate) {
-                row.style.display = "";
-                count++;
-                row.querySelector(".sno").textContent = count; // Update serial number
-            } else {
-                row.style.display = "none";
-            }
-        });
-        headerCounter.textContent = count;
-        if (count === 0) {
-            let noRecordHTML = `<tr id="no-records"><td colspan="10" style="text-align:center;">No records found</td></tr>`;
-            tableBody.insertAdjacentHTML("beforeend", noRecordHTML);
-        }
-    }
-    function getTodayDate() {
-        let today = new Date();
-        let day = String(today.getDate()).padStart(2, "0");
-        let month = String(today.getMonth() + 1).padStart(2, "0");
-        let year = today.getFullYear();
-        return `${year}-${month}-${day}`;
-    }
-    function formatDate(dateString) {
-        let parts = dateString.split("-");
-        return `${parts[2]}-${parts[1]}-${parts[0]}`; // Convert DD-MM-YYYY to YYYY-MM-DD
-    }
-    let todayDate = getTodayDate();
-    dateFilter.value = todayDate;
-    filterTableByDate(todayDate);
-
-    // Update table when a new date is selected
-    dateFilter.addEventListener("change", function () {
-        filterTableByDate(this.value);
-    });
-});
-        document.addEventListener('DOMContentLoaded', function () {
-    var table = $('#dataTable').DataTable();
-    document.querySelector('#dataTable tbody').addEventListener('click', function (event) {
-        const clickedCell = event.target.closest('td'); // Get clicked <td>
-        if (!clickedCell) return;
-        const nameColumn = clickedCell.closest('.name-column');
-        const companyColumn = clickedCell.closest('.company-column');
-        const titleColumn = clickedCell.cellIndex === 4; // Title column index (zero-based)
-        const searchBox = document.querySelector('input[type="search"]'); // Search box in DataTable
-        if (nameColumn) {
-            const name = nameColumn.textContent.trim();
-            window.location.href = `reports.php?name=${encodeURIComponent(name)}`;
-        } else if (companyColumn) {
-            const company = companyColumn.textContent.trim();
-            window.location.href = `reports.php?company=${encodeURIComponent(company)}`;
-        } else if (titleColumn) {
-            const title = clickedCell.textContent.trim();
-            searchBox.value = title; // Set search box value
-            table.search(title).draw(); // Filter table with title
-            window.location.href = `reports.php?title=${encodeURIComponent(title)}`;
-        } else {
-            window.location.href = "requirement.php";        }
-    });
-});
-    </script>
-    <script>
-$(document).ready(function () {
-    let table = $('#dataTable').DataTable({
-        "pageLength": 10, // Show 10 entries per page
-        "ordering": false, // Disable sorting for better filtering
-        "destroy": true // Allows re-initialization without issues
-    });
-    function filterByDate() {
-        let selectedDate = $('#dateFilter').val();
-        if (!selectedDate) return;
-
-        let formattedSelectedDate = selectedDate.split("-").reverse().join("-"); 
-        table.column(2).search(formattedSelectedDate).draw();
-        let visibleRows = table.rows({ filter: 'applied' }).count();
-        $('.header-counter').text(visibleRows);
-        if (visibleRows === 0) {
-            if (!$("#no-records").length) {
-                $("#dataTable tbody").append(`<tr id="no-records"><td colspan="10" class="text-center">No records found</td></tr>`);
-            }
-        } else {
-            $("#no-records").remove();
-        }
-    }
-    let today = new Date().toISOString().split('T')[0];
-    $('#dateFilter').val(today);
-    filterByDate();
-    $('#dateFilter').on('change', function () {
-        filterByDate();
-    });
-});
-$(document).ready(function () {
-
-    $("#dateFilter").on("change", function () {
-        let selectedDate = $(this).val();
-        if (!selectedDate) return;
-
-        let formattedSelectedDate = selectedDate.split("-").reverse().join("-");
-        dataTable.destroy();
-
-        // Show/hide rows based on selected date
-        $("#dataTable tbody tr").each(function () {
-            let rowDate = $(this).find("td:eq(2)").text().trim();
-            $(this).toggle(rowDate === formattedSelectedDate);
-        });
-
-        // Reinitialize DataTable after filtering
-        dataTable = $("#dataTable").DataTable({
-            pageLength: 10 // Ensures proper pagination
-        });
-    });
-});
-    </script>
-
 <!-- jQuery (Required for DataTables) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -1122,13 +1046,6 @@ $(document).ready(function () {
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
-
-    <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
     
 
 </body>

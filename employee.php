@@ -394,6 +394,14 @@ if (!isset($_SESSION['username'])) {
         <i class="fas fa-fw fa-chart-area" style="font-size:16px"></i>
         <span>Work Reports</span>
     </a>
+</li>
+<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
+<!-- Nav Item - Work Reports -->
+<li class="nav-item l">
+    <a class="nav-link k" href="userrights.php" style="color: black;">
+    <i class="fas fa-user-shield" style="font-size:16px"></i> <!-- User Shield icon -->
+        <span>User Rights</span>
+    </a>
 </li><br>
 <!-- Divider -->
 <div class="sidebar-divider d-none d-md-block"></div>

@@ -1,11 +1,11 @@
-
-<?php
+ <?php
 session_start();
 
 if (!isset($_SESSION['empUserName'])) {
     header("Location: login.php");
     exit();
 }
+
 $companyName = isset($_GET['company']) ? htmlspecialchars($_GET['company']) : '';
 $projectTitle = isset($_GET['title']) ? htmlspecialchars($_GET['title']) : '';
 $projectType = isset($_GET['type']) ? htmlspecialchars($_GET['type']) : '';
@@ -15,26 +15,43 @@ $teammates = isset($_GET['teammates']) ? htmlspecialchars($_GET['teammates']) : 
 ?>
 <?php
 
-include ("dbconn.php");
+include("dbconn.php");
 
 $companyName = isset($_GET['company']) ? htmlspecialchars($_GET['company']) : '';
 $projectTitle = isset($_GET['title']) ? htmlspecialchars($_GET['title']) : '';
 
-// Fetch description based on projectTitle
-$sql = "SELECT  ID,desctitle, date, description FROM descriptiontable WHERE companyName = ? AND projectTitle = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("ss",$companyName , $projectTitle);
-$stmt->execute();
-$result = $stmt->get_result();
-
 $descriptions = [];
-while ($row = $result->fetch_assoc()) {
+
+// Fetch the first description from projectcreation table
+$sql1 = "SELECT ID, 'From: Managing Director' AS desctitle, date, description FROM projectcreation WHERE companyName = ? AND projectTitle = ? LIMIT 1";
+$stmt1 = $conn->prepare($sql1);
+$stmt1->bind_param("ss", $companyName, $projectTitle);
+$stmt1->execute();
+$result1 = $stmt1->get_result();
+
+if ($row = $result1->fetch_assoc()) {
+    $row['highlight'] = true; // Mark the first description to apply styling
+    $descriptions[] = $row;
+}
+$stmt1->close();
+
+// Fetch remaining descriptions from descriptiontable
+$sql2 = "SELECT ID, desctitle, date, description FROM descriptiontable WHERE companyName = ? AND projectTitle = ?";
+$stmt2 = $conn->prepare($sql2);
+$stmt2->bind_param("ss", $companyName, $projectTitle);
+$stmt2->execute();
+$result2 = $stmt2->get_result();
+
+while ($row = $result2->fetch_assoc()) {
+    $row['highlight'] = false; // No special styling for others
     $descriptions[] = $row;
 }
 
-$stmt->close();
+$stmt2->close();
 $conn->close();
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -911,49 +928,49 @@ html, body {
     </div>
 </div>
 <br>
+<!-- Display Descriptions -->
 <div class="white-container">
     <h2 class="container-heading">Description</h2>
     <div class="row" id="entriesContainer">
-    <?php if (!empty($descriptions)) : ?>
-    <?php foreach ($descriptions as $index => $entry) : ?>
-        <div class="col-lg-4 col-md-6 col-sm-12">
-            <div class="entry-box p-2" data-id="<?php echo $entry['ID']; ?>" style="<?php echo $index == 0 ? 'background-color: red; color: white;' : ''; ?>">
-                <div class="row align-items-center">
-                    <div class="col-6">
-                        <span class="entry-title">
-                            <?php echo $index == 0 ? 'From: Managing Director' : htmlspecialchars($entry['desctitle']); ?>
-                        </span>
-                    </div>
-                    <div class="col-3 text-end">
-                        <span class="entry-date"><?php echo htmlspecialchars($entry['date']); ?></span>
-                    </div>
-                    <div class="col-3 text-end">
-                        <!-- Hide edit button only for the first card -->
-                        <button class="toggle-btn" 
-                            onclick="openEditModal(this)" 
-                            style="<?php echo $index == 0 ? 'display: none;' : ''; ?>">
-                            <i class="fas fa-pen"></i>
-                        </button>
-                        <button class="toggle-btn1" 
-                            onclick="toggleDesc(this)" 
-                            style="<?php echo $index == 0 ? 'color: red; background-color: white; border: none;' : ''; ?>">+
-                        </button>
+        <?php if (!empty($descriptions)) : ?>
+            <?php foreach ($descriptions as $index => $entry) : ?>
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="entry-box p-2" data-id="<?php echo $entry['ID']; ?>" 
+                         style="<?php echo $entry['highlight'] ? 'background-color: red; color: white;' : ''; ?>">
+                        <div class="row align-items-center">
+                            <div class="col-6">
+                                <span class="entry-title">
+                                    <?php echo htmlspecialchars($entry['desctitle']); ?>
+                                </span>
+                            </div>
+                            <div class="col-3 text-end">
+                                <span class="entry-date"><?php echo htmlspecialchars($entry['date']); ?></span>
+                            </div>
+                            <div class="col-3 text-end">
+                                <button class="toggle-btn" 
+                                        onclick="openEditModal(this)" 
+                                        style="<?php echo $entry['highlight'] ? 'display: none;' : ''; ?>">
+                                    <i class="fas fa-pen"></i>
+                                </button>
+                                <button class="toggle-btn1" 
+                                        onclick="toggleDesc(this)" 
+                                        style="<?php echo $entry['highlight'] ? 'color: red; background-color: white; border: none;' : ''; ?>">+
+                                </button>
+                            </div>
+                        </div>
+                        <div class="desc-content mt-2" style="display: none;">
+                            <?php echo nl2br(htmlspecialchars($entry['description'])); ?>
+                        </div>
                     </div>
                 </div>
-                <div class="desc-content mt-2" style="display: none;">
-                    <?php echo nl2br(htmlspecialchars($entry['description'])); ?>
-                </div>
-            </div>
-        </div>
-    <?php endforeach; ?>
-    <?php else : ?>
-        <p id="noDescription" class="text-center" style="font-size: 14px; font-weight: bold; color: #5a5c69;">
-            -- No description found --
-        </p>
-    <?php endif; ?>
+            <?php endforeach; ?>
+        <?php else : ?>
+            <p id="noDescription" class="text-center" style="font-size: 14px; font-weight: bold; color: #5a5c69;">
+                -- No description found --
+            </p>
+        <?php endif; ?>
     </div>
 </div>
-
 
 
     </div></div>
@@ -1221,24 +1238,22 @@ function createFileBox(fileName, isDeletable = true, index = null) {
     let fileBox = document.createElement("div");
     fileBox.classList.add("file-box");
 
-    // Apply red color to the first file
-    if (index === 0) {
-        fileBox.style.backgroundColor = "red";
-        fileBox.style.color = "white"; // Ensure text is readable
-    }
-
     let textContainer = document.createElement("div");
     textContainer.classList.add("text-container");
 
     let requirementText = document.createElement("b");
-    requirementText.textContent = isDeletable ? `Requirement ${index + 1}` : "Requirement File";
+
+    if (index === 0) {
+        fileBox.style.backgroundColor = "red";
+        fileBox.style.color = "white"; 
+        requirementText.textContent = "Main Project File"; // Label the first file differently
+    } else {
+        requirementText.textContent = `Requirement ${index}`; 
+    }
 
     let fileNameText = document.createElement("div");
     fileNameText.classList.add("file-name");
-
-    // Remove "reqfiles/" from the displayed filename
     let displayFileName = fileName.replace(/^reqfiles\//, "");
-
     fileNameText.textContent = displayFileName;
     fileNameText.style.fontSize = "14px";
     fileNameText.style.marginTop = "5px";
@@ -1247,8 +1262,7 @@ function createFileBox(fileName, isDeletable = true, index = null) {
     textContainer.appendChild(fileNameText);
     fileBox.appendChild(textContainer);
 
-    // Only add delete button if the file is deletable (not the first one)
-    if (isDeletable) {
+    if (isDeletable && index !== 0) {
         let deleteBtn = document.createElement("div");
         deleteBtn.classList.add("delete-btn");
         deleteBtn.textContent = "✖";
@@ -1263,6 +1277,7 @@ function createFileBox(fileName, isDeletable = true, index = null) {
 
     return fileBox;
 }
+
 
 function deleteFile(fileIndex) {
     const urlParams = new URLSearchParams(window.location.search);

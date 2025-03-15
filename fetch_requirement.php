@@ -6,7 +6,7 @@ $companyName = isset($_GET['company']) ? htmlspecialchars($_GET['company']) : ''
 $projectTitle = isset($_GET['title']) ? htmlspecialchars($_GET['title']) : '';
 
 if (!empty($companyName) && !empty($projectTitle)) {
-    $query = "SELECT reqfile FROM requirementtable WHERE companyName = ? AND projectTitle = ?";
+    $query = "SELECT reqfile FROM reqtable WHERE companyName = ? AND projectTitle = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("ss", $companyName, $projectTitle);
     $stmt->execute();

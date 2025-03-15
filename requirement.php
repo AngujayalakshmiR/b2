@@ -21,9 +21,9 @@ $companyName = isset($_GET['company']) ? htmlspecialchars($_GET['company']) : ''
 $projectTitle = isset($_GET['title']) ? htmlspecialchars($_GET['title']) : '';
 
 // Fetch description based on projectTitle
-$sql = "SELECT date, description FROM descriptiontable WHERE projectTitle = ?";
+$sql = "SELECT  ID,desctitle, date, description FROM descriptiontable WHERE companyName = ? AND projectTitle = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $projectTitle);
+$stmt->bind_param("ss",$companyName , $projectTitle);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -843,11 +843,10 @@ html, body {
     color: #5a5c69; /* Dark gray for better readability */
 }
 </style>
-
-<a href="#" id="addFileBtn" class="btn btn-custom" style="color: white;">
+<a href="#" id="addFileBtn" class="btn btn-custom" style="color: white;"> 
     <i class="fas fa-folder-plus"></i> <span>&nbsp; Add File</span>
-</a> &nbsp; &nbsp;
-
+</a>
+&nbsp;&nbsp;
 <a href="#" class="btn btn-custom" data-toggle="modal" data-target="#descModal" style="color: white;">
     <i class="fas fa-pen"></i> <span>&nbsp; Add Desc</span>
 </a>
@@ -912,82 +911,94 @@ html, body {
     </div>
 </div>
 <br>
-
 <div class="white-container">
     <h2 class="container-heading">Description</h2>
     <div class="row" id="entriesContainer">
-        <?php if (!empty($descriptions)) : ?>
-            <?php foreach ($descriptions as $entry) : ?>
-                <div class="col-lg-4 col-md-6 col-sm-12">
-                    <div class="entry-box p-2">
-                        <div class="row align-items-center">
-                            <div class="col-6">
-                                <span class="entry-title"><?php echo htmlspecialchars($projectTitle); ?></span>
-                            </div>
-                            <div class="col-3 text-end">
-                                <span class="entry-date"><?php echo htmlspecialchars($entry['date']); ?></span>
-                            </div>
-                            <div class="col-3 text-end">
-                                <button class="toggle-btn1" onclick="toggleDesc(this)">+</button>
-                               
-                            </div>
-                        </div>
-                        <div class="desc-content mt-2" style="display: none; color: #6c757d;">
-                            <?php echo nl2br(htmlspecialchars($entry['description'])); ?>
-                        </div>
+    <?php if (!empty($descriptions)) : ?>
+    <?php foreach ($descriptions as $index => $entry) : ?>
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="entry-box p-2" data-id="<?php echo $entry['ID']; ?>" style="<?php echo $index == 0 ? 'background-color: red; color: white;' : ''; ?>">
+                <div class="row align-items-center">
+                    <div class="col-6">
+                        <span class="entry-title">
+                            <?php echo $index == 0 ? 'From: Managing Director' : htmlspecialchars($entry['desctitle']); ?>
+                        </span>
+                    </div>
+                    <div class="col-3 text-end">
+                        <span class="entry-date"><?php echo htmlspecialchars($entry['date']); ?></span>
+                    </div>
+                    <div class="col-3 text-end">
+                        <!-- Hide edit button only for the first card -->
+                        <button class="toggle-btn" 
+                            onclick="openEditModal(this)" 
+                            style="<?php echo $index == 0 ? 'display: none;' : ''; ?>">
+                            <i class="fas fa-pen"></i>
+                        </button>
+                        <button class="toggle-btn1" 
+                            onclick="toggleDesc(this)" 
+                            style="<?php echo $index == 0 ? 'color: red; background-color: white; border: none;' : ''; ?>">+
+                        </button>
                     </div>
                 </div>
-            <?php endforeach; ?>
-        <?php else : ?>
-            <p id="noDescription" class="text-center" style="font-size: 14px; font-weight: bold; color: #5a5c69;">
-                -- No description found --
-            </p>
-        <?php endif; ?>
+                <div class="desc-content mt-2" style="display: none;">
+                    <?php echo nl2br(htmlspecialchars($entry['description'])); ?>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
+    <?php else : ?>
+        <p id="noDescription" class="text-center" style="font-size: 14px; font-weight: bold; color: #5a5c69;">
+            -- No description found --
+        </p>
+    <?php endif; ?>
     </div>
 </div>
 
 
 
-
     </div></div>
-<div class="modal fade" id="descModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade" id="descModal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-body p-4">
-        <form id="descForm">
-          <!-- Date & Title in Same Row -->
-          <div class="form-group d-flex">
-            <div class="w-50 pr-2">
-              <label for="dateInput"><b>Date:</b></label>
-              <input type="date" class="form-control" id="dateInput" required>
-            </div>
-            <div class="w-50 pl-2">
-              <label for="titleInput"><b>Title:</b></label>
-              <input type="text" class="form-control" id="titleInput" placeholder="Enter title" required>
-            </div>
-          </div>
+      <form id="descForm">
+    <input type="hidden" id="companyName" value="<?php echo htmlspecialchars($companyName); ?>">
+    <input type="hidden" id="projectTitle" value="<?php echo htmlspecialchars($projectTitle); ?>">
 
-          <!-- Description Field -->
-          <div class="form-group">
-            <label for="descInput"><b>Description:</b></label>
-            <textarea class="form-control" id="descInput" rows="3" placeholder="Enter description" required></textarea>
-          </div>
+    <div class="form-group d-flex">
+        <div class="w-50 pr-2">
+            <label for="dateInput"><b>Date:</b></label>
+            <input type="date" class="form-control" id="dateInput" required>
+        </div>
+        <div class="w-50 pl-2">
+            <label for="titleInput"><b>Title:</b></label>
+            <input type="text" class="form-control" id="titleInput" placeholder="Enter title" required>
+        </div>
+    </div>
 
-          <!-- Buttons -->
-          <div class="text-center">
-            <button type="submit" class="btn submit-btn mx-2" style="color: white;">Submit</button>
-          </div>
-        </form>
+    <div class="form-group">
+        <label for="descInput"><b>Description:</b></label>
+        <textarea class="form-control" id="descInput" rows="3" placeholder="Enter description" required></textarea>
+    </div>
+
+    <div class="text-center">
+        <button type="submit" class="btn submit-btn mx-2" style="color: white;">Submit</button>
+    </div>
+</form>
+
+
       </div>
     </div>
   </div>
 </div>
 <!-- Edit Description Modal -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-hidden="true">
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-hidden="true"> 
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-body p-4">
         <form id="editForm">
+          <input type="hidden" id="editId"> <!-- Hidden field to store entry ID -->
           <div class="form-group d-flex">
             <div class="w-50 pr-2">
               <label for="editDateInput"><b>Date:</b></label>
@@ -1009,7 +1020,7 @@ html, body {
       </div>
     </div>
   </div>
-</div>
+</div>  
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
@@ -1050,6 +1061,7 @@ html, body {
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -1122,7 +1134,7 @@ html, body {
 
 
 <script>
- document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", () => {
     const fileWrapper = document.getElementById("fileWrapper");
     const fileInput = document.getElementById("fileInput");
     const addFileBtn = document.getElementById("addFileBtn");
@@ -1138,7 +1150,11 @@ html, body {
         const projectTitle = urlParams.get("title");
 
         if (!companyName || !projectTitle) {
-            alert("Company Name and Project Title are required.");
+            Swal.fire({
+                icon: "warning",
+                title: "Missing Information",
+                text: "Company Name and Project Title are required."
+            });
             return;
         }
 
@@ -1154,10 +1170,17 @@ html, body {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert("File uploaded successfully!");
-                location.reload();
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: "File uploaded successfully!"
+                }).then(() => location.reload());
             } else {
-                alert("File upload failed: " + data.error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Upload Failed",
+                    text: data.error
+                });
             }
         })
         .catch(error => console.error("Error:", error));
@@ -1241,7 +1264,6 @@ function createFileBox(fileName, isDeletable = true, index = null) {
     return fileBox;
 }
 
-
 function deleteFile(fileIndex) {
     const urlParams = new URLSearchParams(window.location.search);
     const companyName = urlParams.get("company");
@@ -1256,32 +1278,167 @@ function deleteFile(fileIndex) {
         }
 
         const fileName = data.files[fileIndex]; // Correct file name from DB
-        
-        console.log("Attempting to delete file:", fileName);
 
-        fetch(`delete.php?file=${encodeURIComponent(fileName)}&company=${encodeURIComponent(companyName)}&title=${encodeURIComponent(projectTitle)}`, {
-            method: "GET"
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert("File deleted successfully!");
-                fetchRequirementFile();
-            } else {
-                alert("File deletion failed: " + data.error);
+        Swal.fire({
+            icon: "warning",
+            title: "Are you sure?",
+            text: `You are about to delete ${fileName}. This action cannot be undone.`,
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "Cancel"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`delete.php?file=${encodeURIComponent(fileName)}&company=${encodeURIComponent(companyName)}&title=${encodeURIComponent(projectTitle)}`, {
+                    method: "GET"
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Deleted!",
+                            text: "File deleted successfully."
+                        }).then(() => fetchRequirementFile());
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Deletion Failed",
+                            text: data.error
+                        });
+                    }
+                })
+                .catch(error => console.error("Error:", error));
             }
-        })
-        .catch(error => console.error("Error:", error));
+        });
     });
 }
 
-
 </script>
+
 <script>
-function toggleDesc(button) {
-    let descBox = button.closest('.entry-box').querySelector('.desc-content');
-    descBox.style.display = (descBox.style.display === "none") ? "block" : "none";
+$(document).ready(function () {
+    $("#descForm").submit(function (event) {
+        event.preventDefault();
+
+        let companyName = $("#companyName").val();
+        let projectTitle = $("#projectTitle").val();
+        let date = $("#dateInput").val();
+        let title = $("#titleInput").val();
+        let description = $("#descInput").val();
+
+        console.log("Sending Data:", { companyName, projectTitle, date, title, description });
+
+        $.ajax({
+            url: "add_description.php",
+            type: "POST",
+            data: {
+                companyName: companyName,
+                projectTitle: projectTitle,
+                date: date,
+                title: title,
+                description: description
+            },
+            dataType: "json",
+            success: function (response) {
+                console.log("Response:", response);
+                if (response.success) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Success",
+                        text: response.message
+                    }).then(() => {
+                        $("#descModal").modal("hide");
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: response.message
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX Error:", status, error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "Error submitting the form."
+                });
+            }
+        });
+    });
+});
+</script>
+
+<script>
+// Toggle Description Visibility
+function toggleDesc(btn) {
+  let descBox = btn.closest(".entry-box").querySelector(".desc-content");
+  descBox.style.display = (descBox.style.display === "none") ? "block" : "none";
 }
+
+function openEditModal(btn) {
+    let entryBox = btn.closest(".entry-box");
+    let id = entryBox.dataset.id;
+    let title = entryBox.querySelector(".entry-title").innerText.trim();
+    let date = entryBox.querySelector(".entry-date").innerText.trim();
+    let desc = entryBox.querySelector(".desc-content").innerText.trim();
+
+    $("#editModal").data("id", id);
+    $("#editTitleInput").val(title);
+    $("#editDateInput").val(date);
+    $("#editDescInput").val(desc);
+    
+    $('#editModal').modal('show');
+}
+
+$(document).ready(function () {
+    $("#editForm").submit(function (event) {
+        event.preventDefault();
+
+        let id = $("#editModal").data("id");  
+        let date = $("#editDateInput").val().trim();
+        let title = $("#editTitleInput").val().trim();
+        let description = $("#editDescInput").val().trim(); 
+
+        console.log("Updating Data:", { id, date, title, description });
+
+        $.ajax({
+            url: "update_description.php",
+            type: "POST",
+            data: { id: id, date: date, title: title, description: description },
+            dataType: "json",
+            success: function (response) {
+                console.log("Response:", response);
+                if (response.success) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Success",
+                        text: response.message
+                    }).then(() => {
+                        $("#editModal").modal("hide");
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "Update failed: " + response.message
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX Error:", status, error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "Error updating the data."
+                });
+            }
+        });
+    });
+});
 </script>
 </body>
 

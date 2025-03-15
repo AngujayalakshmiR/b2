@@ -17,7 +17,7 @@ $companyName = $_GET['company'];
 $projectTitle = $_GET['title'];
 
 // Fetch the actual file path from the database
-$stmt = $conn->prepare("SELECT reqfile FROM requirementtable WHERE reqfile = ? AND companyName = ? AND projectTitle = ?");
+$stmt = $conn->prepare("SELECT reqfile FROM reqtable WHERE reqfile = ? AND companyName = ? AND projectTitle = ?");
 $stmt->bind_param("sss", $fileName, $companyName, $projectTitle);
 $stmt->execute();
 $stmt->bind_result($storedFilePath);
@@ -41,7 +41,7 @@ if (!file_exists($storedFilePath)) {
 // Delete the file from the directory
 if (unlink($storedFilePath)) {
     // Delete file record from database
-    $stmt = $conn->prepare("DELETE FROM requirementtable WHERE reqfile = ? AND companyName = ? AND projectTitle = ?");
+    $stmt = $conn->prepare("DELETE FROM reqtable WHERE reqfile = ? AND companyName = ? AND projectTitle = ?");
     $stmt->bind_param("sss", $fileName, $companyName, $projectTitle);
     $stmt->execute();
 

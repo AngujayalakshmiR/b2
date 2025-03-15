@@ -57,38 +57,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $conn->prepare($query);
             $stmt->bind_param("ssissssi", $companyName, $projectType, $totalDays, $projectTitle, $description, $employees, $reqfile, $id);
             $stmt->execute();
-
-            // UPDATE requirementtable
-            $query1 = "UPDATE requirementtable SET companyName=?, projectTitle=?, reqfile=? WHERE ID=?";
-            $stmt1 = $conn->prepare($query1);
-            $stmt1->bind_param("sssi", $companyName, $projectTitle, $reqfile, $id);
-            $stmt1->execute();
-
-            // UPDATE descriptiontable
-            $query2 = "UPDATE descriptiontable SET companyName=?, projectTitle=?, description=? WHERE ID=?";
-            $stmt2 = $conn->prepare($query2);
-            $stmt2->bind_param("sssi", $companyName, $projectTitle, $description, $id);
-            $stmt2->execute();
         } else {
             // INSERT into projectcreation
             $query = "INSERT INTO projectcreation (date, companyName, projectType, totalDays, projectTitle, description, employees, reqfile) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($query);
             $stmt->bind_param("ssssssss", $currentDate, $companyName, $projectType, $totalDays, $projectTitle, $description, $employees, $reqfile);
             $stmt->execute();
-            $last_id = $stmt->insert_id; // Get last inserted ID
-
-            // INSERT into requirementtable
-            $query1 = "INSERT INTO requirementtable (companyName, projectTitle, reqfile, ID) VALUES (?, ?, ?, ?)";
-            $stmt1 = $conn->prepare($query1);
-            $stmt1->bind_param("sssi", $companyName, $projectTitle, $reqfile, $last_id);
-            $stmt1->execute();
-
-            // INSERT into descriptiontable
-            $query2 = "INSERT INTO descriptiontable (date, companyName, projectTitle, description, ID) VALUES (?, ?, ?, ?, ?)";
-            $stmt2 = $conn->prepare($query2);
-            $stmt2->bind_param("ssssi", $currentDate, $companyName, $projectTitle, $description, $last_id);
-            
-            $stmt2->execute();
         }
 
         $conn->commit(); // Commit transaction
@@ -104,8 +78,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Close statements
     $stmt->close();
-    $stmt1->close();
-    $stmt2->close();
     $conn->close();
 }
 ?>

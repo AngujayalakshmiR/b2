@@ -1656,21 +1656,26 @@ $(document).ready(function () {
 
     // Get URL parameters
     const urlParams = new URLSearchParams(window.location.search);
+    const date = urlParams.get('date');
     const company = urlParams.get('company');
-    const projectType = urlParams.get('projectType');
-    const projectTitle = urlParams.get('projectTitle');
+    const type = urlParams.get('type');
+    const title = urlParams.get('title');
 
     // Check which parameter exists and apply search
-    if (company) {
+    if (date) {
+        table.search(date).draw();
+        $('#searchInput').val(date); // Set search bar value
+    }
+    else if (company) {
         table.search(company).draw();
         $('#searchInput').val(company); // Set search bar value
-    } else if (projectType) {
-        table.search(projectType).draw();
-        $('#searchInput').val(projectType); // Set search bar value
-    } else if (projectTitle) {
-        table.search(projectTitle).draw();
-        $('#searchInput').val(projectTitle); // Set search bar value
-    }
+    } else if (type) {
+        table.search(type).draw();
+        $('#searchInput').val(type); // Set search bar value
+    } else if (title) {
+        table.search(title).draw();
+        $('#searchInput').val(title); // Set search bar value
+    } 
 });
 
 </script>

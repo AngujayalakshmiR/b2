@@ -1080,36 +1080,59 @@ $result = mysqli_query($conn, $query);
 
     rows.forEach(row => {
         row.addEventListener('click', function(event) {
-            const companyCell = row.cells[2]; // Company column
-            const projectTypeCell = row.cells[3]; // Project Type column
-            const projectTitleCell = row.cells[4]; // Project Title column
+            const dateCell = row.cells[1]; // Date column
+            const companyCell = row.cells[3]; // Company column
+            const projectTypeCell = row.cells[4]; // Project Type column
+            const projectTitleCell = row.cells[5]; // Project Title column
 
             let paramKey = '';
             let paramValue = '';
 
+            // Extract row data for requirement.php
+            const company = row.cells[3].textContent.trim();
+            const projectTitle = row.cells[5].textContent.trim();
+            const projectType = row.cells[4].textContent.trim();
+            const totalDays = row.cells[6] ? row.cells[6].textContent.trim() : ''; 
+            const workingDays = row.cells[7] ? row.cells[7].textContent.trim() : ''; 
+            const teammates = row.cells[8] ? row.cells[8].textContent.trim() : ''; 
+
             // Check which column was clicked and set the respective parameter
-            if (event.target === companyCell) {
+            if (event.target === dateCell) {
+                paramKey = 'date';
+                paramValue = dateCell.textContent.trim();
+            } else if (event.target === companyCell) {
                 paramKey = 'company';
                 paramValue = companyCell.textContent.trim();
             } else if (event.target === projectTypeCell) {
-                paramKey = 'projectType';
+                paramKey = 'type';
                 paramValue = projectTypeCell.textContent.trim();
             } else if (event.target === projectTitleCell) {
-                paramKey = 'projectTitle';
+                paramKey = 'title';
                 paramValue = projectTitleCell.textContent.trim();
             }
 
-            // Navigate to reports.php with the correct parameter
+            // Navigate based on clicked column
             if (paramKey && paramValue) {
                 window.location.href = `reports.php?${paramKey}=${encodeURIComponent(paramValue)}`;
+            } else {
+                // Redirect to requirement.php with all details
+                const queryParams = new URLSearchParams({
+                    company: company,
+                    title: projectTitle,
+                    type: projectType,
+                    totalDays: totalDays,
+                    workingDays: workingDays,
+                    teammates: teammates
+                }).toString();
+
+                window.location.href = `requirement.php?${queryParams}`;
             }
-            else {
-                window.location.href = "requirement.php";            }
         });
     });
 });
 
 </script>
+
 
 
 <script>

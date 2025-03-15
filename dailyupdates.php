@@ -32,16 +32,16 @@ if (!isset($_SESSION['username'])) {
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <style>
 
-#dataTable th:nth-child(1), #dataTable td:nth-child(1) { width: 3%; }  /* S.no */
-    #dataTable th:nth-child(2), #dataTable td:nth-child(2) { width: 8%; } /* Name */
-    #dataTable th:nth-child(3), #dataTable td:nth-child(3) { width: 0%; } /* Date */
-    #dataTable th:nth-child(4), #dataTable td:nth-child(4) { width: 15%; } /* Company */
-    #dataTable th:nth-child(5), #dataTable td:nth-child(5) { width: 10%; } /* Project Title */
-    #dataTable th:nth-child(6), #dataTable td:nth-child(6) { width: 14%; }  /* Total Days */
-    #dataTable th:nth-child(7), #dataTable td:nth-child(7) { width: 20%; } /* Description */
-    #dataTable th:nth-child(8), #dataTable td:nth-child(8) { width: 15%; } /* Total Time */
-    #dataTable th:nth-child(9), #dataTable td:nth-child(9) { width: 20%; } /* Actual Time */
-    #dataTable th:nth-child(10), #dataTable td:nth-child(10) { width: 12%; } /* Status */
+    #dt1 th:nth-child(1), #dt1 td:nth-child(1) { width: 3%; }  /* S.no */
+    #dt1 th:nth-child(2), #dt1 td:nth-child(2) { width: 8%; } /* Name */
+    #dt1 th:nth-child(3), #dt1 td:nth-child(3) { width: 0%; } /* Date */
+    #dt1 th:nth-child(4), #dt1 td:nth-child(4) { width: 15%; } /* Company */
+    #dt1 th:nth-child(5), #dt1 td:nth-child(5) { width: 10%; } /* Project Title */
+    #dt1 th:nth-child(6), #dt1 td:nth-child(6) { width: 14%; }  /* Total Days */
+    #dt1 th:nth-child(7), #dt1 td:nth-child(7) { width: 20%; } /* Description */
+    #dt1 th:nth-child(8), #dt1 td:nth-child(8) { width: 15%; } /* Total Time */
+    #dt1 th:nth-child(9), #dt1 td:nth-child(9) { width: 20%; } /* Actual Time */
+    #dt1 th:nth-child(10), #dt1 td:nth-child(10) { width: 12%; } /* Status */
 thead{
     color:black;
 }
@@ -132,7 +132,7 @@ thead{
 .photo-icon:hover, .aadhar-icon:hover, .pan-icon:hover {
     animation: bounce 0.5s ease-in-out;
 }
- #dataTable {
+ #dt1 {
         font-size: 14px; /* Adjust size as needed */
     }
 tbody{
@@ -284,7 +284,7 @@ tbody{
       margin: 0 5px;
     }
     /* Optional: Change cursor for clickable rows */
-    #dataTable tbody tr {
+    #dt1 tbody tr {
       cursor: pointer;
     }
     .sidebar-dark .nav-item .nav-link[data-toggle="collapse"]:hover::after {
@@ -460,8 +460,8 @@ tbody{
 </ul>
 </nav>
 <style>
-    #dataTable th:nth-child(3), 
-    #dataTable td:nth-child(3) {
+    #dt1 th:nth-child(3), 
+    #dt1 td:nth-child(3) {
     display: none;
 }
 </style>
@@ -483,7 +483,7 @@ tbody{
 </div>
 
         <div class="table-responsive">
-            <table class="table text-center" id="dataTable" width="100%">
+            <table class="table text-center" id="dt1" width="100%">
                 <thead>
                     <tr>
                         <th>S.no</th>
@@ -601,30 +601,42 @@ document.addEventListener("DOMContentLoaded", function () {
         filterTableByDate(this.value);
     });
 });
-        document.addEventListener('DOMContentLoaded', function () {
-    var table = $('#dataTable').DataTable();
-    document.querySelector('#dataTable tbody').addEventListener('click', function (event) {
-        const clickedCell = event.target.closest('td'); // Get clicked <td>
+document.addEventListener('DOMContentLoaded', function () {
+    var table = $('#dt1');
+
+    document.querySelector('#dt1 tbody').addEventListener('click', function (event) {
+        const clickedCell = event.target.closest('td'); // Get the clicked <td>
         if (!clickedCell) return;
-        const nameColumn = clickedCell.closest('.name-column');
-        const companyColumn = clickedCell.closest('.company-column');
-        const titleColumn = clickedCell.cellIndex === 4; // Title column index (zero-based)
-        const searchBox = document.querySelector('input[type="search"]'); // Search box in DataTable
-        if (nameColumn) {
-            const name = nameColumn.textContent.trim();
-            window.location.href = `reports.php?name=${encodeURIComponent(name)}`;
-        } else if (companyColumn) {
-            const company = companyColumn.textContent.trim();
-            window.location.href = `reports.php?company=${encodeURIComponent(company)}`;
-        } else if (titleColumn) {
-            const title = clickedCell.textContent.trim();
-            searchBox.value = title; // Set search box value
-            table.search(title).draw(); // Filter table with title
-            window.location.href = `reports.php?title=${encodeURIComponent(title)}`;
-        } else {
-            window.location.href = "requirement.php";        }
+
+        const row = clickedCell.closest('tr'); // Get the parent <tr>
+
+        const name = row.cells[1].textContent.trim(); // Name column
+        const companyTitle = row.cells[3].textContent.trim(); // Company-Title column
+        const type = row.cells[4].textContent.trim(); // Type column
+
+        let paramKey = '';
+        let paramValue = '';
+
+        // Determine which column was clicked
+        if (clickedCell.cellIndex === 1) { // Name column
+            paramKey = 'name';
+            paramValue = name;
+        } else if (clickedCell.cellIndex === 3) { // Company-Title column
+            let [company, title] = companyTitle.split(' - ').map(str => str.trim()); // Split into Company and Title
+            window.location.href = `reports.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}`;
+            return; // Stop execution after redirection
+        } else if (clickedCell.cellIndex === 4) { // Type column
+            paramKey = 'type';
+            paramValue = type;
+        }
+
+        // Redirect if a valid column was clicked
+        if (paramKey && paramValue) {
+            window.location.href = `reports.php?${paramKey}=${encodeURIComponent(paramValue)}`;
+        }
     });
 });
+
     </script>
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">

@@ -1074,62 +1074,65 @@ $result = mysqli_query($conn, $query);
 }
 </script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    // Get all rows from the table
+    document.addEventListener('DOMContentLoaded', function () {
     const rows = document.querySelectorAll('#dataTable tbody tr');
 
     rows.forEach(row => {
-        row.addEventListener('click', function(event) {
-            const dateCell = row.cells[1]; // Date column
-            const companyCell = row.cells[3]; // Company column
-            const projectTypeCell = row.cells[4]; // Project Type column
-            const projectTitleCell = row.cells[5]; // Project Title column
+        row.addEventListener('click', function (event) {
+            const dateCell = row.cells[1]; 
+            const companyCell = row.cells[3]; 
+            const projectTypeCell = row.cells[4]; 
+            const projectTitleCell = row.cells[5]; 
+
+            const company = companyCell.textContent.trim();
+            const projectType = projectTypeCell.textContent.trim();
+            const projectTitle = projectTitleCell.textContent.trim();
+            const totalDays = row.cells[6] ? row.cells[6].textContent.trim() : ''; 
+            const teammates = row.cells[7] ? row.cells[7].textContent.trim() : ''; 
 
             let paramKey = '';
             let paramValue = '';
 
-            // Extract row data for requirement.php
-            const company = row.cells[3].textContent.trim();
-            const projectTitle = row.cells[5].textContent.trim();
-            const projectType = row.cells[4].textContent.trim();
-            const totalDays = row.cells[6] ? row.cells[6].textContent.trim() : ''; 
-            const workingDays = row.cells[7] ? row.cells[7].textContent.trim() : ''; 
-            const teammates = row.cells[8] ? row.cells[8].textContent.trim() : ''; 
-
-            // Check which column was clicked and set the respective parameter
             if (event.target === dateCell) {
                 paramKey = 'date';
                 paramValue = dateCell.textContent.trim();
-            } else if (event.target === companyCell) {
-                paramKey = 'company';
-                paramValue = companyCell.textContent.trim();
-            } else if (event.target === projectTypeCell) {
-                paramKey = 'type';
-                paramValue = projectTypeCell.textContent.trim();
-            } else if (event.target === projectTitleCell) {
-                paramKey = 'title';
-                paramValue = projectTitleCell.textContent.trim();
-            }
-
-            // Navigate based on clicked column
-            if (paramKey && paramValue) {
                 window.location.href = `reports.php?${paramKey}=${encodeURIComponent(paramValue)}`;
-            } else {
-                // Redirect to requirement.php with all details
+            } 
+            else if (event.target === companyCell || event.target === projectTypeCell || event.target === projectTitleCell) {
+                // Redirect to reports.php when clicking on company, project type, or project title
                 const queryParams = new URLSearchParams({
                     company: company,
                     title: projectTitle,
-                    type: projectType,
-                    totalDays: totalDays,
-                    workingDays: workingDays,
-                    teammates: teammates
+                    type: projectType
                 }).toString();
+                window.location.href = `reports.php?${queryParams}`;
+            } 
+            else {
+                // Fetch workingDays from server before redirecting to requirement.php
+                fetch(`calculate_working_days.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(projectTitle)}&type=${encodeURIComponent(projectType)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        let workingDays = data.workingDays || 0;
 
-                window.location.href = `requirement.php?${queryParams}`;
+                        const queryParams = new URLSearchParams({
+                            company: company,
+                            title: projectTitle,
+                            type: projectType,
+                            totalDays: totalDays,
+                            workingDays: workingDays,
+                            teammates: teammates
+                        }).toString();
+
+                        window.location.href = `requirement.php?${queryParams}`;
+                    })
+                    .catch(error => console.error('Error fetching working days:', error));
             }
         });
     });
 });
+
+</script>
+
 
 </script>
 

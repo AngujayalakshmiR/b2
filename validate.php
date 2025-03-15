@@ -5,7 +5,6 @@ include 'dbconn.php'; // Ensure this file has a valid DB connection
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
-
     if (!empty($username) && !empty($password)) {
         // Check in the employeedetails table
         $sql1 = "SELECT id, Name, empUserName FROM employeedetails WHERE  empUserName = ? AND empPassword = ?";

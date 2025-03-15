@@ -41,19 +41,19 @@ include 'dbconn.php'; ?>
     thead{
         color:black;
     }
-        #dataTable th:nth-child(1), #dataTable td:nth-child(1) { width: 2%; }  /* S.no */
-#dataTable th:nth-child(2), #dataTable td:nth-child(2) { width: 8%; } /* Name */
-#dataTable th:nth-child(3), #dataTable td:nth-child(3) { width: 13%; } /* Date */
-#dataTable th:nth-child(4), #dataTable td:nth-child(4) { width: 14%; } /* Company */
-#dataTable th:nth-child(5), #dataTable td:nth-child(5) { width: 12%; } /* Project Title */
-#dataTable th:nth-child(6), #dataTable td:nth-child(6) { width: 12%; } /* Total Days */
-#dataTable th:nth-child(7), #dataTable td:nth-child(7) { width: 15%; } /* Description */
-#dataTable th:nth-child(8), #dataTable td:nth-child(8) { width: 12%; } /* Total Time */
-#dataTable th:nth-child(9), #dataTable td:nth-child(9) { width: 13%; }
-#dataTable th:nth-child(10), #dataTable td:nth-child(10) { width: 10%; }
+        #dt1 th:nth-child(1), #dt1 td:nth-child(1) { width: 2%; }  /* S.no */
+#dt1 th:nth-child(2), #dt1 td:nth-child(2) { width: 8%; } /* Name */
+#dt1 th:nth-child(3), #dt1 td:nth-child(3) { width: 13%; } /* Date */
+#dt1 th:nth-child(4), #dt1 td:nth-child(4) { width: 14%; } /* Company */
+#dt1 th:nth-child(5), #dt1 td:nth-child(5) { width: 12%; } /* Project Title */
+#dt1 th:nth-child(6), #dt1 td:nth-child(6) { width: 12%; } /* Total Days */
+#dt1 th:nth-child(7), #dt1 td:nth-child(7) { width: 15%; } /* Description */
+#dt1 th:nth-child(8), #dt1 td:nth-child(8) { width: 12%; } /* Total Time */
+#dt1 th:nth-child(9), #dt1 td:nth-child(9) { width: 13%; }
+#dt1 th:nth-child(10), #dt1 td:nth-child(10) { width: 10%; }
 
  /* Reduce table font size */
- #dataTable {
+ #dt1 {
         font-size: 14px; /* Adjust size as needed */
     }
       thead  {
@@ -667,7 +667,7 @@ include 'dbconn.php'; ?>
       margin: 0 5px;
     }
     /* Optional: Change cursor for clickable rows */
-    #dataTable tbody tr {
+    #dt1 tbody tr {
       cursor: pointer;
     }
     .sidebar-dark .nav-item .nav-link[data-toggle="collapse"]:hover::after {
@@ -728,7 +728,7 @@ include 'dbconn.php'; ?>
 } */
 
 /* Style for icons in the status column */
-#dataTable tbody td i {
+#dt1 tbody td i {
     color: rgb(0, 148, 255);
 }
 .page-item.active .page-link {
@@ -736,8 +736,8 @@ include 'dbconn.php'; ?>
 }
 </style>
 <style>
-    #dataTable th:nth-child(3), 
-    #dataTable td:nth-child(3) {
+    #dt1 th:nth-child(3), 
+    #dt1 td:nth-child(3) {
     display: none;
 }
 </style>
@@ -863,7 +863,7 @@ $totalEmployees = $totalEmployeesResult->fetch_assoc()['total'];
 </div>
 
         <div class="table-responsive">
-            <table class="table text-center" id="dataTable" width="100%">
+            <table class="table text-center" id="dt1" width="100%">
                 <thead>
                     <tr>
                         <th>S.no</th>
@@ -1022,28 +1022,57 @@ document.addEventListener("DOMContentLoaded", function () {
         filterTableByDate(this.value);
     });
 });
-        document.addEventListener('DOMContentLoaded', function () {
-    var table = $('#dataTable').DataTable();
-    document.querySelector('#dataTable tbody').addEventListener('click', function (event) {
-        const clickedCell = event.target.closest('td'); // Get clicked <td>
+document.addEventListener('DOMContentLoaded', function () {
+    var table = $('#dt1');
+
+    document.querySelector('#dt1 tbody').addEventListener('click', function (event) {
+        const clickedCell = event.target.closest('td'); // Get the clicked <td>
         if (!clickedCell) return;
-        const nameColumn = clickedCell.closest('.name-column');
-        const companyColumn = clickedCell.closest('.company-column');
-        const titleColumn = clickedCell.cellIndex === 4; // Title column index (zero-based)
-        const searchBox = document.querySelector('input[type="search"]'); // Search box in DataTable
-        if (nameColumn) {
-            const name = nameColumn.textContent.trim();
-            window.location.href = `reports.php?name=${encodeURIComponent(name)}`;
-        } else if (companyColumn) {
-            const company = companyColumn.textContent.trim();
-            window.location.href = `reports.php?company=${encodeURIComponent(company)}`;
-        } else if (titleColumn) {
-            const title = clickedCell.textContent.trim();
-            searchBox.value = title; // Set search box value
-            table.search(title).draw(); // Filter table with title
-            window.location.href = `reports.php?title=${encodeURIComponent(title)}`;
+
+        const row = clickedCell.closest('tr'); // Get the parent <tr>
+
+        const name = row.cells[1].textContent.trim(); // Name column
+        const companyTitle = row.cells[3].textContent.trim(); // Company-Title column
+        const type = row.cells[4].textContent.trim(); // Type column
+        const totalDays = row.cells[5].textContent.trim(); // Total Days column
+
+        let [company, title] = companyTitle.split(' - ').map(str => str.trim()); // Split Company-Title
+
+        let paramKey = '';
+        let paramValue = '';
+
+        // Check which column was clicked
+        if (clickedCell.cellIndex === 1) { // Name column
+            paramKey = 'name';
+            paramValue = name;
+        } else if (clickedCell.cellIndex === 3) { // Company-Title column
+            window.location.href = `reports.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}`;
+            return;
+        } else if (clickedCell.cellIndex === 4) { // Type column
+            paramKey = 'type';
+            paramValue = type;
         } else {
-            window.location.href = "requirement.php";        }
+            // Fetch teammates and actual hours via AJAX
+            fetch(`calculate_working_days1.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}`)
+                .then(response => response.json())
+                .then(data => {
+                    let teammates = encodeURIComponent(data.teammates);
+                    let actualHrs = encodeURIComponent(data.actualHrs);
+                    let workingDays = encodeURIComponent(data.workingDays); // Fetch workingDays
+
+                    // Redirect with workingDays included
+                    window.location.href = `requirement.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}&totalDays=${encodeURIComponent(totalDays)}&teammates=${teammates}&actualHrs=${actualHrs}&workingDays=${workingDays}`;
+                })
+                .catch(error => console.error('Error fetching data:', error));
+
+
+            return;
+        }
+
+        // Redirect if a valid column was clicked
+        if (paramKey && paramValue) {
+            window.location.href = `reports.php?${paramKey}=${encodeURIComponent(paramValue)}`;
+        }
     });
 });
     </script>
@@ -1111,11 +1140,7 @@ $(document).ready(function () {
 <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
 <!-- Initialize DataTable -->
-<script>
-    $(document).ready(function() {
-        $('#dataTable').DataTable();
-    });
-</script>
+
 
     <!-- Core plugin JavaScript-->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>

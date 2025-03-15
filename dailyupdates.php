@@ -613,21 +613,39 @@ document.addEventListener('DOMContentLoaded', function () {
         const name = row.cells[1].textContent.trim(); // Name column
         const companyTitle = row.cells[3].textContent.trim(); // Company-Title column
         const type = row.cells[4].textContent.trim(); // Type column
+        const totalDays = row.cells[5].textContent.trim(); // Total Days column
+
+        let [company, title] = companyTitle.split(' - ').map(str => str.trim()); // Split Company-Title
 
         let paramKey = '';
         let paramValue = '';
 
-        // Determine which column was clicked
+        // Check which column was clicked
         if (clickedCell.cellIndex === 1) { // Name column
             paramKey = 'name';
             paramValue = name;
         } else if (clickedCell.cellIndex === 3) { // Company-Title column
-            let [company, title] = companyTitle.split(' - ').map(str => str.trim()); // Split into Company and Title
             window.location.href = `reports.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}`;
-            return; // Stop execution after redirection
+            return;
         } else if (clickedCell.cellIndex === 4) { // Type column
             paramKey = 'type';
             paramValue = type;
+        } else {
+            // Fetch teammates and actual hours via AJAX
+            fetch(`calculate_working_days1.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}`)
+                .then(response => response.json())
+                .then(data => {
+                    let teammates = encodeURIComponent(data.teammates);
+                    let actualHrs = encodeURIComponent(data.actualHrs);
+                    let workingDays = encodeURIComponent(data.workingDays); // Fetch workingDays
+
+                    // Redirect with workingDays included
+                    window.location.href = `requirement.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}&totalDays=${encodeURIComponent(totalDays)}&teammates=${teammates}&actualHrs=${actualHrs}&workingDays=${workingDays}`;
+                })
+                .catch(error => console.error('Error fetching data:', error));
+
+
+            return;
         }
 
         // Redirect if a valid column was clicked

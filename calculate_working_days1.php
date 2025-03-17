@@ -8,25 +8,30 @@ $projectType = isset($_GET['type']) ? $_GET['type'] : '';
 $response = ['teammates' => '', 'actualHrs' => 0, 'workingDays' => 0];
 
 if ($companyName && $projectTitle && $projectType) {
-    $query = "SELECT GROUP_CONCAT(DISTINCT name SEPARATOR ', ') AS teammates, 
-                     SUM(actualHrs) AS totalActualHrs 
-              FROM dailyupdates 
-              WHERE companyName = ? AND projectTitle = ? AND projectType = ?";
+    // Fetch actual hours from dailyupdates table
+    $query1 = "SELECT SUM(actualHrs) AS totalActualHrs FROM dailyupdates WHERE companyName = ? AND projectTitle = ? AND projectType = ?";
+    $stmt1 = $conn->prepare($query1);
+    $stmt1->bind_param("sss", $companyName, $projectTitle, $projectType);
+    $stmt1->execute();
+    $result1 = $stmt1->get_result();
+    $data1 = $result1->fetch_assoc();
+    $totalActualHrs = $data1['totalActualHrs'] ?: 0;
     
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("sss", $companyName, $projectTitle, $projectType);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $data = $result->fetch_assoc();
-
-    if ($data) {
-        $totalActualHrs = $data['totalActualHrs'] ?: 0; // Ensure it's not null
-        $workingDays = round($totalActualHrs / 8, 2); // Calculate working days
-
-        $response['teammates'] = $data['teammates'] ?: 'N/A';
-        $response['actualHrs'] = round($totalActualHrs, 2);
-        $response['workingDays'] = $workingDays; // Add working days to response
-    }
+    // Fetch teammates from projectcreation table
+    $query2 = "SELECT employees FROM projectcreation WHERE companyName = ? AND projectTitle = ? AND projectType = ?";
+    $stmt2 = $conn->prepare($query2);
+    $stmt2->bind_param("sss", $companyName, $projectTitle, $projectType);
+    $stmt2->execute();
+    $result2 = $stmt2->get_result();
+    $data2 = $result2->fetch_assoc();
+    $teammates = $data2['employees'] ?: 'N/A';
+    
+    // Calculate working days
+    $workingDays = round($totalActualHrs / 8, 2);
+    
+    $response['teammates'] = $teammates;
+    $response['actualHrs'] = round($totalActualHrs, 2);
+    $response['workingDays'] = $workingDays;
 }
 
 echo json_encode($response);

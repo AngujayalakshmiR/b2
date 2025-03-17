@@ -911,11 +911,11 @@ function filterByDate() {
                 $(".header-counter").text(taskCount); // Update task count dynamically
 
                 // Disable add button if actual hours reach 8
-                if (actualHrsSum >= 8) {
-                    $("button[type='submit']").prop("disabled", true).text("Limit Reached");
-                } else {
-                    $("button[type='submit']").prop("disabled", false).text("Add");
-                }
+                // if (actualHrsSum >= 8) {
+                //     $("button[type='submit']").prop("disabled", true).text("Limit Reached");
+                // } else {
+                //     $("button[type='submit']").prop("disabled", false).text("Add");
+                // }
             },
             error: function () {
                 console.error("Error fetching task data.");
@@ -1082,6 +1082,7 @@ $(document).ready(fetchTasks);
 });
 
 </script>
+
 </body>
 
 </html>

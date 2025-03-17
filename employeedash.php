@@ -1054,25 +1054,46 @@ document.getElementById('dateFilter').addEventListener('change', function () {
         }
     });
 });
-
 document.addEventListener('DOMContentLoaded', function () {
+    var table = $('#dt2');
 
-    document.querySelector('#dataTable2 tbody').addEventListener('click', function (event) {
-        const clickedCell = event.target.closest('td');
+    document.querySelector('#dt2 tbody').addEventListener('click', function (event) {
+        let clickedCell = event.target.closest('td');
         if (!clickedCell) return;
 
-        const row = clickedCell.closest('tr'); // Get the row
-        const companyTitleCell = row.querySelector('.company-title'); // Get "Company - Title" cell
-        const projectTypeCell = row.querySelector('.project-type'); // Get "Project Type" cell
+        let row = clickedCell.closest('tr'); // Get the clicked row
+        let colIndex = clickedCell.cellIndex;
 
-        if (clickedCell === companyTitleCell) {
-            const companyTitle = companyTitleCell.textContent.trim();
-            window.location.href = `employeeWorkReports.php?search=${encodeURIComponent(companyTitle)}`;
-        } else if (clickedCell === projectTypeCell) {
-            const projectType = projectTypeCell.textContent.trim();
-            window.location.href = `employeeWorkReports.php?search=${encodeURIComponent(projectType)}`;
+        const companyCol = 2; // Column Index for 'Company - Title'
+
+        if (colIndex === companyCol) {
+            // If "Company - Title" column is clicked, redirect to employeeWorkReports.php
+            const companyTitle = row.cells[companyCol].textContent.trim();
+
+            const queryParams = new URLSearchParams({
+                company: companyTitle // Passing full "Company - Title"
+            }).toString();
+
+            window.location.href = `employeeWorkReports.php?${queryParams}`;
         } else {
-            window.location.href = "requirement.php";
+            // If any other column is clicked, execute this logic
+            let companyTitle = row.cells[2].textContent.split(" - ");
+            let companyName = companyTitle[0].trim();
+            let projectTitle = companyTitle[1] ? companyTitle[1].trim() : "";
+            let totalDays = row.cells[4].textContent.trim();
+
+            // Fetch project type, working days, and teammates via AJAX
+            fetch(`employee_report_data.php?company=${encodeURIComponent(companyName)}&title=${encodeURIComponent(projectTitle)}`)
+                .then(response => response.json())
+                .then(data => {
+                    let projectType = data.projectType;
+                    let workingDays = data.workingDays;
+                    let teammates = data.teammates; // Get teammates
+
+                    // Redirect to requirement.php with parameters
+                    window.location.href = `requirement.php?company=${encodeURIComponent(companyName)}&title=${encodeURIComponent(projectTitle)}&type=${encodeURIComponent(projectType)}&totalDays=${encodeURIComponent(totalDays)}&workingDays=${encodeURIComponent(workingDays)}&teammates=${encodeURIComponent(teammates)}`;
+                })
+                .catch(error => console.error('Error:', error));
         }
     });
 });

@@ -1123,7 +1123,7 @@ $result = mysqli_query($conn, $query);
                             teammates: teammates
                         }).toString();
 
-                        window.location.href = `requirement.php?${queryParams}`;
+                        window.location.href = `admin-requirement.php?${queryParams}`;
                     })
                     .catch(error => console.error('Error fetching working days:', error));
             }

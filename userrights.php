@@ -450,6 +450,57 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     background-color: #f8f9fc;
 }
 
+
+
+
+.outer-container {
+    background-color: white;  /* White background */
+    border-radius: 25px;       /* Rounded corners */
+    padding: 15px;             /* Inner spacing */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional shadow */
+    margin: 20px 0;            /* Space above and below */
+}
+
+.scrollable-container {
+    display: flex;
+    overflow-x: auto; /* Enable horizontal scrolling */
+    white-space: nowrap;
+    padding: 10px;
+    border-radius: 5px;
+    gap: 10px;
+    scroll-behavior: smooth;
+}
+.scrollable-container::-webkit-scrollbar {
+    height: 6px; /* Small height for horizontal scrollbar */
+}
+
+.scrollable-container::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Light background */
+    border-radius: 10px;
+}
+
+.scrollable-container::-webkit-scrollbar-thumb {
+    background: rgb(70, 176, 251); /* Scrollbar color */
+    border-radius: 10px; /* Rounded scrollbar */
+}
+
+.scrollable-container::-webkit-scrollbar-thumb:hover {
+    background:rgb(70, 176, 251); /* Darker on hover */
+}
+
+        .acard {
+            flex: 0 0 auto; /* Prevents shrinking */
+            min-width: 250px; /* Set width for each card */
+            background-color: rgb(70, 176, 251);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        .acard h3, .acard p {
+            margin: 5px 0;
+        }
 </style>
 </head>
 
@@ -764,6 +815,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         width: 100%;
         padding: 10px 0;
     }
+
+
+
     </style>
         <div id="content-wrapper" class="d-flex flex-column">
 
@@ -806,10 +860,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 </nav>
                 <!-- End of Topbar -->
-
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
+                <div class="outer-container">
+    <div class="scrollable-container" id="rightsContainer">
+        <!-- Rights will be loaded here -->
+    </div>
+</div>
 
+        <br>
                 <div class="card shadow mb-4">
                 <form id="rightsForm">
     <div class="card-header py-2">
@@ -1011,7 +1070,39 @@ $(document).ready(function () {
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function () {
+            // Function to fetch rights
+            function fetchRights() {
+                $.ajax({
+                    url: "fetch_rights_display.php", // Backend PHP file to fetch data
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        let container = $("#rightsContainer");
+                        container.html(""); // Clear previous data
 
+                        if (data.length > 0) {
+                            data.forEach(item => {
+                                let card = `
+                                    <div class="acard">
+                                        <p style="font-size:17px;">${item.name}</p>
+                                        <p style="font-size:15px;"><strong>Module:</strong> ${item.module}</p>
+                                        <p style="font-size:15px;"><strong>Rights:</strong> ${item.rights}</p>
+                                    </div>
+                                `;
+                                container.append(card);
+                            });
+                        } else {
+                            container.html("<p>No rights found.</p>");
+                        }
+                    },
+                });
+            }
+
+            fetchRights(); // Fetch rights on page load
+        });
+    </script>
     <script>
     document.querySelectorAll(".check-all").forEach((checkbox) => {
         checkbox.addEventListener("change", function() {

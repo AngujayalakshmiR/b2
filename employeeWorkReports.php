@@ -1,10 +1,20 @@
 <?php
 session_start();
+include "dbconn.php"; // Ensure database connection is included
 
 if (!isset($_SESSION['empUserName'])) {
     header("Location: login.php");
     exit();
 }
+
+$empUserName = $_SESSION['empUserName'];
+$Name = $_SESSION['Name'];
+
+$query = "SELECT * FROM dailyupdates WHERE name = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("s", $Name);
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -692,190 +702,47 @@ if (!isset($_SESSION['empUserName'])) {
 
 
             <!-- Employee Report Table -->
-            <table class="table table-bordered text-center" style="font-size: 14px;" id="dataTable" width="100%" cellspacing="0">
-              <thead>
-                <tr class="thead">
-                  <th>S.no</th>
-                  <th>Date</th>
-                  <th>Company - Title</th>
-                  <th>Description</th>
-                  <th>Total Hrs</th>
-                  <th>Actual Hrs</th>
-                  <th>Status</th>
-                  <th>Total Days</th>
+            <table class="table table-bordered text-center" style="font-size: 14px;" id="dataTable" width="100%" cellspacing="0"> 
+    <thead>
+        <tr class="thead">
+            <th>S.no</th>
+            <th>Date</th>
+            <th>Company - Title</th>
+            <th>Total Days</th>
+            <th>Description</th>
+            <th>Total Hrs</th>
+            <th>Actual Hrs</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody id="tableBody">
+    <?php
+    if ($result->num_rows > 0) {
+        $sno = 1;
+        while ($row = $result->fetch_assoc()) {
+            ?>
+            <tr>
+                <td><?= $sno++; ?></td>
+                <td><?= date('d-m-Y', strtotime($row['date'])); ?></td> <!-- Format date -->
+                <td><?= $row['companyName'] . ' - ' . $row['projectTitle']; ?></td>
+                <td><?= $row['totalDays']; ?></td>
+                <td><?= $row['taskDetails']; ?></td>
+                <td><?= $row['totalHrs']; ?></td>
+                <td><?= $row['actualHrs']; ?></td>
+                <td>
+    <?= (is_numeric($row['actualHrs']) && $row['actualHrs'] > 0) ? 'Completed' : 'In Progress'; ?>
+</td>
 
-                </tr>
-              </thead>
-              <tbody id="tableBody">
-                <!-- Example rows; these would normally be generated dynamically -->
-                <tr>
-                  <td>1</td>
-                  <td>10-02-2025</td>
-                  <td>Govin-ABCd</td>
-                  <td>XYZ</td>
-                  <td>6</td>
-                  <td>5</td>
-                  <td>Completed</td>
-                  <td>5</td>
+            </tr>
+            <?php
+        }
+    } else {
+        echo "<tr><td colspan='8'>No records found</td></tr>";
+    }
+    ?>
+</tbody>
 
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>10-02-2025</td>
-                  <td>Kurinji-XYZ</td>
-                  <td>aaa</td>
-                  <td>4</td>
-                  <td>-</td>
-                  <td>Started</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>10-02-2025</td>
-                  <td>xxx-KMNo</td>
-                  <td>bbb</td>
-                  <td>7</td>
-                  <td>8</td>
-                  <td>Completed</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td>10-02-2025</td>
-                  <td>Govin-ABC</td>
-                  <td>XYZ</td>
-                  <td>6</td>
-                  <td>5</td>
-                  <td>Completed</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>5</td>
-                  <td>10-02-2025</td>
-                  <td>Kurinji-XYZ</td>
-                  <td>aaa</td>
-                  <td>4</td>
-                  <td>-</td>
-                  <td>Started</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>6</td>
-                  <td>10-02-2025</td>
-                  <td>xxx-KMN</td>
-                  <td>bbb</td>
-                  <td>7</td>
-                  <td>8</td>
-                  <td>Completed</td>
-                  <td>5</td>
-
-                </tr>
-
-
-                <tr>
-                  <td>7</td>
-                  <td>11-02-2025</td>
-                  <td>Govin-ABC</td>
-                  <td>XYZ</td>
-                  <td>6</td>
-                  <td>5</td>
-                  <td>Completed</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>8</td>
-                  <td>11-02-2025</td>
-                  <td>Kurinji-XYZ</td>
-                  <td>aaa</td>
-                  <td>4</td>
-                  <td>-</td>
-                  <td>Started</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>9</td>
-                  <td>11-02-2025</td>
-                  <td>xxx-KMN</td>
-                  <td>bbb</td>
-                  <td>7</td>
-                  <td>8</td>
-                  <td>Completed</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>10</td>
-                  <td>11-02-2025</td>
-                  <td>Govin-ABC</td>
-                  <td>XYZ</td>
-                  <td>6</td>
-                  <td>5</td>
-                  <td>Completed</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>11</td>
-                  <td>11-02-2025</td>
-                  <td>Kurinji-XYZ</td>
-                  <td>aaa</td>
-                  <td>4</td>
-                  <td>-</td>
-                  <td>Started</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>12</td>
-                  <td>11-02-2025</td>
-                  <td>xxx-KMN</td>
-                  <td>bbb</td>
-                  <td>7</td>
-                  <td>8</td>
-                  <td>Completed</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>13</td>
-                  <td>11-02-2025</td>
-                  <td>Govin-mobile app</td>
-                  <td>XYZ</td>
-                  <td>6</td>
-                  <td>5</td>
-                  <td>Completed</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>14</td>
-                  <td>12-02-2025</td>
-                  <td>Govin-mobile app</td>
-                  <td>XYZ</td>
-                  <td>6</td>
-                  <td>5</td>
-                  <td>Completed</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>15</td>
-                  <td>13-02-2025</td>
-                  <td>Govin-web app</td>
-                  <td>XYZ</td>
-                  <td>6</td>
-                  <td>5</td>
-                  <td>Completed</td>
-                  <td>19</td>
-                </tr>
-              </tbody>
-            </table>
+</table>
           </div>
         </div>
       </div>
@@ -891,36 +758,42 @@ if (!isset($_SESSION['empUserName'])) {
 
   <script>
 document.addEventListener('DOMContentLoaded', function () {
-    // Initialize DataTable
     var table = $('#dataTable').DataTable();
 
-    // Event delegation to handle dynamically generated rows
     document.querySelector('#dataTable tbody').addEventListener('click', function (event) {
         let clickedCell = event.target.closest('td');
         if (!clickedCell) return;
 
-        // Get the search input field from DataTables
-        const searchBox = document.querySelector('input[type="search"]');
+        let row = clickedCell.closest('tr'); // Get the clicked row
+        let colIndex = clickedCell.cellIndex;
 
-        // Get column index of the clicked cell
-        const colIndex = clickedCell.cellIndex;
+        const dateCol = 1; 
+        const companyCol = 2; 
 
-        // Define column indexes
-        const dateCol = 1; // "Date" column
-        const companyCol = 2;
-
-        if ([ dateCol, companyCol].includes(colIndex)) {
-            // Get clean text without extra spaces or new lines
-            let searchText = clickedCell.textContent.replace(/\s+/g, ' ').trim();
-
-            // Update search box
-            searchBox.value = searchText;
-
-            // Trigger DataTables search
+        if ([dateCol, companyCol].includes(colIndex)) {
+            // If Date or Company - Title column is clicked, perform DataTable search
+            let searchText = clickedCell.textContent.trim();
+            document.querySelector('input[type="search"]').value = searchText;
             table.search(searchText).draw();
-        }else {
-            // If clicked column is not Date, Company-Title, or Type, open the PDF
-            window.location.href = "requirement.php";
+        } else {
+            // Extract values from the row for the logged-in user
+            let companyTitle = row.cells[2].textContent.split(" - ");
+            let companyName = companyTitle[0].trim();
+            let projectTitle = companyTitle[1] ? companyTitle[1].trim() : "";
+            let totalDays = row.cells[3].textContent.trim();
+
+            // Fetch project type, working days, and teammates via AJAX
+            fetch(`employee_report_data.php?company=${encodeURIComponent(companyName)}&title=${encodeURIComponent(projectTitle)}`)
+                .then(response => response.json())
+                .then(data => {
+                    let projectType = data.projectType;
+                    let workingDays = data.workingDays;
+                    let teammates = data.teammates; // Get teammates
+
+                    // Redirect to requirement.php with parameters
+                    window.location.href = `requirement.php?company=${encodeURIComponent(companyName)}&title=${encodeURIComponent(projectTitle)}&type=${encodeURIComponent(projectType)}&totalDays=${encodeURIComponent(totalDays)}&workingDays=${encodeURIComponent(workingDays)}&teammates=${encodeURIComponent(teammates)}`;
+                })
+                .catch(error => console.error('Error:', error));
         }
     });
 });
@@ -947,8 +820,8 @@ document.addEventListener('DOMContentLoaded', function () {
         table.rows({ search: 'applied' }).every(function () {
             let row = this.data(); // Get row data
             let companyTitle = row[2].trim(); // Get Company-Title column (adjust index if needed)
-            let totalDaysValue = parseFloat(row[7].trim()) || 0; // Get Total Days column (adjust index if needed)
-            let actualHrs = row[5].trim(); // Get Actual Hours column
+            let totalDaysValue = parseFloat(row[3].trim()) || 0; // Get Total Days column (adjust index if needed)
+            let actualHrs = row[6].trim(); // Get Actual Hours column
 
             if (companyTitle) {
                 if (!totalDaysMap.has(companyTitle)) {
@@ -983,23 +856,27 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('endDateEmployee').addEventListener('change', filterByDate);
 
     // Custom DataTable filtering function
-    $.fn.dataTable.ext.search.push(
-        function (settings, data, dataIndex) {
-            let min = document.getElementById('startDateEmployee').value;
-            let max = document.getElementById('endDateEmployee').value;
-            let date = data[2]; // Column index for 'Date'
-            
-            // Convert date format to YYYY-MM-DD
-            let dateParts = date.split('-');
-            let formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
-            let tableDate = new Date(formattedDate);
-            
-            if ((min === "" || new Date(min) <= tableDate) && (max === "" || new Date(max) >= tableDate)) {
-                return true;
-            }
-            return false;
-        }
-    );
+    $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+    let min = document.getElementById('startDateEmployee').value;
+    let max = document.getElementById('endDateEmployee').value;
+    let date = data[1].trim(); // Get 'Date' column, which should be at index 1
+
+    if (!date) return false; // Skip empty rows
+
+    // Convert 'DD-MM-YYYY' format to 'YYYY-MM-DD' for comparison
+    let dateParts = date.split('-');
+    let formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+    let tableDate = new Date(formattedDate);
+
+    let minDate = min ? new Date(min) : null;
+    let maxDate = max ? new Date(max) : null;
+
+    // Apply filtering logic
+    if ((!minDate || tableDate >= minDate) && (!maxDate || tableDate <= maxDate)) {
+        return true;
+    }
+    return false;
+});
 
     // Ensure updateDays is called after filtering
     table.on('draw', function () {
@@ -1134,17 +1011,18 @@ document.addEventListener('DOMContentLoaded', function () {
 </script> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
+
 function exportToExcel() {
     let table = $('#dataTable').DataTable(); // Get DataTable instance
 
     // Get only filtered data (visible after search/filter) from all pages
     let filteredData = table.rows({ search: 'applied' }).data().toArray();
 
-    // Prepare the worksheet data with correct columns
-    let dataArray = [["S.no", "Date", "Company - Title", "Description", "Total Hrs", "Actual Hrs", "Status", "Total Days"]];
+    // Prepare the worksheet data
+    let dataArray = [["S.no", "Date", "Company - Title", "Total Days", "Description", "Total Hrs", "Actual Hrs", "Status"]];
 
     filteredData.forEach((row, index) => {
-        dataArray.push([index + 1, row[1], row[2], row[3], row[4], row[5], row[6], row[7]]);
+        dataArray.push([index + 1, row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8]]);
     });
 
     // Get "Total Days" and "Actual Days" from the page
@@ -1159,73 +1037,35 @@ function exportToExcel() {
 
     // Create a workbook and append worksheet
     let wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Filtered Report");
+    XLSX.utils.book_append_sheet(wb, ws, "Employee Report");
 
     // Export file
-    XLSX.writeFile(wb, "Filtered_Employee_Report.xlsx");
+    XLSX.writeFile(wb, "Employee_Report.xlsx");
 }
-
-// Attach event listener to the new button ID
-document.getElementById("exportExcelEmployee").addEventListener("click", exportToExcel);
-
 </script>
-<script>
-$(document).ready(function() {
-    $('#projectTable').DataTable();
-});
-</script>
-<script>
-    $(document).ready(function() {
-        // Toggle between Employee and Project Reports
-        $("#employeeTab").click(function() {
-            $("#employeeReport").show();
-            $("#projectReport").hide();
-            $(".nav-link").removeClass("active");
-            $(this).addClass("active");
-        });
 
-        $("#projectTab").click(function() {
-            $("#employeeReport").hide();
-            $("#projectReport").show();
-            $(".nav-link").removeClass("active");
-            $(this).addClass("active");
-        });
-
-        // Employee Filter
-        let originalData = $("#tableBody").html(); // Store original table data
-
-        $("#employeeFilter").change(function() {
-            let selectedEmployee = $(this).val();
-            if (selectedEmployee === "all") {
-                $("#tableBody").html(originalData); // Restore original table
-            } else {
-                let filteredRows = "";
-                $("#tableBody tr").each(function(index) {
-                    let employeeName = $(this).find("td:eq(1)").text().trim();
-                    if (employeeName === selectedEmployee) {
-                        $(this).find("td:eq(0)").text(index + 1); // Recalculate S.no
-                        filteredRows += `<tr>${$(this).html()}</tr>`; // Store filtered rows
-                    }
-                });
-                $("#tableBody").html(filteredRows); // Update table with filtered rows
-            }
-        });
-    });
-</script>
 <script>
-    $(document).ready(function () {
+$(document).ready(function () { 
     var table = $('#dataTable').DataTable();
 
     // Get URL parameters
     const urlParams = new URLSearchParams(window.location.search);
-    const searchQuery = urlParams.get('search'); // Unified search parameter
+    const company = urlParams.get('company');
 
-    // Apply search if a parameter exists
+    // Combine parameters for search
+    let searchQuery = '';
+
+    if (company) searchQuery += company + ' ';
+
+    searchQuery = searchQuery.trim(); // Remove trailing space
+
+    // Apply search if any parameter exists
     if (searchQuery) {
         table.search(searchQuery).draw();
-        $('#dataTable_filter input').val(searchQuery); // Auto-fill search bar
+        $('#searchInput').val(searchQuery); // Set search bar value
     }
 });
+
 
 </script>
 </body>

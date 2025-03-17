@@ -603,7 +603,7 @@ if (!isset($_SESSION['username'])) {
 <script>
     $(document).ready(function () {
     // Restrict numbers in text fields
-    $("#customername, #companyname, #stateInput, #districtInput").on("input", function () {
+    $(" #stateInput, #districtInput").on("input", function () {
         $(this).val($(this).val().replace(/\d/g, '')); // Remove numbers
     });
 

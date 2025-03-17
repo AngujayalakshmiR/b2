@@ -640,7 +640,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     let workingDays = encodeURIComponent(data.workingDays); // Fetch workingDays
 
                     // Redirect with workingDays included
-                    window.location.href = `requirement.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}&totalDays=${encodeURIComponent(totalDays)}&teammates=${teammates}&actualHrs=${actualHrs}&workingDays=${workingDays}`;
+                    window.location.href = `admin-requirement.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}&totalDays=${encodeURIComponent(totalDays)}&teammates=${teammates}&actualHrs=${actualHrs}&workingDays=${workingDays}`;
                 })
                 .catch(error => console.error('Error fetching data:', error));
 

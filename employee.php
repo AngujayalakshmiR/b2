@@ -971,13 +971,7 @@ function fetchEmployeeTable() {
 $(document).ready(function () {
     fetchEmployeeTable();
 });
-
-
-
-
 </script>
-
-
 <script>
 $(document).ready(function () {
     $("#customerForm").submit(function (e) {

@@ -5,6 +5,8 @@ if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
 }?>
+
+<?php include 'dbconn.php'; // Ensure this file has a valid DB connection ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -763,221 +765,57 @@ if (!isset($_SESSION['username'])) {
 
 
             <!-- Employee Report Table -->
-            <table class="table table-bordered text-center" style="font-size: 14px;" id="dataTable" width="100%" cellspacing="0">
-              <thead>
-                <tr class="thead">
-                  <th>S.no</th>
-                  <th>Name</th>
-                  <th>Date</th>
-                  <th>Company - Title</th>
-                  <th>Type</th>
-                  <th>Description</th>
-                  <th>Total Hrs</th>
-                  <th>Actual Hrs</th>
-                  <th>Status</th>
-                  <th>Total Days</th>
+            <table class="table text-center" id="dataTable" width="100%">
+                <thead>
+                    <tr>
+                        <th>S.no</th>
+                        <th>Name</th>
+                        <th>Date</th>
+                        <th>Company-Title</th>
+                        <th>Type</th>
+                        <th>Total Days</th>
+                        <th>Description</th>
+                        <th>Total Hrs</th>
+                        <th>Actual Hrs</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                <?php
+$c = 1;
+$sql = "SELECT * FROM dailyupdates ORDER BY date DESC";
+$result = $conn->query($sql);
 
-                </tr>
-              </thead>
-              <tbody id="tableBody">
-                <!-- Example rows; these would normally be generated dynamically -->
-                <tr>
-                  <td>1</td>
-                  <td>Surya</td>
-                  <td>10-02-2025</td>
-                  <td>Govin-ABCd</td>
-                  <td>Web Application</td>
-                  <td>XYZ</td>
-                  <td>6</td>
-                  <td>5</td>
-                  <td>Completed</td>
-                  <td>5</td>
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $actualHrs = trim($row['actualHrs']);
+        $status = ($actualHrs === '-' || empty($actualHrs)) 
+            ? '<td><i class="fas fa-hourglass-half status-icon in-progress" style="font-size:12px;color:rgb(0, 148, 255);"></i>&nbsp;&nbsp;Inprogress</td>' 
+            : '<td><i class="fas fa-check-circle status-icon completed" style="font-size:12px;color:rgb(0, 148, 255);"></i>&nbsp;&nbsp;Completed</td>';
 
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>Naveen</td>
-                  <td>10-02-2025</td>
-                  <td>Kurinji-XYZ</td>
-                  <td>Mobile Application</td>
-                  <td>aaa</td>
-                  <td>4</td>
-                  <td>-</td>
-                  <td>Started</td>
-                  <td>5</td>
+        // Convert date format to match input field
+        $formattedDate = date("d-m-Y", strtotime($row['date']));
 
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>Pavithra</td>
-                  <td>10-02-2025</td>
-                  <td>xxx-KMNo</td>
-                  <td>Web Application</td>
-                  <td>bbb</td>
-                  <td>7</td>
-                  <td>8</td>
-                  <td>Completed</td>
-                  <td>5</td>
+        echo "<tr data-date='$formattedDate'>
+            <td class='sno'>{$c}</td> 
+            <td class='name'>{$row['name']}</td>
+            <td class='date'>$formattedDate</td>
+            <td>{$row['companyName']} - {$row['projectTitle']}</td>
+            <td>{$row['projectType']}</td>
+            <td>{$row['totalDays']}</td>
+            <td>{$row['taskDetails']}</td>
+            <td>{$row['totalHrs']}</td>
+            <td>{$row['actualHrs']}</td>
+            $status
+        </tr>";
 
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td>JayaVarshini</td>
-                  <td>10-02-2025</td>
-                  <td>Govin-ABC</td>
-                  <td>Web Application</td>
-                  <td>XYZ</td>
-                  <td>6</td>
-                  <td>5</td>
-                  <td>Completed</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>5</td>
-                  <td>Mohan</td>
-                  <td>10-02-2025</td>
-                  <td>Kurinji-XYZ</td>
-                  <td>Mobile Application</td>
-                  <td>aaa</td>
-                  <td>4</td>
-                  <td>-</td>
-                  <td>Started</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>6</td>
-                  <td>Angu</td>
-                  <td>10-02-2025</td>
-                  <td>xxx-KMN</td>
-                  <td>Web Application</td>
-                  <td>bbb</td>
-                  <td>7</td>
-                  <td>8</td>
-                  <td>Completed</td>
-                  <td>5</td>
-
-                </tr>
-
-
-                <tr>
-                  <td>7</td>
-                  <td>Surya</td>
-                  <td>11-02-2025</td>
-                  <td>Govin-ABC</td>
-                  <td>Web Application</td>
-                  <td>XYZ</td>
-                  <td>6</td>
-                  <td>5</td>
-                  <td>Completed</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>8</td>
-                  <td>Naveen</td>
-                  <td>11-02-2025</td>
-                  <td>Kurinji-XYZ</td>
-                  <td>Mobile Application</td>
-                  <td>aaa</td>
-                  <td>4</td>
-                  <td>-</td>
-                  <td>Started</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>9</td>
-                  <td>Pavithra</td>
-                  <td>11-02-2025</td>
-                  <td>xxx-KMN</td>
-                  <td>Web Application</td>
-                  <td>bbb</td>
-                  <td>7</td>
-                  <td>8</td>
-                  <td>Completed</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>10</td>
-                  <td>JayaVarshini</td>
-                  <td>11-02-2025</td>
-                  <td>Govin-ABC</td>
-                  <td>Web Application</td>
-                  <td>XYZ</td>
-                  <td>6</td>
-                  <td>5</td>
-                  <td>Completed</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>11</td>
-                  <td>Mohan</td>
-                  <td>11-02-2025</td>
-                  <td>Kurinji-XYZ</td>
-                  <td>Mobile Application</td>
-                  <td>aaa</td>
-                  <td>4</td>
-                  <td>-</td>
-                  <td>Started</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>12</td>
-                  <td>Angu</td>
-                  <td>11-02-2025</td>
-                  <td>xxx-KMN</td>
-                  <td>Web Application</td>
-                  <td>bbb</td>
-                  <td>7</td>
-                  <td>8</td>
-                  <td>Completed</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>13</td>
-                  <td>JayaVarshini</td>
-                  <td>11-02-2025</td>
-                  <td>Govin-mobile app</td>
-                  <td>Web Application</td>
-                  <td>XYZ</td>
-                  <td>6</td>
-                  <td>5</td>
-                  <td>Completed</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>14</td>
-                  <td>surya</td>
-                  <td>12-02-2025</td>
-                  <td>Govin-mobile app</td>
-                  <td>Web Application</td>
-                  <td>XYZ</td>
-                  <td>6</td>
-                  <td>5</td>
-                  <td>Completed</td>
-                  <td>5</td>
-
-                </tr>
-                <tr>
-                  <td>15</td>
-                  <td>JayaVarshini</td>
-                  <td>13-02-2025</td>
-                  <td>Govin-web app</td>
-                  <td>Web Application</td>
-                  <td>XYZ</td>
-                  <td>6</td>
-                  <td>5</td>
-                  <td>Completed</td>
-                  <td>19</td>
-                </tr>
-              </tbody>
+        $c++;
+    }
+} else {
+    echo "<tr><td colspan='10'>No records found</td></tr>";
+}
+?>
+                </tbody>
             </table>
           </div>
         </div>
@@ -994,8 +832,8 @@ if (!isset($_SESSION['username'])) {
                         
                         <div class="d-flex export-container" style="justify-content: flex-end;">
                         <button style='background:green;' id="exportProjectExcel" class="btn btn-primary export-btn" onclick="exportProjectReport()" title="Export Project Report">
-    <i class="fa fa-file-alt"></i>&nbsp;&nbsp;Generate Report
-</button>
+                            <i class="fa fa-file-alt"></i>&nbsp;&nbsp;Generate Report
+                        </button>
                         </div>
                     </div>
                 </div>
@@ -1009,83 +847,70 @@ if (!isset($_SESSION['username'])) {
                                 <b>Actual Days: </b><span id="actualProjectDays" class="count-circle">0</span>
                             </h5>
                         </div>
+                        <?php
+include 'dbconn.php'; // Include database connection
 
-                        <table class="table table-bordered text-center" style="font-size: 14px;" id="projectTable" width="100%" cellspacing="0">
-                            <thead>
-                                <tr class="thead">
-                                    <th>S.No</th>
-                                    <th>Date</th>
-                                    <th>Company-Title</th>
-                                    <th>Type</th>
-                                    <th>Employees</th>
-                                    <th>Description</th>
-                                    <th>Total days</th>
-                                    <th>Work days</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>11-02-2025</td>
-                                    <td>Govin - ABC</td>
-                                    <td>Web development</td>
-                                    <td>Surya,Varshini</td>
-                                    <td>suma</td>
-                                    <td>5</td>
-                                    <td>5</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>11-02-2025</td>
-                                    <td>Kurinji - xyz</td>
-                                    <td>App development</td>
-                                    <td>Naveen,Mohan</td>
-                                    <td>suma1</td>
-                                    <td>6</td>
-                                    <td>7</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>11-02-2025</td>
-                                    <td>xxx - KMN</td>
-                                    <td>UI/UX Design</td>
-                                    <td>Pavithra,Angu</td>
-                                    <td>suma2</td>
-                                    <td>4</td>
-                                    <td>-</td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>12-02-2025</td>
-                                    <td>Govin - ABC</td>
-                                    <td>Web development</td>
-                                    <td>Surya,Varshini</td>
-                                    <td>suma</td>
-                                    <td>5</td>
-                                    <td>5</td>
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td>12-02-2025</td>
-                                    <td>Kurinji - xyz</td>
-                                    <td>App development</td>
-                                    <td>Naveen,Mohan</td>
-                                    <td>suma1</td>
-                                    <td>6</td>
-                                    <td>7</td>
-                                </tr>
-                                <tr>
-                                    <td>6</td>
-                                    <td>12-02-2025</td>
-                                    <td>xxx - KMN</td>
-                                    <td>UI/UX Design</td>
-                                    <td>Pavithra,Angu</td>
-                                    <td>suma2</td>
-                                    <td>4</td>
-                                    <td>-</td>
-                                </tr>
-                            </tbody>
-                        </table>
+$query = "SELECT * FROM projectcreation";
+$result = $conn->query($query);
+?>
+
+<table class="table table-bordered text-center" style="font-size: 14px;" id="projectTable" width="100%" cellspacing="0"> 
+    <thead>
+        <tr class="thead">
+            <th>S.No</th>
+            <th>Date</th>
+            <th>Company-Title</th>
+            <th>Type</th>
+            <th>Employees</th>
+            <th>Total days</th>
+            <th>Work days</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if ($result->num_rows > 0) {
+            $sno = 1;
+            while ($row = $result->fetch_assoc()) {
+                $companyName = $row['companyName'];
+                $projectTitle = $row['projectTitle'];
+                $projectType = $row['projectType'];
+
+                // Calculate workdays
+                $workDaysQuery = "SELECT SUM(actualHrs) AS totalActualHrs FROM dailyupdates 
+                                  WHERE companyName = ? AND projectTitle = ? AND projectType = ?";
+                $stmt = $conn->prepare($workDaysQuery);
+                $stmt->bind_param("sss", $companyName, $projectTitle, $projectType);
+                $stmt->execute();
+                $workDaysResult = $stmt->get_result();
+                $workDaysData = $workDaysResult->fetch_assoc();
+
+                $workingDays = 0;
+                if ($workDaysData && $workDaysData['totalActualHrs']) {
+                    $workingDays = round($workDaysData['totalActualHrs'] / 8, 2); // Convert hours to days
+                }
+                ?>
+                <tr>
+                    <td><?= $sno++; ?></td>
+                    <td><?= date('d-m-Y', strtotime($row['date'])); ?></td>
+                    <td><?= $row['companyName'] . ' - ' . $row['projectTitle']; ?></td>
+                    <td><?= $row['projectType']; ?></td>
+                    <td><?= $row['employees']; ?></td>
+                    <td><?= $row['totalDays']; ?></td>
+                    <td><?= $workingDays; ?></td>
+                </tr>
+                <?php
+            }
+        } else {
+            echo "<tr><td colspan='7'>No projects found</td></tr>";
+        }
+        ?>
+    </tbody>
+</table>
+
+<?php
+$conn->close();
+?>
+
                     </div>
                 </div>
             </div>
@@ -1180,9 +1005,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const nameCol = 1; // "Name" column
         const dateCol = 2; // "Date" column
         const companyCol = 3;
-        const typeCol=4; // "Company - Title" column
+        const typeCol = 4; // "Company - Title" column
 
-        if ([nameCol, dateCol, companyCol,typeCol].includes(colIndex)) {
+        if ([nameCol, dateCol, companyCol, typeCol].includes(colIndex)) {
             // Get clean text without extra spaces or new lines
             let searchText = clickedCell.textContent.replace(/\s+/g, ' ').trim();
 
@@ -1191,18 +1016,38 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Trigger DataTables search
             table.search(searchText).draw();
-        }else {
-            // If clicked column is not Date, Company-Title, or Type, open the PDF
-            window.location.href = "requirement.php";
+        } else {
+            // Get the parent <tr> of the clicked cell
+            const row = clickedCell.closest('tr');
+
+            const companyTitle = row.cells[3].textContent.trim(); // Company-Title column
+            const type = row.cells[4].textContent.trim(); // Type column
+            const totalDays = row.cells[5].textContent.trim(); // Total Days column
+
+            let [company, title] = companyTitle.split(' - ').map(str => str.trim()); // Split Company-Title
+
+            // Fetch teammates and actual hours via AJAX
+            fetch(`calculate_working_days1.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}`)
+                .then(response => response.json())
+                .then(data => {
+                    let teammates = encodeURIComponent(data.teammates);
+                    let actualHrs = encodeURIComponent(data.actualHrs);
+                    let workingDays = encodeURIComponent(data.workingDays); // Fetch workingDays
+
+                    // Redirect with workingDays included
+                    window.location.href = `admin-requirement.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}&totalDays=${encodeURIComponent(totalDays)}&teammates=${teammates}&actualHrs=${actualHrs}&workingDays=${workingDays}`;
+                })
+                .catch(error => console.error('Error fetching data:', error));
         }
     });
 });
 
 </script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener('DOMContentLoaded', function () {
     // Initialize DataTable
     var table = $('#projectTable').DataTable();
+
     // Event delegation for dynamic table updates
     document.querySelector('#projectTable tbody').addEventListener('click', function (event) {
         let clickedCell = event.target.closest('td'); // Get the clicked <td>
@@ -1229,11 +1074,31 @@ document.addEventListener('DOMContentLoaded', function () {
             // Trigger DataTables search
             table.search(searchText).draw();
         } else {
-            // If clicked column is not Date, Company-Title, or Type, open the PDF
-            window.location.href = "requirement.php";
+            // Get the parent <tr> of the clicked cell
+            const row = clickedCell.closest('tr');
+
+            const companyTitle = row.cells[2].textContent.trim(); // Company-Title column
+            const type = row.cells[3].textContent.trim(); // Type column
+            const totalDays = row.cells[5].textContent.trim(); // Total Days column
+
+            let [company, title] = companyTitle.split(' - ').map(str => str.trim()); // Split Company-Title
+
+            // Fetch teammates and actual hours via AJAX
+            fetch(`calculate_working_days1.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}`)
+                .then(response => response.json())
+                .then(data => {
+                    let teammates = encodeURIComponent(data.teammates);
+                    let actualHrs = encodeURIComponent(data.actualHrs);
+                    let workingDays = encodeURIComponent(data.workingDays); // Fetch workingDays
+
+                    // Redirect with workingDays included
+                    window.location.href = `admin-requirement.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}&totalDays=${encodeURIComponent(totalDays)}&teammates=${teammates}&actualHrs=${actualHrs}&workingDays=${workingDays}`;
+                })
+                .catch(error => console.error('Error fetching data:', error));
         }
     });
 });
+
 </script>
 <!-- ######### EMPLOYEE REPORT ########## -->
 <script>
@@ -1256,8 +1121,8 @@ document.addEventListener('DOMContentLoaded', function () {
         table.rows({ search: 'applied' }).every(function () {
             let row = this.data(); // Get row data
             let companyTitle = row[3].trim(); // Get Company-Title column (adjust index if needed)
-            let totalDaysValue = parseFloat(row[9].trim()) || 0; // Get Total Days column (adjust index if needed)
-            let actualHrs = row[7].trim(); // Get Actual Hours column
+            let totalDaysValue = parseFloat(row[5].trim()) || 0; // Get Total Days column (adjust index if needed)
+            let actualHrs = row[8].trim(); // Get Actual Hours column
 
             if (companyTitle) {
                 if (!totalDaysMap.has(companyTitle)) {
@@ -1321,81 +1186,77 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 <!-- ######### PROJECT REPORT ########## -->
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var table = $('#projectTable').DataTable();
+document.addEventListener('DOMContentLoaded', function () {
+    var table = $('#projectTable').DataTable();
 
-        // Function to update Total Days and Work Days across all pages
-        function updateDays() {
-            let totalDaysSum = 0;
-            let workDaysSum = 0;
-            let companyTotalDays = {}; // Object to store unique company total days
+    function updateDays() {
+        let totalDaysSum = 0;
+        let workDaysSum = 0;
+        let companyTotalDays = {}; 
 
-            // Check if the search bar is empty
-            let searchValue = document.querySelector('input[type="search"]').value.trim();
-            if (searchValue === "") {
-                $("#totalProjectDays").text(0); // Reset total days
-                $("#actualProjectDays").text(0); // Reset work days
-                return; // Stop execution
-            }
-
-            // Loop through all filtered rows, regardless of pagination
-            table.rows({ search: 'applied' }).data().each(function (row) {
-                let companyTitle = row[2].trim(); // Get Company Title column
-                let totalDaysValue = parseFloat(row[6].trim()) || 0; // Get Total Days column
-                let workDaysValue = parseFloat(row[7].trim()) || 0; // Get Work Days column
-
-                if (!companyTotalDays[companyTitle]) {
-                    companyTotalDays[companyTitle] = totalDaysValue;
-                    totalDaysSum += totalDaysValue;
-                }
-                workDaysSum += workDaysValue;
-            });
-
-            $("#totalProjectDays").text(totalDaysSum); // Display summed total days
-            $("#actualProjectDays").text(workDaysSum); // Display summed work days
+        let searchValue = document.querySelector('input[type="search"]').value.trim();
+        if (searchValue === "") {
+            $("#totalProjectDays").text(0);
+            $("#actualProjectDays").text(0);
+            return;
         }
 
-        // Search input event
-        document.querySelector('input[type="search"]').addEventListener('keyup', function () {
-            table.search(this.value).draw();
-            setTimeout(updateDays, 200); // Update days after search
-        });
+        table.rows({ search: 'applied' }).data().each(function (row) {
+            let companyTitle = row[2].trim();
+            let totalDaysValue = parseFloat(row[5].trim()) || 0;
+            let workDaysValue = parseFloat(row[6].trim()) || 0;
 
-        // Date filter event
-        function filterByDate() {
-            table.draw();
-            setTimeout(updateDays, 200); // Update days after filtering
-        }
-
-        document.getElementById('startDateProject').addEventListener('change', filterByDate);
-        document.getElementById('endDateProject').addEventListener('change', filterByDate);
-
-        // Custom DataTable filtering function
-        $.fn.dataTable.ext.search.push(
-            function (settings, data, dataIndex) {
-                let min = document.getElementById('startDateProject').value;
-                let max = document.getElementById('endDateProject').value;
-                let date = data[1]; // Column index for 'Date'
-
-                // Convert date format to YYYY-MM-DD
-                let dateParts = date.split('-');
-                let formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
-                let tableDate = new Date(formattedDate);
-
-                if ((min === "" || new Date(min) <= tableDate) && (max === "" || new Date(max) >= tableDate)) {
-                    return true;
-                }
-                return false;
+            if (!companyTotalDays[companyTitle]) {
+                companyTotalDays[companyTitle] = totalDaysValue;
+                totalDaysSum += totalDaysValue;
             }
-        );
-
-        // Ensure updateDays is called after filtering and pagination changes
-        table.on('draw', function () {
-            updateDays();
+            workDaysSum += workDaysValue;
         });
 
-        updateDays(); // Call initially to set the correct values
+        $("#totalProjectDays").text(totalDaysSum);
+        $("#actualProjectDays").text(workDaysSum);
+    }
+
+    document.querySelector('input[type="search"]').addEventListener('keyup', function () {
+        table.search(this.value).draw();
+        setTimeout(updateDays, 200);
     });
+
+    function filterByDate() {
+        table.draw();
+        setTimeout(updateDays, 200);
+    }
+
+    document.getElementById('startDateProject').addEventListener('change', filterByDate);
+    document.getElementById('endDateProject').addEventListener('change', filterByDate);
+
+    // Custom DataTable filtering function
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            let min = document.getElementById('startDateProject').value;
+            let max = document.getElementById('endDateProject').value;
+            let date = data[1]; // Column index for 'Date'
+
+            // Convert date from DD-MM-YYYY to YYYY-MM-DD
+            let dateParts = date.split('-'); // Expecting DD-MM-YYYY
+            let formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+            let tableDate = new Date(formattedDate);
+
+            if ((min === "" || new Date(min) <= tableDate) && (max === "" || new Date(max) >= tableDate)) {
+                return true;
+            }
+            return false;
+        }
+    );
+
+
+    table.on('draw', function () {
+        updateDays();
+    });
+
+    updateDays();
+});
+
 </script>
 
             <!-- End of Main Content -->
@@ -1559,10 +1420,10 @@ function exportProjectReport() {
     let filteredData = table.rows({ search: 'applied' }).data().toArray();
 
     // Prepare the worksheet data
-    let dataArray = [["S.No", "Date", "Company - Title", "Type", "Employees", "Description", "Total Days", "Work Days"]];
+    let dataArray = [["S.No", "Date", "Company - Title", "Type", "Employees", "Total Days", "Work Days"]];
 
     filteredData.forEach((row, index) => {
-        dataArray.push([index + 1, row[1], row[2], row[3], row[4], row[5], row[6], row[7]]);
+        dataArray.push([index + 1, row[1], row[2], row[3], row[4], row[5], row[6]]);
     });
 
     // Get "Total Days" and "Actual Days" from the page
@@ -1581,7 +1442,7 @@ function exportProjectReport() {
     XLSX.utils.book_append_sheet(wb, ws, "Project Report");
 
     // Export file
-    XLSX.writeFile(wb, "Filtered_Project_Report.xlsx");
+    XLSX.writeFile(wb, "Project_Report.xlsx");
 }
 
 </script>
@@ -1600,17 +1461,14 @@ $(document).ready(function() {
             $(".nav-link").removeClass("active");
             $(this).addClass("active");
         });
-
         $("#projectTab").click(function() {
             $("#employeeReport").hide();
             $("#projectReport").show();
             $(".nav-link").removeClass("active");
             $(this).addClass("active");
         });
-
         // Employee Filter
         let originalData = $("#tableBody").html(); // Store original table data
-
         $("#employeeFilter").change(function() {
             let selectedEmployee = $(this).val();
             if (selectedEmployee === "all") {
@@ -1632,18 +1490,16 @@ $(document).ready(function() {
 <script>
 $(document).ready(function () {
     var table = $('#dataTable').DataTable();
-
     // Get URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     const name = urlParams.get('name');
-    const company = urlParams.get('company');
+    const companyt = urlParams.get('companyt');
     const title = urlParams.get('title'); // Get title from URL
-
     // Check if name, company, or title exists in the URL and filter accordingly
     if (name) {
         table.search(name).draw();
-    } else if (company) {
-        table.search(company).draw();
+    } else if (companyt) {
+        table.search(companyt).draw();
     } else if (title) {
         table.search(title).draw(); // Filter table by title
     }

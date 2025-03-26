@@ -11,12 +11,12 @@ $name = $_SESSION['Name'];
 $date = date('Y-m-d'); // Get today's date
 
 // Retrieve form inputs
-$companyName = $_POST['companyName'] ?? '';
-$projectTitle = $_POST['projectTitle'] ?? '';
-$projectType = $_POST['projectType'] ?? '';
-$totalDays = $_POST['totalDays'] ?? '';
-$taskDetails = $_POST['taskDetails'] ?? '';
-$totalHrs = $_POST['totalHrs'] ?? '';
+$companyName = $_POST['companyName'];
+$projectTitle = $_POST['projectTitle'];
+$projectType = $_POST['projectType'];
+$totalDays = $_POST['totalDays'];
+$taskDetails = $_POST['taskDetails'];
+$totalHrs = $_POST['totalHrs'];
 
 // Validate required fields
 if (empty($companyName) || empty($projectTitle) || empty($taskDetails) || empty($totalHrs)) {

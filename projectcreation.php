@@ -192,7 +192,6 @@ thead{
 
     .master.active{
         width: 90%;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
         color:white;
         border-radius: 8px;
         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
@@ -368,7 +367,6 @@ thead{
     <!-- Page Wrapper -->
     <div id="wrapper">
 
-    
     <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background: white;">
 <!-- Sidebar - Brand -->
 <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">

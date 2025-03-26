@@ -476,51 +476,7 @@ $totalEntries2 = $result2->num_rows;
 
     <!-- Page Wrapper -->
     <div id="wrapper">
-
-    <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background: white;">
-<!-- Sidebar - Brand -->
-<a class="sidebar-brand d-flex align-items-center justify-content-center" href="employeedash.php">
-    <div class="sidebar-brand-icon" style='font-size:19px'>KTG</div>
-    <div class="sidebar-brand-text mx-2" style='font-size:19px'>DASHBOARD</div>
-</a>
-<hr class="sidebar-divider my-0">
-
-<!-- Divider -->
-<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
-<!-- Nav Item - Dashboard -->
-<li class="nav-item l active">
-    <a class="nav-link k" href="employeedash.php" style="color: white;">
-        <i class="fas fa-fw fa-tachometer-alt" style="font-size:16px"></i>
-        <span>Dashboard</span>
-    </a>
-</li>
-<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
-
-
-<!-- Divider -->
-<!-- Nav Item - Project Creation -->
-<li class="nav-item l">
-    <a class="nav-link k" href="employeeProjectAllocated.php" style="color: black;">
-        <i class="fas fa-fw fa-folder" style="font-size:16px"></i>
-        <span>Project Allocation</span>
-    </a>
-</li>
-
-<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
-<!-- Nav Item - Work Reports -->
-<li class="nav-item l">
-    <a class="nav-link k" href="employeeWorkReports.php" style="color: black;">
-        <i class="fas fa-fw fa-chart-area" style="font-size:16px"></i>
-        <span>Work Reports</span>
-    </a>
-</li><br>
-<!-- Divider -->
-<div class="sidebar-divider d-none d-md-block"></div>
-<!-- Sidebar Toggler -->
-<div class="text-center d-none d-md-inline">
-    <button class="rounded-circle side border-0" id="sidebarToggle"></button>
-</div>
-</ul>
+<?php include("sidebar.php"); ?>
 <style>
    
 
@@ -849,7 +805,7 @@ $todayUpdates = $todayUpdatesRow['todayUpdates'];
                                                 $result_hours = $stmt_hours->get_result();
                                                 $row_hours = $result_hours->fetch_assoc();
                                     
-                                                $totalActualHrs = $row_hours['total_actual_hrs'] ?? 0; // If no record, default to 0
+                                                $totalActualHrs = $row_hours['total_actual_hrs']; // If no record, default to 0
                                                 $workingDays = round($totalActualHrs / 8, 2); // Divide by 8 to get working days
 
                                                 echo "<tr>";

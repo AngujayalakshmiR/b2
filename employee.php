@@ -326,90 +326,8 @@ if (!isset($_SESSION['username'])) {
     <div id="wrapper">
 
        
-    
-    <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background: white;">
-<!-- Sidebar - Brand -->
-<a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
-    <div class="sidebar-brand-icon" style='font-size:19px'>KTG</div>
-    <div class="sidebar-brand-text mx-2" style='font-size:19px'>DASHBOARD</div>
-</a>
-<hr class="sidebar-divider my-0">
+    <?php include ("sidebar.php"); ?>
 
-<!-- Divider -->
-<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
-<!-- Nav Item - Dashboard -->
-<li class="nav-item l ">
-    <a class="nav-link k" href="index.php" style="color: white;">
-        <i class="fas fa-fw fa-tachometer-alt" style="font-size:16px"></i>
-        <span>Dashboard</span>
-    </a>
-</li>
-<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
-<li class="nav-item l" style="padding:0px;">
-    <a class="nav-link k" href="followups.php" style="color: white;">
-        <i class="fas fa-fw fa-comment-dots" style="font-size:16px"></i>
-        <span>FollowUps</span>
-    </a>
-</li>
-<!-- Divider -->
-<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
-<!-- Nav Item - Master -->
-<li class="nav-item l active master">
-    <a class="nav-link k collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-        aria-expanded="true" aria-controls="collapseTwo" style="color: white;">
-        <i class="fas fa-fw fa-clipboard-list" style="font-size:16px"></i>
-        <span>Master</span>
-    </a>
-    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar" style="z-index: 1000;">
-        <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item " href="customer.php" style="color: black;">Customer</a>
-            <a class="collapse-item active" href="employee.php" style="color: white;">Employee</a>
-            <a class="collapse-item" href="designation.php" style="color: black;">Designation</a>
-            <a class="collapse-item" href="projecttype.php" style="color: black;">Project Type</a>
-            <a class="collapse-item" href="followuptype.php" style="color: black;">FollowUp Type</a>
-        </div>
-    </div>
-</li> 
-<!-- Divider -->
-<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
-<!-- Nav Item - Project Creation -->
-<li class="nav-item l">
-    <a class="nav-link k" href="projectcreation.php" style="color: black;">
-        <i class="fas fa-fw fa-folder" style="font-size:16px"></i>
-        <span>Project Creation</span>
-    </a>
-</li>
-<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
-<!-- Nav Item - Daily Updates -->
-<li class="nav-item l">
-    <a class="nav-link k" href="dailyupdates.php" style="color: black;">
-        <i class="fas fa-fw fa-table" style="font-size:16px"></i>
-        <span>Daily Update</span>
-    </a>
-</li>
-<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
-<!-- Nav Item - Work Reports -->
-<li class="nav-item l">
-    <a class="nav-link k" href="reports.php" style="color: black;">
-        <i class="fas fa-fw fa-chart-area" style="font-size:16px"></i>
-        <span>Work Reports</span>
-    </a>
-</li>
-<div class="sidebar-divider" style="margin-bottom: 3px;"></div>
-<!-- Nav Item - Work Reports -->
-<li class="nav-item l">
-    <a class="nav-link k" href="userrights.php" style="color: black;">
-    <i class="fas fa-user-shield" style="font-size:16px"></i> <!-- User Shield icon -->
-        <span>User Rights</span>
-    </a>
-</li><br>
-<!-- Divider -->
-<div class="sidebar-divider d-none d-md-block"></div>
-<!-- Sidebar Toggler -->
-<div class="text-center d-none d-md-inline">
-    <button class="rounded-circle side border-0" id="sidebarToggle"></button>
-</div>
-</ul>
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -978,11 +896,9 @@ $(document).ready(function () {
         e.preventDefault(); // Prevent page reload
 
         let formData = new FormData(this);
-        let isUpdate = $("#employee_id").val().trim() !== ""; // Check if update or add
 
-        // Show loading state
         Swal.fire({
-            title: isUpdate ? "Updating Employee..." : "Adding Employee...",
+            title: "Adding Employee...",
             text: "Please wait...",
             allowOutsideClick: false,
             didOpen: () => {
@@ -991,7 +907,7 @@ $(document).ready(function () {
         });
 
         $.ajax({
-            url: "addEmployeeBackend.php",
+            url: "addEmployee.php",
             type: "POST",
             data: formData,
             contentType: false,
@@ -999,7 +915,6 @@ $(document).ready(function () {
             dataType: "json",
             success: function (response) {
                 Swal.close(); // Close loading popup
-
                 if (response.status === "error") {
                     Swal.fire({
                         icon: "error",
@@ -1010,7 +925,7 @@ $(document).ready(function () {
                 } else {
                     Swal.fire({
                         icon: "success",
-                        title: isUpdate ? "Employee Updated!" : "Employee Added!",
+                        title: "Employee Added!",
                         text: response.message,
                         confirmButtonText: "OK"
                     }).then(() => {
@@ -1018,15 +933,72 @@ $(document).ready(function () {
                     });
                 }
             },
-            error: function (xhr, status, error) {
-                Swal.close(); // Close loading popup
-
+            error: function (xhr) {
+                Swal.close();
                 let errorMessage = xhr.responseJSON?.message || "Something went wrong. Please try again.";
-
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
-                    text: isUpdate ? `Error updating employee: ${errorMessage}` : `Error adding employee: ${errorMessage}`,
+                    text: `Error adding employee: ${errorMessage}`,
+                    confirmButtonText: "Try Again"
+                });
+            }
+        });
+    });
+});
+
+$(document).ready(function () {
+    $("#customerForm").submit(function (e) {
+        e.preventDefault(); // Prevent page reload
+
+        let formData = new FormData(this);
+        let employeeId = $("#employee_id").val().trim();
+
+        if (employeeId === "") return; // If no ID, prevent updating
+
+        Swal.fire({
+            title: "Updating Employee...",
+            text: "Please wait...",
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        $.ajax({
+            url: "updateEmployee.php",
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            dataType: "json",
+            success: function (response) {
+                Swal.close(); // Close loading popup
+                if (response.status === "error") {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: response.message,
+                        confirmButtonText: "OK"
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Employee Updated!",
+                        text: response.message,
+                        confirmButtonText: "OK"
+                    }).then(() => {
+                        location.reload(); // Reload after success
+                    });
+                }
+            },
+            error: function (xhr) {
+                Swal.close();
+                let errorMessage = xhr.responseJSON?.message || "Something went wrong. Please try again.";
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: `Error updating employee: ${errorMessage}`,
                     confirmButtonText: "Try Again"
                 });
             }

@@ -10,46 +10,6 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['empUserName'])) {
 }
 ?>
 
-<?php
-if (isset($_GET['rights'])) {
-    $rights = urldecode($_GET['rights']); // Decode URL parameter
-    $rightsArray = explode(',', $rights); // Convert to array
-
-    // Define possible rights and assign numbers
-    $statuses = [
-        'Add' => 1,
-        'Update' => 2,
-        'Delete' => 3,
-        'Add,Update' => 4,
-        'Add,Delete' => 5,
-        'Delete,Update' => 6,
-        'Add,Delete,Update' => 7
-    ];
-
-    // Sort rights array to ensure order consistency
-    sort($rightsArray);
-    $rightsKey = implode(',', $rightsArray); // Convert back to string
-
-    // Determine status number
-    $statusNo = isset($statuses[$rightsKey]) ? $statuses[$rightsKey] : 0; // Default 0 if unknown
-}
-?>
-
-<script>
-    // Get status number from PHP
-    let statusNo = "<?php echo $statusNo; ?>";
-
-    // Update URL without reloading
-    let url = new URL(window.location.href);
-    url.searchParams.set("status", statusNo);
-    window.history.replaceState(null, "", url);
-
-    // Redirect based on status number
-    if (statusNo >= 1 && statusNo <= 7) {
-        window.location.href = `customer_${statusNo}.php`;
-    }
-</script>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -101,6 +61,7 @@ if (isset($_GET['rights'])) {
 
         .btn-edit {
             color: #28a745;
+            display: none;
         }
 
         .btn-delete {
@@ -517,50 +478,8 @@ if (isset($_GET['rights'])) {
 </nav>
 
 <div class="container-fluid">
-<div class="container mb-4 mt-4" style="background: white; border-radius: 25px; border: 2px solid rgb(0, 148, 255);">
-<div class="column">
-    <div class="row">
-        <!-- Left Section (20% width for the button) -->
-       
-        <!-- Right Section (80% width for form fields) -->
-        <div class="col-md-12">
-    <form id="customerForm" class="row g-3 mt-3">
-        <div class="col-md-4 pb-1">
-            <input type="text" class="form-control mb-2" id="customername" placeholder="Enter Customer Name" required>
-            <input type="text" class="form-control mb-2" id="companyname" placeholder="Enter Company Name" required>
-            <input type="text" class="form-control mb-2" id="customerno" placeholder="Enter Phone Number" required>
-        </div>
-
-        <div class="col-md-4 pb-1">
-        <textarea class="form-control mb-2" id="customeraddress" name="customeraddress" placeholder="Enter Customer Address" rows="2" style="height: 85px;" required></textarea>
-                            <select class="form-control mb-2" id="country" name="country" required>
-                                <option value="">Select Country</option>
-                            </select>
-        </div>
-
-        <div class="col-md-4 pb-1">
-        <select class="form-control mb-2 d-none" id="stateDropdown" name="stateDropdown">
-                                <option value="">Select State</option>
-                            </select>
-                            <input type="text" class="form-control mb-2" id="stateInput" name="state" placeholder="Enter State" required>
-                            <select class="form-control mb-2 d-none" id="districtDropdown" name="districtDropdown">
-                                <option value="">Select District</option>
-                            </select>
-                            <input type="text" class="form-control mb-2" id="districtInput" name="district" placeholder="Enter District" >
-                            <input type="text" class="form-control mb-2" id="pincode" name="pincode" placeholder="Enter Pincode" required>
-        </div>
-    </form>
+<div class="container mb-4 mt-4" style="background: white; ">
 </div>
-    </div></div>
-<div class="column">
-    <div class="pb-2 d-flex justify-content-sm-end justify-content-center align-items-center">
-        <button type="submit" class="btn" id="customerbtn"
-            style="background: rgb(0, 148, 255); border-radius: 25px; color: white;">
-            <i class="fas fa-user"></i>&nbsp; Add Customer
-        </button>
-</div>
-
-</div></div>
 <script>
     $(document).ready(function () {
     // Restrict numbers in text fields

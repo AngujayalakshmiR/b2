@@ -1,4 +1,4 @@
-<?php
+<?php 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -21,11 +21,9 @@ if (isset($_SESSION['username'])) {
 include 'dbconn.php';
 ?>
 
-
-
 <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background: white;">
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
         <div class="sidebar-brand-icon" style='font-size:19px'>KTG</div>
         <div class="sidebar-brand-text mx-2" style='font-size:19px'>DASHBOARD</div>
     </a>
@@ -58,8 +56,8 @@ include 'dbconn.php';
             </a>
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item " href="customer.php" style="color: black;">Customer</a>
-                    <a class="collapse-item " href="employee.php" style="color: black;">Employee</a>
+                    <a class="collapse-item" href="customer.php" style="color: black;">Customer</a>
+                    <a class="collapse-item" href="employee.php" style="color: black;">Employee</a>
                     <a class="collapse-item" href="designation.php" style="color: black;">Designation</a>
                     <a class="collapse-item" href="projecttype.php" style="color: black;">Project Type</a>
                     <a class="collapse-item" href="followuptype.php" style="color: black;">FollowUp Type</a>
@@ -98,19 +96,21 @@ include 'dbconn.php';
                 <span>User Rights</span>
             </a>
         </li>
-        <?php elseif ($role === 'employee') :
-    // Fetch employee rights from the database
-    $Name = $_SESSION['Name'];
-    $accessModules = [];
+    <?php elseif ($role === 'employee') :
+        // Fetch employee rights from the database (both module and rights data)
+        $Name = $_SESSION['Name'];
+        $accessModules = [];
 
-    $sql = "SELECT module FROM userrights WHERE name = '$Name'";
-    $result = $conn->query($sql);
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $accessModules[] = $row['module'];
+        $sql = "SELECT module, rights FROM userrights WHERE name = '$Name'";
+        $result = $conn->query($sql);
+        if ($result && $result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $accessModules[] = $row; // Each row contains 'module' and 'rights'
+            }
         }
-    }
-?>
+
+        // Employee static navigation items
+        ?>
         <!-- Employee Navigation -->
         <li class="nav-item l active">
             <a class="nav-link k" href="employeedash.php" style="color: white;">
@@ -134,34 +134,41 @@ include 'dbconn.php';
                 <span>Work Reports</span>
             </a>
         </li>
-        
-<?php
-// Display additional access-based navigation
-$availableModules = [
-    "Dashboard" => "index.php",
-    "Customer" => "customer.php",
-    "Employee" => "employee.php",
-    "Designation" => "designation.php",
-    "Project Type" => "projecttype.php",
-    "FollowUp Type" => "followuptype.php",
-    "Project Creation" => "projectcreation.php",
-    "Daily Update" => "dailyupdates.php",
-    "Work Reports" => "reports.php"
-];
+        <div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 
-foreach ($accessModules as $module) {
-    if (isset($availableModules[$module])) {
-        echo '<li class="nav-item l">
-                <a class="nav-link k" href="' . $availableModules[$module] . '" style="color: black;">
-                    <i class="fas fa-fw fa-folder" style="font-size:16px"></i>
-                    <span>' . $module . '</span>
-                </a>
-              </li>
-              <div class="sidebar-divider" style="margin-bottom: 3px;"></div>';
-    }
-}
-?>
-    <?php endif; ?>
+        <?php
+        // Define a mapping of allowed modules to their page URLs
+        $availableModules = [
+            "Dashboard"      => "index.php",
+            "Customer"       => "customer.php",
+            "Employee"       => "employee.php",
+            "Designation"    => "designation.php",
+            "Project Type"   => "projecttype.php",
+            "FollowUp Type"  => "followuptype.php",
+            "Project Creation" => "projectcreation.php",
+            "Daily Update"   => "dailyupdates.php",
+            "Work Reports"   => "reports.php"
+        ];
+
+        // Display additional access-based navigation using rights in URL
+        foreach ($accessModules as $moduleData) {
+            $moduleName = $moduleData['module'];
+            $rights = urlencode($moduleData['rights']); // URL encode the rights data
+
+            if (isset($availableModules[$moduleName])) {
+                // Append rights data as a query parameter to the URL
+                $moduleUrl = $availableModules[$moduleName] . "?rights=" . $rights;
+                echo '<li class="nav-item l">
+                        <a class="nav-link k" href="' . $moduleUrl . '" style="color: black;">
+                            <i class="fas fa-fw fa-folder" style="font-size:16px"></i>
+                            <span>' . $moduleName . '</span>
+                        </a>
+                      </li>
+                      <div class="sidebar-divider" style="margin-bottom: 3px;"></div>';
+            }
+        }
+    endif;
+    ?>
 
     <br>
     <div class="sidebar-divider d-none d-md-block"></div>
@@ -171,8 +178,9 @@ foreach ($accessModules as $module) {
         <button class="rounded-circle side border-0" id="sidebarToggle"></button>
     </div>
 </ul>
+
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
     const navLinks = document.querySelectorAll(".nav-item");
 
     // Retrieve the last active page from localStorage
@@ -201,5 +209,4 @@ foreach ($accessModules as $module) {
         });
     });
 });
-
 </script>

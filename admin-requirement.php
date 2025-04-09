@@ -1,10 +1,13 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['username']) && !isset($_SESSION['empUserName'])) {
     header("Location: login.php");
     exit();
 }
+?>
+
+<?php
 
 $companyName = isset($_GET['company']) ? htmlspecialchars($_GET['company']) : '';
 $projectTitle = isset($_GET['title']) ? htmlspecialchars($_GET['title']) : '';

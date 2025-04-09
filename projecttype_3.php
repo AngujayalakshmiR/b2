@@ -7,46 +7,6 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['empUserName'])) {
 }
 ?>
 
-<?php
-if (isset($_GET['rights'])) {
-    $rights = urldecode($_GET['rights']); // Decode URL parameter
-    $rightsArray = explode(',', $rights); // Convert to array
-
-    // Define possible rights and assign numbers
-    $statuses = [
-        'Add' => 1,
-        'Update' => 2,
-        'Delete' => 3,
-        'Add,Update' => 4,
-        'Add,Delete' => 5,
-        'Delete,Update' => 6,
-        'Add,Delete,Update' => 7
-    ];
-
-    // Sort rights array to ensure order consistency
-    sort($rightsArray);
-    $rightsKey = implode(',', $rightsArray); // Convert back to string
-
-    // Determine status number
-    $statusNo = isset($statuses[$rightsKey]) ? $statuses[$rightsKey] : 0; // Default 0 if unknown
-}
-?>
-
-<script>
-    // Get status number from PHP
-    let statusNo = "<?php echo $statusNo; ?>";
-
-    // Update URL without reloading
-    let url = new URL(window.location.href);
-    url.searchParams.set("status", statusNo);
-    window.history.replaceState(null, "", url);
-
-    // Redirect based on status number
-    if (statusNo >= 1 && statusNo <= 7) {
-        window.location.href = `projecttype_${statusNo}.php`;
-    }
-</script>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -97,6 +57,7 @@ thead{
 
         .btn-edit {
             color: #28a745;
+            display: none;
         }
 
         .btn-delete {
@@ -474,7 +435,7 @@ thead{
 
            <!-- Designation Cards Container -->
            <div class="container-fluid">
-           <div class="container custom-container mb-4 mt-4" style="background: white; border-radius: 25px; border: 2px solid rgb(0, 148, 255);">
+           <!-- <div class="container custom-container mb-4 mt-4" style="background: white; border-radius: 25px; border: 2px solid rgb(0, 148, 255);">
     <div class="row">
         <div class="col-12">
         <form class="row g-10" id="projecttypeForm">
@@ -489,7 +450,7 @@ thead{
 </form>
         </div>
     </div>
-</div>
+</div> -->
 
 
 <!-- DataTales Example -->

@@ -7,58 +7,20 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['empUserName'])) {
 }
 ?>
 
-<?php
-if (isset($_GET['rights'])) {
-    $rights = urldecode($_GET['rights']); // Decode URL parameter
-    $rightsArray = explode(',', $rights); // Convert to array
-
-    // Define possible rights and assign numbers
-    $statuses = [
-        'Add' => 1,
-        'Update' => 2,
-        'Delete' => 3,
-        'Add,Update' => 4,
-        'Add,Delete' => 5,
-        'Delete,Update' => 6,
-        'Add,Delete,Update' => 7
-    ];
-
-    // Sort rights array to ensure order consistency
-    sort($rightsArray);
-    $rightsKey = implode(',', $rightsArray); // Convert back to string
-
-    // Determine status number
-    $statusNo = isset($statuses[$rightsKey]) ? $statuses[$rightsKey] : 0; // Default 0 if unknown
-}
-?>
-
-<script>
-    // Get status number from PHP
-    let statusNo = "<?php echo $statusNo; ?>";
-
-    // Update URL without reloading
-    let url = new URL(window.location.href);
-    url.searchParams.set("status", statusNo);
-    window.history.replaceState(null, "", url);
-
-    // Redirect based on status number
-    if (statusNo >= 1 && statusNo <= 7) {
-        window.location.href = `projecttype_${statusNo}.php`;
-    }
-</script>
-
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" type="image/png" href="img/ktglogo.jpg">
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Task Manager</title>
 <!-- Load jQuery first -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -69,13 +31,11 @@ if (isset($_GET['rights'])) {
         rel="stylesheet">
         <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <!-- Custom styles for this template-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <style>
-thead{
-    color:black;
-}
+        thead{
+            color:black;
+        }
         /* Center align action buttons */
         .action-buttons {
             display: flex;
@@ -123,7 +83,6 @@ thead{
             background: #0056b3;
             transform: scale(1.1);
         }
-
     .table {
     border-radius: 15px;
     overflow: hidden; /* Ensures inner elements don't break the radius */
@@ -189,12 +148,12 @@ thead{
 
     #taskButton {
         width: 100%;
-        align-items: center;
+        margin-left: 0px;
     }
 }
     </style>
 <style>
-              .sidebar-brand-icon, .sidebar-brand-text {
+           .sidebar-brand-icon, .sidebar-brand-text {
         font-size: large;
         background: white;
         -webkit-background-clip: text; /* Clip background to text */
@@ -314,7 +273,6 @@ thead{
     .sidebar-dark .nav-item .nav-link[data-toggle="collapse"]:hover::after {
     color: white;
 }
-
 /* Style for the table header (thead) */
 /* #dataTable thead {
     color: rgb(140, 147, 159);
@@ -374,20 +332,7 @@ thead{
         margin: 0 auto;    /* Center the container */
     }
 }
-@media (max-width: 768px) {
-    .col-md-2 {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100px; /* Ensures the container has some height */
-      width: 100%; /* Ensures the container takes up full width on smaller screens */
-    }
-
-    .fa-id-badge {
-      font-size: 3rem; /* Adjust icon size if needed for smaller screens */
-    }
-  }
-  @media (max-width:600px) {
+@media (max-width:600px) {
     h4{
         font-size: small;
     }
@@ -398,6 +343,7 @@ thead{
     }
 }
 </style>
+    
 </head>
 
 <body id="page-top">
@@ -405,7 +351,7 @@ thead{
     <!-- Page Wrapper -->
     <div id="wrapper">
 
-    <?php include ("sidebar.php"); ?>
+<?php include ("sidebar.php"); ?>
 
         <!-- End of Sidebar -->
 
@@ -414,29 +360,26 @@ thead{
 
             <!-- Main Content -->
             <div id="content">
+           
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style=" background:white;">
-                      
+                                <!-- Sidebar Toggler -->
+
                     <!-- Sidebar Toggle (Topbar) -->
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
-                    </button>          
+                    </button>
                    <!-- Header Section -->
 <div class="mr-auto d-flex align-items-center pl-3 py-2">
-    <h4 class="text-dark font-weight-bold mr-4" style="color: rgb(15,29,64);  margin-top: 5px;">
-        Master > Project Type
+    <h4 class="text-dark font-weight-bold mr-4" style="color: rgb(15,29,64); margin-top: 5px;">
+        Master > Designation
     </h4>
 </div>
 
 <!-- Customer Modal (No header, reduced width) -->
 <!-- Include Font Awesome for Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-
-
-
-
-
-                   
+        
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -474,58 +417,60 @@ thead{
 
            <!-- Designation Cards Container -->
            <div class="container-fluid">
-           <div class="container custom-container mb-4 mt-4" style="background: white; border-radius: 25px; border: 2px solid rgb(0, 148, 255);">
-    <div class="row">
-        <div class="col-12">
-        <form class="row g-10" id="projecttypeForm">
+                <div class="container custom-container mb-4 mt-4" style="background: white; border-radius: 25px; border: 2px solid rgb(0, 148, 255);">
+                    <div class="row">
+                        <div class="col-12">
+                        <form class="row g-10" id="designationForm">
     <div class="col-md-8 pt-2 d-flex align-items-center">
-        <input type="text" class="form-control mb-2" id="projecttypeName" name="projecttypeName" placeholder="Enter Project Type" required>
+        <input type="text" class="form-control mb-2" id="designationName" name="designationName" placeholder="Enter Designation" required>
     </div>
     <div class="col-md-4 pt-2 pb-2 d-flex justify-content-center align-items-center">
-        <button type="submit" id="projecttypeBtn" class="btn" style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: 190px;">
-            <i class="fas fa-project-diagram"></i>&nbsp; Add Project Type
+        <button type="submit" id="designationBtn" class="btn" style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: 190px;">
+            <i class="fas fa-briefcase"></i>&nbsp; Add Designation
         </button>
     </div>
 </form>
-        </div>
-    </div>
-</div>
+           
+                        </div>
+                    </div>
 
 
-<!-- DataTales Example -->
-<div class="card shadow mb-4">
-<div class="card-header py-3">
-    <p class="m-0" style="font-size: 16px;color:rgb(23, 25, 28);font-style: normal;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    font-size: 16px;
-    font-weight: 500;">
-        <b>Project Type Details</b> 
-        <span class="header-counter">0</span> <!-- Counter next to heading -->
-    </p>
-</div>
-    <div class="card-body">
-        <div class="table-responsive">
-        <table class="table table-bordered text-center" style="font-size:14px;" id="dataTable" width="100%" cellspacing="0"> 
+                </div>
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <p class="m-0" style="font-size: 16px;color:rgb(23, 25, 28);font-style: normal;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                            color: rgb(23, 25, 28);
+                            font-size: 16px;
+                            font-weight: 500;"><b>Designation Details</b> 
+                                <span class="header-counter">3</span>  <!-- Counter next to heading -->
+                                            </p>
+                        </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                <table class="table table-bordered text-center" style="font-size:14px;" id="dataTable" width="100%" cellspacing="0"> 
     <thead>
         <tr class="thead">
             <th>S.no</th>
-            <th>Project Type</th>
+            <th>Designation</th>
             <th>Action</th>
         </tr>
     </thead>
-    <tbody id="projecttype_table">
-        <!-- Project Types will be loaded here dynamically -->
+    <tbody id="designation_table">
+        <!-- Designation Types will be loaded here dynamically -->
     </tbody>
 </table>
+                                </div>
+                            </div>
+                    </div>
 
-        </div>
-    </div>
-</div>
+                </div>
 
-</div>
-
+                <!-- /.container-fluid -->
 
             </div>
 
@@ -551,9 +496,23 @@ thead{
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
+   <!-- jQuery (Must be loaded first) -->
+   <script src="vendor/jquery/jquery.min.js"></script>
 
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<!-- Bootstrap core JavaScript -->
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript -->
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages -->
+<script src="js/sb-admin-2.min.js"></script>
+
+<!-- DataTables Plugin (Ensure it's loaded after jQuery) -->
+<script src="vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -571,23 +530,6 @@ thead{
             </div>
         </div>
     </div>
-   <!-- jQuery (Must be loaded first) -->
-<script src="vendor/jquery/jquery.min.js"></script>
-
-<!-- Bootstrap core JavaScript -->
-<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-<!-- Core plugin JavaScript -->
-<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-<!-- Custom scripts for all pages -->
-<script src="js/sb-admin-2.min.js"></script>
-
-<!-- DataTables Plugin (Ensure it's loaded after jQuery) -->
-<script src="vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<!-- Initialize DataTable AFTER all dependencies are loaded -->
 <script>
     $(document).ready(function() {
         $('#dataTable').DataTable();
@@ -597,31 +539,29 @@ thead{
 <!-- Page level custom scripts -->
 <script src="js/demo/datatables-demo.js"></script>
 
-    <script>
-$(document).ready(function () {
+  <script>
+    $(document).ready(function () {
     let editId = null;
     let dataTable = $("#dataTable").DataTable(); // Initialize DataTable
 
-    function fetchProjectTypes() {
+    function fetchdesignation() {
         $.ajax({
-            url: "projecttypeBackend.php",
+            url: "designationBackend.php",
             type: "GET",
             dataType: "json",
             success: function (data) {
-                // Destroy DataTable ONLY if it exists AND the table has data
                 if ($.fn.DataTable.isDataTable("#dataTable") && data.count > 0) {
                     dataTable.destroy();
                 }
 
                 if (data.count === 0) {
-                    $("#projecttype_table").html("<tr><td colspan='3'>No project types found</td></tr>");
+                    $("#designation_table").html("<tr><td colspan='3'>No Designation found</td></tr>");
                 } else {
-                    $("#projecttype_table").html(data.tableData); // Insert new rows
+                    $("#designation_table").html(data.tableData); // Insert new rows
                 }
 
                 $(".header-counter").text(data.count);
 
-                // Reinitialize DataTable only when there are rows
                 if (data.count > 0) {
                     dataTable = $("#dataTable").DataTable();
                 }
@@ -632,15 +572,21 @@ $(document).ready(function () {
         });
     }
 
-    fetchProjectTypes(); // Fetch data on page load
+    fetchdesignation(); // Fetch data on page load
 
-    $("#projecttypeForm").submit(function (e) {
+    // Restrict numbers in the Designation field
+    $("#designationName").on("input", function () {
+        $(this).val($(this).val().replace(/\d/g, '')); // Remove numbers dynamically
+    });
+
+    $("#designationForm").submit(function (e) {
         e.preventDefault();
-        var projecttype = $("#projecttypeName").val().trim();
-        if (projecttype === "") {
+        var designation = $("#designationName").val().trim();
+
+        if (designation === "") {
             Swal.fire({
                 title: "Error!",
-                text: "Please enter a project type!",
+                text: "Please enter a designation!",
                 icon: "error",
                 confirmButtonColor: "rgb(0, 148, 255)"
             });
@@ -648,11 +594,11 @@ $(document).ready(function () {
         }
 
         let requestData = editId
-            ? { edit_id: editId, projecttypeName: projecttype }
-            : { projecttypeName: projecttype };
+            ? { edit_id: editId, designationName: designation }
+            : { designationName: designation };
 
         $.ajax({
-            url: "projecttypeBackend.php",
+            url: "designationBackend.php",
             type: "POST",
             data: requestData,
             dataType: "json",
@@ -660,15 +606,15 @@ $(document).ready(function () {
                 Swal.fire({
                     title: editId ? "Updated!" : "Success!",
                     text: editId
-                        ? "Project Type Successfully Edited"
-                        : "Project Type Added Successfully",
+                        ? "Designation Successfully Edited"
+                        : "Designation Added Successfully",
                     icon: "success",
                     confirmButtonColor: "rgb(0, 148, 255)"
                 }).then(() => {
-                    $("#projecttypeName").val("");
-                    $("#projecttypeBtn").html('<i class="fas fa-project-diagram"></i>&nbsp; Add Project Type');
+                    $("#designationName").val("");
+                    $("#designationBtn").html('<i class="fas fa-briefcase"></i>&nbsp; Add Designation');
                     editId = null;
-                    fetchProjectTypes();
+                    fetchdesignation();
                 });
             },
             error: function () {
@@ -683,59 +629,56 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".btn-delete", function () {
-    var id = $(this).data("id");
+        var id = $(this).data("id");
 
-    Swal.fire({
-        title: "Are you sure?",
-        text: "Do you want to delete this project type?",
-        icon: "warning",
-        showCancelButton: true,
-        cancelButtonText: "No, Don't Delete",
-        confirmButtonText: "Yes, Delete it",
-        confirmButtonColor: "rgb(0, 148, 255)",
-        cancelButtonColor: "#d33"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: "projecttypeBackend.php",
-                type: "POST",
-                data: { delete_id: id },
-                dataType: "json",
-                success: function (response) {
-                    Swal.fire({
-                        title: "Deleted!",
-                        text: "The entry has been deleted.",
-                        icon: "success",
-                        confirmButtonColor: "rgb(0, 148, 255)"
-                    }).then(() => {
-                        location.reload();  // ✅ Reload the page after confirmation
-                    });
-                },
-                error: function () {
-                    Swal.fire({
-                        title: "Error!",
-                        text: "Something went wrong!",
-                        icon: "error",
-                        confirmButtonColor: "rgb(0, 148, 255)"
-                    });
-                }
-            });
-        }
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to delete this designation?",
+            icon: "warning",
+            showCancelButton: true,
+            cancelButtonText: "No, Don't Delete",
+            confirmButtonText: "Yes, Delete it",
+            confirmButtonColor: "rgb(0, 148, 255)",
+            cancelButtonColor: "#d33"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "designationBackend.php",
+                    type: "POST",
+                    data: { delete_id: id },
+                    dataType: "json",
+                    success: function (response) {
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "The entry has been deleted.",
+                            icon: "success",
+                            confirmButtonColor: "rgb(0, 148, 255)"
+                        }).then(() => {
+                            location.reload();  // ✅ Reload the page after confirmation
+                        });
+                    },
+                    error: function () {
+                        Swal.fire({
+                            title: "Error!",
+                            text: "Something went wrong!",
+                            icon: "error",
+                            confirmButtonColor: "rgb(0, 148, 255)"
+                        });
+                    }
+                });
+            }
+        });
     });
-});
-
 
     $(document).on("click", ".btn-edit", function () {
         editId = $(this).data("id");
         var currentName = $(this).closest("tr").find("td:nth-child(2)").text();
-        $("#projecttypeName").val(currentName);
-        $("#projecttypeBtn").html('<i class="fas fa-edit"></i>&nbsp; Update');
+        $("#designationName").val(currentName);
+        $("#designationBtn").html('<i class="fas fa-edit"></i>&nbsp; Update');
     });
 });
 
-</script>
-
-
+  </script>
 </body>
 
 </html>

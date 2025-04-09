@@ -7,48 +7,6 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['empUserName'])) {
 }
 ?>
 
-<?php
-if (isset($_GET['rights'])) {
-    $rights = urldecode($_GET['rights']); // Decode URL parameter
-    $rightsArray = explode(',', $rights); // Convert to array
-
-    // Define possible rights and assign numbers
-    $statuses = [
-        'Add' => 1,
-        'Update' => 2,
-        'Delete' => 3,
-        'Add,Update' => 4,
-        'Add,Delete' => 5,
-        'Delete,Update' => 6,
-        'Add,Delete,Update' => 7
-    ];
-
-    // Sort rights array to ensure order consistency
-    sort($rightsArray);
-    $rightsKey = implode(',', $rightsArray); // Convert back to string
-
-    // Determine status number
-    $statusNo = isset($statuses[$rightsKey]) ? $statuses[$rightsKey] : 0; // Default 0 if unknown
-}
-?>
-
-<script>
-    // Get status number from PHP
-    let statusNo = "<?php echo $statusNo; ?>";
-
-    // Update URL without reloading
-    let url = new URL(window.location.href);
-    url.searchParams.set("status", statusNo);
-    window.history.replaceState(null, "", url);
-
-    // Redirect based on status number
-    if (statusNo >= 1 && statusNo <= 7) {
-        window.location.href = `employee_${statusNo}.php`;
-    }
-</script>
-
-
-
 
 
 
@@ -86,6 +44,7 @@ if (isset($_GET['rights'])) {
             display: flex;
             justify-content: center;
             gap: 10px;
+            display: none;
         }
 
         /* Styling for buttons */
@@ -94,18 +53,22 @@ if (isset($_GET['rights'])) {
             background: transparent;
             font-size: 18px;
             transition: transform 0.2s ease-in-out;
+            display: none;
         }
 
         .btn-action:hover {
             transform: scale(1.2);
+            display: none;
         }
 
         .btn-edit {
             color: #28a745;
+            display: none;
         }
 
         .btn-delete {
             color: #dc3545;
+            display: none;
         }
 
         /* Add Customer Button */
@@ -352,6 +315,7 @@ if (isset($_GET['rights'])) {
 
         .action-buttons button {
             margin: 0 5px;
+            display: none;
         }
 
         /* Optional: Change cursor for clickable rows */
@@ -735,6 +699,7 @@ if (isset($_GET['rights'])) {
                                 districtInput.classList.remove("d-none");
                             }
                         });
+
                     </script>
 
                     <?php
@@ -771,7 +736,7 @@ if (isset($_GET['rights'])) {
                                             <th>Photo</th>
                                             <th>Aadhar</th>
                                             <th>Pan</th>
-                                            <th>Action</th>
+                                           
                                         </tr>
                                     </thead>
                                     <tbody id="employeeTableBody">
@@ -790,18 +755,10 @@ if (isset($_GET['rights'])) {
                                                 echo "<td><i class='fas fa-camera-retro photo-icon' onclick='openImageModal(\"" . htmlspecialchars($row['empPic']) . "\")'></i></td>";
                                                 echo "<td><i class='fas fa-id-card aadhar-icon' onclick='openImageModal(\"" . htmlspecialchars($row['empAadhar']) . "\")'></i></td>";
                                                 echo "<td><i class='fas fa-id-badge pan-icon' onclick='openImageModal(\"" . htmlspecialchars($row['empPan']) . "\")'></i></td>";
-
-                                                echo "<td class='action-buttons'>
-                                <button class='btn-action btn-edit' data-id='" . $row['ID'] . "'><i class='fas fa-edit'></i></button>
-                                <button class='btn-action btn-delete delete-btn' data-id='" . $row['ID'] . "'>
-                                    <i class='fas fa-trash-alt' style='color: rgb(238, 153, 129);'></i>
-                                </button>
-                            </td>";
-
                                                 echo "</tr>";
                                             }
                                         } else {
-                                            echo "<tr><td colspan='9'>No employees found</td></tr>";
+                                            echo "<tr><td colspan='8'>No employees found</td></tr>";
                                         }
                                         ?>
                                     </tbody>

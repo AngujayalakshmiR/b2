@@ -7,47 +7,6 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['empUserName'])) {
 }
 ?>
 
-<?php
-if (isset($_GET['rights'])) {
-    $rights = urldecode($_GET['rights']); // Decode URL parameter
-    $rightsArray = explode(',', $rights); // Convert to array
-
-    // Define possible rights and assign numbers
-    $statuses = [
-        'Add' => 1,
-        'Update' => 2,
-        'Delete' => 3,
-        'Add,Update' => 4,
-        'Add,Delete' => 5,
-        'Delete,Update' => 6,
-        'Add,Delete,Update' => 7
-    ];
-
-    // Sort rights array to ensure order consistency
-    sort($rightsArray);
-    $rightsKey = implode(',', $rightsArray); // Convert back to string
-
-    // Determine status number
-    $statusNo = isset($statuses[$rightsKey]) ? $statuses[$rightsKey] : 0; // Default 0 if unknown
-}
-?>
-
-<script>
-    // Get status number from PHP
-    let statusNo = "<?php echo $statusNo; ?>";
-
-    // Update URL without reloading
-    let url = new URL(window.location.href);
-    url.searchParams.set("status", statusNo);
-    window.history.replaceState(null, "", url);
-
-    // Redirect based on status number
-    if (statusNo >= 1 && statusNo <= 7) {
-        window.location.href = `projectcreation_${statusNo}.php`;
-    }
-</script>
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -119,10 +78,12 @@ thead{
 
         .btn-edit {
             color: #28a745;
+            display: none;
         }
 
         .btn-delete {
             color: #dc3545;
+            
         }
 
         /* Add Customer Button */
@@ -739,119 +700,8 @@ document.addEventListener("DOMContentLoaded", function () {
         
                         <!-- Begin Page Content -->
                         <div class="container-fluid">
-                        <div class="container mb-4 mt-4" style="background: white; border-radius: 25px; border: 2px solid rgb(0, 148, 255);">
-    <div class="row">
-        <div class="col-md-12">
-            <form action="projectCreationBackend.php" method="post" id="customerForm" style="font-size:14px;" class="row g-3 mt-3" enctype="multipart/form-data">
-                <input type="hidden" id="selectedEmployeesInput" name="employees">
-
-                <!-- Column 1: Company, Project Type & No. of Days -->
-                <div class="col-md-4 pb-1">
-                    <div class="d-flex align-items-center mb-2">
-                        <select class="form-control" id="companySelect" name="companyName">
-                            <option value="">Select Company</option>
-                            <?php
-                                include 'dbconn.php';
-                                $query = "SELECT ID, companyName FROM customer ORDER BY companyName";
-                                $result = mysqli_query($conn, $query);
-
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    echo "<option value='" . $row['companyName'] . "'>" . $row['companyName'] . "</option>";
-                                }
-                            ?>
-                        </select>
-                        <span onclick="window.location.href='customer.php'">
-                            <i class="fas fa-plus-circle text-primary ml-2" style="cursor: pointer;"></i>
-                        </span>
-                    </div>
-
-                    <div class="d-flex align-items-center mb-2">
-                        <select class="form-control" id="projectTypeSelect" name="projectType">
-                            <option value="">Select Project Type</option>
-                            <?php
-                                include 'dbconn.php';
-                                $query = "SELECT ID, ProjecttypeName FROM projecttype ORDER BY ProjecttypeName";
-                                $result = mysqli_query($conn, $query);
-
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    echo "<option value='" .  $row['ProjecttypeName']. "'>" . $row['ProjecttypeName'] . "</option>";
-                                }
-                            ?>
-                        </select>
-                        <span onclick="window.location.href='projecttype.php'">
-                            <i class="fas fa-plus-circle text-primary ml-2" style="cursor: pointer;"></i>
-                        </span>
-                    </div>
-
-                    <input type="number" class="form-control mb-2" id="employeephnno" name="totalDays" placeholder="Enter No. of Days">
-                </div>
-
-                <!-- Column 2: Project Title & Description -->
-                <div class="col-md-4 pb-1">
-                    <input type="text" class="form-control mb-2" id="projecttitle" name="projectTitle" placeholder="Enter Project title">
-                    <textarea class="form-control mb-2" id="projectdescription" name="description" placeholder="Enter Project Description" rows="2" style="height: 85px;"></textarea>
-                </div>
-
-                <!-- Column 3: File Upload -->
-                <div class="col-md-4 pb-1">
-                    <div class="container d-flex justify-content-center align-items-center" 
-                        style="border: 3px solid rgb(252, 217, 104); background: rgb(252, 217, 104); border-radius: 25px; min-height: 120px;">
-                        <div class="form-group" style="margin-top: 8px; margin-bottom: 8px;">
-                            <label for="requirementfile" class="upload-label d-block font-weight-bold" style="margin-bottom: 0px;">
-                                <i id="requirement" class="fas fa-folder file-icon fa-lg upload-icon" 
-                                    style="text-align: center; display: block; cursor: pointer; margin-bottom: 12px; color: white;">
-                                </i> 
-                                <p class="mt-1 justify-content-center" style="font-size: 14px; text-align: center; margin-bottom: 10px; color: white;">
-                                    Upload Requirement 
-                                </p>
-                            </label>
-                            <input type="file" class="form-control-file d-none" id="requirementfile" name="reqfile"
-                                onchange="updateIcon(this, 'requirement', 'requirementfile-name')">
-                                <p class="file-name text-muted" id="requirementfile-name">
-                                    <?php echo isset($fileName) ? $fileName : "No file chosen"; ?>
-                                </p>
-
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Employee Selection and Project Submission Row -->
-                <div class="row align-items-center mb-3 w-100">
-                    <!-- Employees (9 columns) -->
-                    <div class="col-md-9 d-flex align-items-center">
-                        <!-- Add Employee Button -->
-                        <button type="button" class="btn mt-2 d-flex align-items-center" id="addAccessBtn"
-                            style="background: rgb(238, 153, 129); color: white; font-size: 14px; align-self: flex-start; white-space: nowrap;">
-                            <i class="fas fa-user-plus"></i>&nbsp; Employee
-                        </button>
-                        <span onclick="window.location.href='employee.php'">
-                            <i class="fas fa-plus-circle text-primary ml-2" style="cursor: pointer;"></i>
-                        </span>
-
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <div id="selectedEmployeesContainer" class="mt-2">
-                            <span id="selectedEmployees" employees>--Nil--</span>
-                        </div>
-
-                        <!-- Dropdown Container -->
-                        <div id="dropdownContainer" class="mt-2 p-3 rounded shadow" 
-                            style="display: none; border: 1px solid #ccc; background: white; position: absolute; width: 10%; min-width: 280px; z-index: 100;">
-                            <div id="employeeDropdown" class="row"></div>
-                        </div>
-                    </div>
-
-                    <!-- Add Project Button (3 columns) -->
-                    <div class="col-md-3 d-flex justify-content-md-end justify-content-center">
-                        <button type="submit" class="btn" id="customerbtn" 
-                            style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: auto;">
-                            <i class="fas fa-file-alt"></i>&nbsp; Add Project
-                        </button>
-                    </div>
-                </div>
-
-            </form>
-        </div>
-    </div>
+                        <div class="container mb-4 mt-4" style="background: white;">
+    
 </div>
 
 
@@ -906,8 +756,7 @@ $result = mysqli_query($conn, $query);
                             <td><?php echo $row['totalDays']; ?></td>
                             <td><?php echo $row['employees']; ?></td>
                             <td class="action-buttons">
-                                <button class="btn-action btn-edit" data-id="<?php echo $row['ID']; ?>"><i class="fas fa-edit"></i></button>
-
+                                
                                 <button class="btn-action btn-delete" onclick="deleteProject(<?php echo $row['ID']; ?>)"><i class="fas fa-trash-alt" style="color: rgb(238, 153, 129);"></i></button>
                             </td>
                         </tr>
@@ -1041,70 +890,6 @@ $result = mysqli_query($conn, $query);
     }
 }
 </script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-    const rows = document.querySelectorAll('#dataTable tbody tr');
-
-    rows.forEach(row => {
-        row.addEventListener('click', function (event) {
-            const dateCell = row.cells[1]; 
-            const companyCell = row.cells[3]; 
-            const projectTypeCell = row.cells[4]; 
-            const projectTitleCell = row.cells[5]; 
-
-            const company = companyCell.textContent.trim();
-            const projectType = projectTypeCell.textContent.trim();
-            const projectTitle = projectTitleCell.textContent.trim();
-            const totalDays = row.cells[6] ? row.cells[6].textContent.trim() : ''; 
-            const teammates = row.cells[7] ? row.cells[7].textContent.trim() : ''; 
-
-            let paramKey = '';
-            let paramValue = '';
-
-            if (event.target === dateCell) {
-                paramKey = 'date';
-                paramValue = dateCell.textContent.trim();
-                window.location.href = `reports.php?${paramKey}=${encodeURIComponent(paramValue)}`;
-            } 
-            else if (event.target === companyCell || event.target === projectTypeCell || event.target === projectTitleCell) {
-                // Redirect to reports.php when clicking on company, project type, or project title
-                const queryParams = new URLSearchParams({
-                    company: company,
-                    title: projectTitle,
-                    type: projectType
-                }).toString();
-                window.location.href = `reports.php?${queryParams}`;
-            } 
-            else {
-                // Fetch workingDays from server before redirecting to requirement.php
-                fetch(`calculate_working_days.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(projectTitle)}&type=${encodeURIComponent(projectType)}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        let workingDays = data.workingDays || 0;
-
-                        const queryParams = new URLSearchParams({
-                            company: company,
-                            title: projectTitle,
-                            type: projectType,
-                            totalDays: totalDays,
-                            workingDays: workingDays,
-                            teammates: teammates
-                        }).toString();
-
-                        window.location.href = `admin-requirement.php?${queryParams}`;
-                    })
-                    .catch(error => console.error('Error fetching working days:', error));
-            }
-        });
-    });
-});
-
-</script>
-
-
-</script>
-
-
 
 <script>
   $(document).ready(function () {

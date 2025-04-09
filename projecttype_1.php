@@ -7,47 +7,6 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['empUserName'])) {
 }
 ?>
 
-<?php
-if (isset($_GET['rights'])) {
-    $rights = urldecode($_GET['rights']); // Decode URL parameter
-    $rightsArray = explode(',', $rights); // Convert to array
-
-    // Define possible rights and assign numbers
-    $statuses = [
-        'Add' => 1,
-        'Update' => 2,
-        'Delete' => 3,
-        'Add,Update' => 4,
-        'Add,Delete' => 5,
-        'Delete,Update' => 6,
-        'Add,Delete,Update' => 7
-    ];
-
-    // Sort rights array to ensure order consistency
-    sort($rightsArray);
-    $rightsKey = implode(',', $rightsArray); // Convert back to string
-
-    // Determine status number
-    $statusNo = isset($statuses[$rightsKey]) ? $statuses[$rightsKey] : 0; // Default 0 if unknown
-}
-?>
-
-<script>
-    // Get status number from PHP
-    let statusNo = "<?php echo $statusNo; ?>";
-
-    // Update URL without reloading
-    let url = new URL(window.location.href);
-    url.searchParams.set("status", statusNo);
-    window.history.replaceState(null, "", url);
-
-    // Redirect based on status number
-    if (statusNo >= 1 && statusNo <= 7) {
-        window.location.href = `projecttype_${statusNo}.php`;
-    }
-</script>
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -97,10 +56,12 @@ thead{
 
         .btn-edit {
             color: #28a745;
+            display: none;
         }
 
         .btn-delete {
             color: #dc3545;
+            display: none;
         }
 
         /* Add Customer Button */
@@ -512,7 +473,6 @@ thead{
         <tr class="thead">
             <th>S.no</th>
             <th>Project Type</th>
-            <th>Action</th>
         </tr>
     </thead>
     <tbody id="projecttype_table">
@@ -604,7 +564,7 @@ $(document).ready(function () {
 
     function fetchProjectTypes() {
         $.ajax({
-            url: "projecttypeBackend.php",
+            url: "projecttypeBackend_1.php",
             type: "GET",
             dataType: "json",
             success: function (data) {
@@ -614,7 +574,7 @@ $(document).ready(function () {
                 }
 
                 if (data.count === 0) {
-                    $("#projecttype_table").html("<tr><td colspan='3'>No project types found</td></tr>");
+                    $("#projecttype_table").html("<tr><td colspan='2'>No project types found</td></tr>");
                 } else {
                     $("#projecttype_table").html(data.tableData); // Insert new rows
                 }
@@ -652,7 +612,7 @@ $(document).ready(function () {
             : { projecttypeName: projecttype };
 
         $.ajax({
-            url: "projecttypeBackend.php",
+            url: "projecttypeBackend_1.php",
             type: "POST",
             data: requestData,
             dataType: "json",
@@ -697,7 +657,7 @@ $(document).ready(function () {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: "projecttypeBackend.php",
+                url: "projecttypeBackend_1.php",
                 type: "POST",
                 data: { delete_id: id },
                 dataType: "json",

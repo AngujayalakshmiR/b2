@@ -10,45 +10,6 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['empUserName'])) {
 }
 ?>
 
-<?php
-if (isset($_GET['rights'])) {
-    $rights = urldecode($_GET['rights']); // Decode URL parameter
-    $rightsArray = explode(',', $rights); // Convert to array
-
-    // Define possible rights and assign numbers
-    $statuses = [
-        'Add' => 1,
-        'Update' => 2,
-        'Delete' => 3,
-        'Add,Update' => 4,
-        'Add,Delete' => 5,
-        'Delete,Update' => 6,
-        'Add,Delete,Update' => 7
-    ];
-
-    // Sort rights array to ensure order consistency
-    sort($rightsArray);
-    $rightsKey = implode(',', $rightsArray); // Convert back to string
-
-    // Determine status number
-    $statusNo = isset($statuses[$rightsKey]) ? $statuses[$rightsKey] : 0; // Default 0 if unknown
-}
-?>
-
-<script>
-    // Get status number from PHP
-    let statusNo = "<?php echo $statusNo; ?>";
-
-    // Update URL without reloading
-    let url = new URL(window.location.href);
-    url.searchParams.set("status", statusNo);
-    window.history.replaceState(null, "", url);
-
-    // Redirect based on status number
-    if (statusNo >= 1 && statusNo <= 7) {
-        window.location.href = `customer_${statusNo}.php`;
-    }
-</script>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -554,7 +515,7 @@ if (isset($_GET['rights'])) {
     </div></div>
 <div class="column">
     <div class="pb-2 d-flex justify-content-sm-end justify-content-center align-items-center">
-        <button type="submit" class="btn" id="customerbtn"
+        <button type="submit" class="btn" id="customerbtn" disabled
             style="background: rgb(0, 148, 255); border-radius: 25px; color: white;">
             <i class="fas fa-user"></i>&nbsp; Add Customer
         </button>
@@ -1001,6 +962,15 @@ $(document).on("click", ".btn-delete", function () {
                 $("#pincode").val(customer.pincode);
 
                 $("#customerbtn").off("click").text("Update Customer").attr("data-update", customerId);
+
+
+                $("#buttonText").text("Update Customer"); // Change button text for update mode
+                    $("#buttonText").text("Update Customer"); // Change button label
+    $("#customerbtn").prop("disabled", false); // Enable the button
+    $("#customerbtn").css({
+        "opacity": "1",
+        "cursor": "pointer"
+    });
             }
         });
     });

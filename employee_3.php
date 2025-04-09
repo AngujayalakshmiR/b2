@@ -7,48 +7,6 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['empUserName'])) {
 }
 ?>
 
-<?php
-if (isset($_GET['rights'])) {
-    $rights = urldecode($_GET['rights']); // Decode URL parameter
-    $rightsArray = explode(',', $rights); // Convert to array
-
-    // Define possible rights and assign numbers
-    $statuses = [
-        'Add' => 1,
-        'Update' => 2,
-        'Delete' => 3,
-        'Add,Update' => 4,
-        'Add,Delete' => 5,
-        'Delete,Update' => 6,
-        'Add,Delete,Update' => 7
-    ];
-
-    // Sort rights array to ensure order consistency
-    sort($rightsArray);
-    $rightsKey = implode(',', $rightsArray); // Convert back to string
-
-    // Determine status number
-    $statusNo = isset($statuses[$rightsKey]) ? $statuses[$rightsKey] : 0; // Default 0 if unknown
-}
-?>
-
-<script>
-    // Get status number from PHP
-    let statusNo = "<?php echo $statusNo; ?>";
-
-    // Update URL without reloading
-    let url = new URL(window.location.href);
-    url.searchParams.set("status", statusNo);
-    window.history.replaceState(null, "", url);
-
-    // Redirect based on status number
-    if (statusNo >= 1 && statusNo <= 7) {
-        window.location.href = `employee_${statusNo}.php`;
-    }
-</script>
-
-
-
 
 
 
@@ -102,6 +60,7 @@ if (isset($_GET['rights'])) {
 
         .btn-edit {
             color: #28a745;
+            display: none;
         }
 
         .btn-delete {
@@ -470,134 +429,9 @@ if (isset($_GET['rights'])) {
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    <div class="container mb-4 mt-4" style="background: white; border-radius: 25px; border: 2px solid rgb(0, 148, 255);">
+                    <div class="container mb-4 mt-4" style="background: white; ">
                         <div class="column">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <form id="customerForm" class="row g-3 mt-3" action="addEmployeeBackend.php" method="POST" enctype="multipart/form-data" validate>
-                                        <!-- Column 1: Name & Company Name -->
-                                        <input type="hidden" id="employee_id" name="employee_id">
-                                        <input type="hidden" id="old_employeePhoto" name="old_employeePhoto">
-                                        <input type="hidden" id="old_aadharCard" name="old_aadharCard">
-                                        <input type="hidden" id="old_panCard" name="old_panCard">
-
-                                        <div class="col-md-3 pb-1">
-                                            <input type="text" class="form-control mb-2" id="employeename" name="employeename" placeholder="Enter Employee Name" required>
-                                            <div class="d-flex align-items-center">
-                                                <select class="form-control mb-2 w-100" id="designation" name="designation" required>
-                                                    <option value="">Select Designation</option>
-                                                    <?php
-                                                    include("dbconn.php");
-
-                                                    // Fetch designations
-                                                    $sql = "SELECT ID, DesignationName FROM designation";
-                                                    $result = $conn->query($sql);
-
-                                                    // Populate dropdown
-                                                    if ($result->num_rows > 0) {
-                                                        while ($row = $result->fetch_assoc()) {
-                                                            echo '<option value="' . $row['DesignationName'] . '">' . $row['DesignationName'] . '</option>';
-                                                        }
-                                                    } else {
-                                                        echo '<option value="">No Designations Found</option>';
-                                                    }
-
-                                                    // Close connection
-                                                    ?>
-                                                </select>
-
-
-                                                <span onclick="window.location.href='designation.php'" style="cursor: pointer; margin-left: 8px; align-items:center;">
-                                                    <i class="fas fa-plus-circle text-primary" style="vertical-align: middle;"></i>
-                                                </span>
-                                            </div>
-                                            <input type="text" class="form-control mb-2" id="employeephnno" name="employeephnno" placeholder="Enter Phone Number" required>
-                                        </div>
-
-                                        <!-- Column 2: Address & District -->
-                                        <div class="col-md-3 pb-1">
-                                            <textarea class="form-control mb-2" id="customeraddress" name="customeraddress" placeholder="Enter Employee Address" rows="2" style="height: 85px;" required></textarea>
-                                            <select class="form-control mb-2" id="country" name="country" required>
-                                                <option value="">Select Country</option>
-                                            </select>
-                                        </div>
-
-                                        <!-- Column 3: State & District -->
-                                        <div class="col-md-2 pb-1">
-                                            <select class="form-control mb-2 d-none" id="stateDropdown" name="stateDropdown">
-                                                <option value="">Select State</option>
-                                            </select>
-                                            <input type="text" class="form-control mb-2" id="stateInput" name="state" placeholder="Enter State">
-                                            <select class="form-control mb-2 d-none" id="districtDropdown" name="district">
-                                                <option value="">Select District</option>
-                                            </select>
-                                            <input type="text" class="form-control mb-2" id="districtInput" name="district" placeholder="Enter District">
-                                            <input type="text" class="form-control mb-2" id="pincode" name="pincode" placeholder="Enter Pincode" required>
-                                        </div>
-
-                                        <!-- Column 4: File Uploads & Credentials -->
-                                        <div class="col-md-4 pb-1">
-                                            <div class="row">
-                                                <!-- File Upload Section -->
-                                                <div class="col-md-4 col-sm-6 pb-2">
-                                                    <div class="form-group">
-                                                        <label for="employeePhoto" class="upload-label d-block font-weight-bold" style="margin-bottom: 0px;">
-                                                            <i id="photoIcon" class="fas fa-camera-retro fa-lg" style="text-align: center; display: block; cursor: pointer;margin-bottom: 8px;color: rgb(222, 141, 197);"></i>
-                                                            <p class="mt-1" style="font-size: 14px; text-align:center;margin-bottom: 5px;">Upload Photo</p>
-                                                        </label>
-                                                        <input type="file" class="form-control-file" id="employeePhoto" name="employeePhoto" onchange="updateIcon(this, 'photoIcon', 'photoFileName')"
-                                                            style="opacity: 0; position: absolute; width: 1px; height: 1px;">
-
-                                                        <p class="file-name text-muted" id="photoFileName" style="font-size: 14px; text-align:center;">No file chosen</p>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-4 col-sm-6 pb-2">
-                                                    <div class="form-group">
-                                                        <label for="aadharCard" class="upload-label d-block font-weight-bold" style="margin-bottom: 0px;">
-                                                            <i id="aadharIcon" class="fas fa-id-card fa-lg " style="text-align: center; display: block; cursor: pointer;margin-bottom: 8px;color: rgb(140, 221, 130);"></i>
-                                                            <p class="mt-1" style="font-size: 14px; text-align:center;margin-bottom: 5px;">Upload Aadhar</p>
-                                                        </label>
-                                                        <input type="file" class="form-control-file" id="aadharCard" name="aadharCard" onchange="updateIcon(this, 'aadharIcon', 'aadharFileName')"
-                                                            style="opacity: 0; position: absolute; width: 1px; height: 1px;">
-                                                        <p class="file-name text-muted" id="aadharFileName" style="font-size: 14px; text-align:center;">No file chosen</p>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-4 col-sm-12 pb-2">
-                                                    <div class="form-group">
-                                                        <label for="panCard" class="upload-label d-block font-weight-bold" style="margin-bottom: 0px;">
-                                                            <i id="panIcon" class="fas fa-id-badge fa-lg " style="text-align: center; display: block; cursor: pointer;margin-bottom: 8px;color: rgb(246, 185, 114);"></i>
-                                                            <p class="mt-1" style="font-size: 14px; text-align:center; margin-bottom: 5px;">Upload Pan</p>
-                                                        </label>
-                                                        <input type="file" class="form-control-file " id="panCard" name="panCard" onchange="updateIcon(this, 'panIcon', 'panFileName')" style="opacity: 0; position: absolute; width: 1px; height: 1px;">
-                                                        <p class="file-name text-muted" id="panFileName" style="font-size: 14px; text-align:center;">No file chosen</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Username and Password Section -->
-                                            <div class="row">
-                                                <div class="col-sm-6 pb-2">
-                                                    <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username" required>
-                                                </div>
-                                                <div class="col-sm-6 pb-2">
-                                                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                </div>
-                            </div>
-                            <!-- Submit Button -->
-                            <div class="column">
-                                <div class="pb-2 d-flex justify-content-sm-end justify-content-center align-items-center">
-                                    <button type="submit" class="btn" id="customerbtn"
-                                        style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: auto;">
-                                        <i class="fas fa-users"></i>&nbsp; <span id="buttonText">Add Employee</span>
-                                    </button>
-                                </div>
-                            </div>
-                            </form>
+                                   
                         </div>
                     </div>
                     <script>

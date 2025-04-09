@@ -7,46 +7,6 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['empUserName'])) {
 }
 ?>
 
-<?php
-if (isset($_GET['rights'])) {
-    $rights = urldecode($_GET['rights']); // Decode URL parameter
-    $rightsArray = explode(',', $rights); // Convert to array
-
-    // Define possible rights and assign numbers
-    $statuses = [
-        'Add' => 1,
-        'Update' => 2,
-        'Delete' => 3,
-        'Add,Update' => 4,
-        'Add,Delete' => 5,
-        'Delete,Update' => 6,
-        'Add,Delete,Update' => 7
-    ];
-
-    // Sort rights array to ensure order consistency
-    sort($rightsArray);
-    $rightsKey = implode(',', $rightsArray); // Convert back to string
-
-    // Determine status number
-    $statusNo = isset($statuses[$rightsKey]) ? $statuses[$rightsKey] : 0; // Default 0 if unknown
-}
-?>
-
-<script>
-    // Get status number from PHP
-    let statusNo = "<?php echo $statusNo; ?>";
-
-    // Update URL without reloading
-    let url = new URL(window.location.href);
-    url.searchParams.set("status", statusNo);
-    window.history.replaceState(null, "", url);
-
-    // Redirect based on status number
-    if (statusNo >= 1 && statusNo <= 7) {
-        window.location.href = `projecttype_${statusNo}.php`;
-    }
-</script>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -101,6 +61,7 @@ thead{
 
         .btn-delete {
             color: #dc3545;
+            display: none;
         }
 
         /* Add Customer Button */
@@ -482,7 +443,7 @@ thead{
         <input type="text" class="form-control mb-2" id="projecttypeName" name="projecttypeName" placeholder="Enter Project Type" required>
     </div>
     <div class="col-md-4 pt-2 pb-2 d-flex justify-content-center align-items-center">
-        <button type="submit" id="projecttypeBtn" class="btn" style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: 190px;">
+        <button type="submit" id="projecttypeBtn" class="btn" style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: 190px;" disabled>
             <i class="fas fa-project-diagram"></i>&nbsp; Add Project Type
         </button>
     </div>
@@ -635,52 +596,58 @@ $(document).ready(function () {
     fetchProjectTypes(); // Fetch data on page load
 
     $("#projecttypeForm").submit(function (e) {
-        e.preventDefault();
-        var projecttype = $("#projecttypeName").val().trim();
-        if (projecttype === "") {
+    e.preventDefault();
+
+    // Allow submission only if editId is not null (i.e., we're in update mode)
+    if (!editId) {
+        return; // Don't allow form submission when not in edit mode
+    }
+
+    var projecttype = $("#projecttypeName").val().trim();
+    if (projecttype === "") {
+        Swal.fire({
+            title: "Error!",
+            text: "Please enter a project type!",
+            icon: "error",
+            confirmButtonColor: "rgb(0, 148, 255)"
+        });
+        return;
+    }
+
+    let requestData = { edit_id: editId, projecttypeName: projecttype };
+
+    $.ajax({
+        url: "projecttypeBackend.php",
+        type: "POST",
+        data: requestData,
+        dataType: "json",
+        success: function (response) {
+            Swal.fire({
+                title: "Updated!",
+                text: "Project Type Successfully Edited",
+                icon: "success",
+                confirmButtonColor: "rgb(0, 148, 255)"
+            }).then(() => {
+                $("#projecttypeName").val("");
+                $("#projecttypeBtn")
+                    .html('<i class="fas fa-project-diagram"></i>&nbsp; Add Project Type')
+                    .prop("disabled", true); // 🔧 disable again after update
+
+                editId = null;
+                fetchProjectTypes();
+            });
+        },
+        error: function () {
             Swal.fire({
                 title: "Error!",
-                text: "Please enter a project type!",
+                text: "Something went wrong!",
                 icon: "error",
                 confirmButtonColor: "rgb(0, 148, 255)"
             });
-            return;
         }
-
-        let requestData = editId
-            ? { edit_id: editId, projecttypeName: projecttype }
-            : { projecttypeName: projecttype };
-
-        $.ajax({
-            url: "projecttypeBackend.php",
-            type: "POST",
-            data: requestData,
-            dataType: "json",
-            success: function (response) {
-                Swal.fire({
-                    title: editId ? "Updated!" : "Success!",
-                    text: editId
-                        ? "Project Type Successfully Edited"
-                        : "Project Type Added Successfully",
-                    icon: "success",
-                    confirmButtonColor: "rgb(0, 148, 255)"
-                }).then(() => {
-                    $("#projecttypeName").val("");
-                    $("#projecttypeBtn").html('<i class="fas fa-project-diagram"></i>&nbsp; Add Project Type');
-                    editId = null;
-                    fetchProjectTypes();
-                });
-            },
-            error: function () {
-                Swal.fire({
-                    title: "Error!",
-                    text: "Something went wrong!",
-                    icon: "error",
-                    confirmButtonColor: "rgb(0, 148, 255)"
-                });
-            }
-        });
     });
+});
+
 
     $(document).on("click", ".btn-delete", function () {
     var id = $(this).data("id");
@@ -725,12 +692,16 @@ $(document).ready(function () {
 });
 
 
-    $(document).on("click", ".btn-edit", function () {
-        editId = $(this).data("id");
-        var currentName = $(this).closest("tr").find("td:nth-child(2)").text();
-        $("#projecttypeName").val(currentName);
-        $("#projecttypeBtn").html('<i class="fas fa-edit"></i>&nbsp; Update');
-    });
+$(document).on("click", ".btn-edit", function () {
+    editId = $(this).data("id");
+    var currentName = $(this).closest("tr").find("td:nth-child(2)").text();
+    $("#projecttypeName").val(currentName);
+
+    $("#projecttypeBtn")
+        .html('<i class="fas fa-edit"></i>&nbsp; Update')
+        .prop("disabled", false); // Enable only when editing
+});
+
 });
 
 </script>

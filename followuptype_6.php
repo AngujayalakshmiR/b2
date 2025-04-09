@@ -7,51 +7,12 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['empUserName'])) {
 }
 ?>
 
-<?php
-if (isset($_GET['rights'])) {
-    $rights = urldecode($_GET['rights']); // Decode URL parameter
-    $rightsArray = explode(',', $rights); // Convert to array
-
-    // Define possible rights and assign numbers
-    $statuses = [
-        'Add' => 1,
-        'Update' => 2,
-        'Delete' => 3,
-        'Add,Update' => 4,
-        'Add,Delete' => 5,
-        'Delete,Update' => 6,
-        'Add,Delete,Update' => 7
-    ];
-
-    // Sort rights array to ensure order consistency
-    sort($rightsArray);
-    $rightsKey = implode(',', $rightsArray); // Convert back to string
-
-    // Determine status number
-    $statusNo = isset($statuses[$rightsKey]) ? $statuses[$rightsKey] : 0; // Default 0 if unknown
-}
-?>
-
-<script>
-    // Get status number from PHP
-    let statusNo = "<?php echo $statusNo; ?>";
-
-    // Update URL without reloading
-    let url = new URL(window.location.href);
-    url.searchParams.set("status", statusNo);
-    window.history.replaceState(null, "", url);
-
-    // Redirect based on status number
-    if (statusNo >= 1 && statusNo <= 7) {
-        window.location.href = `projecttype_${statusNo}.php`;
-    }
-</script>
-
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -60,8 +21,8 @@ if (isset($_GET['rights'])) {
     <link rel="icon" type="image/png" href="img/ktglogo.jpg">
 
     <title>Task Manager</title>
-<!-- Load jQuery first -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
@@ -69,8 +30,6 @@ if (isset($_GET['rights'])) {
         rel="stylesheet">
         <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <!-- Custom styles for this template-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <style>
 thead{
@@ -405,7 +364,8 @@ thead{
     <!-- Page Wrapper -->
     <div id="wrapper">
 
-    <?php include ("sidebar.php"); ?>
+        <!-- Sidebar -->
+        <?php include ("sidebar.php"); ?>
 
         <!-- End of Sidebar -->
 
@@ -424,19 +384,13 @@ thead{
                    <!-- Header Section -->
 <div class="mr-auto d-flex align-items-center pl-3 py-2">
     <h4 class="text-dark font-weight-bold mr-4" style="color: rgb(15,29,64);  margin-top: 5px;">
-        Master > Project Type
+        Master > Followup Type
     </h4>
 </div>
 
 <!-- Customer Modal (No header, reduced width) -->
 <!-- Include Font Awesome for Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-
-
-
-
-
-                   
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -477,13 +431,13 @@ thead{
            <div class="container custom-container mb-4 mt-4" style="background: white; border-radius: 25px; border: 2px solid rgb(0, 148, 255);">
     <div class="row">
         <div class="col-12">
-        <form class="row g-10" id="projecttypeForm">
+        <form class="row g-10" id="followuptypeForm">
     <div class="col-md-8 pt-2 d-flex align-items-center">
-        <input type="text" class="form-control mb-2" id="projecttypeName" name="projecttypeName" placeholder="Enter Project Type" required>
+        <input type="text" class="form-control mb-2" id="followuptypeName" name="followuptypeName" placeholder="Enter FollowUp Type" required>
     </div>
     <div class="col-md-4 pt-2 pb-2 d-flex justify-content-center align-items-center">
-        <button type="submit" id="projecttypeBtn" class="btn" style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: 190px;">
-            <i class="fas fa-project-diagram"></i>&nbsp; Add Project Type
+        <button type="submit" id="followuptypeBtn" class="btn" style="background: rgb(0, 148, 255); border-radius: 25px; color: white; width: 190px;" disabled>
+            <i class="fas fa-fw fa-comment-dots"></i>&nbsp; Add FollowUp 
         </button>
     </div>
 </form>
@@ -494,32 +448,36 @@ thead{
 
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
-<div class="card-header py-3">
+    <div class="card-header py-3">
     <p class="m-0" style="font-size: 16px;color:rgb(23, 25, 28);font-style: normal;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    color: rgb(23, 25, 28);
     font-size: 16px;
-    font-weight: 500;">
-        <b>Project Type Details</b> 
-        <span class="header-counter">0</span> <!-- Counter next to heading -->
-    </p>
-</div>
+    font-weight: 500;"><b>FollowUp Type Details</b> 
+        <span class="header-counter">0</span>  <!-- Counter next to heading -->
+</p>
+
+
+
+</form></h6>
+       
+    </div>
     <div class="card-body">
         <div class="table-responsive">
         <table class="table table-bordered text-center" style="font-size:14px;" id="dataTable" width="100%" cellspacing="0"> 
     <thead>
         <tr class="thead">
             <th>S.no</th>
-            <th>Project Type</th>
+            <th>FollowUp Type</th>
             <th>Action</th>
         </tr>
     </thead>
-    <tbody id="projecttype_table">
+    <tbody id="followuptype_table">
         <!-- Project Types will be loaded here dynamically -->
     </tbody>
 </table>
-
         </div>
     </div>
 </div>
@@ -571,7 +529,7 @@ thead{
             </div>
         </div>
     </div>
-   <!-- jQuery (Must be loaded first) -->
+    <!-- jQuery (Must be loaded first) -->
 <script src="vendor/jquery/jquery.min.js"></script>
 
 <!-- Bootstrap core JavaScript -->
@@ -602,9 +560,9 @@ $(document).ready(function () {
     let editId = null;
     let dataTable = $("#dataTable").DataTable(); // Initialize DataTable
 
-    function fetchProjectTypes() {
+    function fetchfollowupTypes() {
         $.ajax({
-            url: "projecttypeBackend.php",
+            url: "followuptypeBackend.php",
             type: "GET",
             dataType: "json",
             success: function (data) {
@@ -614,9 +572,9 @@ $(document).ready(function () {
                 }
 
                 if (data.count === 0) {
-                    $("#projecttype_table").html("<tr><td colspan='3'>No project types found</td></tr>");
+                    $("#followuptype_table").html("<tr><td colspan='3'>No FollowUp types found</td></tr>");
                 } else {
-                    $("#projecttype_table").html(data.tableData); // Insert new rows
+                    $("#followuptype_table").html(data.tableData); // Insert new rows
                 }
 
                 $(".header-counter").text(data.count);
@@ -632,62 +590,68 @@ $(document).ready(function () {
         });
     }
 
-    fetchProjectTypes(); // Fetch data on page load
+    fetchfollowupTypes(); // Fetch data on page load
 
-    $("#projecttypeForm").submit(function (e) {
-        e.preventDefault();
-        var projecttype = $("#projecttypeName").val().trim();
-        if (projecttype === "") {
-            Swal.fire({
-                title: "Error!",
-                text: "Please enter a project type!",
-                icon: "error",
-                confirmButtonColor: "rgb(0, 148, 255)"
-            });
-            return;
-        }
+    $("#followuptypeForm").submit(function (e) {
+    e.preventDefault();
 
-        let requestData = editId
-            ? { edit_id: editId, projecttypeName: projecttype }
-            : { projecttypeName: projecttype };
+    // 🚫 Prevent submission if not in edit mode
+    if (!editId) return;
 
-        $.ajax({
-            url: "projecttypeBackend.php",
-            type: "POST",
-            data: requestData,
-            dataType: "json",
-            success: function (response) {
-                Swal.fire({
-                    title: editId ? "Updated!" : "Success!",
-                    text: editId
-                        ? "Project Type Successfully Edited"
-                        : "Project Type Added Successfully",
-                    icon: "success",
-                    confirmButtonColor: "rgb(0, 148, 255)"
-                }).then(() => {
-                    $("#projecttypeName").val("");
-                    $("#projecttypeBtn").html('<i class="fas fa-project-diagram"></i>&nbsp; Add Project Type');
-                    editId = null;
-                    fetchProjectTypes();
-                });
-            },
-            error: function () {
-                Swal.fire({
-                    title: "Error!",
-                    text: "Something went wrong!",
-                    icon: "error",
-                    confirmButtonColor: "rgb(0, 148, 255)"
-                });
-            }
+    var followuptype = $("#followuptypeName").val().trim();
+
+    if (followuptype === "") {
+        Swal.fire({
+            icon: "warning",
+            title: "Oops!",
+            text: "Please enter a FollowUp type!",
         });
+        return;
+    }
+
+    let requestData = {
+        edit_id: editId,
+        followuptypeName: followuptype
+    };
+
+    $.ajax({
+        url: "followuptypeBackend.php",
+        type: "POST",
+        data: requestData,
+        dataType: "json",
+        success: function (response) {
+            Swal.fire({
+                icon: "success",
+                title: "FollowUp Type Updated!",
+                text: "Successfully edited the FollowUp type.",
+                confirmButtonColor: "rgb(0, 148, 255)",
+            }).then(() => {
+                // Reset form and button
+                $("#followuptypeName").val("");
+                $("#followuptypeBtn")
+                    .html('<i class="fas fa-fw fa-comment-dots"></i>&nbsp; Add FollowUp')
+                    .prop("disabled", true); // 🔒 Disable after update
+
+                editId = null;
+                fetchfollowupTypes(); // 🔁 Refresh list
+            });
+        },
+        error: function () {
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: "Something went wrong!",
+            });
+        }
     });
+});
 
     $(document).on("click", ".btn-delete", function () {
     var id = $(this).data("id");
 
     Swal.fire({
         title: "Are you sure?",
-        text: "Do you want to delete this project type?",
+        text: "Do you want to delete this followup type?",
         icon: "warning",
         showCancelButton: true,
         cancelButtonText: "No, Don't Delete",
@@ -697,7 +661,7 @@ $(document).ready(function () {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: "projecttypeBackend.php",
+                url: "followuptypeBackend.php",
                 type: "POST",
                 data: { delete_id: id },
                 dataType: "json",
@@ -724,18 +688,18 @@ $(document).ready(function () {
     });
 });
 
+$(document).on("click", ".btn-edit", function () {
+    editId = $(this).data("id");
+    var currentName = $(this).closest("tr").find("td:nth-child(2)").text();
+    $("#followuptypeName").val(currentName);
 
-    $(document).on("click", ".btn-edit", function () {
-        editId = $(this).data("id");
-        var currentName = $(this).closest("tr").find("td:nth-child(2)").text();
-        $("#projecttypeName").val(currentName);
-        $("#projecttypeBtn").html('<i class="fas fa-edit"></i>&nbsp; Update');
-    });
+    $("#followuptypeBtn")
+        .html('<i class="fas fa-edit"></i>&nbsp; Update')
+        .prop("disabled", false); // Enable only when editing
+});
 });
 
 </script>
-
-
 </body>
 
 </html>

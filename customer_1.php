@@ -10,46 +10,6 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['empUserName'])) {
 }
 ?>
 
-<?php
-if (isset($_GET['rights'])) {
-    $rights = urldecode($_GET['rights']); // Decode URL parameter
-    $rightsArray = explode(',', $rights); // Convert to array
-
-    // Define possible rights and assign numbers
-    $statuses = [
-        'Add' => 1,
-        'Update' => 2,
-        'Delete' => 3,
-        'Add,Update' => 4,
-        'Add,Delete' => 5,
-        'Delete,Update' => 6,
-        'Add,Delete,Update' => 7
-    ];
-
-    // Sort rights array to ensure order consistency
-    sort($rightsArray);
-    $rightsKey = implode(',', $rightsArray); // Convert back to string
-
-    // Determine status number
-    $statusNo = isset($statuses[$rightsKey]) ? $statuses[$rightsKey] : 0; // Default 0 if unknown
-}
-?>
-
-<script>
-    // Get status number from PHP
-    let statusNo = "<?php echo $statusNo; ?>";
-
-    // Update URL without reloading
-    let url = new URL(window.location.href);
-    url.searchParams.set("status", statusNo);
-    window.history.replaceState(null, "", url);
-
-    // Redirect based on status number
-    if (statusNo >= 1 && statusNo <= 7) {
-        window.location.href = `customer_${statusNo}.php`;
-    }
-</script>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -85,6 +45,7 @@ if (isset($_GET['rights'])) {
             display: flex;
             justify-content: center;
             gap: 10px;
+            display: none;
         }
 
         /* Styling for buttons */
@@ -93,18 +54,22 @@ if (isset($_GET['rights'])) {
             background: transparent;
             font-size: 18px;
             transition: transform 0.2s ease-in-out;
+            display: none;
         }
 
         .btn-action:hover {
             transform: scale(1.2);
+            display: none;
         }
 
         .btn-edit {
             color: #28a745;
+            display: none;
         }
 
         .btn-delete {
             color: #dc3545;
+            display: none;
         }
 
         /* Add Customer Button */
@@ -744,7 +709,6 @@ countryDropdown.addEventListener("change", function() {
                     <th>Company Name</th>
                     <th>Contact</th>
                     <th>Address</th>
-                    <th>Action</th>
                 </tr>
             </thead>
             <tbody id="customerTableBody">
@@ -759,10 +723,7 @@ countryDropdown.addEventListener("change", function() {
                             <td>{$row['companyName']}</td>
                             <td>{$row['phoneno']}</td>
                             <td>{$row['companyAddress']}, {$row['district']}, {$row['state']}, {$row['country']} - {$row['pincode']}</td>
-                            <td class='action-buttons'>
-                                <button class='btn-action btn-edit' data-id='{$row['ID']}'><i class='fas fa-edit'></i></button>
-                                <button class='btn-action btn-delete' data-id='{$row['ID']}'><i class='fas fa-trash-alt' style='color: rgb(238, 153, 129);'></i></button>
-                            </td>
+                           
                         </tr>";
                     $sno++;
                 }
@@ -895,7 +856,7 @@ $(document).ready(function () {
 
 
     $.ajax({
-        url: "customerBackend.php",
+        url: "customerBackend_1.php",
         type: "POST",
         data: customerData,
         success: function (response) {
@@ -916,7 +877,7 @@ $(document).ready(function () {
 
     function loadCustomers() { 
     $.ajax({
-        url: "customerBackend.php",
+        url: "customerBackend_1.php",
         type: "GET",
         dataType: "json",
         success: function (data) {
@@ -930,7 +891,7 @@ $(document).ready(function () {
             } else {
                 $("#customerTableBody").html(`
                     <tr>
-                        <td colspan="8" class="text-center">No customers found</td>
+                        <td colspan="7" class="text-center">No customers found</td>
                     </tr>
                 `);
             }
@@ -961,7 +922,7 @@ $(document).on("click", ".btn-delete", function () {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: "customerBackend.php",
+                url: "customerBackend_1.php",
                 type: "POST",
                 data: { delete: true, id: customerId },
                 success: function () {
@@ -986,7 +947,7 @@ $(document).on("click", ".btn-delete", function () {
         var customerId = $(this).data("id");
 
         $.ajax({
-            url: "customerBackend.php",
+            url: "customerBackend_1.php",
             type: "POST",
             data: { edit: true, id: customerId },
             dataType: "json",
@@ -1024,7 +985,7 @@ $(document).on("click", "#customerbtn[data-update]", function (e) {
     };
 
     $.ajax({
-        url: "customerBackend.php",
+        url: "customerBackend_1.php",
         type: "POST",
         data: updatedData,
         success: function () {

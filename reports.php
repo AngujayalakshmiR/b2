@@ -1409,22 +1409,26 @@ $(document).ready(function() {
 <script>
 $(document).ready(function () {
     var table = $('#dataTable').DataTable();
+
     // Get URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     const name = urlParams.get('name');
-    const companyt = urlParams.get('companyt');
-    const title = urlParams.get('title'); // Get title from URL
-    // Check if name, company, or title exists in the URL and filter accordingly
+    const company = urlParams.get('company');
+    const type = urlParams.get('type');
+
+    // Combine company and title like it appears in the table (e.g., "Company - Title")
+
+    // Apply search in priority order: Name > Company-Title > Type
     if (name) {
         table.search(name).draw();
-    } else if (companyt) {
-        table.search(companyt).draw();
-    } else if (title) {
-        table.search(title).draw(); // Filter table by title
+    } else if (company) {
+        table.search(company).draw();
+    } else if (type) {
+        table.search(type).draw();
     }
 });
-
 </script>
+
 <script>
     $(document).ready(function () {
     var table = $('#dataTable').DataTable();

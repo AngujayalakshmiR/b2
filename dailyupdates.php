@@ -573,12 +573,22 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // For reports.php — Name, Company-Title, or Type clicks
-        if ([1, 3, 4].includes(cellIndex)) {
-            const url = `reports.php?name=${encodeURIComponent(name)}&company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}`;
+        if ([1].includes(cellIndex)) {
+            const url = `reports.php?name=${encodeURIComponent(name)}`;
             window.location.href = url;
             return;
         }
-
+        if ([3].includes(cellIndex)) {
+            const url = `reports.php?company=${encodeURIComponent(company)}`;
+            window.location.href = url;
+            return;
+        }
+        if ([4].includes(cellIndex)) {
+            const url = `reports.php?type=${encodeURIComponent(type)}`;
+            window.location.href = url;
+            return;
+        }
+        
         // For admin-requirement.php — Other cells
         if ([5, 6, 7, 8].includes(cellIndex)) {
             fetch(`calculate_working_days1.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}`)

@@ -977,60 +977,76 @@ document.addEventListener("DOMContentLoaded", function () {
         filterTableByDate(this.value);
     });
 });
-document.addEventListener('DOMContentLoaded', function () {
-    var table = $('#dt1');
 
-    document.querySelector('#dt1 tbody').addEventListener('click', function (event) {
-        const clickedCell = event.target.closest('td'); // Get the clicked <td>
+    </script>
+              
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const tableBody = document.querySelector('#dt1 tbody');
+
+    tableBody.addEventListener('click', function (event) {
+        const clickedCell = event.target.closest('td');
         if (!clickedCell) return;
 
-        const row = clickedCell.closest('tr'); // Get the parent <tr>
+        const row = clickedCell.closest('tr');
+        if (!row) return;
 
-        const name = row.cells[1].textContent.trim(); // Name column
-        const companyTitle = row.cells[3].textContent.trim(); // Company-Title column
-        const type = row.cells[4].textContent.trim(); // Type column
-        const totalDays = row.cells[5].textContent.trim(); // Total Days column
+        const cellIndex = clickedCell.cellIndex;
 
-        let [company, title] = companyTitle.split(' - ').map(str => str.trim()); // Split Company-Title
+        const name = row.cells[1]?.textContent.trim();
+        const companyTitleFull = row.cells[3]?.textContent.trim();
+        const type = row.cells[4]?.textContent.trim();
+        const totalDays = row.cells[5]?.textContent.trim();
+        const description = row.cells[6]?.textContent.trim();
+        const totalHrs = row.cells[7]?.textContent.trim();
+        const actualHrs = row.cells[8]?.textContent.trim();
 
-        let paramKey = '';
-        let paramValue = '';
-
-        // Check which column was clicked
-        if (clickedCell.cellIndex === 1) { // Name column
-            paramKey = 'name';
-            paramValue = name;
-        } else if (clickedCell.cellIndex === 3) { // Company-Title column
-            window.location.href = `reports.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}`;
-            return;
-        } else if (clickedCell.cellIndex === 4) { // Type column
-            paramKey = 'type';
-            paramValue = type;
+        // Properly extract company and title even if no dash or multiple dashes
+        let company = "", title = "";
+        if (companyTitleFull.includes(" - ")) {
+            [company, title] = companyTitleFull.split(" - ").map(str => str.trim());
         } else {
-            // Fetch teammates and actual hours via AJAX
+            company = companyTitleFull;
+            title = "";
+        }
+
+        // For reports.php — Name, Company-Title, or Type clicks
+        if ([1].includes(cellIndex)) {
+            const url = `reports.php?name=${encodeURIComponent(name)}`;
+            window.location.href = url;
+            return;
+        }
+        if ([3].includes(cellIndex)) {
+            const url = `reports.php?company=${encodeURIComponent(company)}`;
+            window.location.href = url;
+            return;
+        }
+        if ([4].includes(cellIndex)) {
+            const url = `reports.php?type=${encodeURIComponent(type)}`;
+            window.location.href = url;
+            return;
+        }
+        
+        // For admin-requirement.php — Other cells
+        if ([5, 6, 7, 8].includes(cellIndex)) {
             fetch(`calculate_working_days1.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}`)
                 .then(response => response.json())
                 .then(data => {
-                    let teammates = encodeURIComponent(data.teammates);
-                    let actualHrs = encodeURIComponent(data.actualHrs);
-                    let workingDays = encodeURIComponent(data.workingDays); // Fetch workingDays
+                    const teammates = encodeURIComponent(data.teammates || '');
+                    const workingDays = encodeURIComponent(data.workingDays || '');
 
-                    // Redirect with workingDays included
-                    window.location.href = `admin-requirement.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}&totalDays=${encodeURIComponent(totalDays)}&teammates=${teammates}&actualHrs=${actualHrs}&workingDays=${workingDays}`;
+                    const url = `admin-requirement.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}&totalDays=${encodeURIComponent(totalDays)}&description=${encodeURIComponent(description)}&totalHrs=${encodeURIComponent(totalHrs)}&actualHrs=${encodeURIComponent(actualHrs)}&teammates=${teammates}&workingDays=${workingDays}`;
+                    window.location.href = url;
                 })
-                .catch(error => console.error('Error fetching data:', error));
-
-
-            return;
-        }
-
-        // Redirect if a valid column was clicked
-        if (paramKey && paramValue) {
-            window.location.href = `reports.php?${paramKey}=${encodeURIComponent(paramValue)}`;
+                .catch(error => {
+                    console.error('Error fetching admin requirement data:', error);
+                    alert('Failed to fetch admin requirement data.');
+                });
         }
     });
 });
-    </script>
+</script>
+
     <script>
 $(document).ready(function () {
     let table = $('#dataTable').DataTable({

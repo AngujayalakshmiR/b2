@@ -572,48 +572,6 @@ if (!isset($_SESSION['username'])) {
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
 
-<!-- Modal -->
-<div class="modal fade" id="designationModal" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-body p-0">
-        <div class="row no-gutters">
-          <!-- Form Section -->
-          <div class="col-12 p-3">
-            <form id="designationForm">
-              <!-- Title Field -->
-              <div class="form-group">
-                <label for="titleInput"><b>Title:</b></label>
-                <input type="text" class="form-control" id="titleInput" placeholder="Enter title" required>
-              </div>
-              <!-- Short Description Field -->
-              <div class="form-group">
-                <label for="descriptionInput"><b>Updates</b></label>
-                <textarea class="form-control" id="descriptionInput" rows="2" placeholder="Enter short description" required></textarea>
-              </div>
-              <!-- Dropdown for Status -->
-              <div class="form-group">
-                <label for="statusSelect"><b>Status:</b></label>
-                <select class="form-control" id="statusSelect" required>
-                  <option value="">Select</option>
-                  <option value="ongoing">Ongoing</option>
-                  <option value="payment">Payment</option>
-                  <option value="new-client">New Client</option>
-                </select>
-              </div>
-              <!-- Dropdown for Assigned To -->
-             
-              <!-- Submit Button -->
-              <div class="text-center">
-                <button type="submit" class="btn submit-btn" style="color: white;">Submit</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 
 <!-- Responsive CSS -->
@@ -714,27 +672,35 @@ if (!isset($_SESSION['username'])) {
 <div class="container-fluid mt-4">
   <!-- Nav Tabs -->
   <ul class="nav nav-pills custom-nav">
-    <li class="nav-item">
-        <a class="nav-link active" id="all-tab" href="#" onclick="setActiveTab('all')">
-            <i class="fas fa-list-ul"></i> All
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="ongoing-tab" href="#" onclick="setActiveTab('ongoing')">
-            Ongoing
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="payment-tab" href="#" onclick="setActiveTab('payment')">
-            Payment
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="new-client-tab" href="#" onclick="setActiveTab('new-client')">
-            New Client
-        </a>
-    </li>
+  <li class="nav-item">
+      <a class="nav-link active" id="all-tab" href="#" onclick="setActiveTab('all')">
+          <i class="fas fa-list-ul"></i> All
+      </a>
+  </li>
+
+  <?php
+  // DB connection
+  include("dbconn.php");
+  $sql = "SELECT FollowuptypeName FROM followuptype";
+  $result = $conn->query($sql);
+
+  if ($result->num_rows > 0) {
+      while($row = $result->fetch_assoc()) {
+          $type = strtolower(str_replace(' ', '-', $row['FollowuptypeName'])); // e.g., "New Client" -> "new-client"
+          $label = $row['FollowuptypeName'];
+          echo '
+          <li class="nav-item">
+              <a class="nav-link" id="' . $type . '-tab" href="#" onclick="setActiveTab(\'' . $type . '\')">
+                  ' . $label . '
+              </a>
+          </li>';
+      }
+  }
+
+  $conn->close();
+  ?>
 </ul>
+  
 
 <style>
     /* Adjust font size for navigation tabs */
@@ -820,19 +786,7 @@ if (!isset($_SESSION['username'])) {
       transform: scale(1.05);
     }
 
-    /* Background Colors for Status */
-    .card.ongoing {
-      background-color: rgb(183, 225, 254);
-    }
-
-    .card.new-client {
-      background-color: rgb(206, 248, 201);
-    }
-
-    .card.payment {
-      background-color: rgb(217, 230, 162);
-    }
-
+    
     /* Hide Description & Status Initially */
     .card-text, .card-status {
       display: none;
@@ -853,7 +807,7 @@ if (!isset($_SESSION['username'])) {
 .flag-icon {
   position: absolute;
   top: 5px;
-  right: 20px;
+  right: 2px;
   cursor: pointer;
   font-size: 14px;
   padding: 5px;
@@ -912,13 +866,101 @@ if (!isset($_SESSION['username'])) {
     display: block !important;
 }
 
+.open-icon{
+  position: absolute;
+  bottom: 35px;
+  right: 2px;
+  cursor: pointer;
+  font-size: 27px;
+  color: #090b81;
+  opacity: 0; /* Initially hidden */
+  transform: scale(0.5); /* Starts slightly smaller */
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+.card:hover .open-icon {
+    opacity: 1; /* Show on hover */
+}
 
 </style>
 
 </div>
 
+<!-- HTML + PHP Modal -->
+<div class="modal fade" id="designationModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body p-0">
+        <div class="row no-gutters">
+          <div class="col-12 p-3">
+            <form id="designationForm" method="POST">
+              <input type="hidden" id="followupId" value="123">
+
+              <div class="form-group">
+                <label for="titleInput"><b>Title:</b></label>
+                <input type="text" class="form-control" id="titleInput" placeholder="Enter title" required>
+              </div>
+              <div class="form-group">
+                <label for="descriptionInput"><b>Updates</b></label>
+                <textarea class="form-control" id="descriptionInput" rows="2" placeholder="Enter short description" required></textarea>
+              </div>
+              <div class="form-group">
+                <label for="statusSelect"><b>Status:</b></label>
+                <?php
+                  include('dbconn.php');
+                  $sql = "SELECT FollowuptypeName FROM followuptype";
+                  $result = $conn->query($sql);
+                ?>
+                <select class="form-control" id="statusSelect" required>
+                  <option value="">Select</option>
+                  <?php
+                    if ($result->num_rows > 0) {
+                        while($row = $result->fetch_assoc()) {
+                            echo "<option value='" . htmlspecialchars($row["FollowuptypeName"]) . "'>" . htmlspecialchars($row["FollowuptypeName"]) . "</option>";
+                        }
+                    } else {
+                        echo "<option value=''>No statuses available</option>";
+                    }
+                    $conn->close();
+                  ?>
+                </select>
+              </div>
+              <div class="text-center">
+                <button type="submit" class="btn submit-btn" style="color: white;">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript -->
 <script>
-  let allCards = []; // Store all cards globally
+const statusColorMap = {};
+let allCards = [];
+
+// Predefined pastel color palette
+const pastelColors = [
+    "#FFB3BA", "#FFDFBA", "#FFFFBA", "#BAFFC9", "#BAE1FF",
+    "#D5BAFF", "#FFC3E0", "#C4FAF8", "#E0BBE4", "#D0F4DE",
+    "#FFCCF9", "#F3FFE3", "#E7FFDE", "#FFFACD", "#D1C4E9",
+    "#B2EBF2", "#F8BBD0", "#F0F4C3", "#FAD6A5", "#B9FBC0"
+];
+
+let colorIndex = 0;
+
+function getColorForStatus(status) {
+    if (!statusColorMap[status]) {
+        if (colorIndex >= pastelColors.length) {
+            alert("Not enough unique colors! Add more to pastelColors array.");
+            statusColorMap[status] = "#ffffff"; // fallback
+        } else {
+            statusColorMap[status] = pastelColors[colorIndex++];
+        }
+    }
+    return statusColorMap[status];
+}
 
 document.getElementById("designationForm").addEventListener("submit", function(event) {
     event.preventDefault();
@@ -927,44 +969,78 @@ document.getElementById("designationForm").addEventListener("submit", function(e
     const description = document.getElementById("descriptionInput").value;
     const status = document.getElementById("statusSelect").value;
 
-    const card = createCard(title, description, status);
-    allCards.push(card);
-    appendCardToTab(status, card);
-    refreshCards();
+    fetch('insert_followup.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `title=${encodeURIComponent(title)}&updates=${encodeURIComponent(description)}&status=${encodeURIComponent(status)}`
+    })
+    .then(response => response.json())
+    .then(result => {
+      if (!result.success) {
+          if (result.error === 'duplicate') {
+              alert("A follow-up with the same title and status already exists.");
+          } else {
+              alert("Failed to add follow-up. Try again.");
+          }
+          return;
+      }
 
-    document.getElementById("designationForm").reset();
-    $('#designationModal').modal('hide');
+      const followupId = result.followupId;
+      const card = createCard(title, description, status, followupId);
+      allCards.push(card);
+      appendCardToTab(status, card);
+      refreshCards();
+      document.getElementById("designationForm").reset();
+      $('#designationModal').modal('hide');
+  })
+
+
+    .catch(error => {
+        console.error('Error:', error);
+    });
 });
 
-function createCard(title, description, status) {
+function createCard(title, description, status, followupId) {
     const card = document.createElement("div");
     const creationDate = new Date().toISOString();
-    const cardId = 'card-' + new Date().getTime();
+    card.setAttribute("data-id", followupId); // 🔥 ID from DB
 
-    card.classList.add("card", "card-container", "col-12", "col-md-6", "col-lg-3", status);
+    const bgColor = getColorForStatus(status);
+    card.classList.add("card", "card-container", "col-12", "col-md-6", "col-lg-3");
+    card.style.backgroundColor = bgColor;
     card.setAttribute('data-status', status);
-    card.setAttribute('id', cardId);
     card.setAttribute('data-created-date', creationDate);
 
     card.innerHTML = `
-        <div class="card-body">
-            <span class="flag-icon fas fa-flag" style="float:right;" onclick="toggleColorPicker(this)"></span>
-            <div class="color-picker">
-                <span style="background: red;" onclick="changeFlagColor(this, 'red')"></span>
-                <span style="background: blue;" onclick="changeFlagColor(this, 'blue')"></span>
-                <span style="background: green;" onclick="changeFlagColor(this, 'green')"></span>
-                <span style="background: black;" onclick="changeFlagColor(this, 'black')"></span>
-                <span style="background: orange;" onclick="changeFlagColor(this, 'orange')"></span>
-            </div>      
-            <p class="card-title"><strong>Title:</strong> ${title}</p>
-            <p class="card-text"><strong>Updates:</strong> ${description}</p>
-            <p class="card-status"><strong>Status:</strong> ${status}</p>
-            <p class="card-date" style="display:none;">Created On: ${creationDate}</p>
-            <span class="delete-icon fas fa-trash" onclick="deleteCard(this)"></span>
+    <div class="card-body">
+        <span class="flag-icon fas fa-flag" style="float:right;" onclick="toggleColorPicker(this)"></span>
+        <div class="color-picker">
+            <span style="background: white;" onclick="changeFlagColor(this, 'white')"></span>
+            <span style="background: red;" onclick="changeFlagColor(this, 'red')"></span>
+            <span style="background: blue;" onclick="changeFlagColor(this, 'blue')"></span>
+            <span style="background: green;" onclick="changeFlagColor(this, 'green')"></span>
+            <span style="background: black;" onclick="changeFlagColor(this, 'black')"></span>
+            <span style="background: orange;" onclick="changeFlagColor(this, 'orange')"></span>
         </div>
+        <p class="card-title">${title}</p>
+        <p class="card-text">${description}</p>
+        <p class="card-status"><strong>Status:</strong> ${status}</p>
+        <p><strong>Card ID:</strong> ${followupId}</p> <!-- ✅ Show actual DB ID -->
+        <span class="open-icon fas fa-eye" onclick="navigateToFollowUp('${title}', '${status}')"></span>
+        <span class="delete-icon fas fa-trash" onclick="deleteCard(this, ${followupId})"></span>
+    </div>
     `;
-
     return card;
+}
+
+
+function navigateToFollowUp(title, status) {
+    const encodedTitle = encodeURIComponent(title);
+    const encodedStatus = encodeURIComponent(status);
+    window.location.href = `followup-updates.php?title=${encodedTitle}&status=${encodedStatus}`;
+    event.stopPropagation();
 }
 
 function toggleColorPicker(icon) {
@@ -991,12 +1067,12 @@ function changeFlagColor(element, color) {
     event.stopPropagation();
 }
 
-function deleteCard(icon) {
-    const card = icon.closest(".card");
-    event.stopPropagation();
-    card.remove();
-    allCards = allCards.filter(existingCard => existingCard.id !== card.id);
-}
+// function deleteCard(icon) {
+//     const card = icon.closest(".card");
+//     event.stopPropagation();
+//     card.remove();
+//     allCards = allCards.filter(existingCard => existingCard.id !== card.id);
+// }
 
 function appendCardToTab(status, card) {
     const container = document.getElementById("cards-container");
@@ -1006,58 +1082,102 @@ function appendCardToTab(status, card) {
 function setActiveTab(tab) {
     document.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active'));
     document.getElementById(tab + '-tab').classList.add('active');
-    refreshCards();
+    refreshCards(tab);
 }
 
 function refreshCards() {
     const activeTab = document.querySelector('.nav-link.active')?.id.replace('-tab', '') || 'all';
     const container = document.getElementById("cards-container");
     container.innerHTML = '';
+
     allCards.forEach(card => {
-        if (activeTab === 'all' || card.getAttribute('data-status') === activeTab) {
+        const status = card.getAttribute('data-status');
+        card.style.backgroundColor = getColorForStatus(status);
+        if (activeTab === 'all' || status === activeTab) {
             container.appendChild(card);
         }
     });
 }
 
+// ✅ Load existing followups from database on page load
+window.addEventListener("DOMContentLoaded", () => {
+    fetch('get_followups.php')
+        .then(res => res.json())
+        .then(data => {
+            data.forEach(followup => {
+                const { title, last_update, status, followupId } = followup; // <-- change updates to last_update
+                const card = createCard(title, last_update, status, followupId); // <-- pass last_update
+                allCards.push(card);
+            });
+            refreshCards(); // Display loaded cards
+        })
+        .catch(err => console.error('Failed to load followups:', err));
+});
+
+
 </script>
+
+<!-- Edit Modal -->
 <!-- Edit Modal -->
 <div class="modal fade" id="editDesignationModal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-body p-0">
         <div class="row no-gutters">
-          <!-- Form Section -->
           <div class="col-12 p-3">
-            <form id="editDesignationForm">
-              <!-- Title Field -->
+            <form id="editDesignationForm" action="update_followup.php" method="POST">
+              <!-- Hidden ID -->
+              <input type="hidden" id="editFollowupId" name="followupId">
+
+              <!-- Title -->
               <div class="form-group">
                 <label for="editTitleInput"><b>Title:</b></label>
-                <input type="text" class="form-control" id="editTitleInput" placeholder="Enter title" required>
+                <input type="text" class="form-control" id="editTitleInput" name="title" required>
               </div>
 
-              <!-- Short Description Field -->
+              <!-- Previous Updates -->
               <div class="form-group">
-                <label for="editDescriptionInput"><b>Short Description:</b></label>
-                <textarea class="form-control" id="editDescriptionInput" rows="2" placeholder="Enter short description" required></textarea>
+                <label><b>Previous Updates:</b></label>
+                <div id="previousUpdatesContainer" class="border p-2 rounded" style="min-height: 40px;"></div>
               </div>
 
-              <!-- Dropdown for Status -->
+              <!-- New Updates -->
+              <div class="form-group">
+                <label><b>New Updates:</b> 
+                  <span onclick="addNewUpdateField()" style="cursor: pointer;" class="fas fa-plus-circle text-primary"></span>
+                </label>
+                <div id="newUpdateFields">
+                  <!-- New update fields will be appended here dynamically -->
+
+                </div>
+              </div>
+
+              <!-- Status -->
               <div class="form-group">
                 <label for="editStatusSelect"><b>Status:</b></label>
-                <select class="form-control" id="editStatusSelect" required>
+                <?php
+                  include('dbconn.php');
+                  $sql = "SELECT FollowuptypeName FROM followuptype";
+                  $result = $conn->query($sql);
+                ?>
+                <select class="form-control" id="editStatusSelect" name="status" required>
                   <option value="">Select</option>
-                  <option value="ongoing">Ongoing</option>
-                  <option value="payment">Payment</option>
-                  <option value="new-client">New Client</option>
+                  <?php
+                    if ($result->num_rows > 0) {
+                        while($row = $result->fetch_assoc()) {
+                            echo "<option value='" . htmlspecialchars($row["FollowuptypeName"]) . "'>" . htmlspecialchars($row["FollowuptypeName"]) . "</option>";
+                        }
+                    } else {
+                        echo "<option value=''>No statuses available</option>";
+                    }
+                    $conn->close();
+                  ?>
                 </select>
               </div>
 
-             
-
-              <!-- Submit Button -->
+              <!-- Submit -->
               <div class="text-center">
-                <button type="submit" class="btn submit-btn">Update</button>
+                <button type="submit" class="btn btn-primary">Update</button>
               </div>
 
             </form>
@@ -1067,96 +1187,188 @@ function refreshCards() {
     </div>
   </div>
 </div>
-<script>
-  let cardToUpdate = null; // Store the card to be updated
 
-// Add an event listener for opening the edit modal
+<script>
+  // JS function to dynamically add new update fields
+  function addNewUpdateField() {
+    const container = document.getElementById("newUpdateFields");
+    const textarea = document.createElement("textarea");
+    textarea.className = "form-control my-2";
+    textarea.name = "newUpdate[]";  // use array to allow multiple updates
+    textarea.rows = 2;
+    textarea.required = true;
+    container.appendChild(textarea);
+
+  }
+</script>
+
+<script>
+let cardToUpdate = null;
+
+// Add new update field dynamically
+function addNewUpdateField() {
+    const container = document.getElementById("newUpdateFields");
+
+    // If already has one textarea, don't add another
+    if (container.querySelector("textarea")) return;
+
+    const input = document.createElement("textarea");
+    input.classList.add("form-control", "mb-2");
+    input.placeholder = "Enter new update";
+    input.rows = 2;
+    container.appendChild(input);
+}
+
+// Open the edit modal and populate fields
 function openEditModal(card) {
-    // Store the reference to the card being edited
     cardToUpdate = card;
 
-    // Populate modal fields with the current card values
-    const title = card.querySelector(".card-title").textContent;
-    const description = card.querySelector(".card-text").textContent;
+    document.getElementById("editTitleInput").value = card.querySelector(".card-title").textContent;
+
+    // Populate all previous updates
+    const updatesHTML = card.querySelector(".card-text").innerHTML.split('<br>').filter(Boolean);
+    const previousUpdatesDiv = document.getElementById("previousUpdatesContainer");
+    previousUpdatesDiv.innerHTML = '';
+
+    const lastUpdate = updatesHTML.pop();
+    if (lastUpdate) {
+        const textarea = document.createElement("textarea");
+        textarea.classList.add("form-control", "mb-2");
+        textarea.value = lastUpdate;
+        textarea.rows = 2;
+        previousUpdatesDiv.appendChild(textarea);
+    }
+
+
+    // Clear any new update fields
+    document.getElementById("newUpdateFields").innerHTML = '';
+
     const status = card.querySelector(".card-status").textContent.replace("Status: ", "");
-
-    // Set values in the edit modal
-    document.getElementById("editTitleInput").value = title;
-    document.getElementById("editDescriptionInput").value = description;
     document.getElementById("editStatusSelect").value = status;
+    document.getElementById("editFollowupId").value = card.dataset.id;
 
-    // Open the modal
     $('#editDesignationModal').modal('show');
 }
 
-// Add an event listener to each card to trigger the edit modal
 function addCardListeners(card) {
-    card.addEventListener('click', function() {
+    card.addEventListener('click', function (event) {
+        const clickedElement = event.target;
+        const isInteractiveIcon = clickedElement.closest('.open-icon, .delete-icon, .flag-icon, .color-picker, .color-picker span');
+        if (isInteractiveIcon) return;
         openEditModal(card);
     });
 }
 
-// Modify the createCard function to add event listeners to each new card
-function createCard(title, description, status) {
+function createCard(title, description, status, followupId) {
     const card = document.createElement("div");
-    const creationDate = new Date().toISOString(); // Get the current date and time
+    const creationDate = new Date().toISOString();
+
     card.classList.add("card", "card-container", "col-12", "col-md-6", "col-lg-3", status);
-    card.setAttribute('data-status', status); // Add status as data attribute
-    card.setAttribute('draggable', 'true'); // Make the card draggable
-    card.setAttribute('id', 'card-' + new Date().getTime()); // Unique ID for the card
-    card.setAttribute('data-created-date', creationDate); // Store the creation date in a data attribute
+    card.setAttribute('data-status', status);
+    card.setAttribute('draggable', 'true');
+    card.setAttribute('data-created-date', creationDate);
+    card.setAttribute("data-id", followupId);
 
     card.innerHTML = `
-        <div class="card-body">
-            <span class="flag-icon fas fa-flag" style="float:right;right:0px;align-items:right;" onclick="toggleColorPicker(this)"></span>
-            <div class="color-picker">
-                <span style="background: white;" onclick="changeFlagColor(this, 'white')"></span>
-                <span style="background: red;" onclick="changeFlagColor(this, 'red')"></span>
-                <span style="background: blue;" onclick="changeFlagColor(this, 'blue')"></span>
-                <span style="background: green;" onclick="changeFlagColor(this, 'green')"></span>
-                <span style="background: black;" onclick="changeFlagColor(this, 'black')"></span>
-                <span style="background: orange;" onclick="changeFlagColor(this, 'orange')"></span>
-            </div>      
-            <p class="card-title">${title}</p>
-            <p class="card-text">${description}</p>
-            <p class="card-status"><strong>Status:</strong> ${status}</p>
-            <span class="delete-icon fas fa-trash" onclick="deleteCard(this)"></span>
-        </div>
+    <div class="card-body">
+        <span class="flag-icon fas fa-flag" style="float:right;" onclick="toggleColorPicker(this)"></span>
+        <div class="color-picker">
+            <span style="background: white;" onclick="changeFlagColor(this, 'white')"></span>
+            <span style="background: red;" onclick="changeFlagColor(this, 'red')"></span>
+            <span style="background: blue;" onclick="changeFlagColor(this, 'blue')"></span>
+            <span style="background: green;" onclick="changeFlagColor(this, 'green')"></span>
+            <span style="background: black;" onclick="changeFlagColor(this, 'black')"></span>
+            <span style="background: orange;" onclick="changeFlagColor(this, 'orange')"></span>
+        </div>      
+        <p class="card-title">${title}</p>
+        <p class="card-text">${description.split('<br>').pop()}</p>
+        <p class="card-status"><strong>Status:</strong> ${status}</p>
+        <span class="open-icon fas fa-eye" onclick="navigateToFollowUp('${title}', '${status}')"></span>
+        <span class="delete-icon fas fa-trash" onclick="deleteCard(this, ${followupId})"></span>
+    </div>
     `;
 
-    // Add the click listener for the edit modal
     addCardListeners(card);
 
     return card;
 }
 
 document.getElementById("editDesignationForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // Prevent form submission from reloading the page
+    event.preventDefault();
+
+    const title = document.getElementById("editTitleInput").value;
+    const status = document.getElementById("editStatusSelect").value;
+    const followupId = document.getElementById("editFollowupId").value;
+
+    // Collect previous updates
+    const previousUpdates = Array.from(document.querySelectorAll("#previousUpdatesContainer textarea"))
+        .map(textarea => textarea.value.trim())
+        .filter(Boolean);
+
+    // Collect new updates
+    const newUpdates = Array.from(document.querySelectorAll("#newUpdateFields textarea"))
+        .map(textarea => textarea.value.trim())
+        .filter(Boolean);
+
+    const allUpdates = [...previousUpdates, ...newUpdates];
+
+    fetch('update_followup.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `followupId=${followupId}&title=${encodeURIComponent(title)}&status=${encodeURIComponent(status)}&` +
+            allUpdates.map(update => `newUpdate[]=${encodeURIComponent(update)}`).join('&')
+    })
+    .then(response => response.text())
+    .then(result => {
+    if (result.includes("Duplicate title and status")) {
+        alert("A card with this title and status already exists.");
+        return;
+    }
 
     if (cardToUpdate) {
-        // Get the updated values from the modal
-        const updatedTitle = document.getElementById("editTitleInput").value;
-        const updatedDescription = document.getElementById("editDescriptionInput").value;
-        const updatedStatus = document.getElementById("editStatusSelect").value;
-
-        // Update the card content with the new values
-        cardToUpdate.querySelector(".card-title").textContent = updatedTitle;
-        cardToUpdate.querySelector(".card-text").textContent = updatedDescription;
-        cardToUpdate.querySelector(".card-status").textContent = "Status: " + updatedStatus;
-
-        // Update the card's status
-        cardToUpdate.setAttribute('data-status', updatedStatus);
-        cardToUpdate.classList.remove("ongoing", "new-client", "payment"); // Remove previous status class
-        cardToUpdate.classList.add(updatedStatus); // Add the new status class
-
-        // Re-render the card in the correct tab
-        refreshCards();
-
-        // Close the modal
-        $('#editDesignationModal').modal('hide');
+        cardToUpdate.querySelector(".card-title").textContent = title;
+        cardToUpdate.querySelector(".card-text").innerHTML = allUpdates.join("<br>");
+        cardToUpdate.querySelector(".card-status").innerHTML = `<strong>Status:</strong> ${status}`;
     }
-});
 
+    $('#editDesignationModal').modal('hide');
+      location.reload();
+  })
+
+    .catch(error => {
+        console.error('Error updating followup:', error);
+    });
+});
+</script>
+<script>
+  function deleteCard(icon, followupId) {
+    event.stopPropagation();
+
+    if (!confirm("Are you sure you want to delete this card?")) return;
+
+    fetch('delete_followup.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `id=${followupId}`
+    })
+    .then(res => res.json())
+    .then(result => {
+        if (result.success) {
+            const card = icon.closest(".card");
+            card.remove();
+            allCards = allCards.filter(c => c.getAttribute("data-id") !== followupId.toString());
+        } else {
+            alert("Failed to delete: " + result.message);
+        }
+    })
+    .catch(error => {
+        console.error("Error deleting:", error);
+    });
+}
 
 </script>
     <!-- /.container-fluid -->

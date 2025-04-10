@@ -654,14 +654,117 @@ if (!isset($_SESSION['username'])) {
 
                 </nav>
                 <!-- End of Topbar -->
-
                 <!-- Begin Page Content -->
               <!-- Include Bootstrap -->
 
 <!-- Designation Cards Container -->
 <!-- Include Font Awesome -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+<?php
+include 'dbconn.php'; // adjust to your actual DB connection file
+
+$title = $_GET['title'];
+$status = $_GET['status'];
+
+$title = mysqli_real_escape_string($conn, $title);
+$status = mysqli_real_escape_string($conn, $status);
+
+$sql = "SELECT * FROM followups WHERE title='$title' AND status='$status'";
+$result = mysqli_query($conn, $sql);
+?>
+
 <div class="container-fluid mt-4">
+    <h3 class="section-title"><?= htmlspecialchars($title) . ' - ' . htmlspecialchars(ucfirst($status)) ?></h3>
+    <div class="row row-cols-1 row-cols-md-4 g-4" data-masonry='{"percentPosition": true }'>
+
+    <?php
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $dates = explode(',', $row['date']);
+        $updates = explode(',', $row['updates']);
+
+        // Use the shorter length to avoid mismatch
+        $count = min(count($dates), count($updates));
+
+        for ($i = 0; $i < $count; $i++) {
+            $date = trim($dates[$i]);
+            $update = trim($updates[$i]);
+            echo "
+                <div class='col'>
+                    <div class='card h-100'>
+                        <span class='update-date fw-bold p-2'>$date</span> <br><br>
+                        <div class='card-body'>
+                            <p class='card-text'>$update</p>
+                        </div>
+                    </div>
+                </div>
+            ";
+        }
+    } else {
+        echo "<p class='text-muted'>No updates found for this title and status.</p>";
+    }
+    ?>
+    </div>
+
+
+
+<style>
+
+
+.section-title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    color: #222;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.custom-card {
+    min-height: 180px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    padding: 15px;
+    position: relative;
+    overflow: hidden;
+    border: none;
+    text-align: center;
+}
+
+.custom-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-title {
+    font-size: 15px;
+    font-weight: bold;
+    color: #222;
+}
+
+.card-text {
+    font-size: 14px;
+    color: #444;
+}
+
+.update-date {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 4px 8px;
+    font-size: 10px;
+    font-style: italic;
+    border-radius: 12px;
+    font-weight: bold;
+}
+</style>
+
 
 
   <!-- Custom Styles -->
@@ -752,7 +855,6 @@ if (!isset($_SESSION['username'])) {
 /* Card Styles */
 .card {
   position: relative; /* Makes absolute positioning work for children */
-  border: 1px solid #ddd;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
   min-height: 40px; /* Ensures consistent height */
   display: flex;
@@ -904,6 +1006,7 @@ if (!isset($_SESSION['username'])) {
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.2.2/masonry.pkgd.min.js"></script>
 
 
 </body>

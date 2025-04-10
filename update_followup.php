@@ -1,10 +1,10 @@
 <?php 
 include('dbconn.php');
 
-$id = $_POST['followupId'] ?? '';
-$title = $_POST['title'] ?? '';
-$status = $_POST['status'] ?? '';
-$newUpdates = $_POST['newUpdate'] ?? [];
+$id = $_POST['followupId'];
+$title = $_POST['title'];
+$status = $_POST['status'];
+$newUpdates = $_POST['newUpdate'];
 
 if (!is_array($newUpdates)) {
     $newUpdates = [$newUpdates];

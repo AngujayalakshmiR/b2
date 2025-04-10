@@ -8,16 +8,16 @@ header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $employee_id = intval($_POST['employee_id']);
-    $employeename = trim($_POST['employeename'] ?? "");
-    $designation = trim($_POST['designation'] ?? "");
-    $employeephnno = trim($_POST['employeephnno'] ?? "");
-    $customeraddress = trim($_POST['customeraddress'] ?? "");
-    $district = trim($_POST['district'] ?? "");
-    $state = trim($_POST['state'] ?? "");
-    $pincode = trim($_POST['pincode'] ?? "");
-    $country = trim($_POST['country'] ?? "");
-    $username = trim($_POST['username'] ?? "");
-    $password = trim($_POST['password'] ?? "");
+    $employeename = trim($_POST['employeename']);
+    $designation = trim($_POST['designation']);
+    $employeephnno = trim($_POST['employeephnno']);
+    $customeraddress = trim($_POST['customeraddress']);
+    $district = trim($_POST['district']);
+    $state = trim($_POST['state']);
+    $pincode = trim($_POST['pincode']);
+    $country = trim($_POST['country']);
+    $username = trim($_POST['username']);
+    $password = trim($_POST['password']);
 
     // Check for duplicate username or password
     $checkQuery = "SELECT * FROM employeedetails WHERE (empUserName = ? OR empPassword = ?) AND ID != ?";
@@ -48,9 +48,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         return $oldFile;
     }
 
-    $photo = uploadFile("employeePhoto", $_POST["old_employeePhoto"] ?? "");
-    $aadhar = uploadFile("aadharCard", $_POST["old_aadharCard"] ?? "");
-    $pan = uploadFile("panCard", $_POST["old_panCard"] ?? "");
+    $photo = uploadFile("employeePhoto", $_POST["old_employeePhoto"]);
+    $aadhar = uploadFile("aadharCard", $_POST["old_aadharCard"]);
+    $pan = uploadFile("panCard", $_POST["old_panCard"]);
 
     $updateQuery = "UPDATE employeedetails 
                     SET Name=?, Designation=?, empPhNo=?, empAdd=?, empDistrict=?, empState=?, empPincode=?, empCountry=?, 

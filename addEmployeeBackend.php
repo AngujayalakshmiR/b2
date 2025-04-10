@@ -108,9 +108,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 //     }
 
 //     // Upload new files or keep old files if not updated
-//     $photo = uploadFile("employeePhoto", $_POST["old_employeePhoto"] ?? "");
-//     $aadhar = uploadFile("aadharCard", $_POST["old_aadharCard"] ?? "");
-//     $pan = uploadFile("panCard", $_POST["old_panCard"] ?? "");
+//     $photo = uploadFile("employeePhoto", $_POST["old_employeePhoto"]);
+//     $aadhar = uploadFile("aadharCard", $_POST["old_aadharCard"]);
+//     $pan = uploadFile("panCard", $_POST["old_panCard"]);
 
 //     if (!empty($employee_id)) {
 //         // Update Employee Details

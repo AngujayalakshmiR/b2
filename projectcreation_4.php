@@ -859,7 +859,7 @@ $result = mysqli_query($conn, $query);
                         <tr id="row_<?php echo $row['ID']; ?>">
                             <td><?php echo $sno++; ?></td>
                             <td><?php echo $row['date']; ?></td>
-                            <td><?php echo $row['customerName'] ?? 'N/A'; ?></td>
+                            <td><?php echo $row['customerName']; ?></td>
                             <td><?php echo $row['companyName']; ?></td>
                             <td><?php echo $row['projectType']; ?></td>
                             <td><?php echo $row['projectTitle']; ?></td>

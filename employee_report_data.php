@@ -21,7 +21,7 @@ if ($companyName && $projectTitle) {
     $stmt1->execute();
     $result1 = $stmt1->get_result();
     $data1 = $result1->fetch_assoc();
-    $projectType = $data1['projectType'] ?? '';
+    $projectType = $data1['projectType'];
 
     // Get total actual hours for the logged-in user
     $query2 = "SELECT SUM(actualHrs) AS totalActualHrs FROM dailyupdates WHERE companyName = ? AND projectTitle = ? AND name = ?";
@@ -42,7 +42,7 @@ if ($companyName && $projectTitle) {
     $stmt3->execute();
     $result3 = $stmt3->get_result();
     $data3 = $result3->fetch_assoc();
-    $teammates = $data3['employees'] ?? '';
+    $teammates = $data3['employees'];
 
     $response['projectType'] = $projectType;
     $response['workingDays'] = $workingDays;

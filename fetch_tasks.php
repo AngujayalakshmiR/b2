@@ -8,8 +8,8 @@ if (!isset($_SESSION['empUserName'])) {
 }
 
 $Name = $_SESSION['Name'];
-$companyName = $_POST['companyName'] ?? '';
-$projectTitle = $_POST['projectTitle'] ?? '';
+$companyName = $_POST['companyName'];
+$projectTitle = $_POST['projectTitle'];
 
 if (empty($companyName) || empty($projectTitle)) {
     echo "Invalid company or project.";

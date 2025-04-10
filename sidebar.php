@@ -19,6 +19,9 @@ if (isset($_SESSION['username'])) {
 }
 
 include 'dbconn.php';
+
+// Get the current page filename
+$current_page = basename($_SERVER['PHP_SELF']);
 ?>
 
 <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background: white;">
@@ -32,7 +35,7 @@ include 'dbconn.php';
 
     <?php if ($role === 'admin') : ?>
         <!-- Admin Navigation -->
-        <li class="nav-item l active">
+        <li class="nav-item l <?= $current_page === 'index.php' ? 'active' : '' ?>">
             <a class="nav-link k" href="index.php" style="color: white;">
                 <i class="fas fa-fw fa-tachometer-alt" style="font-size:16px"></i>
                 <span>Admin Dashboard</span>
@@ -40,21 +43,21 @@ include 'dbconn.php';
         </li>
         <div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 
-        <li class="nav-item l">
+        <li class="nav-item l <?= $current_page === 'followups.php' ? 'active' : '' ?>">
             <a class="nav-link k" href="followups.php" style="color: black;">
                 <i class="fas fa-fw fa-comment-dots" style="font-size:16px"></i>
                 <span>FollowUps</span>
             </a>
         </li>
         <div class="sidebar-divider" style="margin-bottom: 3px;"></div>
-        <!-- Nav Item - Master -->
-        <li class="nav-item l master">
+
+        <li class="nav-item l master <?= in_array($current_page, ['customer.php', 'employee.php', 'designation.php', 'projecttype.php', 'followuptype.php']) ? 'active' : '' ?>">
             <a class="nav-link k collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                 aria-expanded="true" aria-controls="collapseTwo" style="color: white;">
                 <i class="fas fa-fw fa-clipboard-list" style="font-size:16px"></i>
                 <span>Master</span>
             </a>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div id="collapseTwo" class="collapse <?= in_array($current_page, ['customer.php', 'employee.php', 'designation.php', 'projecttype.php', 'followuptype.php']) ? 'show' : '' ?>" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <a class="collapse-item" href="customer.php" style="color: black;">Customer</a>
                     <a class="collapse-item" href="employee.php" style="color: black;">Employee</a>
@@ -66,7 +69,7 @@ include 'dbconn.php';
         </li> 
         <div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 
-        <li class="nav-item l">
+        <li class="nav-item l <?= $current_page === 'projectcreation.php' ? 'active' : '' ?>">
             <a class="nav-link k" href="projectcreation.php" style="color: black;">
                 <i class="fas fa-fw fa-folder" style="font-size:16px"></i>
                 <span>Project Creation</span>
@@ -74,7 +77,7 @@ include 'dbconn.php';
         </li>
         <div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 
-        <li class="nav-item l">
+        <li class="nav-item l <?= $current_page === 'dailyupdates.php' ? 'active' : '' ?>">
             <a class="nav-link k" href="dailyupdates.php" style="color: black;">
                 <i class="fas fa-fw fa-table" style="font-size:16px"></i>
                 <span>Daily Update</span>
@@ -82,7 +85,7 @@ include 'dbconn.php';
         </li>
         <div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 
-        <li class="nav-item l">
+        <li class="nav-item l <?= $current_page === 'reports.php' ? 'active' : '' ?>">
             <a class="nav-link k" href="reports.php" style="color: black;">
                 <i class="fas fa-fw fa-chart-area" style="font-size:16px"></i>
                 <span>Admin Work Reports</span>
@@ -90,14 +93,14 @@ include 'dbconn.php';
         </li>
         <div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 
-        <li class="nav-item l">
+        <li class="nav-item l <?= $current_page === 'userrights.php' ? 'active' : '' ?>">
             <a class="nav-link k" href="userrights.php" style="color: black;">
                 <i class="fas fa-user-shield" style="font-size:16px"></i>
                 <span>User Rights</span>
             </a>
         </li>
+
     <?php elseif ($role === 'employee') :
-        // Fetch employee rights from the database (both module and rights data)
         $Name = $_SESSION['Name'];
         $accessModules = [];
 
@@ -105,14 +108,11 @@ include 'dbconn.php';
         $result = $conn->query($sql);
         if ($result && $result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                $accessModules[] = $row; // Each row contains 'module' and 'rights'
+                $accessModules[] = $row;
             }
         }
-
-        // Employee static navigation items
         ?>
-        <!-- Employee Navigation -->
-        <li class="nav-item l active">
+        <li class="nav-item l <?= $current_page === 'employeedash.php' ? 'active' : '' ?>">
             <a class="nav-link k" href="employeedash.php" style="color: white;">
                 <i class="fas fa-fw fa-tachometer-alt" style="font-size:16px"></i>
                 <span>Employee Dashboard</span>
@@ -120,7 +120,7 @@ include 'dbconn.php';
         </li>
         <div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 
-        <li class="nav-item l">
+        <li class="nav-item l <?= $current_page === 'employeeProjectAllocated.php' ? 'active' : '' ?>">
             <a class="nav-link k" href="employeeProjectAllocated.php" style="color: black;">
                 <i class="fas fa-fw fa-folder" style="font-size:16px"></i>
                 <span>Project Allocation</span>
@@ -128,7 +128,7 @@ include 'dbconn.php';
         </li>
         <div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 
-        <li class="nav-item l">
+        <li class="nav-item l <?= $current_page === 'employeeWorkReports.php' ? 'active' : '' ?>">
             <a class="nav-link k" href="employeeWorkReports.php" style="color: black;">
                 <i class="fas fa-fw fa-chart-area" style="font-size:16px"></i>
                 <span>Work Reports</span>
@@ -137,29 +137,27 @@ include 'dbconn.php';
         <div class="sidebar-divider" style="margin-bottom: 3px;"></div>
 
         <?php
-        // Define a mapping of allowed modules to their page URLs
         $availableModules = [
-            "Dashboard"      => "index.php",
-            "FollowUps"      => "followups.php",
-            "Customer"       => "customer.php",
-            "Employee"       => "employee.php",
-            "Designation"    => "designation.php",
-            "Project Type"   => "projecttype.php",
-            "FollowUp Type"  => "followuptype.php",
+            "Dashboard" => "index.php",
+            "FollowUps" => "followups.php",
+            "Customer" => "customer.php",
+            "Employee" => "employee.php",
+            "Designation" => "designation.php",
+            "Project Type" => "projecttype.php",
+            "FollowUp Type" => "followuptype.php",
             "Project Creation" => "projectcreation.php",
-            "Daily Update"   => "dailyupdates.php",
-            "Work Reports"   => "reports.php"
+            "Daily Update" => "dailyupdates.php",
+            "Work Reports" => "reports.php"
         ];
 
-        // Display additional access-based navigation using rights in URL
         foreach ($accessModules as $moduleData) {
             $moduleName = $moduleData['module'];
-            $rights = urlencode($moduleData['rights']); // URL encode the rights data
+            $rights = urlencode($moduleData['rights']);
 
             if (isset($availableModules[$moduleName])) {
-                // Append rights data as a query parameter to the URL
                 $moduleUrl = $availableModules[$moduleName] . "?rights=" . $rights;
-                echo '<li class="nav-item l">
+                $isActive = strpos($current_page, basename($availableModules[$moduleName])) !== false ? 'active' : '';
+                echo '<li class="nav-item l ' . $isActive . '">
                         <a class="nav-link k" href="' . $moduleUrl . '" style="color: black;">
                             <i class="fas fa-fw fa-folder" style="font-size:16px"></i>
                             <span>' . $moduleName . '</span>
@@ -180,34 +178,13 @@ include 'dbconn.php';
     </div>
 </ul>
 
+<!-- Optional JS to store current page -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-    const navLinks = document.querySelectorAll(".nav-item");
-
-    // Retrieve the last active page from localStorage
-    const activePage = localStorage.getItem("activePage");
-
-    if (activePage) {
-        navLinks.forEach((link) => {
-            if (link.querySelector("a").getAttribute("href") === activePage) {
-                link.classList.add("active");
-            } else {
-                link.classList.remove("active");
-            }
-        });
+    const currentPage = window.location.pathname.split("/").pop();
+    const activeLink = document.querySelector(`a.nav-link[href="${currentPage}"]`);
+    if (activeLink) {
+        activeLink.parentElement.classList.add("active");
     }
-
-    navLinks.forEach((navItem) => {
-        navItem.addEventListener("click", function () {
-            // Remove 'active' class from all items
-            navLinks.forEach((item) => item.classList.remove("active"));
-
-            // Add 'active' class to the clicked item
-            this.classList.add("active");
-
-            // Store the active page in localStorage
-            localStorage.setItem("activePage", this.querySelector("a").getAttribute("href"));
-        });
-    });
 });
 </script>

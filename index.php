@@ -814,7 +814,7 @@ $totalEmployees = $totalEmployeesResult->fetch_assoc()['total'];
     </div>
     <div class="card-body">
     <div class="d-flex justify-content-end mb-2">
-    <input type="text" id="tableSearch" class="form-control" placeholder="Search..." style="width: 250px;">
+    <!-- <input type="text" id="tableSearch" class="form-control" placeholder="Search..." style="width: 250px;"> -->
 </div>
 
         <div class="table-responsive">
@@ -835,7 +835,7 @@ $totalEmployees = $totalEmployeesResult->fetch_assoc()['total'];
                 </thead>
                 <tbody id="table-body">
                 <?php
-$c = 1;
+$sno = 1;
 $sql = "SELECT * FROM dailyupdates ORDER BY date DESC";
 $result = $conn->query($sql);
 
@@ -850,7 +850,7 @@ if ($result->num_rows > 0) {
         $formattedDate = date("d-m-Y", strtotime($row['date']));
 
         echo "<tr data-date='$formattedDate'>
-            <td class='sno'>{$c}</td> 
+           <td >{$sno}</td>  
             <td class='name'>{$row['name']}</td>
             <td class='date'>$formattedDate</td>
             <td>{$row['companyName']} - {$row['projectTitle']}</td>
@@ -861,8 +861,7 @@ if ($result->num_rows > 0) {
             <td>{$row['actualHrs']}</td>
             $status
         </tr>";
-
-        $c++;
+        $sno++;
     }
 } else {
     echo "<tr><td colspan='10'>No records found</td></tr>";
@@ -980,7 +979,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     </script>
               
-<script>
+              <script>
 document.addEventListener('DOMContentLoaded', function () {
     const tableBody = document.querySelector('#dt1 tbody');
 
@@ -1047,58 +1046,58 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-    <script>
+
+<script>
 $(document).ready(function () {
-    let table = $('#dataTable').DataTable({
-        "pageLength": 10, // Show 10 entries per page
-        "ordering": false, // Disable sorting for better filtering
-        "destroy": true // Allows re-initialization without issues
+    // Initialize DataTable
+    let table = $('#dt1').DataTable({
+        pageLength: 10,
+        ordering: false,
+        destroy: true,
+        drawCallback: function () {
+    let api = this.api();
+    let startIndex = api.page.info().start;
+
+    api.rows({ page: 'current', search: 'applied' }).every(function (rowIdx, tableLoop, rowLoop) {
+        let cell = api.cell(rowIdx, 0).node();
+        $(cell).html(startIndex + rowLoop + 1); // 🪄 Keeps it continuous across pages
     });
+}
+
+    });
+
+    // Date Filter Function
     function filterByDate() {
         let selectedDate = $('#dateFilter').val();
         if (!selectedDate) return;
 
-        let formattedSelectedDate = selectedDate.split("-").reverse().join("-"); 
-        table.column(2).search(formattedSelectedDate).draw();
+        let formattedDate = selectedDate.split("-").reverse().join("-"); // to dd-mm-yyyy
+
+        table.column(2).search(formattedDate).draw(); // Filter by "Date" column (index 2)
+
         let visibleRows = table.rows({ filter: 'applied' }).count();
         $('.header-counter').text(visibleRows);
+
         if (visibleRows === 0) {
             if (!$("#no-records").length) {
-                $("#dataTable tbody").append(`<tr id="no-records"><td colspan="10" class="text-center">No records found</td></tr>`);
+                $("#dt1 tbody").append(`<tr id="no-records"><td colspan="10" class="text-center"></td></tr>`);
             }
         } else {
             $("#no-records").remove();
         }
     }
+
+    // Auto load today's date
     let today = new Date().toISOString().split('T')[0];
     $('#dateFilter').val(today);
     filterByDate();
+
+    // On Date Change
     $('#dateFilter').on('change', function () {
         filterByDate();
     });
 });
-$(document).ready(function () {
-
-    $("#dateFilter").on("change", function () {
-        let selectedDate = $(this).val();
-        if (!selectedDate) return;
-
-        let formattedSelectedDate = selectedDate.split("-").reverse().join("-");
-        dataTable.destroy();
-
-        // Show/hide rows based on selected date
-        $("#dataTable tbody tr").each(function () {
-            let rowDate = $(this).find("td:eq(2)").text().trim();
-            $(this).toggle(rowDate === formattedSelectedDate);
-        });
-
-        // Reinitialize DataTable after filtering
-        dataTable = $("#dataTable").DataTable({
-            pageLength: 10 // Ensures proper pagination
-        });
-    });
-});
-    </script>
+</script>
 
 <!-- jQuery (Required for DataTables) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

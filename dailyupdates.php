@@ -680,7 +680,7 @@ $(document).ready(function () {
 
         if (visibleRows === 0) {
             if (!$("#no-records").length) {
-                $("#dt1 tbody").append(`<tr id="no-records"><td colspan="10" class="text-center">No records found</td></tr>`);
+                $("#dt1 tbody").append();
             }
         } else {
             $("#no-records").remove();

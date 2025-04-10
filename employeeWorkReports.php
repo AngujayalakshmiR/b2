@@ -14,7 +14,7 @@ $query = "SELECT * FROM dailyupdates WHERE name = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("s", $Name);
 $stmt->execute();
-$result = $stmt->get_result();
+$result1 = $stmt->get_result();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -673,9 +673,9 @@ $result = $stmt->get_result();
     </thead>
     <tbody id="tableBody">
     <?php
-    if ($result->num_rows > 0) {
+    if ($result1->num_rows > 0) {
         $sno = 1;
-        while ($row = $result->fetch_assoc()) {
+        while ($row = $result1->fetch_assoc()) {
             ?>
             <tr>
                 <td><?= $sno++; ?></td>

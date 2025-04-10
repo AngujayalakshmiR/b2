@@ -1,27 +1,27 @@
 <?php
-session_start();
 
+session_start();
 if (!isset($_SESSION['empUserName'])) {
     header("Location: login.php");
     exit();
 }
 
-include 'dbconn.php'; 
+include 'dbconn.php'; // Ensure database connection
 
 $empUserName = $_SESSION['empUserName'];
 $Name = $_SESSION['Name'];
 
-$sql = "SELECT ID, date, companyName, projectType, totalDays, projectTitle, employees 
-        FROM projectcreation 
-        WHERE employees LIKE ? ORDER BY date DESC";
+// Fetch project details (Table 1)
+$sql1 = "SELECT ID, date, companyName, projectType, totalDays, projectTitle, employees 
+         FROM projectcreation 
+         WHERE employees LIKE ? ORDER BY date DESC"; 
 
-$stmt = $conn->prepare($sql);
-$searchTerm = "%" . $Name . "%"; 
-$stmt->bind_param("s", $searchTerm);
-$stmt->execute();
-$result = $stmt->get_result();
-$totalEntries = $result->num_rows; // Count total rows
-
+$stmt1 = $conn->prepare($sql1);
+$searchTerm = "%" . $Name . "%";
+$stmt1->bind_param("s", $searchTerm);
+$stmt1->execute();
+$result1 = $stmt1->get_result();
+$totalEntries1 = $result1->num_rows;
 
 
 ?>
@@ -481,64 +481,67 @@ tbody{
         <p class="m-0" style="font-size: 16px; color: rgb(23, 25, 28); font-style: normal;
             overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
             font-weight: 500;"><b>Project Details</b> 
- <span class="header-counter"><?php echo $totalEntries; ?></span>  <!-- Dynamic Counter --></p>
+ <span class="header-counter"><?php echo $totalEntries1; ?></span>  <!-- Dynamic Counter --></p>
     </div>
 
     <div class="card-body">
         <div class="table-responsive">
-           <table class="table text-center" style="font-size:14px;" id="dataTable" width="100%">  
-    <thead>
-        <tr>
-            <th>S.no</th>
-            <th>Date</th>
-            <th>Company</th>
-            <th>Title</th>
-            <th>Project Type</th>
-            <th>Total Days</th>
-            <th>Working Days</th>
-            <th>Teammates</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-        $sno = 1;
-        while ($row = $result->fetch_assoc()) {
-            $company = $row['companyName'];
-            $projectTitle = $row['projectTitle'];
+        <table class="table text-center" id="dataTable" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>S.no</th>
+                                            <th>Date</th>
+                                            <th>Company</th>
+                                            <th>Title</th>
+                                            <th>Project Type</th>
+                                            <th>Total Days</th>
+                                            <th>Working Days</th>
+                                            <th>Teammates</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php
+                                        $sno = 1;
+                                        if ($totalEntries1 > 0) {
+                                            while ($row = $result1->fetch_assoc()) {
 
-            // Query to get total actual hours
-            $sql_hours = "SELECT SUM(actualHrs) AS total_actual_hrs FROM dailyupdates 
-                          WHERE name = ? AND companyName = ? AND projectTitle = ?";
-            $stmt_hours = $conn->prepare($sql_hours);
-            $stmt_hours->bind_param("sss", $Name, $company, $projectTitle);
-            $stmt_hours->execute();
-            $result_hours = $stmt_hours->get_result();
-            $row_hours = $result_hours->fetch_assoc();
+                                                $company = $row['companyName'];
+                                                $projectTitle = $row['projectTitle'];
+                                    
+                                                // Query to get total actual hours
+                                                $sql_hours = "SELECT SUM(actualHrs) AS total_actual_hrs FROM dailyupdates 
+                                                              WHERE name = ? AND companyName = ? AND projectTitle = ?";
+                                                $stmt_hours = $conn->prepare($sql_hours);
+                                                $stmt_hours->bind_param("sss", $Name, $company, $projectTitle);
+                                                $stmt_hours->execute();
+                                                $result_hours = $stmt_hours->get_result();
+                                                $row_hours = $result_hours->fetch_assoc();
+                                    
+                                                $totalActualHrs = $row_hours['total_actual_hrs']; // If no record, default to 0
+                                                $workingDays = round($totalActualHrs / 8, 2); // Divide by 8 to get working days
 
-            $totalActualHrs = $row_hours['total_actual_hrs']; // If no record, default to 0
-            $workingDays = round($totalActualHrs / 8, 2); // Divide by 8 to get working days
-
-            echo "<tr>";
-            echo "<td>" . $sno++ . "</td>";
-            echo "<td>" . htmlspecialchars($row['date']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['companyName']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['projectTitle']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['projectType']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['totalDays']) . "</td>";
-            echo "<td>" . $workingDays . "</td>"; // Display calculated working days
-            echo "<td>" . htmlspecialchars($row['employees']) . "</td>";
-            echo "</tr>";
-
-            $stmt_hours->close();
-        }
-        ?>
-    </tbody>
-</table>
+                                                echo "<tr>";
+                                                echo "<td>" . $sno++ . "</td>";
+                                                echo "<td>" . htmlspecialchars($row['date']) . "</td>";
+                                                echo "<td>" . htmlspecialchars($row['companyName']) . "</td>";
+                                                echo "<td>" . htmlspecialchars($row['projectTitle']) . "</td>";
+                                                echo "<td>" . htmlspecialchars($row['projectType']) . "</td>";
+                                                echo "<td>" . htmlspecialchars($row['totalDays']) . "</td>";
+                                                echo "<td>" . $workingDays . "</td>"; 
+                                                echo "<td>" . htmlspecialchars($row['employees']) . "</td>";
+                                                echo "</tr>";
+                                            }
+                                        } else {
+                                            echo "<tr><td colspan='9'>No project details found</td></tr>";
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
         </div>
     </div>
 </div>
 <?php
-$stmt->close();
+$stmt1->close();
 $conn->close();
 ?>
 

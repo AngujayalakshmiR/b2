@@ -140,6 +140,7 @@ include 'dbconn.php';
         // Define a mapping of allowed modules to their page URLs
         $availableModules = [
             "Dashboard"      => "index.php",
+            "FollowUps"      => "followups.php",
             "Customer"       => "customer.php",
             "Employee"       => "employee.php",
             "Designation"    => "designation.php",

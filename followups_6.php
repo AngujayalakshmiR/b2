@@ -6,49 +6,6 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['empUserName'])) {
     exit();
 }
 ?>
-
-<?php
-if (isset($_GET['rights'])) {
-    $rights = urldecode($_GET['rights']); // Decode URL parameter
-    $rightsArray = explode(',', $rights); // Convert to array
-
-    // Define possible rights and assign numbers
-    $statuses = [
-        'Add' => 1,
-        'Update' => 2,
-        'Delete' => 3,
-        'Add,Update' => 4,
-        'Add,Delete' => 5,
-        'Delete,Update' => 6,
-        'Add,Delete,Update' => 7
-    ];
-
-    // Sort rights array to ensure order consistency
-    sort($rightsArray);
-    $rightsKey = implode(',', $rightsArray); // Convert back to string
-
-    // Determine status number
-    $statusNo = isset($statuses[$rightsKey]) ? $statuses[$rightsKey] : 0; // Default 0 if unknown
-}
-?>
-
-
-<script>
-    // Get status number from PHP
-    let statusNo = "<?php echo $statusNo; ?>";
-
-    // Update URL without reloading
-    let url = new URL(window.location.href);
-    url.searchParams.set("status", statusNo);
-    window.history.replaceState(null, "", url);
-
-    // Redirect based on status number
-    if (statusNo >= 1 && statusNo <= 7) {
-        window.location.href = `followups_${statusNo}.php`;
-    }
-</script>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -493,11 +450,11 @@ if (isset($_GET['rights'])) {
     </h4>
     
     <!-- Button to Open Modal (Responsive) -->
-    <button class="btn add d-flex align-items-center  plus-button mb-2 mb-md-0" 
+    <!-- <button class="btn add d-flex align-items-center  plus-button mb-2 mb-md-0" 
         data-toggle="modal" data-target="#designationModal" style="color: white;">
         <i class="fa-solid fa-plus fa-1x plus-icon"></i>&nbsp;
         Add
-    </button>
+    </button> -->
     &nbsp;&nbsp;&nbsp;
    
 

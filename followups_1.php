@@ -6,49 +6,6 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['empUserName'])) {
     exit();
 }
 ?>
-
-<?php
-if (isset($_GET['rights'])) {
-    $rights = urldecode($_GET['rights']); // Decode URL parameter
-    $rightsArray = explode(',', $rights); // Convert to array
-
-    // Define possible rights and assign numbers
-    $statuses = [
-        'Add' => 1,
-        'Update' => 2,
-        'Delete' => 3,
-        'Add,Update' => 4,
-        'Add,Delete' => 5,
-        'Delete,Update' => 6,
-        'Add,Delete,Update' => 7
-    ];
-
-    // Sort rights array to ensure order consistency
-    sort($rightsArray);
-    $rightsKey = implode(',', $rightsArray); // Convert back to string
-
-    // Determine status number
-    $statusNo = isset($statuses[$rightsKey]) ? $statuses[$rightsKey] : 0; // Default 0 if unknown
-}
-?>
-
-
-<script>
-    // Get status number from PHP
-    let statusNo = "<?php echo $statusNo; ?>";
-
-    // Update URL without reloading
-    let url = new URL(window.location.href);
-    url.searchParams.set("status", statusNo);
-    window.history.replaceState(null, "", url);
-
-    // Redirect based on status number
-    if (statusNo >= 1 && statusNo <= 7) {
-        window.location.href = `followups_${statusNo}.php`;
-    }
-</script>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1073,7 +1030,6 @@ function createCard(title, description, status, followupId) {
         <p class="card-status"><strong>Status:</strong> ${status}</p>
         <p><strong>Card ID:</strong> ${followupId}</p> <!-- ✅ Show actual DB ID -->
         <span class="open-icon fas fa-eye" onclick="navigateToFollowUp('${title}', '${status}')"></span>
-        <span class="delete-icon fas fa-trash" onclick="deleteCard(this, ${followupId})"></span>
     </div>
     `;
     return card;
@@ -1264,35 +1220,35 @@ function addNewUpdateField() {
 }
 
 // Open the edit modal and populate fields
-function openEditModal(card) {
-    cardToUpdate = card;
+// function openEditModal(card) {
+//     cardToUpdate = card;
 
-    document.getElementById("editTitleInput").value = card.querySelector(".card-title").textContent;
+//     document.getElementById("editTitleInput").value = card.querySelector(".card-title").textContent;
 
-    // Populate all previous updates
-    const updatesHTML = card.querySelector(".card-text").innerHTML.split('<br>').filter(Boolean);
-    const previousUpdatesDiv = document.getElementById("previousUpdatesContainer");
-    previousUpdatesDiv.innerHTML = '';
+//     // Populate all previous updates
+//     const updatesHTML = card.querySelector(".card-text").innerHTML.split('<br>').filter(Boolean);
+//     const previousUpdatesDiv = document.getElementById("previousUpdatesContainer");
+//     previousUpdatesDiv.innerHTML = '';
 
-    const lastUpdate = updatesHTML.pop();
-    if (lastUpdate) {
-        const textarea = document.createElement("textarea");
-        textarea.classList.add("form-control", "mb-2");
-        textarea.value = lastUpdate;
-        textarea.rows = 2;
-        previousUpdatesDiv.appendChild(textarea);
-    }
+//     const lastUpdate = updatesHTML.pop();
+//     if (lastUpdate) {
+//         const textarea = document.createElement("textarea");
+//         textarea.classList.add("form-control", "mb-2");
+//         textarea.value = lastUpdate;
+//         textarea.rows = 2;
+//         previousUpdatesDiv.appendChild(textarea);
+//     }
 
 
-    // Clear any new update fields
-    document.getElementById("newUpdateFields").innerHTML = '';
+//     // Clear any new update fields
+//     document.getElementById("newUpdateFields").innerHTML = '';
 
-    const status = card.querySelector(".card-status").textContent.replace("Status: ", "");
-    document.getElementById("editStatusSelect").value = status;
-    document.getElementById("editFollowupId").value = card.dataset.id;
+//     const status = card.querySelector(".card-status").textContent.replace("Status: ", "");
+//     document.getElementById("editStatusSelect").value = status;
+//     document.getElementById("editFollowupId").value = card.dataset.id;
 
-    $('#editDesignationModal').modal('show');
-}
+//     $('#editDesignationModal').modal('show');
+// }
 
 function addCardListeners(card) {
     card.addEventListener('click', function (event) {
@@ -1328,7 +1284,6 @@ function createCard(title, description, status, followupId) {
         <p class="card-text">${description.split('<br>').pop()}</p>
         <p class="card-status"><strong>Status:</strong> ${status}</p>
         <span class="open-icon fas fa-eye" onclick="navigateToFollowUp('${title}', '${status}')"></span>
-        <span class="delete-icon fas fa-trash" onclick="deleteCard(this, ${followupId})"></span>
     </div>
     `;
 

@@ -1,10 +1,14 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['username']) && !isset($_SESSION['empUserName'])) {
     header("Location: login.php");
     exit();
 }
+?>
+
+<?php
+
 include 'dbconn.php'; ?>
 <!DOCTYPE html>
 <html lang="en">

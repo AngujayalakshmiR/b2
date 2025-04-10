@@ -441,28 +441,25 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['empUserName'])) {
                                         <div class="col-md-3 pb-1">
                                             <input type="text" class="form-control mb-2" id="employeename" name="employeename" placeholder="Enter Employee Name" required>
                                             <div class="d-flex align-items-center">
-                                                <select class="form-control mb-2 w-100" id="designation" name="designation" required>
-                                                    <option value="">Select Designation</option>
-                                                    <?php
-                                                    include("dbconn.php");
+                                            <select class="form-control mb-2 w-100" id="designation" name="designation" required>
+                                                <option value="">Select Designation</option>
+                                                <?php
+                                                include("dbconn.php");
 
-                                                    // Fetch designations
-                                                    $sql = "SELECT ID, DesignationName FROM designation";
-                                                    $result = $conn->query($sql);
+                                                // Fetch designations in ascending order
+                                                $sql = "SELECT ID, DesignationName FROM designation ORDER BY DesignationName ASC";
+                                                $result = $conn->query($sql);
 
-                                                    // Populate dropdown
-                                                    if ($result->num_rows > 0) {
-                                                        while ($row = $result->fetch_assoc()) {
-                                                            echo '<option value="' . $row['DesignationName'] . '">' . $row['DesignationName'] . '</option>';
-                                                        }
-                                                    } else {
-                                                        echo '<option value="">No Designations Found</option>';
+                                                // Populate dropdown
+                                                if ($result->num_rows > 0) {
+                                                    while ($row = $result->fetch_assoc()) {
+                                                        echo '<option value="' . $row['DesignationName'] . '">' . $row['DesignationName'] . '</option>';
                                                     }
-
-                                                    // Close connection
-                                                    ?>
-                                                </select>
-
+                                                } else {
+                                                    echo '<option value="">No Designations Found</option>';
+                                                }
+                                                ?>
+                                            </select>
 
                                                 <span onclick="window.location.href='designation.php'" style="cursor: pointer; margin-left: 8px; align-items:center;">
                                                     <i class="fas fa-plus-circle text-primary" style="vertical-align: middle;"></i>

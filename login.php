@@ -74,19 +74,19 @@ if (isset($_SESSION['login_error'])) {
           <?php if (isset($error)) { echo "<p class='error-message'>$error</p>"; } ?>
          <!-- Username input -->
          <label>Enter Username:</label> 
-<div class="form-outline mb-4">
+<div class="form-outline mb-2">
     
   <input type="text" name="username" id="form3Example3" class="form-control form-control-lg"
     placeholder="Enter valid username" autocomplete="username" />
 </div>
 <label>Enter Password:</label>
 <!-- Password input -->
-<div class="form-outline mb-3">
+<div class="form-outline mb-2">
   <input type="password" id="form3Example4" name="password" class="form-control form-control-lg"
     placeholder="Enter valid password" autocomplete="current-password" />
 </div>
 
-          <div class="text-center text-lg-start mt-4 pt-2">
+          <div class="text-center text-lg-start mt-1 pt-2 mb-5">
             <button type="submit" class="btn btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem;background: rgb(15,29,64);color:white;">Login</button>
             <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="#!" class="link-danger">Contact Admin</a></p>
           </div>
@@ -96,15 +96,21 @@ if (isset($_SESSION['login_error'])) {
       </div>
     </div>
   </div>
-  <div class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5" style="background: rgb(15,29,64);">
-    <div class="text-white mb-3 mb-md-0">Copyright © 2025. All rights reserved.</div>
-    <div>
-      <a href="#!" class="text-white me-4"><i class="fab fa-facebook-f"></i></a>
-      <a href="#!" class="text-white me-4"><i class="fab fa-twitter"></i></a>
-      <a href="#!" class="text-white me-4"><i class="fab fa-google"></i></a>
-      <a href="#!" class="text-white"><i class="fab fa-linkedin-in"></i></a>
-    </div>
+  <div class="d-none d-lg-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5"
+     style="background: rgb(15,29,64); position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1030;">
+  <div class="text-white mb-3 mb-md-0">
+    Copyright © 2025. All rights reserved.
   </div>
+  <div>
+    <a href="#!" class="text-white me-4"><i class="fab fa-facebook-f"></i></a>
+    <a href="#!" class="text-white me-4"><i class="fab fa-twitter"></i></a>
+    <a href="#!" class="text-white me-4"><i class="fab fa-google"></i></a>
+    <a href="#!" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+  </div>
+</div>
+
+
+
 </section>
 <script type="text/javascript" src="package/js/mdb.umd.min.js"></script>
 </body>

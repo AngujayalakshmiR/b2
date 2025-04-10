@@ -233,7 +233,7 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['empUserName'])) {
 
     .master.active{
         width: 90%;
-        background: linear-gradient(to right, #4568dc, #b06ab3);
+        /* background: linear-gradient(to right, #4568dc, #b06ab3); */
         color:white;
         border-radius: 8px;
         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
@@ -901,7 +901,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script> -->
 
- <script>
+<script>
 document.addEventListener('DOMContentLoaded', function () {
     // Initialize DataTable
     var table = $('#dataTable').DataTable();
@@ -918,10 +918,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const colIndex = clickedCell.cellIndex;
 
         // Define column indexes
-        const nameCol = 1; // "Name" column
-        const dateCol = 2; // "Date" column
-        const companyCol = 3;
-        const typeCol = 4; // "Company - Title" column
+        const nameCol = 1;     // "Name" column
+        const dateCol = 2;     // "Date" column
+        const companyCol = 3;  // "Company - Title" column
+        const typeCol = 4;     // "Type" column
+        const descriptionCol = 6; // "Description" column
 
         if ([nameCol, dateCol, companyCol, typeCol].includes(colIndex)) {
             // Get clean text without extra spaces or new lines
@@ -932,7 +933,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Trigger DataTables search
             table.search(searchText).draw();
-        } else {
+        } 
+        else if (colIndex === descriptionCol) {
             // Get the parent <tr> of the clicked cell
             const row = clickedCell.closest('tr');
 
@@ -957,8 +959,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
-
 </script>
+
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     // Initialize DataTable
@@ -989,29 +991,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Trigger DataTables search
             table.search(searchText).draw();
-        } else {
-            // Get the parent <tr> of the clicked cell
-            const row = clickedCell.closest('tr');
+        } 
+        // else {
+        //     // Get the parent <tr> of the clicked cell
+        //     const row = clickedCell.closest('tr');
 
-            const companyTitle = row.cells[2].textContent.trim(); // Company-Title column
-            const type = row.cells[3].textContent.trim(); // Type column
-            const totalDays = row.cells[5].textContent.trim(); // Total Days column
+        //     const companyTitle = row.cells[2].textContent.trim(); // Company-Title column
+        //     const type = row.cells[3].textContent.trim(); // Type column
+        //     const totalDays = row.cells[5].textContent.trim(); // Total Days column
 
-            let [company, title] = companyTitle.split(' - ').map(str => str.trim()); // Split Company-Title
+        //     let [company, title] = companyTitle.split(' - ').map(str => str.trim()); // Split Company-Title
 
-            // Fetch teammates and actual hours via AJAX
-            fetch(`calculate_working_days1.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}`)
-                .then(response => response.json())
-                .then(data => {
-                    let teammates = encodeURIComponent(data.teammates);
-                    let actualHrs = encodeURIComponent(data.actualHrs);
-                    let workingDays = encodeURIComponent(data.workingDays); // Fetch workingDays
+        //     // Fetch teammates and actual hours via AJAX
+        //     fetch(`calculate_working_days1.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}`)
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             let teammates = encodeURIComponent(data.teammates);
+        //             let actualHrs = encodeURIComponent(data.actualHrs);
+        //             let workingDays = encodeURIComponent(data.workingDays); // Fetch workingDays
 
-                    // Redirect with workingDays included
-                    window.location.href = `admin-requirement.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}&totalDays=${encodeURIComponent(totalDays)}&teammates=${teammates}&actualHrs=${actualHrs}&workingDays=${workingDays}`;
-                })
-                .catch(error => console.error('Error fetching data:', error));
-        }
+        //             // Redirect with workingDays included
+        //             window.location.href = `admin-requirement.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}&totalDays=${encodeURIComponent(totalDays)}&teammates=${teammates}&actualHrs=${actualHrs}&workingDays=${workingDays}`;
+        //         })
+        //         .catch(error => console.error('Error fetching data:', error));
+        // }
     });
 });
 

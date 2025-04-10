@@ -439,7 +439,7 @@ tbody{
     </div>
     <div class="card-body">
     <div class="d-flex justify-content-end mb-2">
-    <input type="text" id="tableSearch" class="form-control" placeholder="Search..." style="width: 250px;">
+    <!-- <input type="text" id="tableSearch" class="form-control" placeholder="Search..." style="width: 250px;"> -->
 </div>
 
         <div class="table-responsive">
@@ -460,11 +460,12 @@ tbody{
                 </thead>
                 <tbody id="table-body">
                 <?php
-$c = 1;
+
 $sql = "SELECT * FROM dailyupdates ORDER BY date DESC";
 $result = $conn->query($sql);
-
+$sno = 1;
 if ($result->num_rows > 0) {
+    
     while ($row = $result->fetch_assoc()) {
         $actualHrs = trim($row['actualHrs']);
         $status = ($actualHrs === '-' || empty($actualHrs)) 
@@ -473,9 +474,9 @@ if ($result->num_rows > 0) {
 
         // Convert date format to match input field
         $formattedDate = date("d-m-Y", strtotime($row['date']));
-
+        
         echo "<tr data-date='$formattedDate'>
-            <td class='sno'>{$c}</td> 
+            <td >{$sno}</td> 
             <td class='name'>{$row['name']}</td>
             <td class='date'>$formattedDate</td>
             <td>{$row['companyName']} - {$row['projectTitle']}</td>
@@ -486,8 +487,8 @@ if ($result->num_rows > 0) {
             <td>{$row['actualHrs']}</td>
             $status
         </tr>";
+        $sno++;
 
-        $c++;
     }
 } else {
     echo "<tr><td colspan='10'>No records found</td></tr>";
@@ -500,6 +501,25 @@ if ($result->num_rows > 0) {
 </div>
                 </div>
             </div>
+
+            
+            <script>
+// Function to renumber visible rows
+function renumberSno() {
+    let rows = document.querySelectorAll('#dt1 tbody tr');
+    let sno = 1;
+
+    rows.forEach(row => {
+        if (row.style.display !== "none") {
+            row.querySelector('td').textContent = sno++; // Update first cell with new sno
+        }
+    });
+}
+
+
+</script>
+
+
             <script>
 document.getElementById("tableSearch").addEventListener("keyup", function() {
     let filter = this.value.toLowerCase();
@@ -510,112 +530,76 @@ document.getElementById("tableSearch").addEventListener("keyup", function() {
         row.style.display = text.includes(filter) ? "" : "none";
     });
 });
-</script>
-    <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const dateFilter = document.getElementById("dateFilter");
-    const tableBody = document.getElementById("table-body");
-    const headerCounter = document.querySelector(".header-counter");
-    function filterTableByDate(selectedDate) {
-        let rows = tableBody.querySelectorAll("tr:not(#no-records)");
-        let count = 0;
-        let noRecordRow = document.getElementById("no-records");
-        if (noRecordRow) {
-            noRecordRow.remove();
-        }
-        rows.forEach((row) => {
-            let rowDate = row.querySelector(".date").textContent.trim();
-            let formattedRowDate = formatDate(rowDate); // Convert to YYYY-MM-DD
+    $(document).ready(function () {
+        // Count the number of rows inside tbody (excluding any with 'No records found')
+        var rowCount = $("#table-body tr").filter(function() {
+            return $(this).find("td").length > 1; // Exclude 'no records found' row
+        }).length;
 
-            if (formattedRowDate === selectedDate) {
-                row.style.display = "";
-                count++;
-                row.querySelector(".sno").textContent = count; // Update serial number
-            } else {
-                row.style.display = "none";
-            }
-        });
-        headerCounter.textContent = count;
-        if (count === 0) {
-            let noRecordHTML = `<tr id="no-records"><td colspan="10" style="text-align:center;">No records found</td></tr>`;
-            tableBody.insertAdjacentHTML("beforeend", noRecordHTML);
-        }
-    }
-    function getTodayDate() {
-        let today = new Date();
-        let day = String(today.getDate()).padStart(2, "0");
-        let month = String(today.getMonth() + 1).padStart(2, "0");
-        let year = today.getFullYear();
-        return `${year}-${month}-${day}`;
-    }
-    function formatDate(dateString) {
-        let parts = dateString.split("-");
-        return `${parts[2]}-${parts[1]}-${parts[0]}`; // Convert DD-MM-YYYY to YYYY-MM-DD
-    }
-    let todayDate = getTodayDate();
-    dateFilter.value = todayDate;
-    filterTableByDate(todayDate);
-
-    // Update table when a new date is selected
-    dateFilter.addEventListener("change", function () {
-        filterTableByDate(this.value);
+        // Update the counter
+        $(".header-counter").text(rowCount);
     });
-});
-document.addEventListener('DOMContentLoaded', function () {
-    var table = $('#dt1');
+</script>
 
-    document.querySelector('#dt1 tbody').addEventListener('click', function (event) {
-        const clickedCell = event.target.closest('td'); // Get the clicked <td>
+           
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const tableBody = document.querySelector('#dt1 tbody');
+
+    tableBody.addEventListener('click', function (event) {
+        const clickedCell = event.target.closest('td');
         if (!clickedCell) return;
 
-        const row = clickedCell.closest('tr'); // Get the parent <tr>
+        const row = clickedCell.closest('tr');
+        if (!row) return;
 
-        const name = row.cells[1].textContent.trim(); // Name column
-        const companyTitle = row.cells[3].textContent.trim(); // Company-Title column
-        const type = row.cells[4].textContent.trim(); // Type column
-        const totalDays = row.cells[5].textContent.trim(); // Total Days column
+        const cellIndex = clickedCell.cellIndex;
 
-        let [company, title] = companyTitle.split(' - ').map(str => str.trim()); // Split Company-Title
+        const name = row.cells[1]?.textContent.trim();
+        const companyTitleFull = row.cells[3]?.textContent.trim();
+        const type = row.cells[4]?.textContent.trim();
+        const totalDays = row.cells[5]?.textContent.trim();
+        const description = row.cells[6]?.textContent.trim();
+        const totalHrs = row.cells[7]?.textContent.trim();
+        const actualHrs = row.cells[8]?.textContent.trim();
 
-        let paramKey = '';
-        let paramValue = '';
-
-        // Check which column was clicked
-        if (clickedCell.cellIndex === 1) { // Name column
-            paramKey = 'name';
-            paramValue = name;
-        } else if (clickedCell.cellIndex === 3) { // Company-Title column
-            window.location.href = `reports.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}`;
-            return;
-        } else if (clickedCell.cellIndex === 4) { // Type column
-            paramKey = 'type';
-            paramValue = type;
+        // Properly extract company and title even if no dash or multiple dashes
+        let company = "", title = "";
+        if (companyTitleFull.includes(" - ")) {
+            [company, title] = companyTitleFull.split(" - ").map(str => str.trim());
         } else {
-            // Fetch teammates and actual hours via AJAX
+            company = companyTitleFull;
+            title = "";
+        }
+
+        // For reports.php — Name, Company-Title, or Type clicks
+        if ([1, 3, 4].includes(cellIndex)) {
+            const url = `reports.php?name=${encodeURIComponent(name)}&company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}`;
+            window.location.href = url;
+            return;
+        }
+
+        // For admin-requirement.php — Other cells
+        if ([5, 6, 7, 8].includes(cellIndex)) {
             fetch(`calculate_working_days1.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}`)
                 .then(response => response.json())
                 .then(data => {
-                    let teammates = encodeURIComponent(data.teammates);
-                    let actualHrs = encodeURIComponent(data.actualHrs);
-                    let workingDays = encodeURIComponent(data.workingDays); // Fetch workingDays
+                    const teammates = encodeURIComponent(data.teammates || '');
+                    const workingDays = encodeURIComponent(data.workingDays || '');
 
-                    // Redirect with workingDays included
-                    window.location.href = `admin-requirement.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}&totalDays=${encodeURIComponent(totalDays)}&teammates=${teammates}&actualHrs=${actualHrs}&workingDays=${workingDays}`;
+                    const url = `admin-requirement.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(title)}&type=${encodeURIComponent(type)}&totalDays=${encodeURIComponent(totalDays)}&description=${encodeURIComponent(description)}&totalHrs=${encodeURIComponent(totalHrs)}&actualHrs=${encodeURIComponent(actualHrs)}&teammates=${teammates}&workingDays=${workingDays}`;
+                    window.location.href = url;
                 })
-                .catch(error => console.error('Error fetching data:', error));
-
-
-            return;
-        }
-
-        // Redirect if a valid column was clicked
-        if (paramKey && paramValue) {
-            window.location.href = `reports.php?${paramKey}=${encodeURIComponent(paramValue)}`;
+                .catch(error => {
+                    console.error('Error fetching admin requirement data:', error);
+                    alert('Failed to fetch admin requirement data.');
+                });
         }
     });
 });
+</script>
 
-    </script>
+
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
@@ -653,58 +637,58 @@ document.addEventListener('DOMContentLoaded', function () {
     <script src="vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
     <script src="js/demo/datatables-demo.js"></script>
-<script>
+    <script>
 $(document).ready(function () {
-    let table = $('#dataTable').DataTable({
-        "pageLength": 10, // Show 10 entries per page
-        "ordering": false, // Disable sorting for better filtering
-        "destroy": true // Allows re-initialization without issues
+    // Initialize DataTable
+    let table = $('#dt1').DataTable({
+        pageLength: 10,
+        ordering: false,
+        destroy: true,
+        drawCallback: function () {
+    let api = this.api();
+    let startIndex = api.page.info().start;
+
+    api.rows({ page: 'current', search: 'applied' }).every(function (rowIdx, tableLoop, rowLoop) {
+        let cell = api.cell(rowIdx, 0).node();
+        $(cell).html(startIndex + rowLoop + 1); // 🪄 Keeps it continuous across pages
     });
+}
+
+    });
+
+    // Date Filter Function
     function filterByDate() {
         let selectedDate = $('#dateFilter').val();
         if (!selectedDate) return;
 
-        let formattedSelectedDate = selectedDate.split("-").reverse().join("-"); 
-        table.column(2).search(formattedSelectedDate).draw();
+        let formattedDate = selectedDate.split("-").reverse().join("-"); // to dd-mm-yyyy
+
+        table.column(2).search(formattedDate).draw(); // Filter by "Date" column (index 2)
+
         let visibleRows = table.rows({ filter: 'applied' }).count();
         $('.header-counter').text(visibleRows);
+
         if (visibleRows === 0) {
             if (!$("#no-records").length) {
-                $("#dataTable tbody").append(`<tr id="no-records"><td colspan="10" class="text-center">No records found</td></tr>`);
+                $("#dt1 tbody").append(`<tr id="no-records"><td colspan="10" class="text-center">No records found</td></tr>`);
             }
         } else {
             $("#no-records").remove();
         }
     }
+
+    // Auto load today's date
     let today = new Date().toISOString().split('T')[0];
     $('#dateFilter').val(today);
     filterByDate();
+
+    // On Date Change
     $('#dateFilter').on('change', function () {
         filterByDate();
     });
 });
-$(document).ready(function () {
+</script>
 
-    $("#dateFilter").on("change", function () {
-        let selectedDate = $(this).val();
-        if (!selectedDate) return;
-
-        let formattedSelectedDate = selectedDate.split("-").reverse().join("-");
-        dataTable.destroy();
-
-        // Show/hide rows based on selected date
-        $("#dataTable tbody tr").each(function () {
-            let rowDate = $(this).find("td:eq(2)").text().trim();
-            $(this).toggle(rowDate === formattedSelectedDate);
-        });
-
-        // Reinitialize DataTable after filtering
-        dataTable = $("#dataTable").DataTable({
-            pageLength: 10 // Ensures proper pagination
-        });
-    });
-});
-    </script>
 </body>
 
 </html>

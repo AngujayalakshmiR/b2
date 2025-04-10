@@ -7,46 +7,6 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['empUserName'])) {
 }
 ?>
 
-<?php
-if (isset($_GET['rights'])) {
-    $rights = urldecode($_GET['rights']); // Decode URL parameter
-    $rightsArray = explode(',', $rights); // Convert to array
-
-    // Define possible rights and assign numbers
-    $statuses = [
-        'Add' => 1,
-        'Update' => 2,
-        'Delete' => 3,
-        'Add,Update' => 4,
-        'Add,Delete' => 5,
-        'Delete,Update' => 6,
-        'Add,Delete,Update' => 7
-    ];
-
-    // Sort rights array to ensure order consistency
-    sort($rightsArray);
-    $rightsKey = implode(',', $rightsArray); // Convert back to string
-
-    // Determine status number
-    $statusNo = isset($statuses[$rightsKey]) ? $statuses[$rightsKey] : 0; // Default 0 if unknown
-}
-?>
-
-<script>
-    // Get status number from PHP
-    let statusNo = "<?php echo $statusNo; ?>";
-
-    // Update URL without reloading
-    let url = new URL(window.location.href);
-    url.searchParams.set("status", statusNo);
-    window.history.replaceState(null, "", url);
-
-    // Redirect based on status number
-    if (statusNo >= 1 && statusNo <= 7) {
-        window.location.href = `projectcreation_${statusNo}.php`;
-    }
-</script>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -748,7 +708,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <!-- Column 1: Company, Project Type & No. of Days -->
                 <div class="col-md-4 pb-1">
                     <div class="d-flex align-items-center mb-2">
-                        <select class="form-control" id="companySelect" name="companyName">
+                        <select class="form-control" id="companySelect" name="companyName" required>
                             <option value="">Select Company</option>
                             <?php
                                 include 'dbconn.php';
@@ -766,7 +726,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     </div>
 
                     <div class="d-flex align-items-center mb-2">
-                        <select class="form-control" id="projectTypeSelect" name="projectType">
+                        <select class="form-control" id="projectTypeSelect" name="projectType" required>
                             <option value="">Select Project Type</option>
                             <?php
                                 include 'dbconn.php';
@@ -783,13 +743,13 @@ document.addEventListener("DOMContentLoaded", function () {
                         </span>
                     </div>
 
-                    <input type="number" class="form-control mb-2" id="employeephnno" name="totalDays" placeholder="Enter No. of Days">
+                    <input type="number" class="form-control mb-2" id="employeephnno" name="totalDays" placeholder="Enter No. of Days" required>
                 </div>
 
                 <!-- Column 2: Project Title & Description -->
                 <div class="col-md-4 pb-1">
-                    <input type="text" class="form-control mb-2" id="projecttitle" name="projectTitle" placeholder="Enter Project title">
-                    <textarea class="form-control mb-2" id="projectdescription" name="description" placeholder="Enter Project Description" rows="2" style="height: 85px;"></textarea>
+                    <input type="text" class="form-control mb-2" id="projecttitle" name="projectTitle" placeholder="Enter Project title" required>
+                    <textarea class="form-control mb-2" id="projectdescription" name="description" placeholder="Enter Project Description" rows="2" style="height: 85px;"  ></textarea>
                 </div>
 
                 <!-- Column 3: File Upload -->
@@ -806,7 +766,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 </p>
                             </label>
                             <input type="file" class="form-control-file d-none" id="requirementfile" name="reqfile"
-                                onchange="updateIcon(this, 'requirement', 'requirementfile-name')">
+                                onchange="updateIcon(this, 'requirement', 'requirementfile-name')" >
                                 <p class="file-name text-muted" id="requirementfile-name">
                                     <?php echo isset($fileName) ? $fileName : "No file chosen"; ?>
                                 </p>
@@ -999,77 +959,22 @@ $result = mysqli_query($conn, $query);
         }
       });
     });
-  </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-    const rows = document.querySelectorAll('#dataTable tbody tr');
 
-    rows.forEach(row => {
-        row.addEventListener('click', function (event) {
-            const dateCell = row.cells[1]; 
-            const companyCell = row.cells[3]; 
-            const projectTypeCell = row.cells[4]; 
-            const projectTitleCell = row.cells[5]; 
 
-            const company = companyCell.textContent.trim();
-            const projectType = projectTypeCell.textContent.trim();
-            const projectTitle = projectTitleCell.textContent.trim();
-            const totalDays = row.cells[6] ? row.cells[6].textContent.trim() : ''; 
-            const teammates = row.cells[7] ? row.cells[7].textContent.trim() : ''; 
+    let reqFileInput = $("#requirementfile")[0];
+    let existingFileText = $("#requirementfile-name").text().trim();
 
-            let paramKey = '';
-            let paramValue = '';
-
-            if (event.target === dateCell) {
-                paramKey = 'date';
-                paramValue = dateCell.textContent.trim();
-                window.location.href = `admin-requirement.php?${queryParams}`;
-            } 
-            else if (event.target === companyCell || event.target === projectTypeCell || event.target === projectTitleCell) {
-                fetch(`calculate_working_days.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(projectTitle)}&type=${encodeURIComponent(projectType)}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        let workingDays = data.workingDays || 0;
-
-                        const queryParams = new URLSearchParams({
-                            company: company,
-                            title: projectTitle,
-                            type: projectType,
-                            totalDays: totalDays,
-                            workingDays: workingDays,
-                            teammates: teammates
-                        }).toString();
-
-                        window.location.href = `admin-requirement.php?${queryParams}`; })
-            } 
-            else {
-                // Fetch workingDays from server before redirecting to requirement.php
-                fetch(`calculate_working_days.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(projectTitle)}&type=${encodeURIComponent(projectType)}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        let workingDays = data.workingDays || 0;
-
-                        const queryParams = new URLSearchParams({
-                            company: company,
-                            title: projectTitle,
-                            type: projectType,
-                            totalDays: totalDays,
-                            workingDays: workingDays,
-                            teammates: teammates
-                        }).toString();
-
-                        window.location.href = `admin-requirement.php?${queryParams}`;
-                    })
-                    .catch(error => console.error('Error fetching working days:', error));
-            }
+    if (!reqFileInput.files.length && (existingFileText === "No file chosen" || existingFileText === "")) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Missing Requirement File',
+            text: 'Please upload the requirement file before updating.',
         });
-    });
-});
+        return false;
+    }
 
-</script>
-
-
+  </script>
   <script>
     function updateFileName(input, fileNameId) {
         const fileInput = input.files[0];
@@ -1111,6 +1016,57 @@ $result = mysqli_query($conn, $query);
     }
 }
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const rows = document.querySelectorAll('#dataTable tbody tr');
+
+        rows.forEach(row => {
+            row.addEventListener('click', function (event) {
+                const dateCell = row.cells[1];
+                const companyCell = row.cells[3];
+                const projectTypeCell = row.cells[4];
+                const projectTitleCell = row.cells[5];
+                const customerCell = row.cells[2];
+                const totalDaysCell = row.cells[6];
+                const teammatesCell = row.cells[7];
+
+                const company = companyCell.textContent.trim();
+                const projectType = projectTypeCell.textContent.trim();
+                const projectTitle = projectTitleCell.textContent.trim();
+                const totalDays = totalDaysCell ? totalDaysCell.textContent.trim() : '';
+                const teammates = teammatesCell ? teammatesCell.textContent.trim() : '';
+
+                const target = event.target;
+
+                 if (target === dateCell || target === companyCell || target === projectTypeCell || target === projectTitleCell || target === customerCell || target === totalDaysCell || target === teammatesCell) {
+                    fetch(`calculate_working_days.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(projectTitle)}&type=${encodeURIComponent(projectType)}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            let workingDays = data.workingDays || 0;
+
+                            const queryParams = new URLSearchParams({
+                                company: company,
+                                title: projectTitle,
+                                type: projectType,
+                                totalDays: totalDays,
+                                workingDays: workingDays,
+                                teammates: teammates
+                            }).toString();
+
+                            window.location.href = `admin-requirement.php?${queryParams}`;
+                        })
+                        .catch(error => console.error('Error fetching working days:', error));
+                }
+
+                // All other clicks: do nothing
+            });
+        });
+    });
+</script>
+
+
+
+
 
 
 <script>
@@ -1168,40 +1124,52 @@ $result = mysqli_query($conn, $query);
         });
     });
 
-    // Form Submit Handler
-    $("#customerForm").submit(function (event) {
-        event.preventDefault();
+   // Form Submit Handler
+$("#customerForm").submit(function (event) {
+    event.preventDefault();
 
-        let formData = new FormData(this);
-        if (editMode) {
-            formData.append("id", editId);
+    // If not in edit mode, ensure the file is selected
+    if (!editMode) {
+        const reqFile = $("#requirementfile")[0].files.length;
+        if (reqFile === 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Requirement File Needed',
+                text: 'Please upload the requirement file before submitting the form.',
+            });
+            return; // prevent form submission
         }
+    }
 
-        $.ajax({
-            url: "projectCreationBackend.php",
-            type: "POST",
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function (response) {
-                Swal.fire({
-                    icon: 'success',
-                    title: editMode ? 'Project Updated!' : 'Project Created!',
-                    text: editMode ? 'Project details updated successfully.' : 'New project created successfully.',
-                }).then(() => {
-                    location.reload(); // Refresh page after action
-                });
+    let formData = new FormData(this);
+    if (editMode) {
+        formData.append("id", editId);
+    }
 
-                // Reset form
-                $("#customerForm")[0].reset();
-                $("#customerbtn").html('<i class="fas fa-file-alt"></i>&nbsp; Add Project')
-                                 .css("background", "rgb(0, 148, 255)"); // Revert button
-                editMode = false;
-                editId = null;
-            }
-        });
+    $.ajax({
+        url: "projectCreationBackend.php",
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            Swal.fire({
+                icon: 'success',
+                title: editMode ? 'Project Updated!' : 'Project Created!',
+                text: editMode ? 'Project details updated successfully.' : 'New project created successfully.',
+            }).then(() => {
+                location.reload();
+            });
+
+            $("#customerForm")[0].reset();
+            $("#customerbtn").html('<i class="fas fa-file-alt"></i>&nbsp; Add Project')
+                             .css("background", "rgb(0, 148, 255)");
+            editMode = false;
+            editId = null;
+        }
     });
 });
+  });
 
 function deleteProject(projectId) {
     Swal.fire({
@@ -1261,6 +1229,9 @@ function deleteProject(projectId) {
         }
     });
 }
+
+
+
 
 </script>
 

@@ -748,7 +748,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <!-- Column 1: Company, Project Type & No. of Days -->
                 <div class="col-md-4 pb-1">
                     <div class="d-flex align-items-center mb-2">
-                        <select class="form-control" id="companySelect" name="companyName">
+                        <select class="form-control" id="companySelect" name="companyName" required>
                             <option value="">Select Company</option>
                             <?php
                                 include 'dbconn.php';
@@ -766,7 +766,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     </div>
 
                     <div class="d-flex align-items-center mb-2">
-                        <select class="form-control" id="projectTypeSelect" name="projectType">
+                        <select class="form-control" id="projectTypeSelect" name="projectType" required>
                             <option value="">Select Project Type</option>
                             <?php
                                 include 'dbconn.php';
@@ -783,13 +783,13 @@ document.addEventListener("DOMContentLoaded", function () {
                         </span>
                     </div>
 
-                    <input type="number" class="form-control mb-2" id="employeephnno" name="totalDays" placeholder="Enter No. of Days">
+                    <input type="number" class="form-control mb-2" id="employeephnno" name="totalDays" placeholder="Enter No. of Days" required>
                 </div>
 
                 <!-- Column 2: Project Title & Description -->
                 <div class="col-md-4 pb-1">
-                    <input type="text" class="form-control mb-2" id="projecttitle" name="projectTitle" placeholder="Enter Project title">
-                    <textarea class="form-control mb-2" id="projectdescription" name="description" placeholder="Enter Project Description" rows="2" style="height: 85px;"></textarea>
+                    <input type="text" class="form-control mb-2" id="projecttitle" name="projectTitle" placeholder="Enter Project title" required>
+                    <textarea class="form-control mb-2" id="projectdescription" name="description" placeholder="Enter Project Description" rows="2" style="height: 85px;"  ></textarea>
                 </div>
 
                 <!-- Column 3: File Upload -->
@@ -806,7 +806,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 </p>
                             </label>
                             <input type="file" class="form-control-file d-none" id="requirementfile" name="reqfile"
-                                onchange="updateIcon(this, 'requirement', 'requirementfile-name')">
+                                onchange="updateIcon(this, 'requirement', 'requirementfile-name')" >
                                 <p class="file-name text-muted" id="requirementfile-name">
                                     <?php echo isset($fileName) ? $fileName : "No file chosen"; ?>
                                 </p>
@@ -999,6 +999,21 @@ $result = mysqli_query($conn, $query);
         }
       });
     });
+
+
+
+    let reqFileInput = $("#requirementfile")[0];
+    let existingFileText = $("#requirementfile-name").text().trim();
+
+    if (!reqFileInput.files.length && (existingFileText === "No file chosen" || existingFileText === "")) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Missing Requirement File',
+            text: 'Please upload the requirement file before updating.',
+        });
+        return false;
+    }
+
   </script>
   <script>
     function updateFileName(input, fileNameId) {
@@ -1043,66 +1058,79 @@ $result = mysqli_query($conn, $query);
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-    const rows = document.querySelectorAll('#dataTable tbody tr');
+        const rows = document.querySelectorAll('#dataTable tbody tr');
 
-    rows.forEach(row => {
-        row.addEventListener('click', function (event) {
-            const dateCell = row.cells[1]; 
-            const companyCell = row.cells[3]; 
-            const projectTypeCell = row.cells[4]; 
-            const projectTitleCell = row.cells[5]; 
+        rows.forEach(row => {
+            row.addEventListener('click', function (event) {
+                const dateCell = row.cells[1];
+                const companyCell = row.cells[3];
+                const projectTypeCell = row.cells[4];
+                const projectTitleCell = row.cells[5];
+                const customerCell = row.cells[2];
+                const totalDaysCell = row.cells[6];
+                const teammatesCell = row.cells[7];
 
-            const company = companyCell.textContent.trim();
-            const projectType = projectTypeCell.textContent.trim();
-            const projectTitle = projectTitleCell.textContent.trim();
-            const totalDays = row.cells[6] ? row.cells[6].textContent.trim() : ''; 
-            const teammates = row.cells[7] ? row.cells[7].textContent.trim() : ''; 
+                const company = companyCell.textContent.trim();
+                const projectType = projectTypeCell.textContent.trim();
+                const projectTitle = projectTitleCell.textContent.trim();
+                const totalDays = totalDaysCell ? totalDaysCell.textContent.trim() : '';
+                const teammates = teammatesCell ? teammatesCell.textContent.trim() : '';
 
-            let paramKey = '';
-            let paramValue = '';
+                const target = event.target;
 
-            if (event.target === dateCell) {
-                paramKey = 'date';
-                paramValue = dateCell.textContent.trim();
-                window.location.href = `reports.php?${paramKey}=${encodeURIComponent(paramValue)}`;
-            } 
-            else if (event.target === companyCell || event.target === projectTypeCell || event.target === projectTitleCell) {
-                // Redirect to reports.php when clicking on company, project type, or project title
-                const queryParams = new URLSearchParams({
-                    company: company,
-                    title: projectTitle,
-                    type: projectType
-                }).toString();
-                window.location.href = `reports.php?${queryParams}`;
-            } 
-            else {
-                // Fetch workingDays from server before redirecting to requirement.php
-                fetch(`calculate_working_days.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(projectTitle)}&type=${encodeURIComponent(projectType)}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        let workingDays = data.workingDays || 0;
+                // Navigate to reports.php only when clicking on specific cells
+                if (target === dateCell) {
+                    const date = dateCell.textContent.trim();
+                    window.location.href = `reports.php?date=${encodeURIComponent(date)}`;
+                } else if (target === companyCell) {
+                    const queryParams = new URLSearchParams({
+                        company: company
+                    }).toString();
+                    window.location.href = `reports.php?${queryParams}`;
+                }  else if (target === projectTypeCell) {
+                    const queryParams = new URLSearchParams({
+                        type: projectType
+                       
+                    }).toString();
+                    window.location.href = `reports.php?${queryParams}`;
+                }  else if (target === projectTitleCell) {
+                    const queryParams = new URLSearchParams({
+                        title: projectTitle
+                        
+                    }).toString();
+                    window.location.href = `reports.php?${queryParams}`;
+                }
 
-                        const queryParams = new URLSearchParams({
-                            company: company,
-                            title: projectTitle,
-                            type: projectType,
-                            totalDays: totalDays,
-                            workingDays: workingDays,
-                            teammates: teammates
-                        }).toString();
+                // Navigate to admin-requirement.php ONLY when clicking on these specific cells
+                else if (target === customerCell || target === totalDaysCell || target === teammatesCell) {
+                    fetch(`calculate_working_days.php?company=${encodeURIComponent(company)}&title=${encodeURIComponent(projectTitle)}&type=${encodeURIComponent(projectType)}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            let workingDays = data.workingDays || 0;
 
-                        window.location.href = `admin-requirement.php?${queryParams}`;
-                    })
-                    .catch(error => console.error('Error fetching working days:', error));
-            }
+                            const queryParams = new URLSearchParams({
+                                company: company,
+                                title: projectTitle,
+                                type: projectType,
+                                totalDays: totalDays,
+                                workingDays: workingDays,
+                                teammates: teammates
+                            }).toString();
+
+                            window.location.href = `admin-requirement.php?${queryParams}`;
+                        })
+                        .catch(error => console.error('Error fetching working days:', error));
+                }
+
+                // All other clicks: do nothing
+            });
         });
     });
-});
-
 </script>
 
 
-</script>
+
+
 
 
 
@@ -1161,40 +1189,52 @@ $result = mysqli_query($conn, $query);
         });
     });
 
-    // Form Submit Handler
-    $("#customerForm").submit(function (event) {
-        event.preventDefault();
+   // Form Submit Handler
+$("#customerForm").submit(function (event) {
+    event.preventDefault();
 
-        let formData = new FormData(this);
-        if (editMode) {
-            formData.append("id", editId);
+    // If not in edit mode, ensure the file is selected
+    if (!editMode) {
+        const reqFile = $("#requirementfile")[0].files.length;
+        if (reqFile === 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Requirement File Needed',
+                text: 'Please upload the requirement file before submitting the form.',
+            });
+            return; // prevent form submission
         }
+    }
 
-        $.ajax({
-            url: "projectCreationBackend.php",
-            type: "POST",
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function (response) {
-                Swal.fire({
-                    icon: 'success',
-                    title: editMode ? 'Project Updated!' : 'Project Created!',
-                    text: editMode ? 'Project details updated successfully.' : 'New project created successfully.',
-                }).then(() => {
-                    location.reload(); // Refresh page after action
-                });
+    let formData = new FormData(this);
+    if (editMode) {
+        formData.append("id", editId);
+    }
 
-                // Reset form
-                $("#customerForm")[0].reset();
-                $("#customerbtn").html('<i class="fas fa-file-alt"></i>&nbsp; Add Project')
-                                 .css("background", "rgb(0, 148, 255)"); // Revert button
-                editMode = false;
-                editId = null;
-            }
-        });
+    $.ajax({
+        url: "projectCreationBackend.php",
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            Swal.fire({
+                icon: 'success',
+                title: editMode ? 'Project Updated!' : 'Project Created!',
+                text: editMode ? 'Project details updated successfully.' : 'New project created successfully.',
+            }).then(() => {
+                location.reload();
+            });
+
+            $("#customerForm")[0].reset();
+            $("#customerbtn").html('<i class="fas fa-file-alt"></i>&nbsp; Add Project')
+                             .css("background", "rgb(0, 148, 255)");
+            editMode = false;
+            editId = null;
+        }
     });
 });
+  });
 
 function deleteProject(projectId) {
     Swal.fire({

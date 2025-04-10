@@ -1,6 +1,7 @@
-<?php session_start();
+<?php
+session_start();
 
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['username']) && !isset($_SESSION['empUserName'])) {
     header("Location: login.php");
     exit();
 }

@@ -956,48 +956,29 @@ function enableEdit(button, taskId, employeeName, taskDate) {
         }
 
         $.ajax({
-            url: 'fetch_total_hours.php',
+            url: 'update_task.php',
             type: 'POST',
             data: {
-                name: employeeName,
-                date: taskDate
+                taskId: taskId,
+                taskDetails: newTaskDetails,
+                actualHrs: newActualHrs
             },
-            success: function (response) {
-                let totalActualHrs = parseFloat(response) || 0;
-                
-                // Adjust the total hours considering the updated task
-                let adjustedTotalHrs = totalActualHrs - existingActualHrs + newActualHrs;
-
-                if (adjustedTotalHrs > 8) {
-                    Swal.fire("Error!", "Total working hours cannot exceed 8 hours in a day.", "error");
-                    return;
+            success: function (updateResponse) {
+                if (updateResponse.trim() === "success") {
+                    Swal.fire("Success!", "Task updated successfully!", "success").then(() => {
+                        location.reload();
+                    });
+                    taskDetailsCell.text(newTaskDetails || "-");
+                    actualHrsCell.text(newActualHrs || "-");
+                    updateButton.text("Saved").removeClass("btn-success").addClass("btn-secondary").prop("disabled", true);
+                } else {
+                    Swal.fire("Error!", updateResponse, "error");
                 }
-
-                $.ajax({
-                    url: 'update_task.php',
-                    type: 'POST',
-                    data: {
-                        taskId: taskId,
-                        taskDetails: newTaskDetails,
-                        actualHrs: newActualHrs
-                    },
-                    success: function (updateResponse) {
-                        if (updateResponse.trim() === "success") {
-                            Swal.fire("Success!", "Task updated successfully!", "success").then(() => {
-                                location.reload();
-                            });
-                            taskDetailsCell.text(newTaskDetails || "-");
-                            actualHrsCell.text(newActualHrs || "-");
-                            updateButton.text("Saved").removeClass("btn-success").addClass("btn-secondary").prop("disabled", true);
-                        } else {
-                            Swal.fire("Error!", updateResponse, "error");
-                        }
-                    }
-                });
             }
         });
-    }
-}
+
+            }
+        }
 
 function updateTotalHours() {
     let totalHrs = 0, actualHrs = 0;

@@ -96,15 +96,19 @@ if (isset($_SESSION['login_error'])) {
       </div>
     </div>
   </div>
-  <div class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5" style="background: rgb(15,29,64);">
-    <div class="text-white mb-3 mb-md-0">Copyright © 2025. All rights reserved.</div>
-    <div>
-      <a href="#!" class="text-white me-4"><i class="fab fa-facebook-f"></i></a>
-      <a href="#!" class="text-white me-4"><i class="fab fa-twitter"></i></a>
-      <a href="#!" class="text-white me-4"><i class="fab fa-google"></i></a>
-      <a href="#!" class="text-white"><i class="fab fa-linkedin-in"></i></a>
-    </div>
+  <div class="d-none d-lg-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5"
+     style="background: rgb(15,29,64); position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1030;">
+  <div class="text-white mb-3 mb-md-0">
+    Copyright © 2025. All rights reserved.
   </div>
+  <div>
+    <a href="#!" class="text-white me-4"><i class="fab fa-facebook-f"></i></a>
+    <a href="#!" class="text-white me-4"><i class="fab fa-twitter"></i></a>
+    <a href="#!" class="text-white me-4"><i class="fab fa-google"></i></a>
+    <a href="#!" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+  </div>
+</div>
+
 </section>
 <script type="text/javascript" src="package/js/mdb.umd.min.js"></script>
 </body>

@@ -1030,7 +1030,6 @@ document.getElementById("designationForm").addEventListener("submit", function(e
           }
           return;
       }
-
       const followupId = result.followupId;
       const card = createCard(title, description, status, followupId);
       allCards.push(card);
@@ -1039,8 +1038,6 @@ document.getElementById("designationForm").addEventListener("submit", function(e
       document.getElementById("designationForm").reset();
       $('#designationModal').modal('hide');
   })
-
-
     .catch(error => {
         console.error('Error:', error);
     });

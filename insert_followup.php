@@ -22,7 +22,6 @@ if ($checkStmt->num_rows > 0) {
 }
 
 $checkStmt->close();
-
 // Step 2: Insert new followup if no duplicate found
 $sql = "INSERT INTO followups (date, title, updates, status) VALUES (?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
